@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<title>OWGM</title>
+
+	<%= fluid960_stylesheets %>
+	<%= stylesheet_link_tag "application" %>
+
+	<% if @map %>
+	<%= GMap.header %>
+	<%= javascript_include_tag "clusterer" %>
+	<%= @map.to_html %>
+	<% end %>
+
+	<%= javascript_include_tag :defaults, "FusionCharts" %>
+</head>
+<body>
+	<div class="container_12">
+		<div class="grid_12">
+			<h1 id="branding">Open Wisp Geographic Monitoring</h1>
+			
+			<ul class="nav main">
+				<% if user_signed_in? %>
+					<li><%= link_to t(:Hotspots), hotspots_path %></li>
+					<li><%= link_to_back %></li>
+					<li id="logout"><%= link_to t(:Sign_out), destroy_user_session_path %></li>
+				<% end %>
+			</ul>
+			
+			<div class="box">
+				<p class="notice"><%= flash[:notice] %></p>
+				<p class="alert"><%= flash[:alert] %></p>
+			</div>
+		</div>
+
+		<div class="clear"></div>
+		<br />
+		<%= yield %>
+		<div class="clear"></div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  hostname: MyString
+  address: MyString
+  city: MyString
+  description: MyString
+  latitude: 9.99
+  longitude: 9.99
+
+two:
+  hostname: MyString
+  address: MyString
+  city: MyString
+  description: MyString
+  latitude: 9.99
+  longitude: 9.99

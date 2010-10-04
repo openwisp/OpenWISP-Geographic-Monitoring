@@ -1,0 +1,50 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  # Uppercase
+  Activity_graph: Activity Graph
+  Address: Address
+  Avg_availability: Average availability
+  Back: Back
+  City: City
+  Cluster: Cluster
+  Cluster_info: "This cluster contains:"
+  Coordinates: Coordinates
+  Description: Description
+  Details: Details
+  Earliest_seen: Earliest seen on
+  Graphs: Graphs
+  Hostname: Hostname
+  Hotspot: Hotspot
+  Hotspot_info: "Quick info:"
+  Hotspots: Hotspots
+  Hotspots_map: Hotspots Map
+  Info: Info
+  Ip_addr: IP Address
+  Latest_seen: Latest seen on
+  Map: Map
+  Name: Name
+  Next: Next
+  No_description_available: No description is available for this hotspot
+  Prev: Previous
+  Quick_search: Quick search
+  Remember_me: Remember me
+  Show: Show
+  Sign_in: Sign in
+  Sign_out: Sign out
+  Status: Status
+  Username: Username
+  
+  # Lowercase
+  all: all
+  back: back
+  details: details
+  down: down
+  not_seen: never seen before
+  n_days_ago:
+    one: 1 day ago
+    other: "{{count}} days ago"
+  unknown: unknown
+  up: up
+  

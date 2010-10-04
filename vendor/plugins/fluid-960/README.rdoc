@@ -1,0 +1,14 @@
+= fluid-960 for Rails
+
+Use this plugin for rapidly prototyping a rails app using the {Fluid-960 CSS Framework}[http://www.designinfluences.com/fluid960gs/]
+
+
+
+== Installation
+
+* script/plugin install git://github.com/cpurcell/fluid-960.git 
+* rake fluid960:install
+
+
+== Usage
+  <%= fluid960_stylesheets %>

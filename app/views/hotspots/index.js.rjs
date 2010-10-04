@@ -1,0 +1,3 @@
+page.replace_html 'hotspots_thead', :partial => 'hotspots_thead'
+page.replace_html 'hotspots', :partial => 'hotspot', :collection => @hotspots
+page.replace_html 'hotspots_paginate', remote_paginate(@hotspots, :div_id => 'hotspots_paginate')
