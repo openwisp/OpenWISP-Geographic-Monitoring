@@ -10,8 +10,6 @@ class Hotspot < ActiveRecord::Base
   has_many :activities
   has_many :activity_histories
 
-  alias_attribute :common_name, :idhotspot
-
   def coords
     [lat, lng]
   end

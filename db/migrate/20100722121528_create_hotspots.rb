@@ -3,12 +3,12 @@ class CreateHotspots < ActiveRecord::Migration
     if MIGRATE_USING_VIEWS 
       sql = <<-eos
         CREATE VIEW hotspots AS
-          SELECT idhotspot as id, hostname, address, city, description, latitude as lat, longitude as lng, mng_ip FROM #{MIGRATE_DB}.hotspot
+          SELECT idhotspot as id, id as common_name, hostname, address, city, description, latitude as lat, longitude as lng, mng_ip FROM #{MIGRATE_DB}.hotspot
       eos
       execute sql
     else
       create_table :hotspots do |t|
-        t.string :idhotspot
+        t.string :common_name
         t.string :hostname
         t.string :address
         t.string :city

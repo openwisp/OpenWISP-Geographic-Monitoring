@@ -4,7 +4,7 @@
 RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
 
 # If views must be used...
-MIGRATE_USING_VIEWS = false
+MIGRATE_USING_VIEWS = true
 MIGRATE_DB = 'wifi'
 # Resolve annoying sub-uri static content serving
 # when using passenger
