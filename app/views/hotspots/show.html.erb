@@ -1,78 +1,107 @@
 <div class="grid_12">
-	<h1><%=t :Hotspot %> <%= @hotspot.hostname %></h1>
+  <h1><%=t :Hotspot %> <%= @hotspot.hostname %></h1>
 
-	<div class="grid_6">
-		<div class="box">
-			<h2><%=t :Map %></h2>
-			<br />
-			<%= @map.div(:width => 430, :height => 400) %>
-			<br />
-		</div>
-	</div>
+  <div class="grid_6">
+    <div class="box">
+      <h2><%=t :Map %></h2>
+      <br />
+      <%= @map.div(:width => 430, :height => 400) %>
+      <br />
+    </div>
+  </div>
 
-	<div class="grid_6">
-		<div class="box">
-			<h2><%=t :Info %></h2>
-			<br />
-			<table>
-				<tbody>
-					<tr>
-						<td class="_hover"><strong><%=t :Hostname %></strong></td>
-						<td class="_hover right"><%= @hotspot.hostname %></td>
-					</tr>
-					<tr>
-						<td class="_hover"><strong><%=t :Address %></strong></td>
-						<td class="_hover right"><%= @hotspot.address %></td>
-					</tr>
-					<tr>
-						<td class="_hover"><strong><%=t :City %></strong></td>
-						<td class="_hover right"><%= @hotspot.city %></td>
-					</tr>
-					<tr>
-						<td class="_hover"><strong><%=t :Status %></strong></td>
-						<td class="_hover right"><%= @hotspot.status %></td>
-					</tr>
-					<tr>
-						<td class="_hover"><strong><%=t :Ip_addr %></strong></td>
-						<td class="_hover right"><%= @hotspot.ip %></td>
-					</tr>
-					<tr>
-						<td class="_hover"><strong><%=t :Coordinates %></strong></td>
-						<td class="_hover right"><%= @hotspot.lat %>, <%= @hotspot.lng %></td>
-					</tr>
-					<tr>
-						<td class="_hover"><strong><%=t :Earliest_seen %></strong></td>
-						<td class="_hover right"><%= @hotspot.earliest_seen %></td>
-					</tr>
-					<tr>
-						<td class="_hover"><strong><%=t :Latest_seen %></strong></td>
-						<td class="_hover right"><%= @hotspot.latest_seen %></td>
-					</tr>
-										
-					<tr><td colspan="2">&nbsp;</td></tr>
-					
-					<tr>
-						<td class="center noborder" colspan="2"><h5><%=t :Description %></h5></td>
-					</tr>
-					<tr>
-						<td class="center noborder" colspan="2"><%= @hotspot.description.empty? ? t(:No_description_available) : @hotspot.description %></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+  <div class="grid_6">
+    <div class="box">
+      <h2><%=t :Info %></h2>
+      <br />
+      <table>
+        <tbody>
+        <tr>
+          <td class="_hover"><strong><%=t :Hostname %></strong></td>
+          <td class="_hover right"><%= @hotspot.hostname %></td>
+        </tr>
+        <tr>
+          <td class="_hover"><strong><%=t :Address %></strong></td>
+          <td class="_hover right"><%= @hotspot.address %></td>
+        </tr>
+        <tr>
+          <td class="_hover"><strong><%=t :City %></strong></td>
+          <td class="_hover right"><%= @hotspot.city %></td>
+        </tr>
+        <tr>
+          <td class="_hover"><strong><%=t :Status %></strong></td>
+          <td class="_hover right"><%= @hotspot.status %></td>
+        </tr>
+        <tr>
+          <td class="_hover"><strong><%=t :Ip_addr %></strong></td>
+          <td class="_hover right"><%= @hotspot.ip %></td>
+        </tr>
+        <tr>
+          <td class="_hover"><strong><%=t :Coordinates %></strong></td>
+          <td class="_hover right"><%= @hotspot.lat %>, <%= @hotspot.lng %></td>
+        </tr>
+        <tr>
+          <td class="_hover"><strong><%=t :Earliest_seen %></strong></td>
+          <td class="_hover right"><%= @hotspot.earliest_seen %></td>
+        </tr>
+        <tr>
+          <td class="_hover"><strong><%=t :Latest_seen %></strong></td>
+          <td class="_hover right"><%= @hotspot.latest_seen %></td>
+        </tr>
 
-	<div class="clear"></div>
+        <tr><td colspan="2">&nbsp;</td></tr>
 
-	<div class="grid_12">
-		<div class="box">
-			<h2><%=t :Graphs %></h2>
-			
-			<div class="box">
-				<h5><%=t :Activity_graph %></h5>
-				<p><%= render_chart @hotspot.activity_graph(:w => 880) %></p>
-			</div>
-			
-		</div>
-	</div>
+        <tr>
+          <td class="center noborder" colspan="2"><h5><%=t :Description %></h5></td>
+        </tr>
+        <tr>
+          <td class="center noborder" colspan="2"><%= @hotspot.description.empty? ? t(:No_description_available) : @hotspot.description %></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+
+  <div class="grid_12">
+    <div class="box">
+      <h2><%=t :Graphs %></h2>
+
+      <div class="box">
+        <h5><%=t :Activity_graph %></h5>
+        <p><%= render_chart @hotspot.activity_graph(:w => 880) %></p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="clear"></div>
+
+  <div class="grid_12">
+    <div class="box">
+      <h2><%=t :Connected_clients %></h2>
+
+      <table>
+        <thead>
+            <tr>
+              <th class="center"><%=t :Interface_address %></th>
+              <th class="center"><%=t :Interface_vendor %></th>
+              <th class="center"><%=t :Last_activity %></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% @hotspot.clients.each do |client| %>
+                <tr>
+                  <td class="center"><%= client.mac_address %></td>
+                  <td class="center"><%= client.vendor %></td>
+                  <td class="center"><%= client.last_activity_short %></td>
+                </tr>
+            <% end %>
+        </tbody>
+      </table>
+      
+    </div>
+  </div>
 </div>

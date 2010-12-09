@@ -10,6 +10,8 @@ class Hotspot < ActiveRecord::Base
   has_many :activities
   has_many :activity_histories
 
+  alias_attribute :common_name, :idhotspot
+
   def coords
     [lat, lng]
   end
@@ -64,7 +66,12 @@ class Hotspot < ActiveRecord::Base
       '-'
     end
   end
-  
+
+  def clients
+    clients = OwtsConnector::clients(self.common_name).map{|client| ConnectedClient.new client }
+    clients.sort{|client1, client2| client2.last_activity <=> client1.last_activity }
+  end
+
   def marker_image
     hotspot_marker_image
   end

@@ -8,6 +8,7 @@ class CreateHotspots < ActiveRecord::Migration
       execute sql
     else
       create_table :hotspots do |t|
+        t.string :idhotspot
         t.string :hostname
         t.string :address
         t.string :city

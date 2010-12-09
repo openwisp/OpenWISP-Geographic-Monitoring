@@ -10,6 +10,7 @@ en:
   City: City
   Cluster: Cluster
   Cluster_info: "This cluster contains:"
+  Connected_clients: Connected clients
   Coordinates: Coordinates
   Description: Description
   Details: Details
@@ -21,7 +22,10 @@ en:
   Hotspots: Hotspots
   Hotspots_map: Hotspots Map
   Info: Info
+  Interface_address: Inteface address
+  Interface_vendor: Inteface vendor
   Ip_addr: IP Address
+  Last_activity: Last activity
   Latest_seen: Latest seen on
   Map: Map
   Name: Name
@@ -34,6 +38,7 @@ en:
   Sign_in: Sign in
   Sign_out: Sign out
   Status: Status
+  Unknown: Unknown
   Username: Username
   
   # Lowercase
@@ -44,7 +49,7 @@ en:
   not_seen: never seen before
   n_days_ago:
     one: 1 day ago
-    other: "{{count}} days ago"
+    other: "#{count} days ago"
   unknown: unknown
   up: up
   
