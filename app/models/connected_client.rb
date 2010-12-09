@@ -11,7 +11,7 @@ class ConnectedClient
   end
 
   def vendor
-    macvendor = MacVendor.find_by_oui(mac_address[0..7])
+    macvendor = MacVendor.find_by_mac_address(mac_address)
     macvendor.nil? ? I18n.t(:Unknown) : macvendor.vendor
   end
 end

@@ -67,6 +67,7 @@ class Hotspot < ActiveRecord::Base
 
   def clients
     clients = OwtsConnector::clients(self.common_name).map{|client| ConnectedClient.new client }
+    clients.delete_if{|client| MacVendor.unknown? client.mac_address }
     clients.sort{|client1, client2| client2.last_activity <=> client1.last_activity }
   end
 
