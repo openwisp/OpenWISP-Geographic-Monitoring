@@ -81,27 +81,33 @@
   <div class="grid_12">
     <div class="box">
       <h2><%=t :Connected_clients %></h2>
-
-      <table>
-        <thead>
-            <tr>
-              <th class="center"><%=t :Interface_address %></th>
-              <th class="center"><%=t :Interface_vendor %></th>
-              <th class="center"><%=t :Last_activity %></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <% @hotspot.clients.each do |client| %>
-                <tr>
-                  <td class="center"><%= client.mac_address %></td>
-                  <td class="center"><%= client.vendor %></td>
-                  <td class="center"><%= client.last_activity_short %></td>
-                </tr>
-            <% end %>
-        </tbody>
-      </table>
+      <p>&nbsp;</p>
       
+      <% clients = @hotspot.clients %>
+
+      <% unless clients.empty? %>
+          <table>
+            <thead>
+                <tr>
+                  <th class="center"><%=t :Interface_address %></th>
+                  <th class="center"><%=t :Interface_vendor %></th>
+                  <th class="center"><%=t :Last_activity %></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% @hotspot.clients.each do |client| %>
+                    <tr>
+                      <td class="center"><%= client.mac_address %></td>
+                      <td class="center"><%= client.vendor %></td>
+                      <td class="center"><%= client.last_activity_short %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+          </table>
+      <% else %>
+          <h5 class="center"><%=t :There_are_no_connected_clients %></h5>
+      <% end %>
     </div>
   </div>
 </div>

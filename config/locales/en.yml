@@ -38,6 +38,7 @@ en:
   Sign_in: Sign in
   Sign_out: Sign out
   Status: Status
+  There_are_no_connected_clients: There are no connected clients
   Unknown: Unknown
   Username: Username
   
@@ -49,7 +50,7 @@ en:
   not_seen: never seen before
   n_days_ago:
     one: 1 day ago
-    other: "#{count} days ago"
+    other: "{{count}} days ago"
   unknown: unknown
   up: up
   
