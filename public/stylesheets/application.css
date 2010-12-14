@@ -19,6 +19,14 @@ tr:hover th[scope=row], tr:hover td._hover
 	text-align: right;
 }
 
+.rfloat {
+  float: right;
+}
+
+.lfloat {
+  float: left;
+}
+
 th {
 	width: 30%;
 }

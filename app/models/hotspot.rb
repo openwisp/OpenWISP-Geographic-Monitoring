@@ -167,7 +167,17 @@ class Hotspot < ActiveRecord::Base
     name_regex.nil? ? Hotspot.all.select{|hs| hs.unknown?} : Hotspot.all.select{|hs| hs.unknown? and hs.hostname =~ /#{name_regex}/i}
   end
 
+  def self.up_count
+    all_up.count
+  end
 
+  def self.down_count
+    all_down.count
+  end
+
+  def self.unknown_count
+    all_unknown.count
+  end
  
   
   protected

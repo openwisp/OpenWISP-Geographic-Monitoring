@@ -10,7 +10,14 @@
 	<div class="clear"></div>
 
 	<div class="box">
-		<h2><%=t :Hotspots %></h2>
+    <h2>
+      <%=t :Hotspots %>
+      <span class="rfloat">
+        <%=t :up %>: <%= Hotspot.up_count %>
+        <%=t :down %>: <%= Hotspot.down_count %>
+        <%=t :unknown %>: <%= Hotspot.unknown_count %>
+      </span>
+    </h2>
 
 		<br />
 		
