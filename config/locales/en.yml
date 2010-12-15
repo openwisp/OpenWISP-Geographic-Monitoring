@@ -50,7 +50,7 @@ en:
   not_seen: never seen before
   n_days_ago:
     one: 1 day ago
-    other: "{{count}} days ago"
+    other: "%{count} days ago"
   unknown: unknown
   up: up
   
