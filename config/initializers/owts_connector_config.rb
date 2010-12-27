@@ -1,1 +1,1 @@
-OwtsConnector::connect "poseidon.surfinsardinia.eu"
+#OwtsConnector::connect "some.host.example"
