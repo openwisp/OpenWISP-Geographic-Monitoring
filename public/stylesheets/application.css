@@ -1,0 +1,126 @@
+.bold {
+  font-weight: bold;
+}
+
+.hover tr:hover>td {
+  background-color: #ffffee;
+}
+
+.hidden {
+  display: none;
+}
+
+.center {
+  text-align: center;
+}
+
+.middle {
+  vertical-align: middle;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.rfloat {
+  float: right;
+}
+
+.lfloat {
+  float: left;
+}
+
+.ordered_asc {
+  padding-right: 20px;
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-image: url('../images/arrow_up.gif');	
+}
+
+.ordered_desc {
+  padding-right: 20px;
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-image: url('../images/arrow_down.gif');
+}
+
+.noborder {
+  border-style: none;
+}
+
+.nohl {
+  color: #808080;
+}
+
+.no_js {
+  font-size: 30px; 
+}
+
+#activity_graph {
+  width: 870px;
+  height: 340px;
+  margin-left: 20px;
+}
+
+#gmap_index {
+  width: 920px;
+  height: 500px;
+}
+
+#gmap_show {
+  width: 430px;
+  height: 400px;
+}
+
+#map_loading {
+  position: absolute;
+  width: 921px;
+  height: 544px;
+  margin-top: -545px;
+  background-color: #ddd;
+}
+
+#map_loading p{
+  font-size: 30px; 
+  margin-top: 250px;
+  margin-left: 350px;
+}
+
+#loading {
+  height: 30px;
+  font-size: 20px; 
+  margin-top: -15px;
+  float: left;
+}
+
+#login {
+  margin: 0 32%;
+}
+
+#logout {
+  float: right;
+}
+
+#hotspots_quicksearch {
+  float: right;
+}
+
+#hotspots_quicksearch .spin {
+  float: left;
+  padding-right: 3px;
+  margin-top: 4px;
+}
+
+#hotspots_paginate .spin {
+  float: left;
+  padding-left: 1px;
+  margin-top: 1px;
+}
+
+th {
+  width: 30%;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OWGM</title>
+
+  <link rel="shortcut icon" href="<%= image_path 'caspur.ico' %>" />
+
+  <%= stylesheet_link_tag '960/css/reset',
+                          '960/css/text',
+                          '960/css/grid',
+                          '960/css/layout',
+                          '960/css/nav',
+                          '960/css/notification',
+                          'jquery.jqplot',
+                          'application',
+                          :cache => 'cache'
+  %>
+
+  <%= javascript_include_tag 'http://maps.google.com/maps/api/js?sensor=false' %>
+
+  <%= javascript_include_tag :defaults,
+                             'jquery.jqplot',
+                             'jquery.jqplot/jqplot.dateAxisRenderer',
+                             'jquery.jqplot/jqplot.canvasTextRenderer',
+                             'jquery.jqplot/jqplot.canvasAxisTickRenderer',
+                             'jquery.jqplot/jqplot.highlighter',
+                             'jquery.jqplot/jqplot.cursor',
+                             'owgm.graphs',
+                             'jquery.observe',
+                             'gmaps.markermanager',
+                             'owgm.gmaps',
+                             :cache => 'cache'
+  %>
+
+  <%= for_ie :version => '6' do %>
+      <%= stylesheet_link_tag '960/css/ie6' %>
+  <% end %>
+
+  <%= for_ie :if => 'gte', :version => '7' do %>
+      <%= stylesheet_link_tag '960/css/ie' %>
+  <% end %>
+
+  <%= for_ie do %>
+      <%= javascript_include_tag 'flashcanvas/flashcanvas', 'owgm.graphs.ie' %>
+  <% end %>
+
+
+  <%= csrf_meta_tag %>
+</head>
+<body>
+<div class="container_12">
+  <div class="grid_12">
+    <h1 id="branding">
+      Open Wisp Geographic Monitoring
+      <br />
+      <%= link_to_locale 'it' %> <%= link_to_locale 'en' %>
+    </h1>
+
+    <ul class="nav main">
+      <% if user_signed_in? %>
+          <li><%= link_to t(:Hotspots), hotspots_path %></li>
+          <li><%= link_to_back %></li>
+          <li id="logout"><%= link_to t(:Sign_out), destroy_user_session_path %></li>
+      <% end %>
+    </ul>
+
+    <div class="box">
+      <p class="notice"><%= flash[:notice] %></p>
+      <p class="alert"><%= flash[:alert] %></p>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+  <br />
+  <%= yield %>
+  <div class="clear"></div>
+</div>
+</body>
+</html>

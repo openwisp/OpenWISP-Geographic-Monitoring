@@ -1,0 +1,39 @@
+<%
+  json_hotspots = []
+  @hotspots.each do |marker|
+    if marker.is_a? Hotspot
+      json_hotspots << {:hotspot => {
+        :hostname => marker.hostname,
+        :lat => marker.lat,
+        :lng => marker.lng,
+        :address => marker.address,
+        :city => marker.city,
+        :icon => image_path_for(marker),
+        :url => url_for(marker)
+      }}
+    elsif marker.is_a? Cluster
+      hotspots_clustered = []
+
+      marker.hotspots.each do |hotspot|
+        hotspots_clustered << {:hotspot => {
+          :hostname => hotspot.hostname,
+          :lat => hotspot.lat,
+          :lng => hotspot.lng,
+          :address => hotspot.address,
+          :city => hotspot.city,
+          :icon => image_path_for(hotspot),
+          :url => url_for(hotspot)
+        }}
+      end
+
+      json_hotspots << {:cluster => {
+        :lat => marker.lat,
+        :lng => marker.lng,
+        :icon => image_path_for(marker),
+        :hotspots => hotspots_clustered
+      }}
+    end
+  end
+%>
+
+<%=raw json_hotspots.to_json %>

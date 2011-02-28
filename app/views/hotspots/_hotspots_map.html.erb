@@ -1,0 +1,25 @@
+<% Hotspot.center do |lat, lng| %>
+  <div id="gmap_index" data-lat="<%= lat %>" data-lng="<%= lng %>">
+    <p class="no_js"><%=t :No_javascript %></p>
+  </div>
+<% end %>
+
+<br />
+<p>
+	<strong><%=t :Show %>:</strong>
+	<% active = params[:filter] || 'all' %>
+	<%= link_to t(:all), {:filter => 'all'}, :class => (active == 'all' ? 'hl' : 'nohl') %>
+	<%= link_to t(:up), {:filter => 'up'}, :class => (active == 'up' ? 'hl' : 'nohl') %>
+	<%= link_to t(:down), {:filter => 'down'}, :class => (active == 'down' ? 'hl' : 'nohl') %>
+	<%= link_to t(:unknown), {:filter => 'unknown'}, :class => (active == 'unknown' ? 'hl' : 'nohl') %>
+</p>
+
+
+<div id="hotspot_marker_template" class="hidden">
+  <%= render 'hotspot_marker' %>
+</div>
+
+<div id="cluster_marker_template" class="hidden">
+  <%= render 'cluster_marker' %>
+</div>
+

@@ -1,0 +1,56 @@
+<h2><%=t :Info %></h2>
+<br />
+<table>
+  <tbody class="hover">
+  <tr>
+    <td><strong><%=t :Hostname %></strong></td>
+    <td class="right"><%= @hotspot.hostname %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Address %></strong></td>
+    <td class="right"><%= @hotspot.address %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :City %></strong></td>
+    <td class="right"><%= @hotspot.city %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Status %></strong></td>
+    <td class="right">
+      <% if @hotspot.up? %>
+          <%=t :up %>
+      <% elsif @hotspot.down? %>
+          <%=t :down %>
+      <% elsif @hotspot.unknown? %>
+          <%=t :unknown %>
+      <% end %>
+      <%= image_tag_for @hotspot, :id => 'hs_icon', :class => 'hidden' %>
+    </td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Ip_addr %></strong></td>
+    <td class="right"><%= @hotspot.ip %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Coordinates %></strong></td>
+    <td class="right"><%= @hotspot.lat %>, <%= @hotspot.lng %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Earliest_seen %></strong></td>
+    <td class="right"><%= @hotspot.earliest_seen %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Latest_seen %></strong></td>
+    <td class="right"><%= @hotspot.latest_seen %></td>
+  </tr>
+
+  <tr><td colspan="2">&nbsp;</td></tr>
+
+  <tr>
+    <td class="center noborder" colspan="2"><h5><%=t :Description %></h5></td>
+  </tr>
+  <tr>
+    <td class="center noborder" colspan="2"><%= @hotspot.description.empty? ? t(:No_description_available) : @hotspot.description %></td>
+  </tr>
+  </tbody>
+</table>

@@ -1,0 +1,71 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+it:
+  activerecord:
+    attributes:
+      hotspot:
+        address: indirizzo
+        city: città
+        hostname: hostname
+  # Uppercase
+  Activity_graph: Grafico Attività
+  Address: Indirizzo
+  Avg_availability: Disponibilità media
+  Back: Indietro
+  City: Città
+  Click_and_drag_to_zoom_in: Clicca e trascina per ingrandire una sezione
+  Cluster: Cluster
+  Cluster_info: "Questo cluster contiene:"
+  Connected_clients: Utenti connessi
+  Coordinates: Coordinate
+  Description: Descrizione
+  Details: Dettagli
+  Earliest_seen: Primo avvistamento
+  Graphs: Grafici
+  Hostname: Hostname
+  Hotspot: Hotspot
+  Hotspot_info: "Informazioni veloci:"
+  Hotspots: Hotspot
+  Hotspots_map: Mappa degli Hotspot
+  Info: Informazioni
+  Interface_address: Indirizzo apparato
+  Interface_vendor: Vendor apparato
+  Ip_addr: Indirizzo IP
+  Last_activity: Ultima attività rilevata
+  Last_day: Ultimo giorno
+  Last_month: Ultimo mese
+  Last_week: Ultima settimana
+  Latest_seen: Ultimo avvistamento
+  Loading: Caricamento
+  Map: Mappa
+  Name: Nome
+  Next: Seguente
+  No_data_to_display: Hotspot sconosciuto, non ci sono dati da visualizzare.
+  No_description_available: Non è disponibile la descrizione per questo hotspot
+  No_javascript: Javascript disabilitato!
+  Prev: Precedente
+  Quick_search: Ricerca rapida
+  Remember_me: Ricordami
+  Reset_zoom: Reimposta zoom
+  Show: Mostra
+  Sign_in: Accedi
+  Sign_out: Esci
+  Status: Stato
+  There_are_no_connected_clients: Non ci sono utenti connessi
+  Unknown: Sconosciuto
+  Username: Username
+  
+  # Lowercase
+  all: tutti
+  back: indietro
+  details: dettagli
+  down: down
+  markers: marker
+  not_seen: mai osservato prima
+  n_days_ago:
+    one: 1 giorno fa
+    other: "#{count} giorni fa"
+  status: stato
+  unknown: sconosciuto
+  up: up

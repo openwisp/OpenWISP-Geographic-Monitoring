@@ -1,0 +1,36 @@
+<div class="grid_12">
+  <h1><%=t :Hotspot %> <%= @hotspot.hostname %></h1>
+
+  <div class="grid_6">
+    <div class="box">
+      <h2><%=t :Map %></h2>
+      <br />
+      <div id="gmap_show" data-lat="<%= @hotspot.lat %>" data-lng="<%= @hotspot.lng %>">
+        <p class="no_js"><%=t :No_javascript %></p>
+      </div>
+      <br />
+    </div>
+  </div>
+
+  <div class="grid_6">
+    <div class="box">
+      <%= render :partial => 'hotspot_info' %>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+
+  <div class="grid_12">
+    <div class="box">
+      <%= render :partial => 'hotspot_graphs' %>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+
+  <div class="grid_12">
+    <div class="box">
+      <%= render :partial => 'hotspot_clients' %>
+    </div>
+  </div>
+</div>

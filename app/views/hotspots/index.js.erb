@@ -1,0 +1,11 @@
+$('#hotspots_thead').html(
+    '<%= escape_javascript(render :partial => 'hotspots_thead') %>'
+);
+
+$('#hotspots').html(
+    '<%= escape_javascript(render :partial => 'hotspot', :collection => @hotspots) %>'
+);
+
+$('#hotspots_paginate').html(
+    '<%= escape_javascript(paginate @hotspots) %>'
+);

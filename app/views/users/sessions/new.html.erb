@@ -1,0 +1,28 @@
+<div class="grid_12">
+  <div class="grid_5" id="login">
+    <div class="box center">
+      <h2><%=t :Sign_in %></h2>
+      <br />
+
+      <%= form_for resource, :as => resource_name, :url => session_path(resource_name) do |f| -%>
+        <p>
+          <b><%= f.label :username, t(:Username) %></b>
+          <%= f.text_field :username %>
+        </p>
+
+        <p>
+          <b><%= f.label :password %></b>
+          <%= f.password_field :password %>
+        </p>
+
+        <% if devise_mapping.rememberable? -%>
+        <p><%= f.check_box :remember_me %> <b><%= f.label :remember_me, t(:Remember_me) %></b></p>
+        <% end -%>
+
+        <p><%= f.submit t(:Sign_in) %></p>
+        <% end -%>
+
+        <%= render :partial => "users/shared/links" %>
+    </div>
+  </div>
+</div>
