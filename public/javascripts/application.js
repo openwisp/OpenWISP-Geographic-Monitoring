@@ -4,7 +4,6 @@
 /* document.ready callback... */
 $(document).ready(function() {
   owgm.enableJavascript();
-  $.ajaxSetup({cache: false});
   owgm.ajaxQuickSearch();
   owgm.ajaxPaginate();
   owgm.ajaxLoading();
