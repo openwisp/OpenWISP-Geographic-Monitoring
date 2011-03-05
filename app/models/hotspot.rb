@@ -1,6 +1,6 @@
 class Hotspot < ActiveRecord::Base
   require 'ipaddr'
-  include Utils
+  include Addons::Mappable
 
   acts_as_authorization_object
 
