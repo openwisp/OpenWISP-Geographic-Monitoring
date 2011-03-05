@@ -10,7 +10,7 @@ class CreateHotspots < ActiveRecord::Migration
                  notes as description,
                  mac_address as common_name,
                  created_at, updated_at
-          FROM access_points
+          FROM owm.access_points
       eos
       execute sql
     elsif DATA_FROM[:table]

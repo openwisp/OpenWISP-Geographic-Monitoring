@@ -11,7 +11,7 @@ class AddWispIdToHotspot < ActiveRecord::Migration
                  mac_address as common_name,
                  created_at, updated_at,
                  wisp_id
-          FROM access_points
+          FROM owm.access_points
       eos
       execute sql
     elsif DATA_FROM[:table]
@@ -32,7 +32,7 @@ class AddWispIdToHotspot < ActiveRecord::Migration
                  notes as description,
                  mac_address as common_name,
                  created_at, updated_at
-          FROM access_points
+          FROM owm.access_points
       eos
       execute sql
     elsif DATA_FROM[:table]

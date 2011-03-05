@@ -4,7 +4,7 @@ class CreateWisps < ActiveRecord::Migration
       sql = <<-eos
         CREATE VIEW wisps AS
           SELECT id, name, notes, created_at, updated_at
-          FROM wisps
+          FROM owm.wisps
       eos
       execute sql
     elsif DATA_FROM[:table]

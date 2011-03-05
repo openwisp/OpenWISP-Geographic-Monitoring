@@ -18,8 +18,8 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 # a view from OWM's tables.
 # If both are true, :owm is preferred.
 DATA_FROM = {
-    :table => true,
-    :owm => false
+    :table => false,
+    :owm => true
 }
 
 module Owgm
