@@ -9,6 +9,9 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   before_filter :set_locale
+
+  private
+
   def set_locale
     # if params[:locale] is nil then I18n.default_locale will be used
     I18n.locale = params[:locale]
@@ -16,5 +19,9 @@ class ApplicationController < ActionController::Base
 
   def default_url_options
     params.has_key?(:locale) ? {:locale => params[:locale]} : {}
+  end
+
+  def load_wisp
+    @wisp = Wisp.find(params[:wisp_id] || params[:id])
   end
 end

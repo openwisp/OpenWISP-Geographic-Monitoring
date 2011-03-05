@@ -58,7 +58,7 @@
 
     <ul class="nav main">
       <% if user_signed_in? %>
-          <li><%= link_to t(:Hotspots), hotspots_path %></li>
+          <li><%= link_to t(:Wisp_list), wisps_path() %></li>
           <li><%= link_to_back %></li>
           <li id="logout"><%= link_to t(:Sign_out), destroy_user_session_path %></li>
       <% end %>

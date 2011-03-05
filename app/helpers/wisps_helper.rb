@@ -1,0 +1,2 @@
+module WispsHelper
+end

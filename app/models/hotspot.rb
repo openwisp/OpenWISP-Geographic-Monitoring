@@ -1,12 +1,15 @@
-require "ipaddr"
-include Utils
-
 class Hotspot < ActiveRecord::Base
+  require 'ipaddr'
+  include Utils
+
+  acts_as_authorization_object
+
   cattr_reader :per_page
   @@per_page = 10
   
   acts_as_mappable :default_units => :kms
 
+  has_one :wisp
   has_many :activities
   has_many :activity_histories
 
@@ -76,9 +79,13 @@ class Hotspot < ActiveRecord::Base
   end
 
   def clients
-    clients = OwtsConnector::clients(self.common_name).map{|client| ConnectedClient.new client }
-    clients.delete_if{|client| client.last_activity.to_date <= 1.day.ago.to_date || MacVendor.unknown?(client.mac_address) }
-    clients.sort{|client1, client2| client2.last_activity <=> client1.last_activity }
+    if OwtsConnector::connected?
+      clients = OwtsConnector::clients(self.common_name).map{|client| ConnectedClient.new client }
+      clients.delete_if{|client| client.last_activity.to_date <= 1.day.ago.to_date || MacVendor.unknown?(client.mac_address) }
+      clients.sort{|client1, client2| client2.last_activity <=> client1.last_activity }
+    else
+      []
+    end
   end
 
   
@@ -135,7 +142,7 @@ class Hotspot < ActiveRecord::Base
   protected
 
   def last_state
-    act = self.activities.find(:first, :order => "created_at DESC")
+    act = self.activities.order("created_at DESC").first
     act.nil? ? nil : act.status
   end
 

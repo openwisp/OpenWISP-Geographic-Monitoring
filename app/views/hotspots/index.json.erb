@@ -1,4 +1,4 @@
-<%
+[<%=
   json_hotspots = []
   @hotspots.each do |marker|
     if marker.is_a? Hotspot
@@ -9,8 +9,8 @@
         :address => marker.address,
         :city => marker.city,
         :icon => image_path_for(marker),
-        :url => url_for(marker)
-      }}
+        :url => wisp_hotspot_url(@wisp, marker)
+      }}.to_json
     elsif marker.is_a? Cluster
       hotspots_clustered = []
 
@@ -22,7 +22,7 @@
           :address => hotspot.address,
           :city => hotspot.city,
           :icon => image_path_for(hotspot),
-          :url => url_for(hotspot)
+          :url => wisp_hotspot_url(@wisp, hotspot)
         }}
       end
 
@@ -31,9 +31,8 @@
         :lng => marker.lng,
         :icon => image_path_for(marker),
         :hotspots => hotspots_clustered
-      }}
+      }}.to_json
     end
   end
-%>
-
-<%=raw json_hotspots.to_json %>
+  raw json_hotspots.join(',')
+%>]

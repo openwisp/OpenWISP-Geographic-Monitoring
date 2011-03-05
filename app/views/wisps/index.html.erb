@@ -1,0 +1,21 @@
+<div class="grid_12">
+  <h1><%=t :Wisp_list %></h1>
+
+  <div class="box">
+    <table>
+      <tr>
+        <th><%=t :Name %></th>
+        <th><%=t :Notes %></th>
+      </tr>
+
+      <% @wisps.each do |wisp| %>
+          <% if user_can_view_wisp? %>
+              <tr>
+                <td><%= link_to wisp.name, wisp_hotspots_path(wisp) %></td>
+                <td><%= wisp.notes %></td>
+              </tr>
+          <% end %>
+      <% end %>
+    </table>
+  </div>
+</div>

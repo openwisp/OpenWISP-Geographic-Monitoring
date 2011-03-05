@@ -38,6 +38,7 @@ en:
   No_data_to_display: Hotspot unknown, there is no data to display.
   No_description_available: No description is available for this hotspot
   No_javascript: Javascript disabled!
+  Notes: Notes
   Prev: Previous
   Quick_search: Quick search
   Remember_me: Remember me
@@ -49,6 +50,7 @@ en:
   There_are_no_connected_clients: There are no connected clients
   Unknown: Unknown
   Username: Username
+  Wisp_list: Wisps List
   
   # Lowercase
   all: all

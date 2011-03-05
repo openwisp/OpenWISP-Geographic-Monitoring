@@ -6,9 +6,21 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
-# If views must be used...
-MIGRATE_USING_VIEWS = true
-MIGRATE_DB = 'wifi'
+# Specify where to look for the wisps and hotspots table
+# data. Only one value can be enable at a time.
+# Possible values:
+# :table => true || :table => false
+# :owm => true || :owm => false
+#
+# If :table is true, the migrations will build a
+# real sql table (and data).
+# If :owm is strue, the migrations will create
+# a view from OWM's tables.
+# If both are true, :owm is preferred.
+DATA_FROM = {
+    :table => true,
+    :owm => false
+}
 
 module Owgm
   class Application < Rails::Application

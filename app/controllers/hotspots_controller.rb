@@ -1,5 +1,14 @@
 class HotspotsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :load_wisp
+
+  access_control do
+    default :deny
+
+    actions :index, :show do
+      allow :wisps_viewer
+      allow :wisp_hotspots_viewer, :of => :wisp
+    end
+  end
 
   def index
     respond_to do |format|
@@ -19,8 +28,6 @@ class HotspotsController < ApplicationController
       end
     end
   end
-
-
 
   private
 

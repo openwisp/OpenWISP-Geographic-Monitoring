@@ -10,6 +10,7 @@ gem 'net-ping'
 gem 'nokogiri'
 gem 'warden'
 gem 'devise'
+gem 'acl9'
 gem 'will_paginate', '~> 3.0.pre2'
 
 gem 'backgroundrb-rails3', :require => 'backgroundrb'

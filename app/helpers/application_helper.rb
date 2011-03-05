@@ -28,7 +28,7 @@ module ApplicationHelper
   end
 
   def link_to_back
-    unless current_page?(root_path) || current_page?(root_path.chop) || current_page?(hotspots_path)
+    unless current_page?(root_path) || current_page?(root_path.chop) || current_page?(wisps_path)
       link_to t(:Back), :back
     end
   end

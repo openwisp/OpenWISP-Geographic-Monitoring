@@ -1,5 +1,4 @@
 module Utils
-
   def get_center_zoom(mappables)
     max_lat = max_lon = 0.0
     min_lat = min_lon = 360.0
@@ -30,25 +29,6 @@ module Utils
       [(max_lat + min_lat)/2, (max_lon + min_lon)/2, 16]
     end
   end
-
-
-  # Extend GMap plugin to add keyboard
-  # shortcuts to maps
-  #class Ym4r::GmPlugin::GMap
-    #def keboard_init
-      #self.record_init "
-      #new GKeyboardHandler(map);
-      #mapContainer = document.getElementById('#{self.container}');
-      #GEvent.trigger(document, 'click', {srcElement: mapContainer, target: mapContainer, nodeType: 1});
-      #"
-    #end
-
-    #def static_map_init()
-      #self.record_init "
-      #map.disableDragging();
-      #"
-    #end
-  #end
 end
 
 

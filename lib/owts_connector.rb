@@ -6,6 +6,10 @@ module OwtsConnector
       $OwtsConnector_connection = XMLRPC::Client.new3( :host => host, :path => path, :port => port, :use_ssl => use_ssl).proxy("locator")
     end
 
+    def connected?
+      !$OwtsConnector_connection.blank?
+    end
+
     def clients(ap_cn)
       begin
         [$OwtsConnector_connection.clients_list(ap_cn)].flatten

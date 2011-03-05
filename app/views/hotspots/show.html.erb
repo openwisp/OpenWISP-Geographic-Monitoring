@@ -28,9 +28,11 @@
 
   <div class="clear"></div>
 
-  <div class="grid_12">
-    <div class="box">
-      <%= render :partial => 'hotspot_clients' %>
-    </div>
-  </div>
+  <% if OwtsConnector::connected? %>
+      <div class="grid_12">
+        <div class="box">
+          <%= render :partial => 'hotspot_clients' %>
+        </div>
+      </div>
+  <% end %>
 </div>
