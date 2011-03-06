@@ -9,7 +9,7 @@ class Hotspot < ActiveRecord::Base
   
   acts_as_mappable :default_units => :kms
 
-  has_one :wisp
+  belongs_to :wisp
   has_many :activities
   has_many :activity_histories
 
@@ -88,9 +88,17 @@ class Hotspot < ActiveRecord::Base
     end
   end
 
-  
+
   ##### Static methods #####
-  
+
+  def self.scope_with_wisp(wisp_id)
+    default_scope where(:wisp_id => wisp_id)
+  end
+
+  def self.around(coords)
+    geo_scope :within => CLUSTER_HOTSPOTS_WITHIN_KM, :origin => coords
+  end
+
   def self.center
     x, y, z = get_center_zoom self.all
     yield x, y, z if block_given?
@@ -103,7 +111,7 @@ class Hotspot < ActiveRecord::Base
     to_remove = hotspots_to_hide(opts[:show]) 
 
     self.all.each do |hs|
-      cluster = Hotspot.find :all, :origin => hs.coords, :within => CLUSTER_HOTSPOTS_WITHIN_KM
+      cluster = Hotspot.around(hs.coords)
       cluster -= to_remove
       cluster -= already_clustered
 

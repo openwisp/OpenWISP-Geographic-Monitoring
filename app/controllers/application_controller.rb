@@ -23,5 +23,6 @@ class ApplicationController < ActionController::Base
 
   def load_wisp
     @wisp = Wisp.find(params[:wisp_id] || params[:id])
+    Hotspot.scope_with_wisp @wisp
   end
 end

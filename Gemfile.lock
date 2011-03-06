@@ -44,6 +44,9 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     geokit (1.5.0)
+    geokit-rails3 (0.1.2)
+      geokit (~> 1.5.0)
+      rails (~> 3.0.0)
     i18n (0.5.0)
     jquery-rails (0.2.1)
       rails (~> 3.0.0)
@@ -108,6 +111,7 @@ DEPENDENCIES
   backgroundrb-rails3
   devise
   geokit
+  geokit-rails3
   jquery-rails
   mysql
   net-ping
