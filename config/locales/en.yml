@@ -15,6 +15,7 @@ en:
   Coordinates: Coordinates
   Description: Description
   Details: Details
+  Down: Down
   Earliest_seen: Earliest seen on
   Graphs: Graphs
   Hostname: Hostname
@@ -51,6 +52,7 @@ en:
   Status: Status
   There_are_no_connected_clients: There are no connected clients
   Unknown: Unknown
+  Up: Up
   Username: Username
   Wisp_list: Wisps List
   

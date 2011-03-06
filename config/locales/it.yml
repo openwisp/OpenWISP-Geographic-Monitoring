@@ -21,6 +21,7 @@ it:
   Coordinates: Coordinate
   Description: Descrizione
   Details: Dettagli
+  Down: Down
   Earliest_seen: Primo avvistamento
   Graphs: Grafici
   Hostname: Hostname
@@ -57,6 +58,7 @@ it:
   Status: Stato
   There_are_no_connected_clients: Non ci sono utenti connessi
   Unknown: Sconosciuto
+  Up: Up
   Username: Username
   Wisp_list: Lista Wisp
   
