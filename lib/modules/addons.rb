@@ -25,9 +25,9 @@ module Addons
 
       max_distance = (max_lat - min_lat) > (max_lon - min_lon) ? (max_lat - min_lat) : (max_lon - min_lon)
       if max_distance > 0
-        [(max_lat + min_lat)/2, (max_lon + min_lon)/2, (16 - (Math::log(max_distance * 2000))).to_i]
+        [(max_lat + min_lat)/2, (max_lon + min_lon)/2, (22 - (Math::log(max_distance * 2000))).to_i]
       else
-        [(max_lat + min_lat)/2, (max_lon + min_lon)/2, 16]
+        [(max_lat + min_lat)/2, (max_lon + min_lon)/2, 22]
       end
     end
   end

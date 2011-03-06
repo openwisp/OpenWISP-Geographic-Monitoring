@@ -76,10 +76,12 @@
       <% end %>
     </ul>
 
-    <div class="box">
-      <p class="notice"><%= flash[:notice] %></p>
-      <p class="alert"><%= flash[:alert] %></p>
-    </div>
+    <% if flash[:notice] || flash[:alert] %>
+        <div class="box">
+          <p class="notice"><%= flash[:notice] %></p>
+          <p class="alert"><%= flash[:alert] %></p>
+        </div>
+    <% end %>
   </div>
 
   <div class="clear"></div>
