@@ -9,7 +9,7 @@
       </tr>
 
       <% @wisps.each do |wisp| %>
-          <% if user_can_view_wisp? %>
+          <% if auth?(:wisps_viewer) || auth?(:wisp_hotspots_viewer, wisp) %>
               <tr>
                 <td><%= link_to wisp.name, wisp_hotspots_path(wisp) %></td>
                 <td><%= wisp.notes %></td>

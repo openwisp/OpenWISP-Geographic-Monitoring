@@ -42,4 +42,8 @@ module ApplicationHelper
     open_tag << "]>"
     (open_tag+to_include+"<![endif]-->").html_safe
   end
+
+  def auth?(role, object=nil)
+    current_user && current_user.has_role?(role, object)
+  end
 end

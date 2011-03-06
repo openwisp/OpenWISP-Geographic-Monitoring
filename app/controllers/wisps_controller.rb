@@ -1,7 +1,7 @@
 class WispsController < ApplicationController
   before_filter :authenticate_user!
 
-  access_control :helper => :user_can_view_wisp? do
+  access_control do
     default :deny
 
     action :index do
