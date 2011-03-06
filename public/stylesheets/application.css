@@ -60,6 +60,11 @@
   font-size: 30px; 
 }
 
+.underline {
+   text-decoration: underline;
+   color: white;
+}
+
 #activity_graph {
   width: 870px;
   height: 340px;

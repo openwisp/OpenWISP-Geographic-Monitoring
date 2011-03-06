@@ -53,21 +53,21 @@ class HotspotsController < ApplicationController
       end
 
       hotspots = case order
-      when 'asc' then
-        [up_hotspots, down_hotspots, unknown_hotspots].flatten
-      when 'desc' then
-        [down_hotspots, up_hotspots, unknown_hotspots].flatten
-      end
+                   when 'asc' then
+                     [up_hotspots, down_hotspots, unknown_hotspots].flatten
+                   when 'desc' then
+                     [down_hotspots, up_hotspots, unknown_hotspots].flatten
+                 end
 
       hotspots.paginate :page => page, :per_page => Hotspot.per_page
     else
       # Find english (main) column name
       i18n_columns = {}
-      
+
       Hotspot.column_names.each do |col|
         i18n_columns[I18n.t(col, :scope => [:activerecord, :attributes, :hotspot])] = col
       end
-      
+
       column = i18n_columns.include?(order_column) ? i18n_columns[order_column] : 'hostname'
 
       unless query.nil?

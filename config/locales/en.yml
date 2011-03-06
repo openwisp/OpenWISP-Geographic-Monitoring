@@ -20,7 +20,9 @@ en:
   Hostname: Hostname
   Hotspot: Hotspot
   Hotspot_info: "Quick info:"
+  Hotspot_named: Hotspot %{hostname}
   Hotspots: Hotspots
+  Hotspots_for: %{wisp}'s Hotspots
   Hotspots_map: Hotspots Map
   Info: Info
   Interface_address: Inteface address

@@ -58,8 +58,20 @@
 
     <ul class="nav main">
       <% if user_signed_in? %>
-          <li><%= link_to t(:Wisp_list), wisps_path() %></li>
-          <li><%= link_to_back %></li>
+          <% if current_page?(:controller => :wisps) %>
+              <li class="underline"><%= link_to t(:Wisp_list) %></li>
+          <% elsif current_page?(:controller => :hotspots, :action => :index) %>
+              <li><%= link_to t(:Wisp_list), wisps_path %></li>
+              <li class="spacer"><a>&raquo;</a></li>
+              <li class="underline"><%= link_to t(:Hotspots_for, :wisp => @wisp.name) %></li>
+          <% elsif current_page?(:controller => :hotspots, :action => :show) %>
+              <li><%= link_to t(:Wisp_list), wisps_path %></li>
+              <li class="spacer"><a>&raquo;</a></li>
+              <li><%= link_to t(:Hotspots_for, :wisp => @wisp.name), wisp_hotspots_path(@wisp) %></li>
+              <li class="spacer"><a>&raquo;</a></li>
+              <li class="underline"><%= link_to t(:Hotspot_named, :hostname => @hotspot.hostname) %></li>
+          <% end %>
+
           <li id="logout"><%= link_to t(:Sign_out), destroy_user_session_path %></li>
       <% end %>
     </ul>

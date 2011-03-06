@@ -26,7 +26,9 @@ it:
   Hostname: Hostname
   Hotspot: Hotspot
   Hotspot_info: "Informazioni veloci:"
+  Hotspot_named: Hotspot %{hostname}
   Hotspots: Hotspot
+  Hotspots_for: Hotspot di %{wisp}
   Hotspots_map: Mappa degli Hotspot
   Info: Informazioni
   Interface_address: Indirizzo apparato
