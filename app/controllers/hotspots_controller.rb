@@ -11,8 +11,6 @@ class HotspotsController < ApplicationController
   end
 
   def index
-    add_breadcrumb :name => I18n.t(:Hotspots_for, :wisp => @wisp.name), :path => wisp_hotspots_path(@wisp)
-
     respond_to do |format|
       format.any(:html, :js) { @hotspots = sort_search_and_paginate }
       format.json { @hotspots = Hotspot.map(:show => what_to_show_on_map) }
@@ -22,8 +20,6 @@ class HotspotsController < ApplicationController
   def show
     @hotspot = Hotspot.find params[:id]
     days_ago = params[:days_ago].to_i
-
-    add_breadcrumb :name => I18n.t(:Hotspot_named, :hostname => @hotspot.hostname), :path => wisp_hotspot_path(@wisp, @hotspot)
 
     respond_to do |format|
       format.html

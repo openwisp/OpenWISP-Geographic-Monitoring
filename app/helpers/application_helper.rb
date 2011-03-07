@@ -46,20 +46,4 @@ module ApplicationHelper
   def auth?(role, object=nil)
     current_user && current_user.has_role?(role, object)
   end
-
-  def render_breadcrumbs
-    crumbs = session[:breadcrumbs].map do |crumb|
-      if current_page? crumb[:path]
-        content_tag :li, content_tag(:a, crumb[:name]), :class => 'underline'
-      else
-        content_tag :li, link_to(crumb[:name], crumb[:path])
-      end
-    end
-
-    separator = content_tag :li do
-      content_tag(:a, raw('&raquo;'), :class => 'spacer')
-    end
-
-    crumbs.join(separator).html_safe
-  end
 end

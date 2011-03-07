@@ -12,16 +12,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def add_breadcrumb(crumb)
-    crumbs = session[:breadcrumbs] ||= []
-
-    if crumbs.include?(crumb)
-      session[:breadcrumbs] = crumbs[0..crumbs.find_index(crumb)]
-    else
-      session[:breadcrumbs] << crumb
-    end
-  end
-
   def set_locale
     # if params[:locale] is nil then I18n.default_locale will be used
     I18n.locale = params[:locale]
@@ -34,12 +24,5 @@ class ApplicationController < ActionController::Base
   def load_wisp
     @wisp = Wisp.find(params[:wisp_id] || params[:id])
     Hotspot.scope_with_wisp @wisp
-  end
-
-  # Override Devise to always redirect to
-  # root_path after sign_in (even if a referral
-  # is provided)
-  def stored_location_for(user)
-    nil
   end
 end

@@ -12,7 +12,5 @@ class WispsController < ApplicationController
 
   def index
     @wisps = Wisp.all
-
-    add_breadcrumb :name => I18n.t(:Wisp_list), :path => wisps_path
   end
 end
