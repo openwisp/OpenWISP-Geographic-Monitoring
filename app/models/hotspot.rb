@@ -91,8 +91,8 @@ class Hotspot < ActiveRecord::Base
 
   ##### Static methods #####
 
-  def self.scope_with_wisp(wisp_id)
-    default_scope where(:wisp_id => wisp_id)
+  def self.of_wisp(wisp)
+    where(:wisp_id => wisp.id)
   end
 
   def self.around(coords)
