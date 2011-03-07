@@ -58,7 +58,7 @@
 
     <ul class="nav main">
       <% if user_signed_in? %>
-          <% if current_page?(:controller => :wisps) %>
+          <% if current_page?(root_path) || current_page?(:controller => :wisps) %>
               <li class="underline"><%= link_to t(:Wisp_list) %></li>
           <% elsif current_page?(:controller => :hotspots, :action => :index) %>
               <li><%= link_to t(:Wisp_list), wisps_path %></li>
