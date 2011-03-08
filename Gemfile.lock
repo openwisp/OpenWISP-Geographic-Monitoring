@@ -50,6 +50,8 @@ GEM
     i18n (0.5.0)
     jquery-rails (0.2.1)
       rails (~> 3.0.0)
+    kaminari (0.10.4)
+      rails (>= 3.0.0)
     mail (2.2.12)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -101,7 +103,6 @@ GEM
     tzinfo (0.3.23)
     warden (0.10.7)
       rack (>= 1.0.0)
-    will_paginate (3.0.pre2)
 
 PLATFORMS
   ruby
@@ -113,6 +114,7 @@ DEPENDENCIES
   geokit
   geokit-rails3
   jquery-rails
+  kaminari
   mysql
   net-ping
   nokogiri
@@ -120,4 +122,3 @@ DEPENDENCIES
   rspec-rails
   smurf
   warden
-  will_paginate (~> 3.0.pre2)

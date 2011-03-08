@@ -5,7 +5,6 @@
 $(document).ready(function() {
   owgm.enableJavascript();
   owgm.ajaxQuickSearch();
-  owgm.ajaxPaginate();
   owgm.ajaxLoading();
   if (typeof(gmaps) !== 'undefined') {
     gmaps.drawGoogleMap();
@@ -22,7 +21,6 @@ var owgm = {
 
   /*** Settings and Variables ***/
   quickSearchDiv: '#hotspots_quicksearch',
-  paginateDiv: '#hotspots_paginate',
   loadingDiv: '#loading',
   noJsDiv: '.no_js',
 
@@ -42,12 +40,6 @@ var owgm = {
       inputField.parent('form').submit();
       $(owgm.loadingDiv).ajaxStop(function(){$(this).fadeOut();});
     }, 1);
-  },
-
-  ajaxPaginate: function() {
-    $(this.paginateDiv).live('mousedown', function() {
-        $(this).find('a').attr('data-remote', 'true');
-    });
   },
 
   ajaxLoading: function() {

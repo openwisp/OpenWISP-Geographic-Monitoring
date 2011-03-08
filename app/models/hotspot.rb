@@ -3,11 +3,10 @@ class Hotspot < ActiveRecord::Base
   extend Addons::Mappable
 
   acts_as_authorization_object
-
-  cattr_reader :per_page
-  @@per_page = 10
-
   acts_as_mappable :default_units => :kms
+
+  paginates_per 10
+  CLUSTER_HOTSPOTS_WITHIN_KM = 2
 
   belongs_to :wisp
   has_one :property_set
@@ -15,8 +14,6 @@ class Hotspot < ActiveRecord::Base
   has_many :activity_histories
 
   delegate :reachable, :to => :property_set, :allow_nil => true
-
-  CLUSTER_HOTSPOTS_WITHIN_KM = 2
 
   def coords
     [lat, lng]
@@ -123,6 +120,14 @@ class Hotspot < ActiveRecord::Base
 
   def self.of_wisp(wisp)
     where(:wisp_id => wisp.id)
+  end
+
+  def self.sort(attribute, direction)
+    if attribute == 'status'
+      with_properties.order("`reachable` #{direction}")
+    else
+      order("#{attribute} #{direction}")
+    end
   end
 
   def self.around(coords)

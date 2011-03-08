@@ -1,9 +1,5 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  def paginate(to_paginate)
-    will_paginate to_paginate, :next_label => t(:Next), :previous_label => t(:Prev)
-  end
-
   def link_to_locale(locale)
     link_to(image_tag("locale/#{locale}.jpg", :size => "26x26"), :locale => locale)
   end

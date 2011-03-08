@@ -1,52 +1,52 @@
 <div class="grid_12">
-	<div class="box">
-		<h2><%=t :Hotspots_map %></h2>
-		<br />
-		<div id="hotspots_map">
-			<%= render 'hotspots_map' %>
-		</div>
+  <div class="box">
+    <h2><%=t :Hotspots_map %></h2>
+    <br />
+    <div id="hotspots_map">
+      <%= render 'hotspots_map' %>
+    </div>
     <div id="map_loading" class="hidden">
       <p><%=t :Loading %> <%=t :markers%> <%= image_tag 'spinner.gif', :size => '22x22' %></p>
     </div>
-	</div>
+  </div>
 
-	<div class="clear"></div>
+  <div class="clear"></div>
 
-	<div class="box">
-		<h2>
-          <%=t :Hotspots %>
-          <span class="rfloat">
+  <div class="box">
+    <h2>
+      <%=t :Hotspots %>
+      <span class="rfloat">
             <%=t :up %>: <%= Hotspot.up.count %>
-            <%=t :down %>: <%= Hotspot.down.count %>
-            <%=t :unknown %>: <%= Hotspot.unknown.count %>
+        <%=t :down %>: <%= Hotspot.down.count %>
+        <%=t :unknown %>: <%= Hotspot.unknown.count %>
           </span>
-        </h2>
+    </h2>
 
-		<br />
+    <br />
 
-		<table>
-			<thead id="hotspots_thead">
-				<%= render 'hotspots_thead' %>
-			</thead>
+    <table>
+      <thead id="hotspots_thead">
+      <%= render 'hotspots_thead' %>
+      </thead>
 
-			<tbody id="hotspots">
-				<%= render @hotspots %>
-			</tbody>
-		</table>
+      <tbody id="hotspots">
+      <%= render @hotspots %>
+      </tbody>
+    </table>
 
-		<div id="hotspots_quicksearch" class="bold">
-			<%= render 'hotspots_quicksearch' %>
-		</div>
-
-		<div id="hotspots_paginate">
-			<%= paginate @hotspots %>
+    <div id="hotspots_quicksearch" class="bold">
+      <%= render 'hotspots_quicksearch' %>
     </div>
-		<br />
+
+    <div id="hotspots_paginate">
+      <%= paginate @hotspots, :remote => true %>
+    </div>
+    <br />
 
     <div id="loading" class="hidden">
       <p><%=t :Loading %> <%= image_tag 'spinner.gif' %></p>
     </div>
-		<br />
+    <br />
 
-	</div>
+  </div>
 </div>

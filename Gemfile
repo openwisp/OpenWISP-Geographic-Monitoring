@@ -12,7 +12,7 @@ gem 'warden'
 gem 'devise'
 gem 'acl9'
 gem 'geokit-rails3'
-gem 'will_paginate', '~> 3.0.pre2'
+gem 'kaminari'
 
 gem 'backgroundrb-rails3', :require => 'backgroundrb'
 

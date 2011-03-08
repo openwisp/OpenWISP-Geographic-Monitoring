@@ -2,6 +2,13 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  activerecord:
+    attributes:
+      hotspot:
+        address: address
+        city: city
+        hostname: hostname
+        status: status
   # Uppercase
   Activity_graph: Activity Graph
   Address: Address
@@ -66,7 +73,6 @@ en:
   n_days_ago:
     one: 1 day ago
     other: "#{count} days ago"
-  status: status
   unknown: unknown
   up: up
   
@@ -109,3 +115,9 @@ en:
         subject: 'Reset password instructions'
       unlock_instructions:
         subject: 'Unlock Instructions'
+
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."

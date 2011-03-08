@@ -12,7 +12,7 @@ class HotspotsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.any(:html, :js) { @hotspots = sort_search_and_paginate }
+      format.any(:html, :js) { @hotspots = hotspots_with_sort_seach_and_paginate.of_wisp(@wisp) }
       format.json { @hotspots = hotspots_with_filter.of_wisp(@wisp).draw_map }
     end
   end
@@ -44,49 +44,26 @@ class HotspotsController < ApplicationController
     end
   end
 
-  def sort_search_and_paginate
-    page = params[:page] || 1
+  def hotspots_with_sort_seach_and_paginate
     query = params[:q] || nil
-    order = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
-    order_column = params[:column].nil? ? nil : params[:column].downcase
-    hotspots = Hotspot.of_wisp(@wisp)
+    column = params[:column] ? params[:column].downcase : nil
+    direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
 
-    if order_column == I18n.t(:status)
-      up = hotspots.up
-      down = hotspots.down
-      unknown = hotspots.unknown
+    hotspots = Hotspot
+    hotspots = hotspots.sort(t_column(column), direction) if column
+    hotspots = hotspots.hostname_like(query) if query
 
-      if query
-        up = up.hostname_like(query)
-        down = down.hostname_like(query)
-        unknown = unknown.hostname_like(query)
-      end
+    hotspots.page params[:page]
+  end
 
-      hotspots = case order
-                   when 'asc' then
-                     [up, down, unknown].flatten
-                   when 'desc' then
-                     [down, up, unknown].flatten
-                 end
+  def t_column(column)
+    i18n_columns = {}
+    i18n_columns[I18n.t(:status, :scope => [:activerecord, :attributes, :hotspot])] = 'status'
 
-      hotspots.paginate :page => page, :per_page => Hotspot.per_page
-    else
-      # Find english (main) column name
-      i18n_columns = {}
-
-      Hotspot.column_names.each do |col|
-        i18n_columns[I18n.t(col, :scope => [:activerecord, :attributes, :hotspot])] = col
-      end
-
-      column = i18n_columns.include?(order_column) ? i18n_columns[order_column] : 'hostname'
-
-      unless query.nil?
-        conds = {:page => page, :order => column+" "+order, :conditions => ['hostname like ?', "%#{query}%"], :per_page => Hotspot.per_page}
-      else
-        conds = {:page => page, :order => column+" "+order, :per_page => Hotspot.per_page}
-      end
-
-      hotspots.paginate conds
+    Hotspot.column_names.each do |col|
+      i18n_columns[I18n.t(col, :scope => [:activerecord, :attributes, :hotspot])] = col
     end
+
+    i18n_columns.include?(column) ? i18n_columns[column] : 'hostname'
   end
 end

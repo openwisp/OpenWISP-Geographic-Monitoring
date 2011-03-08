@@ -7,5 +7,5 @@ $('#hotspots').html(
 );
 
 $('#hotspots_paginate').html(
-    '<%= escape_javascript(paginate @hotspots) %>'
+    '<%= escape_javascript(paginate(@hotspots, :remote => true).to_s) %>'
 );

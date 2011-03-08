@@ -8,6 +8,7 @@ it:
         address: indirizzo
         city: città
         hostname: hostname
+        status: stato
   # Uppercase
   Activity_graph: Grafico Attività
   Address: Indirizzo
@@ -72,7 +73,6 @@ it:
   n_days_ago:
     one: 1 giorno fa
     other: "#{count} giorni fa"
-  status: stato
   unknown: sconosciuto
   up: up
 
@@ -115,3 +115,9 @@ it:
         subject: "Istruzioni per reimpostare la password"
       unlock_instructions:
         subject: "Istruzioni per sbloccare l'account"
+
+  views:
+    pagination:
+      previous: "&laquo; Precedente"
+      next: "Successivo &raquo;"
+      truncate: "..."
