@@ -13,7 +13,7 @@ class HotspotsController < ApplicationController
   def index
     respond_to do |format|
       format.any(:html, :js) { @hotspots = sort_search_and_paginate }
-      format.json { @hotspots = Hotspot.map(:show => what_to_show_on_map) }
+      format.json { @hotspots = hotspots_with_filter.of_wisp(@wisp).map }
     end
   end
 
@@ -31,8 +31,17 @@ class HotspotsController < ApplicationController
 
   private
 
-  def what_to_show_on_map
-    %w{all up down unknown}.include?(params[:filter]) ? params[:filter] : 'all'
+  def hotspots_with_filter
+    case params[:filter]
+      when 'up'
+        Hotspot.up
+      when 'down'
+        Hotspot.down
+      when 'unknown'
+        Hotspot.unknown
+      else
+        Hotspot
+    end
   end
 
   def sort_search_and_paginate
@@ -42,21 +51,21 @@ class HotspotsController < ApplicationController
     order_column = params[:column].nil? ? nil : params[:column].downcase
 
     if order_column == I18n.t(:status)
-      if query.nil?
-        up_hotspots = Hotspot.all_up
-        down_hotspots = Hotspot.all_down
-        unknown_hotspots = Hotspot.all_unknown
-      else
-        up_hotspots = Hotspot.all_up query
-        down_hotspots = Hotspot.all_down query
-        unknown_hotspots = Hotspot.all_unknown query
+      up = Hotspot.up
+      down = Hotspot.down
+      unknown = Hotspot.unknown
+
+      if query
+        up = up.hostname_like(query)
+        down = down.hostname_like(query)
+        unknown = unknown.hostname_like(query)
       end
 
       hotspots = case order
                    when 'asc' then
-                     [up_hotspots, down_hotspots, unknown_hotspots].flatten
+                     [up, down, unknown].flatten
                    when 'desc' then
-                     [down_hotspots, up_hotspots, unknown_hotspots].flatten
+                     [down, up, unknown].flatten
                  end
 
       hotspots.paginate :page => page, :per_page => Hotspot.per_page

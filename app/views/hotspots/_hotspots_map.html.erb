@@ -1,4 +1,4 @@
-<% Hotspot.center do |lat, lng| %>
+<% Hotspot.of_wisp(@wisp).center do |lat, lng| %>
   <div id="gmap_index" data-lat="<%= lat %>" data-lng="<%= lng %>">
     <p class="no_js"><%=t :No_javascript %></p>
   </div>

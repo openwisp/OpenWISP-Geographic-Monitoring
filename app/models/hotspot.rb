@@ -105,14 +105,12 @@ class Hotspot < ActiveRecord::Base
     return x, y, z
   end
 
-  def self.map(opts = {:show => 'all'})
+  def self.map
     clustered_hotspots = []
     already_clustered = []
-    to_remove = hotspots_to_hide(opts[:show])
 
-    self.all.each do |hs|
-      cluster = Hotspot.around(hs.coords)
-      cluster -= to_remove
+    find_each do |hs|
+      cluster = around(hs.coords)
       cluster -= already_clustered
 
       clustered_hotspots << ( cluster.count > 1 ? Cluster.new(cluster) : cluster.first )
@@ -164,19 +162,6 @@ class Hotspot < ActiveRecord::Base
   end
 
   private
-
-  def self.hotspots_to_hide(to_show)
-    case to_show
-      when 'up' then
-        [self.all_down, self.all_unknown].flatten
-      when 'down' then
-        [self.all_up, self.all_unknown].flatten
-      when 'unknown'
-        [self.all_down, self.all_up].flatten
-      else
-        []
-    end
-  end
 
   def self.with_properties
     joins("LEFT JOIN `property_sets` ON `property_sets`.`hotspot_id` = `hotspots`.`id`")
