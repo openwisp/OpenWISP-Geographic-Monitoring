@@ -168,6 +168,6 @@ class Hotspot < ActiveRecord::Base
   end
 
   def set_reachable_to(boolean)
-    property_set ? property_set.update_attribute(:reachable, boolean) : property_set.create(:reachable => boolean, :hotspot => self)
+    property_set.update_attribute(:reachable, boolean) rescue PropertySet.create(:reachable => boolean, :hotspot => self)
   end
 end

@@ -49,11 +49,12 @@ class HotspotsController < ApplicationController
     query = params[:q] || nil
     order = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
     order_column = params[:column].nil? ? nil : params[:column].downcase
+    hotspots = Hotspot.of_wisp(@wisp)
 
     if order_column == I18n.t(:status)
-      up = Hotspot.up
-      down = Hotspot.down
-      unknown = Hotspot.unknown
+      up = hotspots.up
+      down = hotspots.down
+      unknown = hotspots.unknown
 
       if query
         up = up.hostname_like(query)
@@ -80,12 +81,12 @@ class HotspotsController < ApplicationController
       column = i18n_columns.include?(order_column) ? i18n_columns[order_column] : 'hostname'
 
       unless query.nil?
-        conds = {:page => page, :order => column+" "+order, :conditions => ['hostname like ?', "%#{query}%"]}
+        conds = {:page => page, :order => column+" "+order, :conditions => ['hostname like ?', "%#{query}%"], :per_page => Hotspot.per_page}
       else
-        conds = {:page => page, :order => column+" "+order}
+        conds = {:page => page, :order => column+" "+order, :per_page => Hotspot.per_page}
       end
 
-      Hotspot.paginate conds
+      hotspots.paginate conds
     end
   end
 end
