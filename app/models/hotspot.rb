@@ -53,7 +53,11 @@ class Hotspot < ActiveRecord::Base
   end
 
   def reachable!
-    property_set ? property_set.update_attribute(:reachable, true) : property_set.create(:reachable => true, :hotspot => self)
+    set_reachable_to true
+  end
+
+  def unreachable!
+    set_reachable_to false
   end
 
   def latest_seen
@@ -176,5 +180,9 @@ class Hotspot < ActiveRecord::Base
 
   def self.with_properties
     joins("LEFT JOIN `property_sets` ON `property_sets`.`hotspot_id` = `hotspots`.`id`")
+  end
+
+  def set_reachable_to(boolean)
+    property_set ? property_set.update_attribute(:reachable, boolean) : property_set.create(:reachable => boolean, :hotspot => self)
   end
 end

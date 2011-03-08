@@ -41,7 +41,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         if act
           @@semaphore.synchronize {
             act.save!
-            ap.reachable! if act.status
+            act.status ? reachable! : unreachable!
           }
         end
       end)
