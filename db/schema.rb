@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110305103911) do
+ActiveRecord::Schema.define(:version => 20110308090318) do
 
   create_table "activities", :force => true do |t|
     t.integer  "status"
@@ -66,6 +66,11 @@ ActiveRecord::Schema.define(:version => 20110305103911) do
     t.string   "oui"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "property_sets", :force => true do |t|
+    t.boolean "reachable"
+    t.integer "hotspot_id"
   end
 
   create_table "roles", :force => true do |t|

@@ -7,14 +7,14 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
 
   MAX_THREADS = 10
   PING_TIMEOUT = 5
-  
+
   @@semaphore = Mutex.new
 
   def create(args = nil)
     # this method is called, when worker is loaded for the first time
-    
+
   end
-  
+
   def hotspots_monitoring
     threads = []
     Hotspot.all.each do |ap|
@@ -41,6 +41,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         if act
           @@semaphore.synchronize {
             act.save!
+            ap.reachable! if act.status
           }
         end
       end)
@@ -59,7 +60,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     end
 
   end
-  
+
   def consolidate
     Hotspot.all.each do |ap|
       @@semaphore.synchronize {
@@ -79,5 +80,5 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     time = 1.week.to_i.ago
     ActivityHistory.destroy_all(:conditions => "created_at < #{time}")
   end
-  
+
 end
