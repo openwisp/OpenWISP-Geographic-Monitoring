@@ -13,7 +13,7 @@ class HotspotsController < ApplicationController
   def index
     respond_to do |format|
       format.any(:html, :js) { @hotspots = sort_search_and_paginate }
-      format.json { @hotspots = hotspots_with_filter.of_wisp(@wisp).map }
+      format.json { @hotspots = hotspots_with_filter.of_wisp(@wisp).draw_map }
     end
   end
 

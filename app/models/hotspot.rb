@@ -105,7 +105,7 @@ class Hotspot < ActiveRecord::Base
     return x, y, z
   end
 
-  def self.map
+  def self.draw_map
     clustered_hotspots = []
     already_clustered = []
 
