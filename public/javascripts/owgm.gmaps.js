@@ -7,6 +7,7 @@ var gmaps = {
     hotspotTemplate: '#hotspot_infowindow_templ',
     clusterTemplate: '#cluster_infowindow_templ',
     hotspotClusterTemplate: '#hotspots_infowindow_templ',
+    markerShadow: '/images/shadow.png',
     map: undefined, // will be defined in drawGoogleMap
     mgr: undefined, // will be defined in drawMarkers
     latSelector: 'data-lat',
@@ -62,7 +63,8 @@ var gmaps = {
             new google.maps.Marker({
                 position: hotspot_coords,
                 map: gmaps.map,
-                icon: $(gmaps.singleHotspotIcon).attr('src')
+                icon: gmaps.gIcon($(gmaps.singleHotspotIcon).attr('src')),
+                shadow: gmaps.gShadow()
             });
         }
     },
@@ -87,21 +89,24 @@ var gmaps = {
                 if (this.hotspot) {
                     marker_container = new google.maps.Marker({
                         position: gmaps.getCoords(this.hotspot.lat, this.hotspot.lng),
-                        icon: this.hotspot.icon
+                        icon: gmaps.gIcon(this.hotspot.icon),
+                        shadow: gmaps.gShadow()
                     });
                     gmaps.hotspots.push(marker_container);
                     gmaps.addInfoWindow(marker_container, gmaps.buildHotspotInfo(this.hotspot));
                 } else if (this.cluster) {
                     marker_container = new google.maps.Marker({
                         position: gmaps.getCoords(this.cluster.lat, this.cluster.lng),
-                        icon: this.cluster.icon
+                        icon: gmaps.gIcon(this.cluster.icon),
+                        shadow: gmaps.gShadow()
                     });
                     gmaps.clusters.push(marker_container);
                     gmaps.addInfoWindow(marker_container, gmaps.buildClusterInfo(this.cluster));
                     $.each(this.cluster.hotspots, function(){
                         marker_container = new google.maps.Marker({
                             position: gmaps.getCoords(this.hotspot.lat, this.hotspot.lng),
-                            icon: this.hotspot.icon
+                            icon: gmaps.gIcon(this.hotspot.icon),
+                            shadow: gmaps.gShadow()
                         });
                         gmaps.hotspots_clustered.push(marker_container);
                         gmaps.addInfoWindow(marker_container, gmaps.buildHotspotInfo(this.hotspot));
@@ -109,6 +114,14 @@ var gmaps = {
                 }
             });
         });
+    },
+
+    gIcon: function(src) {
+        return new google.maps.MarkerImage(src, new google.maps.Size(32.0, 37.0), new google.maps.Point(0, 0), new google.maps.Point(16.0, 18.0));
+    },
+
+    gShadow: function() {
+        return new google.maps.MarkerImage(gmaps.markerShadow, new google.maps.Size(51.0, 37.0), new google.maps.Point(0, 0), new google.maps.Point(16.0, 18.0));
     },
 
     addInfoWindow: function(marker, contentString) {
@@ -132,7 +145,8 @@ var gmaps = {
 
     buildClusterInfo: function(cluster) {
         var _content = $(gmaps.clusterTemplate).clone().html();
-        var _hotspots, _hotspot = "";
+        var _hotspots, _hotspot;
+        _hotspots = "";
 
         $.each(cluster.hotspots, function(){
             _hotspot = $(gmaps.hotspotClusterTemplate).clone().html();
