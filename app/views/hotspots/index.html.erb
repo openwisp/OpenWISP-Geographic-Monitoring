@@ -20,10 +20,10 @@
     <h2>
       <%=t :Hotspots %>
       <span class="rfloat">
-            <%=t :up %>: <%= Hotspot.up.count %>
-        <%=t :down %>: <%= Hotspot.down.count %>
-        <%=t :unknown %>: <%= Hotspot.unknown.count %>
-          </span>
+        <%=t :up %>: <%= @hotspots.up.count %>
+        <%=t :down %>: <%= @hotspots.down.count %>
+        <%=t :unknown %>: <%= @hotspots.unknown.count %>
+      </span>
     </h2>
 
     <br />
