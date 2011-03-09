@@ -4,7 +4,7 @@ development:
   adapter: mysql
   encoding: utf8
   database: owgm
-  pool: 5
+  pool: 15
   username: root
   password: admin
   socket: /tmp/mysql.sock
@@ -16,11 +16,11 @@ development:
 test:
   adapter: sqlite3
   database: db/test.sqlite3
-  pool: 5
+  pool: 15
   timeout: 5000
 
 production:
   adapter: sqlite3
   database: db/production.sqlite3
-  pool: 5
+  pool: 15
   timeout: 5000
