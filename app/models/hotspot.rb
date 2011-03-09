@@ -131,7 +131,7 @@ class Hotspot < ActiveRecord::Base
   end
 
   def self.around(coords)
-    geo_scope :within => CLUSTER_HOTSPOTS_WITHIN_KM, :origin => coords
+    select("`hotspots`.*").geo_scope(:within => CLUSTER_HOTSPOTS_WITHIN_KM, :origin => coords)
   end
 
   def self.up
