@@ -1,0 +1,50 @@
+<script id="hotspot_infowindow_templ" type="text/html">
+  <h5><%=t :Hotspot_info %></h5>
+  <table>
+    <tbody class="hover">
+    <tr>
+      <td><strong><%=t :Hostname %></strong></td>
+      <td>__hostname__</td>
+    </tr>
+    <tr>
+      <td><strong><%=t :Address %></strong></td>
+      <td>__address__</td>
+    </tr>
+    <tr>
+      <td><strong><%=t :City %></strong></td>
+      <td>__city__</td>
+    </tr>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="2" class="center"><a href="__url__"><%=t :Details %></a></td>
+    </tr>
+    </tbody>
+  </table>
+</script>
+
+<script id="cluster_infowindow_templ" type="text/html">
+  <h5><%=t :Cluster_info %></h5>
+  <table>
+    <thead>
+    <tr>
+      <th><%=t :Status %></th>
+      <th class="center"><%=t :Hostname %></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody class="hover">
+    __hotspots__
+    </tbody>
+  </table>
+</script>
+
+<script id="hotspots_infowindow_templ" type="text/html">
+  <tr>
+    <td><img src="__icon__" alt="hotspot icon" width="30" height="35"></td>
+    <td class="middle center">__hostname__</td>
+    <td class="middle center"><a href="__url__"><%=t :details %></a></td>
+  </tr>
+</script>
+

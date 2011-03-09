@@ -4,8 +4,9 @@ var gmaps = {
     mapDiv: '#gmap_index',
     mapDivSingle: '#gmap_show',
     mapLoadingDiv: '#map_loading',
-    hotspotTemplate: '#hotspot_marker_template',
-    clusterTemplate: '#cluster_marker_template',
+    hotspotTemplate: '#hotspot_infowindow_templ',
+    clusterTemplate: '#cluster_infowindow_templ',
+    hotspotClusterTemplate: '#hotspots_infowindow_templ',
     map: undefined, // will be defined in drawGoogleMap
     mgr: undefined, // will be defined in drawMarkers
     latSelector: 'data-lat',
@@ -120,25 +121,28 @@ var gmaps = {
     },
 
     buildHotspotInfo: function(hotspot) {
-        var _content = $(gmaps.hotspotTemplate).clone();
-        _content.find(".hostname").html(hotspot.hostname);
-        _content.find(".city").html(hotspot.city);
-        _content.find(".address").html(hotspot.address);
-        _content.find(".url").attr('href', hotspot.url);
-        return _content.html();
+        var _content = $(gmaps.hotspotTemplate).clone().html();
+        _content = _content.replace(/__hostname__/, hotspot.hostname);
+        _content = _content.replace(/__address__/, hotspot.address);
+        _content = _content.replace(/__city__/, hotspot.city);
+        _content = _content.replace(/__url__/, hotspot.url);
+        _content = _content.replace(/__icon__/, hotspot.icon);
+        return _content;
     },
 
     buildClusterInfo: function(cluster) {
-        var _content = $(gmaps.clusterTemplate).clone();
-        var _hotspot = _content.find(".one_hotspot").clone();
-        _content.find(".one_hotspot").remove();
+        var _content = $(gmaps.clusterTemplate).clone().html();
+        var _hotspots, _hotspot = "";
 
         $.each(cluster.hotspots, function(){
-            _hotspot.find(".icon").attr('src', this.hotspot.icon);
-            _hotspot.find(".hostname").html(this.hotspot.hostname);
-            _hotspot.find(".url").attr('href', this.hotspot.url);
-            _hotspot.clone().appendTo(_content.find(".hotspots"));
+            _hotspot = $(gmaps.hotspotClusterTemplate).clone().html();
+            _hotspot = _hotspot.replace(/__icon__/, this.hotspot.icon);
+            _hotspot = _hotspot.replace(/__hostname__/, this.hotspot.hostname);
+            _hotspot = _hotspot.replace(/__url__/, this.hotspot.url);
+            _hotspots += _hotspot;
         });
-        return _content.html();
+
+        _content = _content.replace(/__hotspots__/, _hotspots);
+        return _content;
     }
 }
