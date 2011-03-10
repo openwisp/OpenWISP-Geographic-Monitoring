@@ -42,4 +42,8 @@ module ApplicationHelper
   def auth?(role, object=nil)
     current_user && current_user.has_role?(role, object)
   end
+
+  def hotspots_with_or_without_wisp_path(wisp)
+    wisp ? wisp_hotspots_path(wisp) : hotspots_path
+  end
 end

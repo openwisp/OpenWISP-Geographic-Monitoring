@@ -49,7 +49,7 @@ class HotspotsController < ApplicationController
     column = params[:column] ? params[:column].downcase : nil
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
 
-    hotspots = Hotspot
+    hotspots = Hotspot.scoped
     hotspots = hotspots.sort(t_column(column), direction) if column
     hotspots = hotspots.hostname_like(query) if query
 

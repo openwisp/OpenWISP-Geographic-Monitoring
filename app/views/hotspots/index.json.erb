@@ -9,7 +9,7 @@
         :address => marker.address,
         :city => marker.city,
         :icon => image_path_for(marker),
-        :url => wisp_hotspot_url(@wisp, marker)
+        :url => wisp_hotspot_url(marker.wisp, marker)
       }}.to_json
     elsif marker.is_a? Cluster
       hotspots_clustered = []
@@ -22,7 +22,7 @@
           :address => hotspot.address,
           :city => hotspot.city,
           :icon => image_path_for(hotspot),
-          :url => wisp_hotspot_url(@wisp, hotspot)
+          :url => wisp_hotspot_url(hotspot.wisp, hotspot)
         }}
       end
 

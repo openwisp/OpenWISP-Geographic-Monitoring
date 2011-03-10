@@ -52,7 +52,7 @@
 <div class="container_12">
   <div class="grid_12">
     <h1 id="branding">
-       <%= link_to image_tag("logo_caspur.png", :border => 0, :size => "58x45", :alt => 'Open WISP Manager', :class => "wispmanager_logo") %> Open Wisp Geographic Monitoring
+      <%= link_to image_tag("logo_caspur.png", :border => 0, :size => "58x45", :alt => 'Open WISP Manager', :class => "wispmanager_logo") %> Open Wisp Geographic Monitoring
       <br />
       <%= link_to_locale 'it' %> <%= link_to_locale 'en' %>
     </h1>
@@ -64,7 +64,7 @@
           <% elsif current_page?(:controller => :hotspots, :action => :index) %>
               <li><%= link_to t(:Wisp_list), wisps_path %></li>
               <li class="spacer"><a>&raquo;</a></li>
-              <li class="underline"><a><%=t :Hotspots_for, :wisp => @wisp.name %></a></li>
+              <li class="underline"><a><%= @wisp ? t(:Hotspots_for, :wisp => @wisp) : t(:Hotspots_of_every_wisp) %></a></li>
           <% elsif current_page?(:controller => :hotspots, :action => :show) %>
               <li><%= link_to t(:Wisp_list), wisps_path %></li>
               <li class="spacer"><a>&raquo;</a></li>

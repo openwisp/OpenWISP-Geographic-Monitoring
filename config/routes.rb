@@ -4,6 +4,8 @@ Owgm::Application.routes.draw do
 
   devise_for :users
 
+  resources :hotspots, :only => [:index]
+
   resources :wisps, :only => :index do
     resources :hotspots, :only => [:index, :show]
   end

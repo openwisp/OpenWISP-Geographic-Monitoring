@@ -1,5 +1,5 @@
 <tr>
-  <td class="middle"><%= link_to hotspot.hostname, wisp_hotspot_path(@wisp, hotspot) %></td>
+  <td class="middle"><%= link_to hotspot.hostname, wisp_hotspot_path(hotspot.wisp, hotspot) %></td>
   <td class="middle"><%= hotspot.address %></td>
   <td class="middle"><%= hotspot.city %></td>
   <td class="middle right"><%= image_tag_for hotspot, :size => "30x35", :class => 'right' %></td>

@@ -31,6 +31,7 @@ it:
   Hotspot_named: Hotspot %{hostname}
   Hotspots: Hotspot
   Hotspots_for: Hotspot di %{wisp}
+  Hotspots_of_every_wisp: Hotspot di ogni wisp
   Hotspots_map: Mappa degli Hotspot
   Info: Informazioni
   Interface_address: Indirizzo apparato

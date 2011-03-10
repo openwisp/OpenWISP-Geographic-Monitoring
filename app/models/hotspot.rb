@@ -119,7 +119,8 @@ class Hotspot < ActiveRecord::Base
   end
 
   def self.of_wisp(wisp)
-    where(:wisp_id => wisp.id)
+    # Skip scope (and let other scopes return results) if wisp is nil
+    wisp ? where(:wisp_id => wisp.id) : scoped
   end
 
   def self.sort(attribute, direction)
