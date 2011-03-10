@@ -68,13 +68,14 @@ var gmaps = {
                 icon: gmaps.gIcon($(gmaps.singleHotspotIcon).attr('src')),
                 shadow: gmaps.gShadow($(gmaps.singleHotspotIcon).attr('src'))
             });
-            gmaps.bnds.extend(_marker.getPosition());
-            gmaps.fitMarkers();
         }
     },
 
     fitMarkers: function() {
         gmaps.map.fitBounds(gmaps.bnds);
+        if (gmaps.map.getZoom() > gmaps.cluster_till_zoom) {
+            gmaps.map.setZoom(gmaps.cluster_till_zoom);
+        }
     },
 
     drawMarkers: function() {
