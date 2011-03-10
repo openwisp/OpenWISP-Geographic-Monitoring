@@ -10,6 +10,7 @@ var gmaps = {
     markerShadow: 'shadow.png',
     map: undefined, // will be defined in drawGoogleMap
     mgr: undefined, // will be defined in drawMarkers
+    bnds: undefined, // will be defined in as LatLngBounds
     latSelector: 'data-lat',
     lngSelector: 'data-lng',
     singleHotspotIcon: '#hs_icon',
@@ -34,13 +35,14 @@ var gmaps = {
     drawGoogleMap: function() {
         if(owgm.exists(gmaps.mapDiv)) {
             $(gmaps.mapLoadingDiv).show();
+            gmaps.bnds = new google.maps.LatLngBounds();
             // Hotspots (many) index view. Fetch data to draw
             // by parsing JSON data retrieved from the save view.
             // Hotspots are drawn via MarkerManager v3
             var map_div_id = $(gmaps.mapDiv).attr('id');
             gmaps.map = new google.maps.Map(document.getElementById(map_div_id), $.extend(gmaps.opts, {
                 zoom: 7,
-                center: gmaps.getCoords($(gmaps.mapDiv).attr(gmaps.latSelector), $(gmaps.mapDiv).attr(gmaps.lngSelector))
+                center: gmaps.getCoords(0,0)
             }));
             var listener = google.maps.event.addListener(gmaps.map, 'bounds_changed', function(){
                 gmaps.fetchMarkers();
@@ -60,13 +62,19 @@ var gmaps = {
                 disableDoubleClickZoom: true,
                 keyboardShortcuts: false
             }));
-            new google.maps.Marker({
+            var _marker = new google.maps.Marker({
                 position: hotspot_coords,
                 map: gmaps.map,
                 icon: gmaps.gIcon($(gmaps.singleHotspotIcon).attr('src')),
                 shadow: gmaps.gShadow($(gmaps.singleHotspotIcon).attr('src'))
             });
+            gmaps.bnds.extend(_marker.getPosition());
+            gmaps.fitMarkers();
         }
+    },
+
+    fitMarkers: function() {
+        gmaps.map.fitBounds(gmaps.bnds);
     },
 
     drawMarkers: function() {
@@ -79,6 +87,7 @@ var gmaps = {
                 gmaps.mgr.refresh();
                 $(gmaps.mapLoadingDiv).fadeOut('slow');
             });
+            gmaps.fitMarkers();
         }
     },
 
@@ -94,6 +103,7 @@ var gmaps = {
                     });
                     gmaps.hotspots.push(marker_container);
                     gmaps.addInfoWindow(marker_container, gmaps.buildHotspotInfo(this.hotspot));
+                    gmaps.bnds.extend(marker_container.getPosition());
                 } else if (this.cluster) {
                     marker_container = new google.maps.Marker({
                         position: gmaps.getCoords(this.cluster.lat, this.cluster.lng),
@@ -102,6 +112,7 @@ var gmaps = {
                     });
                     gmaps.clusters.push(marker_container);
                     gmaps.addInfoWindow(marker_container, gmaps.buildClusterInfo(this.cluster));
+                    gmaps.bnds.extend(marker_container.getPosition());
                     $.each(this.cluster.hotspots, function(){
                         marker_container = new google.maps.Marker({
                             position: gmaps.getCoords(this.hotspot.lat, this.hotspot.lng),

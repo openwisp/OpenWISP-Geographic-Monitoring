@@ -1,6 +1,5 @@
 class Hotspot < ActiveRecord::Base
   require 'ipaddr'
-  extend Addons::Mappable
 
   acts_as_authorization_object
   acts_as_mappable :default_units => :kms
@@ -95,12 +94,6 @@ class Hotspot < ActiveRecord::Base
 
 
   ##### Static methods #####
-
-  def self.center
-    x, y, z = get_center_zoom self.all
-    yield x, y, z if block_given?
-    return x, y, z
-  end
 
   def self.draw_map
     clustered_hotspots = []
