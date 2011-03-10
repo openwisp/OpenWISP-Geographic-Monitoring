@@ -16,18 +16,22 @@
       </thead>
 
       <tbody>
-          <% @wisps.each do |wisp| %>
-              <% if auth?(:wisps_viewer) || auth?(:wisp_hotspots_viewer, wisp) %>
-                  <tr>
-                    <td><%= link_to wisp.name, wisp_hotspots_path(wisp) %></td>
-                    <td colspan="3"><%= wisp.notes %></td>
-                    <td class="center"><%= wisp.hotspots_up.count %></td>
-                    <td class="center"><%= wisp.hotspots_down.count %></td>
-                    <td class="center"><%= wisp.hotspots_unknown.count %></td>
-                  </tr>
-              <% end %>
+      <% @wisps.each do |wisp| %>
+          <% if auth?(:wisps_viewer) || auth?(:wisp_hotspots_viewer, wisp) %>
+              <tr>
+                <td><%= link_to wisp.name, wisp_hotspots_path(wisp) %></td>
+                <td colspan="3"><%= wisp.notes %></td>
+                <td class="center"><%= wisp.hotspots_up.count %></td>
+                <td class="center"><%= wisp.hotspots_down.count %></td>
+                <td class="center"><%= wisp.hotspots_unknown.count %></td>
+              </tr>
           <% end %>
+      <% end %>
       </tbody>
     </table>
+
+    <% if auth? :wisps_viewer %>
+        <h6><%= link_to t(:Show_all_hotspots), hotspots_path %></h6>
+    <% end %>
   </div>
 </div>
