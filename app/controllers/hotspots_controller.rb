@@ -6,7 +6,7 @@ class HotspotsController < ApplicationController
 
     actions :index, :show do
       allow :wisps_viewer
-      allow :wisp_hotspots_viewer, :of => :wisp
+      allow :wisp_hotspots_viewer, :of => :wisp, :if => :wisp_loaded?
     end
   end
 

@@ -3,6 +3,7 @@
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
+  helper_method :wisp_loaded?
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   # Scrub sensitive parameters from your log
@@ -23,5 +24,9 @@ class ApplicationController < ActionController::Base
 
   def load_wisp
     @wisp = Wisp.find(params[:wisp_id] || params[:id]) rescue nil
+  end
+
+  def wisp_loaded?
+    !@wisp.nil?
   end
 end
