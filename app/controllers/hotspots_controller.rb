@@ -50,7 +50,7 @@ class HotspotsController < ApplicationController
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
 
     hotspots = Hotspot.scoped
-    hotspots = hotspots.sort(t_column(column), direction) if column
+    hotspots = hotspots.sort_with(t_column(column), direction) if column
     hotspots = hotspots.hostname_like(query) if query
 
     hotspots.page params[:page]

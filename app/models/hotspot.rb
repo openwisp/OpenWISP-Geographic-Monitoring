@@ -116,7 +116,7 @@ class Hotspot < ActiveRecord::Base
     wisp ? where(:wisp_id => wisp.id) : scoped
   end
 
-  def self.sort(attribute, direction)
+  def self.sort_with(attribute, direction)
     if attribute == 'status'
       with_properties.order("`reachable` #{direction}")
     else
