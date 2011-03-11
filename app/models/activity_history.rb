@@ -4,7 +4,9 @@ class ActivityHistory < ActiveRecord::Base
   default_scope order(:start_time)
 
   def as_json(options={})
-    [ start_time.to_datetime.to_i, status ]
+    # Time should be in unix epoch time in
+    # milliseconds...
+    [ start_time.to_i * 1000, status ]
   end
 
   def self.older_than(time)
