@@ -19,12 +19,11 @@ class HotspotsController < ApplicationController
 
   def show
     @hotspot = Hotspot.find params[:id]
-    days_ago = params[:days_ago].to_i
 
     respond_to do |format|
       format.html
       format.json do
-        render :json => @hotspot.activities_older_than(days_ago)
+        render :json => @hotspot.activity_histories.older_than(30.days.ago)
       end
     end
   end

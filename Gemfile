@@ -4,7 +4,6 @@ gem 'rails', '3.0.3'
 gem 'mysql'
 
 gem 'jquery-rails'
-gem 'smurf'
 gem 'geokit'
 gem 'net-ping'
 gem 'nokogiri'

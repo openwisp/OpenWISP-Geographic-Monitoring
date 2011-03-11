@@ -3,15 +3,12 @@
 
 /* document.ready callback... */
 $(document).ready(function() {
-  owgm.enableJavascript();
-  owgm.ajaxQuickSearch();
-  owgm.ajaxLoading();
-  if (typeof(gmaps) !== 'undefined') {
-    gmaps.drawGoogleMap();
-  }
-  if (typeof(graphs) !== 'undefined') {
-    graphs.drawActivityGraph();
-  }
+    owgm.enableJavascript();
+    owgm.ajaxQuickSearch();
+    owgm.ajaxLoading();
+    if (typeof(gmaps) !== 'undefined') {
+        gmaps.drawGoogleMap();
+    }
 });
 
 
@@ -19,36 +16,36 @@ $(document).ready(function() {
 
 var owgm = {
 
-  /*** Settings and Variables ***/
-  quickSearchDiv: '#hotspots_quicksearch',
-  loadingDiv: '#loading',
-  noJsDiv: '.no_js',
+    /*** Settings and Variables ***/
+    quickSearchDiv: '#hotspots_quicksearch',
+    loadingDiv: '#loading',
+    noJsDiv: '.no_js',
 
-  /*** Application Specific Functions ***/
-  enableJavascript: function() {
-    $(owgm.noJsDiv).hide();
-  },
+    /*** Application Specific Functions ***/
+    enableJavascript: function() {
+        $(owgm.noJsDiv).hide();
+    },
 
-  exists: function (selector) {
-    return ($(selector).length > 0);
-  },
+    exists: function (selector) {
+        return ($(selector).length > 0);
+    },
 
-  ajaxQuickSearch: function() {
-    var inputField = $(this.quickSearchDiv).find('input[type=text]');
-    inputField.observe(function() {
-      $(owgm.loadingDiv).fadeIn();
-      inputField.parent('form').submit();
-      $(owgm.loadingDiv).ajaxStop(function(){$(this).fadeOut();});
-    }, 1);
-  },
+    ajaxQuickSearch: function() {
+        var inputField = $(this.quickSearchDiv).find('input[type=text]');
+        inputField.observe(function() {
+            $(owgm.loadingDiv).fadeIn();
+            inputField.parent('form').submit();
+            $(owgm.loadingDiv).ajaxStop(function(){$(this).fadeOut();});
+        }, 1);
+    },
 
-  ajaxLoading: function() {
-    $('[data-remote=true]').live('click', function(){
-      $(owgm.loadingDiv).fadeIn();
-    }).ajaxStop(function(){
-      $(owgm.loadingDiv).fadeOut();
-    });
-  }
+    ajaxLoading: function() {
+        $('[data-remote=true]').live('click', function(){
+            $(owgm.loadingDiv).fadeIn();
+        }).ajaxStop(function(){
+            $(owgm.loadingDiv).fadeOut();
+        });
+    }
 };
 
 /************************/

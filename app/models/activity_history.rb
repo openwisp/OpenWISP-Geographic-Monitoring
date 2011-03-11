@@ -1,11 +1,13 @@
 class ActivityHistory < ActiveRecord::Base
   belongs_to :hotspot
 
-  def as_json(options={})
-    {:activity_history => {
-      :status => status,
-      :start_time => start_time.to_s,
-      :last_time => last_time.to_s
-    }}
+  default_scope order(:start_time)
+
+  def as_json
+    [ status, start_time.to_s ]
+  end
+
+  def self.older_than(time)
+    where(:start_time => time.to_time..Time.now)
   end
 end

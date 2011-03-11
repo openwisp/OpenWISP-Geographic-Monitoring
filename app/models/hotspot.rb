@@ -74,14 +74,6 @@ class Hotspot < ActiveRecord::Base
     end
   end
 
-  def activities_older_than(count)
-    if count > 0
-      activity_histories.where('start_time >= ?', count.days.ago)
-    else
-      activity_histories
-    end
-  end
-
   def clients
     if OwtsConnector::connected?
       clients = OwtsConnector::clients(self.common_name).map{|client| ConnectedClient.new client }
