@@ -67,9 +67,8 @@
 
 #activity_graph {
   width: 870px;
-  height: 340px;
+  height: 240px;
   margin-left: 5px;
-  margin-top: 15px;
 }
 
 #gmap_index {
@@ -79,7 +78,7 @@
 
 #gmap_show {
   width: 430px;
-  height: 400px;
+  height: 228px;
 }
 
 #map_loading {

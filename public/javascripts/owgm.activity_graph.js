@@ -3,7 +3,6 @@ $.getJSON('', function(activity_histories){
         chart: {
             renderTo: 'activity_graph',
             zoomType: 'x',
-            spacingTop: 10,
 	    plotBorderWidth: 1
         },
         title: { text: null },
@@ -26,13 +25,12 @@ $.getJSON('', function(activity_histories){
         yAxis: {
             title: { text: null },
 	    labels: {style: {fontWeight: 'bold'}},
-            minorGridLineColor: '#E0E0E0',
-            minorGridLineWidth: 0.5,
+            minorGridLineWidth: 0.3,
             minorTickInterval: 'auto',
-	    maxPadding: 0.18,
-	    min: -0.1,
-            endOnTick: false,
-            showFirstLabel: false
+	    min: -0.01,
+	    max: 1.01,
+            showFirstLabel: false,
+	    showLastLabel: false
         },
         tooltip: {
             shared: false,
