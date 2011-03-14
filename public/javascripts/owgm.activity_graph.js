@@ -3,16 +3,32 @@ $.getJSON('', function(activity_histories){
         chart: {
             renderTo: 'activity_graph',
             zoomType: 'x',
-            spacingTop: 10
+            spacingTop: 10,
+	    plotBorderWidth: 1
         },
         title: { text: null },
         xAxis: {
             type: 'datetime',
-            title: { text: null }
+            title: { text: null },
+	    labels: {style: {fontWeight: 'bold'}, step:2},
+            endOnTick: false,
+	    maxPadding: 0,
+	    minPadding: 0,
+	    gridLineWidth: 2,
+	    minorGridLineWidth: 1,
+	    dateTimeLabelFormats: {
+		day: '%e %B',
+		hour: '%e %B, %H:%M',
+		minute: '%e %B, %H:%M',
+		second: '%e/%m, %H:%M'
+	    }
         },
         yAxis: {
             title: { text: null },
-	    gridLineDashStyle: 'longdash',
+	    labels: {style: {fontWeight: 'bold'}},
+            minorGridLineColor: '#E0E0E0',
+            minorGridLineWidth: 0.5,
+            minorTickInterval: 'auto',
 	    maxPadding: 0.18,
 	    min: -0.1,
             endOnTick: false,
@@ -21,7 +37,7 @@ $.getJSON('', function(activity_histories){
         tooltip: {
             shared: false,
 	    formatter: function() {
-		return '<strong>'+ Highcharts.dateFormat('%e %b %Y, %H:%M', this.x) +'</strong><br/>'+ this.y;
+		return '<strong>'+ Highcharts.dateFormat('%a %e %b %Y, %H:%M', this.x) +'</strong><br/>'+ this.y;
 	    },
 	    backgroundColor: {
             linearGradient: [0, 0, 0, 50],
@@ -53,7 +69,6 @@ $.getJSON('', function(activity_histories){
 	    }
 	},
         series: [{
-	    name: "activity",
             data: activity_histories
         }]
     });
