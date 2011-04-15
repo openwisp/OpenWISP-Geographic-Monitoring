@@ -77,7 +77,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
   end
 
   def housekeeping
-    time = 1.week.to_i.ago
+    time = 3.months.to_i.ago
     ActivityHistory.destroy_all(:conditions => "created_at < #{time}")
   end
 
