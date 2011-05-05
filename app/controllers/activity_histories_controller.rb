@@ -11,7 +11,10 @@ class ActivityHistoriesController < ApplicationController
   end
 
   def index
-    @hotspots = Hotspot.activated(params[:from], params[:to]).of_wisp(@wisp)
+    @from = Date.strptime(params[:from], I18n.t('date.formats.default')) rescue 365.days.ago.to_date
+    @to = Date.strptime(params[:to], I18n.t('date.formats.default')) rescue Date.today
+
+    @hotspots = Hotspot.activated(@to).of_wisp(@wisp)
   end
 
   def show

@@ -84,6 +84,14 @@ class Hotspot < ActiveRecord::Base
     end
   end
 
+  def up_average(from, to)
+    activity_histories.observe(activation_date > from ? activation_date : from, to).average_availability
+  end
+
+  def down_average(from, to)
+    100 - up_average(from, to)
+  end
+
 
   ##### Static methods #####
 
@@ -136,14 +144,8 @@ class Hotspot < ActiveRecord::Base
     with_properties.where(:property_sets => {:reachable => nil})
   end
 
-  def self.activated(from=nil, to=nil)
-    to = to ? to.to_date : Date.today
-
-    unless from.blank?
-      where(:activation_date => (from.to_date)..to)
-    else
-      where("activation_date <= ?", to)
-    end
+  def self.activated(till=nil)
+    where("activation_date <= ?", till)
   end
 
   def self.all_up(regex=nil)

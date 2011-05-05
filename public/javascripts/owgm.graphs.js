@@ -32,14 +32,6 @@ var graphs = {
                 Highcharts.setOptions({lang: this.lang});
             }
         });
-    },
-
-    daysAgo: function(days) {
-        return new Date().setDate(graphs.today().getDate()-days);
-    },
-
-    today: function() {
-        return new Date();
     }
 };
 

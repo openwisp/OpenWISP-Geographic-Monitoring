@@ -26,6 +26,7 @@ en:
   Details: Details
   Down: Down
   Earliest_seen: Earliest seen on
+  Filter_data_by_date: Filter by date
   Graphs: Graphs
   Hostname: Hostname
   Hotspot: Hotspot
@@ -64,6 +65,7 @@ en:
   There_are_no_connected_clients: There are no connected clients
   Unknown: Unknown
   Up: Up
+  Update: Update
   Username: Username
   Wisp_list: Wisps List
   
@@ -125,3 +127,7 @@ en:
       previous: "&laquo; Prev"
       next: "Next &raquo;"
       truncate: "..."
+
+  date:
+    formats:
+      default: "%d/%m/%Y"

@@ -1,13 +1,32 @@
 <% content_for :after_defaults do %>
-    <%= javascript_include_tag 'jquery.tablesorter' %>
-    <%= stylesheet_link_tag 'jquery.tablesorter' %>
-    <%= javascript_tag "$(function(){$('#report').tablesorter({widgets:['zebra']});});" %>
+    <%= stylesheet_link_tag 'jquery-ui/styles', 'jquery.tablesorter' %>
+    <%= javascript_include_tag 'jquery-ui', 'jquery.tablesorter' %>
+    <%= javascript_include_tag "jquery-ui.datepicker-#{I18n.locale}" %>
+
+    <%= javascript_tag "$(
+            function(){
+                $('#report').tablesorter({widgets:['zebra']});
+                owgm.dateRangePicker();
+            }
+    );" %>
 <% end %>
 
 
 <div class="grid_12">
   <div class="box">
     <h1><%=t :Availability_report_for, :wisp => @wisp.name %></h1>
+
+    <div class="box">
+      <h5><%=t :Filter_data_by_date %></h5>
+
+      <form action="<%= wisp_activity_histories_path %>" method="get">
+          <%= text_field_tag 'from', l(@from) %>
+          <strong>-</strong>
+          <%= text_field_tag 'to', l(@to) %>
+          <%= tag(:input, :type => 'submit', :value => t(:Update)) %>
+      </form>
+    </div>
+
 
     <table id="report" class="tablesorter">
       <thead>
@@ -28,8 +47,8 @@
             <td><%= hotspot.address %></td>
             <td><%= hotspot.city %></td>
             <td><%= hotspot.description %></td>
-            <td class="center"><%= hotspot.activity_histories.observe(params[:from], params[:to]).average_availability %>%</td>
-            <td class="center"><%= 100 - hotspot.activity_histories.observe(params[:from], params[:to]).average_availability %>%</td>
+            <td class="center"><%= hotspot.up_average @from, @to %>%</td>
+            <td class="center"><%= hotspot.down_average @from, @to %>%</td>
           </tr>
       <% end %>
       </tbody>

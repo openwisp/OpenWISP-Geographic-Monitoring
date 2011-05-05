@@ -45,6 +45,31 @@ var owgm = {
         }).ajaxStop(function(){
             $(owgm.loadingDiv).fadeOut();
         });
+    },
+
+    dateRangePicker: function(){
+        if (owgm.exists('#from') && owgm.exists('#to')) {
+            var dates = $( "#from, #to" ).datepicker({
+                maxDate: owgm.today(),
+                defaultDate: "+1w",
+                showButtonPanel: true,
+                changeMonth: true,
+                onSelect: function(selectedDate) {
+                    var option = this.id == "from" ? "minDate" : "maxDate",
+                            instance = $(this).data("datepicker"),
+                            date = $.datepicker.parseDate(instance.settings.dateFormat, selectedDate, instance.settings);
+                    dates.not(this).datepicker("option", option, date);
+                }
+            });
+        }
+    },
+
+    daysAgo: function(days) {
+        return new Date().setDate(owgm.today().getDate()-days);
+    },
+
+    today: function() {
+        return new Date();
     }
 };
 

@@ -13,14 +13,8 @@ class ActivityHistory < ActiveRecord::Base
     where(:start_time => time.to_time..Time.now)
   end
 
-  def self.observe(from=nil, to=nil)
-    to = to ? to.to_date : Date.today
-
-    unless from.blank?
-      where(:last_time => (from.to_date)..to)
-    else
-      where("last_time <= ?", to)
-    end
+  def self.observe(from, to)
+    where(:last_time => from..to)
   end
 
   def self.average_availability
