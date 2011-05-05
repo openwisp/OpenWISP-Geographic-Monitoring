@@ -1,0 +1,38 @@
+<% content_for :after_defaults do %>
+    <%= javascript_include_tag 'jquery.tablesorter' %>
+    <%= stylesheet_link_tag 'jquery.tablesorter' %>
+    <%= javascript_tag "$(function(){$('#report').tablesorter({widgets:['zebra']});});" %>
+<% end %>
+
+
+<div class="grid_12">
+  <div class="box">
+    <h1><%=t :Availability_report_for, :wisp => @wisp.name %></h1>
+
+    <table id="report" class="tablesorter">
+      <thead>
+      <tr>
+        <th class="header"><%=t :Name %></th>
+        <th><%=t :Address %></th>
+        <th><%=t :City %></th>
+        <th><%=t :Description %></th>
+        <th class="green center small"><%=t :Up %></th>
+        <th class="red center small"><%=t :Down %></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @hotspots.each do |hotspot| %>
+          <tr>
+            <td><%= link_to hotspot.hostname, [@wisp, hotspot] %></td>
+            <td><%= hotspot.address %></td>
+            <td><%= hotspot.city %></td>
+            <td><%= hotspot.description %></td>
+            <td class="center"><%= hotspot.activity_histories.observe(params[:from], params[:to]).average_availability %>%</td>
+            <td class="center"><%= 100 - hotspot.activity_histories.observe(params[:from], params[:to]).average_availability %>%</td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

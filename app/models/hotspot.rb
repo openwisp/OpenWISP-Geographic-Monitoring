@@ -136,6 +136,16 @@ class Hotspot < ActiveRecord::Base
     with_properties.where(:property_sets => {:reachable => nil})
   end
 
+  def self.activated(from=nil, to=nil)
+    to = to ? to.to_date : Date.today
+
+    unless from.blank?
+      where(:activation_date => (from.to_date)..to)
+    else
+      where("activation_date <= ?", to)
+    end
+  end
+
   def self.all_up(regex=nil)
     Hotspot.up.hostname_like regex
   end

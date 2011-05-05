@@ -7,7 +7,12 @@ Owgm::Application.routes.draw do
   resources :hotspots, :only => [:index]
 
   resources :wisps, :only => :index do
+
     resources :hotspots, :only => [:index, :show]
+
+    resources :activity_histories, :only => :index
+    match 'hotspots/:hotspot_id/activity_histories' => 'activity_histories#show', :as => :hotspot_activity_histories
+    match 'availability_report' => 'activity_histories#index', :as => :availability_report
   end
 
   # Sample of regular route:

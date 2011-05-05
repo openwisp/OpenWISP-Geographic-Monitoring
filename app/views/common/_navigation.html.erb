@@ -1,0 +1,29 @@
+<% if user_signed_in? %>
+    <% if current_page?(root_path) || current_page?(:controller => :wisps) %>
+        <li class="underline"><a><%=t :Wisp_list %></a></li>
+    <% elsif current_page?(wisp_availability_report_path(@wisp)) || current_page?(wisp_activity_histories_path(@wisp)) %>
+        <li><%= link_to t(:Wisp_list), wisps_path %></li>
+        <li class="spacer"><a>&raquo;</a></li>
+        <li class="underline"><a>
+          <%=t :Availability_report_for, :wisp => @wisp.name %>
+        </a></li>
+    <% elsif current_page? hotspots_with_or_without_wisp_path(@wisp) %>
+        <li><%= link_to t(:Wisp_list), wisps_path %></li>
+        <li class="spacer"><a>&raquo;</a></li>
+        <li class="underline"><a>
+          <% if wisp_loaded? %>
+              <%=t :Hotspots_for, :wisp => @wisp.name %>
+          <% else %>
+              <%=t :Hotspots_of_every_wisp %>
+          <% end %>
+        </a></li>
+    <% elsif current_page? :controller => :hotspots, :action => :show %>
+        <li><%= link_to t(:Wisp_list), wisps_path %></li>
+        <li class="spacer"><a>&raquo;</a></li>
+        <li><%= link_to t(:Hotspots_for, :wisp => @wisp.name), wisp_hotspots_path(@wisp) %></li>
+        <li class="spacer"><a>&raquo;</a></li>
+        <li class="underline"><a><%=t :Hotspot_named, :hostname => @hotspot.hostname %></a></li>
+    <% end %>
+
+    <li id="logout"><%= link_to t(:Sign_out), destroy_user_session_path %></li>
+<% end %>

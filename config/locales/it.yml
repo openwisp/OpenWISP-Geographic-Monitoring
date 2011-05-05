@@ -12,6 +12,8 @@ it:
   # Uppercase
   Activity_graph: Grafico Attività
   Address: Indirizzo
+  Availability_report: Report di disponibilità
+  Availability_report_for: Report di disponibilità per %{wisp}
   Avg_availability: Disponibilità media
   Back: Indietro
   City: Città

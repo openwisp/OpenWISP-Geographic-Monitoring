@@ -12,6 +12,8 @@ en:
   # Uppercase
   Activity_graph: Activity Graph
   Address: Address
+  Availability_report: Availability report
+  Availability_report_for: Availability report for %{wisp}
   Avg_availability: Average availability
   Back: Back
   City: City

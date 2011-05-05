@@ -12,4 +12,18 @@ class ActivityHistory < ActiveRecord::Base
   def self.older_than(time)
     where(:start_time => time.to_time..Time.now)
   end
+
+  def self.observe(from=nil, to=nil)
+    to = to ? to.to_date : Date.today
+
+    unless from.blank?
+      where(:last_time => (from.to_date)..to)
+    else
+      where("last_time <= ?", to)
+    end
+  end
+
+  def self.average_availability
+    (average('status').to_f * 100).ceil
+  end
 end

@@ -1,0 +1,2 @@
+module ActivityHistoryHelper
+end

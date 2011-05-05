@@ -1,4 +1,4 @@
-$.getJSON('', function(activity_histories){
+$.getJSON(window.location.origin+window.location.pathname+'/activity_histories.json', function(activity_histories){
     graphs.init({
         chart: {
             renderTo: 'activity_graph',
