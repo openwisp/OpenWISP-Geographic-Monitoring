@@ -1,7 +1,7 @@
 <% if user_signed_in? %>
     <% if current_page?(root_path) || current_page?(:controller => :wisps) %>
         <li class="underline"><a><%=t :Wisp_list %></a></li>
-    <% elsif current_page?(wisp_availability_report_path(@wisp)) || current_page?(wisp_activity_histories_path(@wisp)) %>
+    <% elsif @wisp && (current_page?(wisp_availability_report_path(@wisp)) || current_page?(wisp_activity_histories_path(@wisp))) %>
         <li><%= link_to t(:Wisp_list), wisps_path %></li>
         <li class="spacer"><a>&raquo;</a></li>
         <li class="underline"><a>
