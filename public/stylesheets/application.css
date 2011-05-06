@@ -138,3 +138,7 @@ th {
     color: #ff3333;
 }
 
+.highlighted td{
+    background:#FFFF99 !important;
+}
+

@@ -39,6 +39,68 @@ var owgm = {
         }, 1);
     },
 
+    highlightHotspotsReport: function(tableId, upClass, downClass, statusId, highLowId, percentId) {
+        var status = $(statusId);
+        var highLow = $(highLowId);
+        var percent = $(percentId);
+
+        status.observe(function(){
+            if (this.val() != '' && highLow.val() != '' && percent.val() != '') {
+                findToHighlight();
+            }
+        });
+        highLow.observe(function(){
+            if (this.val() != '' && status.val() != '' && percent.val() != '') {
+                findToHighlight();
+            }
+        });
+        percent.observe(function(){
+            if (this.val() != '' && highLow.val() != '' && status.val() != '') {
+                findToHighlight();
+            }
+        });
+
+        var findToHighlight = function() {
+            var statusVal = status.val();
+            var highLowVal = highLow.val();
+            var percentVal = percent.val();
+
+            var highlight = function(elem) {
+                elem.removeClass('highlighted');
+
+                var tdVal = $('td'+upClass, elem).html();
+                if (tdVal) {
+                    if (statusVal === '1') {
+                        if (highLowVal === '<') {
+                            if (parseInt(tdVal.slice(0,-1)) < parseInt(percentVal)){
+                                elem.addClass('highlighted');
+                            }
+                        } else if (highLowVal === '>') {
+                            if (parseInt(tdVal.slice(0,-1)) > parseInt(percentVal)){
+                                elem.addClass('highlighted');
+                            }
+                        }
+                    } else if (statusVal === '0') {
+                        if (highLowVal === '<') {
+                            if (parseInt(tdVal.slice(0,-1)) < parseInt(percentVal)){
+                                elem.addClass('highlighted');
+                            }
+                        } else if (highLowVal === '>') {
+                            if (parseInt(tdVal.slice(0,-1)) > parseInt(percentVal)){
+                                elem.addClass('highlighted');
+                            }
+                        }
+                    }
+
+                }
+            };
+
+            $(tableId+' tr').each(function(){
+                highlight($(this));
+            });
+        };
+    },
+
     ajaxLoading: function() {
         $('[data-remote=true]').live('click', function(){
             $(owgm.loadingDiv).fadeIn();

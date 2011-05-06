@@ -7,6 +7,7 @@
             function(){
                 $('#report').tablesorter({widgets:['zebra'],dateFormat:'#{locale == :en ? 'us' : 'uk'}'});
                 owgm.dateRangePicker();
+                owgm.highlightHotspotsReport('#report', '.up', '.down', '#up_down_status', '#than_percent', '#percent_value');
             }
     );" %>
 <% end %>
@@ -35,7 +36,7 @@
         <h5><%=t :Highlight_hotspots_with %></h5>
 
         <%= select 'up_down', 'status', [[t(:Status), ''], [t(:Up), 1], [t(:Down), 0]] %>
-        <%= select 'than', 'percent', [[t(:higher_lower), ''], [t(:higher), 'higher'], [t(:lower), 'lower']] %>
+        <%= select 'than', 'percent', [[t(:higher_lower), ''], [t(:higher), '>'], [t(:lower), '<']] %>
         <span><%=t :than %></span>
         <%= select 'percent', 'value', ['',0,10,20,30,40,50,60,70,80,90,100].map{|percent| ["#{percent}%", percent]} %>
       </div>
@@ -62,8 +63,8 @@
             <td><%= hotspot.address %></td>
             <td><%= hotspot.city %></td>
             <td><%= hotspot.description %></td>
-            <td class="center"><%= hotspot.up_average @from, @to %>%</td>
-            <td class="center"><%= hotspot.down_average @from, @to %>%</td>
+            <td class="center up"><%= hotspot.up_average @from, @to %>%</td>
+            <td class="center down"><%= hotspot.down_average @from, @to %>%</td>
           </tr>
       <% end %>
       </tbody>
