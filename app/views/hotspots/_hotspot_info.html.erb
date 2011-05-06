@@ -36,12 +36,16 @@
     <td class="right"><%= @hotspot.lat %>, <%= @hotspot.lng %></td>
   </tr>
   <tr>
+    <td><strong><%=t :Activation_date %></strong></td>
+    <td class="right"><%=l @hotspot.activation_date rescue '-' %></td>
+  </tr>
+  <tr>
     <td><strong><%=t :Earliest_seen %></strong></td>
-    <td class="right"><%= @hotspot.earliest_seen %></td>
+    <td class="right"><%=l @hotspot.earliest_seen rescue '-' %></td>
   </tr>
   <tr>
     <td><strong><%=t :Latest_seen %></strong></td>
-    <td class="right"><%= @hotspot.latest_seen %></td>
+    <td class="right"><%=l @hotspot.latest_seen rescue '-' %></td>
   </tr>
 
   <tr><td colspan="2">&nbsp;</td></tr>

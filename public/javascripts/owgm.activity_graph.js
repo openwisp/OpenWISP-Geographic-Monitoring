@@ -1,4 +1,4 @@
-$.getJSON(window.location.href+'/activity_histories.json', function(activity_histories){
+$.getJSON(owgm.path('activity_histories.json'), function(activity_histories){
     graphs.init({
         chart: {
             renderTo: 'activity_graph',

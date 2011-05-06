@@ -39,6 +39,20 @@ var owgm = {
         }, 1);
     },
 
+    path: function(path) {
+        var _curr = window.location.pathname;
+        var _params = window.location.search;
+        if (path.charAt(0) === '/') {
+            if (_curr.substr(1, owums.subUri.length) === owums.subUri) {
+                return '/'+owums.subUri+path+_params;
+            } else {
+                return path+_params;
+            }
+        } else {
+            return _curr+'/'+path+_params;
+        }
+    },
+
     highlightHotspotsReport: function(tableId, upClass, downClass, statusId, highLowId, percentId) {
         var status = $(statusId);
         var highLow = $(highLowId);

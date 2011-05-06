@@ -60,8 +60,6 @@ class Hotspot < ActiveRecord::Base
     unless unknown?
       latest = activity_histories.last :conditions => ["status > ?", 0], :order => "last_time ASC"
       latest.nil? ? '-' : latest.last_time.to_s(:short)
-    else
-      '-'
     end
   end
 
@@ -69,8 +67,6 @@ class Hotspot < ActiveRecord::Base
     unless unknown?
       earliest = activity_histories.first :conditions => ["status > ?", 0], :order => "last_time ASC"
       earliest.nil? ? '-' : earliest.last_time.to_s(:short)
-    else
-      '-'
     end
   end
 
