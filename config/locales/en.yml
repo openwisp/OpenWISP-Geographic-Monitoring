@@ -35,6 +35,7 @@ en:
     the first date of the observation period, to the latest observation period's date.
   "
   Graphs: Graphs
+  Highlight_hotspots_with: Highlight hotspots with
   Hostname: Hostname
   Hotspot: Hotspot
   Hotspot_info: "Quick info:"
@@ -81,11 +82,15 @@ en:
   back: back
   details: details
   down: down
+  higher: higher
+  higher_lower: "higher/lower"
+  lower: lower
   markers: markers
   not_seen: never seen before
   n_days_ago:
     one: 1 day ago
     other: "#{count} days ago"
+  than: than
   unknown: unknown
   up: up
   

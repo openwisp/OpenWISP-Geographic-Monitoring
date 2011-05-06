@@ -16,18 +16,30 @@
   <div class="box">
     <h1><%=t :Availability_report_for, :wisp => @wisp.name %></h1>
 
-    <div class="box">
-      <h5><%=t :Filter_data_by_date %></h5>
-      <span><%=t :Filter_instructions_1 %><br/><%=t :Filter_instructions_2 %></span>
+    <div class="grid_6">
+      <div class="box">
+        <h5><%=t :Filter_data_by_date %></h5>
+        <span><%=t :Filter_instructions_1 %><br/><%=t :Filter_instructions_2 %></span>
 
-      <form action="<%= wisp_activity_histories_path %>" method="get">
+        <form action="<%= wisp_activity_histories_path %>" method="get">
           <%= text_field_tag 'from', l(@from) %>
           <strong>-</strong>
           <%= text_field_tag 'to', l(@to) %>
           <%= tag(:input, :type => 'submit', :value => t(:Update)) %>
-      </form>
+        </form>
+      </div>
     </div>
 
+    <div class="grid_6">
+      <div class="box">
+        <h5><%=t :Highlight_hotspots_with %></h5>
+
+        <%= select 'up_down', 'status', [[t(:Status), ''], [t(:Up), 1], [t(:Down), 0]] %>
+        <%= select 'than', 'percent', [[t(:higher_lower), ''], [t(:higher), 'higher'], [t(:lower), 'lower']] %>
+        <span><%=t :than %></span>
+        <%= select 'percent', 'value', ['',0,10,20,30,40,50,60,70,80,90,100].map{|percent| ["#{percent}%", percent]} %>
+      </div>
+    </div>
 
     <table id="report" class="tablesorter">
       <thead>

@@ -35,6 +35,7 @@ it:
     prima data del periodo di osservazione, fino alla data superiore del periodo d'osservazione.
   "
   Graphs: Grafici
+  Highlight_hotspots_with: Evidenzia gli hotspot con
   Hostname: Hostname
   Hotspot: Hotspot
   Hotspot_info: "Informazioni veloci:"
@@ -81,11 +82,15 @@ it:
   back: indietro
   details: dettagli
   down: down
+  higher: maggiore
+  higher_lower: "maggiore/inferiore"
+  lower: inferiore
   markers: marker
   not_seen: mai osservato prima
   n_days_ago:
     one: 1 giorno fa
     other: "#{count} giorni fa"
+  than: del
   unknown: sconosciuto
   up: up
 
