@@ -83,8 +83,8 @@ it:
   details: dettagli
   down: down
   higher: maggiore
-  higher_lower: "maggiore/inferiore"
-  lower: inferiore
+  higher_lower: "maggiore/minore"
+  lower: minore
   markers: marker
   not_seen: mai osservato prima
   n_days_ago:

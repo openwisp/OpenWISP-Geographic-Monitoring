@@ -68,19 +68,9 @@ var owgm = {
             var highlight = function(elem) {
                 elem.removeClass('highlighted');
 
-                var tdVal = $('td'+upClass, elem).html();
-                if (tdVal) {
-                    if (statusVal === '1') {
-                        if (highLowVal === '<') {
-                            if (parseInt(tdVal.slice(0,-1)) < parseInt(percentVal)){
-                                elem.addClass('highlighted');
-                            }
-                        } else if (highLowVal === '>') {
-                            if (parseInt(tdVal.slice(0,-1)) > parseInt(percentVal)){
-                                elem.addClass('highlighted');
-                            }
-                        }
-                    } else if (statusVal === '0') {
+                if (statusVal === '1') {
+                    var tdVal = $('td'+upClass, elem).html();
+                    if (tdVal) {
                         if (highLowVal === '<') {
                             if (parseInt(tdVal.slice(0,-1)) < parseInt(percentVal)){
                                 elem.addClass('highlighted');
@@ -91,8 +81,21 @@ var owgm = {
                             }
                         }
                     }
-
+                } else if (statusVal === '0') {
+                    var tdVal = $('td'+downClass, elem).html();
+                    if (tdVal) {
+                        if (highLowVal === '<') {
+                            if (parseInt(tdVal.slice(0,-1)) < parseInt(percentVal)){
+                                elem.addClass('highlighted');
+                            }
+                        } else if (highLowVal === '>') {
+                            if (parseInt(tdVal.slice(0,-1)) > parseInt(percentVal)){
+                                elem.addClass('highlighted');
+                            }
+                        }
+                    }
                 }
+
             };
 
             $(tableId+' tr').each(function(){
