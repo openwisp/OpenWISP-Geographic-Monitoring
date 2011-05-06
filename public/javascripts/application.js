@@ -43,23 +43,7 @@ var owgm = {
         var status = $(statusId);
         var highLow = $(highLowId);
         var percent = $(percentId);
-
-        status.observe(function(){
-            if (this.val() != '' && highLow.val() != '' && percent.val() != '') {
-                findToHighlight();
-            }
-        });
-        highLow.observe(function(){
-            if (this.val() != '' && status.val() != '' && percent.val() != '') {
-                findToHighlight();
-            }
-        });
-        percent.observe(function(){
-            if (this.val() != '' && highLow.val() != '' && status.val() != '') {
-                findToHighlight();
-            }
-        });
-
+        
         var findToHighlight = function() {
             var statusVal = status.val();
             var highLowVal = highLow.val();
@@ -102,6 +86,12 @@ var owgm = {
                 highlight($(this));
             });
         };
+
+        $(statusId+','+highLowId+','+percentId).change(function(){
+            if (status.val() != '' && highLow.val() != '' && percent.val() != '') {
+                findToHighlight();
+            }
+        });
     },
 
     ajaxLoading: function() {
