@@ -1,11 +1,11 @@
 <% content_for :after_defaults do %>
     <%= stylesheet_link_tag 'jquery-ui/styles', 'jquery.tablesorter' %>
     <%= javascript_include_tag 'jquery-ui', 'jquery.tablesorter' %>
-    <%= javascript_include_tag "jquery-ui.datepicker-#{I18n.locale}" %>
+    <%= javascript_include_tag "jquery-ui.datepicker-#{locale}" %>
 
     <%= javascript_tag "$(
             function(){
-                $('#report').tablesorter({widgets:['zebra']});
+                $('#report').tablesorter({widgets:['zebra'],dateFormat:'#{locale == :en ? 'us' : 'uk'}'});
                 owgm.dateRangePicker();
             }
     );" %>
@@ -32,6 +32,7 @@
       <thead>
       <tr>
         <th class="header"><%=t :Name %></th>
+        <th><%=t :Activation_date %></th>
         <th><%=t :Address %></th>
         <th><%=t :City %></th>
         <th><%=t :Description %></th>
@@ -44,6 +45,7 @@
       <% @hotspots.each do |hotspot| %>
           <tr>
             <td><%= link_to hotspot.hostname, [@wisp, hotspot] %></td>
+            <td><%=l hotspot.activation_date %></td>
             <td><%= hotspot.address %></td>
             <td><%= hotspot.city %></td>
             <td><%= hotspot.description %></td>

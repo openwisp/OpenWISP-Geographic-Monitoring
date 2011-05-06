@@ -10,6 +10,7 @@ en:
         hostname: hostname
         status: status
   # Uppercase
+  Activation_date: Activation date
   Activity_graph: Activity Graph
   Address: Address
   Availability_report: Availability report
@@ -130,4 +131,4 @@ en:
 
   date:
     formats:
-      default: "%d/%m/%Y"
+      default: "%m/%d/%Y"

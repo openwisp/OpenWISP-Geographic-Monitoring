@@ -10,6 +10,7 @@ it:
         hostname: hostname
         status: stato
   # Uppercase
+  Activation_date: Data di attivazione
   Activity_graph: Grafico Attività
   Address: Indirizzo
   Availability_report: Report di disponibilità
