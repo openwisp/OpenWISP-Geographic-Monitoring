@@ -88,8 +88,10 @@ var owgm = {
         };
 
         $(statusId+','+highLowId+','+percentId).change(function(){
-            if (status.val() != '' && highLow.val() != '' && percent.val() != '') {
+            if (status.val() !== '' && highLow.val() !== '' && percent.val() !== '') {
                 findToHighlight();
+            } else if (status.val() === '' && highLow.val() === '' && percent.val() === '') {
+                $('.highlighted').removeClass('highlighted');
             }
         });
     },

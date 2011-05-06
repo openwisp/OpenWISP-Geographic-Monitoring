@@ -18,6 +18,6 @@ class ActivityHistory < ActiveRecord::Base
   end
 
   def self.average_availability
-    (average('status').to_f * 100).ceil
+     average('status').to_f * 100
   end
 end

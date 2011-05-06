@@ -85,11 +85,11 @@ class Hotspot < ActiveRecord::Base
   end
 
   def up_average(from, to)
-    activity_histories.observe(activation_date > from ? activation_date : from, to).average_availability
+    sprintf "%.1f", activity_histories.observe(activation_date > from ? activation_date : from, to).average_availability
   end
 
   def down_average(from, to)
-    100 - up_average(from, to)
+    sprintf "%.1f", 100 - activity_histories.observe(activation_date > from ? activation_date : from, to).average_availability
   end
 
 
