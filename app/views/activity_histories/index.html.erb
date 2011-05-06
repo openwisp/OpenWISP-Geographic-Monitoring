@@ -18,6 +18,7 @@
 
     <div class="box">
       <h5><%=t :Filter_data_by_date %></h5>
+      <span><%=t :Filter_instructions_1 %><br/><%=t :Filter_instructions_2 %></span>
 
       <form action="<%= wisp_activity_histories_path %>" method="get">
           <%= text_field_tag 'from', l(@from) %>

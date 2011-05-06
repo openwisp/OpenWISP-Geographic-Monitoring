@@ -28,6 +28,12 @@ it:
   Down: Down
   Earliest_seen: Primo avvistamento
   Filter_data_by_date: Filtra per data
+  Filter_instructions_1: "
+    Le date sono relative ai dati per ogni hotspot a partire dalla data di attivazione, o dalla
+  "
+  Filter_instructions_2: "
+    prima data del periodo di osservazione, fino alla data superiore del periodo d'osservazione.
+  "
   Graphs: Grafici
   Hostname: Hostname
   Hotspot: Hotspot

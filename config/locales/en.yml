@@ -28,6 +28,12 @@ en:
   Down: Down
   Earliest_seen: Earliest seen on
   Filter_data_by_date: Filter by date
+  Filter_instructions_1: "
+    Dates are relative for each hotspot's data starting from the activation date, or
+  "
+  Filter_instructions_2: "
+    the first date of the observation period, to the latest observation period's date.
+  "
   Graphs: Graphs
   Hostname: Hostname
   Hotspot: Hotspot
