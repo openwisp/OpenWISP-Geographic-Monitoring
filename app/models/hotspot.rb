@@ -70,16 +70,6 @@ class Hotspot < ActiveRecord::Base
     end
   end
 
-  def clients
-    if OwtsConnector::connected?
-      clients = OwtsConnector::clients(self.common_name).map{|client| ConnectedClient.new client }
-      clients.delete_if{|client| client.last_activity.to_date <= 1.day.ago.to_date || MacVendor.unknown?(client.mac_address) }
-      clients.sort{|client1, client2| client2.last_activity <=> client1.last_activity }
-    else
-      []
-    end
-  end
-
   def up_average(from, to)
     sprintf "%.1f", activity_histories.observe(activation_date > from ? activation_date : from, to).average_availability
   end
