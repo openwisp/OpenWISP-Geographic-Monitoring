@@ -78,6 +78,10 @@ class Hotspot < ActiveRecord::Base
     sprintf "%.1f", 100 - activity_histories.observe(activation_date > from ? activation_date : from, to).average_availability
   end
 
+  def online_users(scope = :all)
+    OnlineUser.find(scope, :params => {:hotspot => self.hostname})
+  end
+
 
   ##### Static methods #####
 

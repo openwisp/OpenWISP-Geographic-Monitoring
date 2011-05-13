@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110505072359) do
+ActiveRecord::Schema.define(:version => 20110513130550) do
 
   create_table "activities", :force => true do |t|
     t.integer  "status"
@@ -53,6 +53,13 @@ ActiveRecord::Schema.define(:version => 20110505072359) do
     t.string   "runner_info"
     t.string   "worker_key"
     t.datetime "scheduled_at"
+  end
+
+  create_table "configurations", :force => true do |t|
+    t.string   "key",                        :null => false
+    t.string   "value",      :default => "", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "hotspots", :id => false, :force => true do |t|
