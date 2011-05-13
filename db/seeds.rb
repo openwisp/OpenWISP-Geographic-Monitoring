@@ -17,6 +17,7 @@ puts 'Assigning every role in User::ROLES to the admin user'
 User::ROLES.each{|role| admin.has_role! role}
 
 # Add default configuration keys
-Configuration.set('owmw_site', 'http://owmw/site')
+puts 'Adding default configuration keys'
+Configuration.set('owmw_site', 'http://owmw/site/access_points')
 Configuration.set('owmw_user','admin')
 Configuration.set('owmw_password','password')
