@@ -15,14 +15,14 @@
 
 <div class="grid_12">
   <div class="box">
-    <h1><%=t :Availability_report %></h1>
+    <h1><%=t :Availability_report_for, :wisp => @wisp.name %></h1>
 
     <div class="grid_6">
       <div class="box">
         <h5><%=t :Filter_data_by_date %></h5>
         <span><%=t :Filter_instructions_1 %><br/><%=t :Filter_instructions_2 %></span>
 
-        <form action="<%= activity_histories_path %>" method="get">
+        <form action="<%= wisp_activity_histories_path %>" method="get">
           <%= text_field_tag 'from', l(@from) %>
           <strong>-</strong>
           <%= text_field_tag 'to', l(@to) %>
@@ -58,7 +58,7 @@
       <tbody>
       <% @hotspots.each do |hotspot| %>
           <tr>
-            <td><%= link_to hotspot.hostname, hotspot %></td>
+            <td><%= link_to hotspot.hostname, [@wisp, hotspot] %></td>
             <td><%=l hotspot.activation_date %></td>
             <td><%= hotspot.address %></td>
             <td><%= hotspot.city %></td>
