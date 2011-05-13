@@ -67,7 +67,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         if ap.activities.count > 0
           first_time = ap.activities.first(:order => "created_at").created_at.change(:min => 0, :sec => 0)
           last_time = ap.activities.first(:order => "created_at DESC").created_at.change(:min => 0, :sec => 0)
-          avg = ap.activities.average(:status, :conditions => "created_at < '#{last_time}'").to_f
+          avg = ap.activities.average(:status, :conditions => ["created_at < ?", last_time]).to_f
           ah = ap.activity_histories.build(:status => avg, :start_time => first_time, :last_time => last_time)
           ah.save!
           Activity.destroy_all(["hotspot_id = ? AND created_at < ?", ap.id, last_time])
@@ -78,7 +78,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
 
   def housekeeping
     time = 6.months.to_i.ago
-    ActivityHistory.destroy_all("created_at < #{time}")
+    ActivityHistory.destroy_all(["created_at < ?", time])
   end
 
 end
