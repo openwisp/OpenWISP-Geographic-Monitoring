@@ -2,7 +2,9 @@ class OnlineUser < ActiveResource::Base
   extend ActiveModel::Naming
   include ActiveModel::Serializers::Xml
 
-  self.site = "#{Configuration.get('owmw_site')}/:hotspot"
-  self.user = Configuration.get('owmw_user')
-  self.password = Configuration.get('owmw_password')
+  def self.active_resource_from(url, username, password)
+    self.site = "#{url}/access_points/:hotspot"
+    self.user = username
+    self.password = password
+  end
 end

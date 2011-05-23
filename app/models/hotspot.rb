@@ -79,7 +79,8 @@ class Hotspot < ActiveRecord::Base
   end
 
   def online_users(scope = :all)
-    OnlineUser.find(scope, :params => {:hotspot => self.hostname})
+    OnlineUser.active_resource_from(wisp.owmw_url, wisp.owmw_username, wisp.owmw_password)
+    OnlineUser.find(scope, :params => {:hotspot => hostname})
   end
 
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110513130550) do
+ActiveRecord::Schema.define(:version => 20110523115343) do
 
   create_table "activities", :force => true do |t|
     t.integer  "status"
@@ -126,11 +126,14 @@ ActiveRecord::Schema.define(:version => 20110513130550) do
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "wisps", :id => false, :force => true do |t|
-    t.integer  "id",         :default => 0, :null => false
-    t.string   "name",                      :null => false
+    t.integer  "id",            :default => 0, :null => false
+    t.string   "name",                         :null => false
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "owmw_url"
+    t.string   "owmw_username"
+    t.string   "owmw_password"
   end
 
 end
