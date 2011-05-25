@@ -15,8 +15,6 @@ gem 'kaminari'
 
 gem 'backgroundrb-rails3', :require => 'backgroundrb'
 
-group :test do
-  gem 'rspec-rails'
+group :development do
+  gem 'capistrano'
 end
-
-
