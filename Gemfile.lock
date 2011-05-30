@@ -30,7 +30,7 @@ GEM
       activesupport (= 3.0.3)
     activesupport (3.0.3)
     arel (2.0.10)
-    backgroundrb-rails3 (1.1.4)
+    backgroundrb-rails3 (1.1.5)
       chronic (>= 0.2.3)
       packet (>= 0.1.15)
       rails (>= 3.0.0)
