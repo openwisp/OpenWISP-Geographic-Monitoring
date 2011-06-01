@@ -1,4 +1,4 @@
-class OnlineUser < ActiveResource::Base
+class AssociatedUser < ActiveResource::Base
   extend ActiveModel::Naming
   include ActiveModel::Serializers::Xml
 

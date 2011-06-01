@@ -78,9 +78,9 @@ class Hotspot < ActiveRecord::Base
     sprintf "%.1f", 100 - activity_histories.observe(activation_date > from ? activation_date : from, to).average_availability
   end
 
-  def online_users(scope = :all)
-    OnlineUser.active_resource_from(wisp.owmw_url, wisp.owmw_username, wisp.owmw_password)
-    OnlineUser.find(scope, :params => {:hotspot => hostname})
+  def associated_users(scope = :all)
+    AssociatedUser.active_resource_from(wisp.owmw_url, wisp.owmw_username, wisp.owmw_password)
+    AssociatedUser.find(scope, :params => {:hotspot => hostname})
   end
 
 
