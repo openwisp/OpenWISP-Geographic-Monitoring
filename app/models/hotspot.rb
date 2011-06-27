@@ -59,14 +59,14 @@ class Hotspot < ActiveRecord::Base
   def latest_seen
     unless unknown?
       latest = activity_histories.last :conditions => ["status > ?", 0], :order => "last_time ASC"
-      latest.nil? ? '-' : latest.last_time.to_s(:short)
+      latest.nil? ? '-' : latest.last_time
     end
   end
 
   def earliest_seen
     unless unknown?
       earliest = activity_histories.first :conditions => ["status > ?", 0], :order => "last_time ASC"
-      earliest.nil? ? '-' : earliest.last_time.to_s(:short)
+      earliest.nil? ? '-' : earliest.last_time
     end
   end
 
