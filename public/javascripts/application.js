@@ -121,7 +121,7 @@ var owgm = {
     dateRangePicker: function(){
         if (owgm.exists('#from') && owgm.exists('#to')) {
             var dates = $( "#from, #to" ).datepicker({
-                minDate: '-10y',
+                minDate: '-6m',
                 maxDate: owgm.today(),
                 defaultDate: "+1w",
                 showButtonPanel: true,
