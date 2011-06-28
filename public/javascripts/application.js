@@ -57,7 +57,7 @@ var owgm = {
         var status = $(statusId);
         var highLow = $(highLowId);
         var percent = $(percentId);
-        
+
         var findToHighlight = function() {
             var statusVal = status.val();
             var highLowVal = highLow.val();
@@ -121,15 +121,21 @@ var owgm = {
     dateRangePicker: function(){
         if (owgm.exists('#from') && owgm.exists('#to')) {
             var dates = $( "#from, #to" ).datepicker({
+                minDate: '-10y',
                 maxDate: owgm.today(),
                 defaultDate: "+1w",
                 showButtonPanel: true,
                 changeMonth: true,
-                onSelect: function(selectedDate) {
+                changeYear: true,
+                yearRange: 'c-10:',
+                onSelect: function( selectedDate ) {
                     var option = this.id == "from" ? "minDate" : "maxDate",
-                            instance = $(this).data("datepicker"),
-                            date = $.datepicker.parseDate(instance.settings.dateFormat, selectedDate, instance.settings);
-                    dates.not(this).datepicker("option", option, date);
+                            instance = $( this ).data( "datepicker" ),
+                            date = $.datepicker.parseDate(
+                                    instance.settings.dateFormat || $.datepicker._defaults.dateFormat,
+                                    selectedDate, instance.settings
+                                    );
+                    dates.not( this ).datepicker( "option", option, date );
                 }
             });
         }
