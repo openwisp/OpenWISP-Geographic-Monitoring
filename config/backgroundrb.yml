@@ -1,6 +1,6 @@
 --- 
 :backgroundrb: 
-  :ip: localhost
+  :ip: 127.0.0.1
   :port: 11012
   :environment: production
   

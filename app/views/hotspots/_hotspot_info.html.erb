@@ -41,11 +41,11 @@
   </tr>
   <tr>
     <td><strong><%=t :Earliest_seen %></strong></td>
-    <td class="right"><%=l @hotspot.earliest_seen rescue '-' %></td>
+    <td class="right"><%= l(@hotspot.earliest_seen, :format => :short) rescue '-' %></td>
   </tr>
   <tr>
     <td><strong><%=t :Latest_seen %></strong></td>
-    <td class="right"><%=l @hotspot.latest_seen rescue '-' %></td>
+    <td class="right"><%= l(@hotspot.latest_seen, :format => :short) rescue '-' %></td>
   </tr>
   <tr>
     <td><strong><%=t :Connected_users %></strong></td>
