@@ -1,6 +1,4 @@
 Owgm::Application.routes.draw do
-  get "property_set/update"
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
