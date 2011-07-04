@@ -1,4 +1,6 @@
 Owgm::Application.routes.draw do
+  get "property_set/update"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -8,7 +10,9 @@ Owgm::Application.routes.draw do
 
   resources :wisps, :only => :index do
 
-    resources :hotspots, :only => [:index, :show]
+    resources :hotspots, :only => [:index, :show] do
+      resource :property_set, :only => :update
+    end
 
     resources :activity_histories, :only => :index
     match 'hotspots/:hotspot_id/activity_histories' => 'activity_histories#show', :as => :hotspot_activity_histories

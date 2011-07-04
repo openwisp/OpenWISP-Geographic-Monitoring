@@ -51,14 +51,9 @@
     <td><strong><%=t :Connected_users %></strong></td>
     <td class="right"><%= @hotspot.associated_users.count rescue 0 %></td>
   </tr>
-
-  <tr><td colspan="2">&nbsp;</td></tr>
-
   <tr>
-    <td class="center noborder" colspan="2"><h5><%=t :Description %></h5></td>
-  </tr>
-  <tr>
-    <td class="center noborder" colspan="2"><%= @hotspot.description.empty? ? t(:No_description_available) : @hotspot.description %></td>
+    <td><strong><%=t :Public_on_Georss %></strong></td>
+    <td id="public" class="right"><%=t @hotspot.public ? :true : :false %></td>
   </tr>
   </tbody>
 </table>

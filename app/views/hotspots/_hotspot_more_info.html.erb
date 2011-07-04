@@ -1,0 +1,28 @@
+<h2><%=t :More_info %></h2>
+<br />
+
+<div class="box with_border">
+  <h4><%=t :Description %></h4>
+  <br/>
+
+  <p><%= @hotspot.description.empty? ? t(:No_description_available) : @hotspot.description %></p>
+</div>
+
+<div class="box with_border">
+  <h4><%=t :Site_description %></h4>
+  <p>
+    <%=t :Will_be_rendered_in_georss %><br/>
+    <strong>(<%=t :Click_to_edit %>)</strong>
+  </p>
+
+  <p id="site_description"><%= @hotspot.site_description.blank? ? t(:No_site_description_available) : @hotspot.site_description %></p>
+</div>
+
+
+<div class="box with_border">
+  <h4><%=t :Notes %></h4>
+  <p><strong>(<%=t :Click_to_edit %>)</strong></p>
+
+  <p id="notes"><%= @hotspot.notes.blank? ? t(:No_notes_available) : @hotspot.notes %></p>
+</div>
+

@@ -17,8 +17,10 @@ en:
   Availability_report_for: Availability report for %{wisp}
   Avg_availability: Average availability
   Back: Back
+  Cancel: Cancel
   City: City
   Click_and_drag_to_zoom_in: You can click and drag to zoom in
+  Click_to_edit: Click to edit
   Cluster: Cluster
   Cluster_info: "This cluster contains:"
   Connected_users: Connected users
@@ -55,12 +57,16 @@ en:
   Latest_seen: Latest seen on
   Loading: Loading
   Map: Map
+  More_info: Altre informazioni
   Name: Name
   Next: Next
   No_data_to_display: Hotspot unknown, there is no data to display.
   No_description_available: No description is available for this hotspot
   No_javascript: Javascript disabled!
-  Notes: Notes
+  No_notes_available: No additional notes available
+  No_site_description_available: Description for installation site is not available
+  Notes: Additional notes
+  Ok: Ok
   Prev: Previous
   Quick_search: Quick search
   Remember_me: Remember me
@@ -69,12 +75,14 @@ en:
   Show_all_hotspots: Show all hotspots
   Sign_in: Sign in
   Sign_out: Sign out
+  Site_description: Installation site
   Status: Status
   There_are_no_connected_clients: There are no connected clients
   Unknown: Unknown
   Up: Up
   Update: Update
   Username: Username
+  Will_be_rendered_in_georss: Will be rendered in GeoRSS
   Wisp_list: Wisps List
   
   # Lowercase

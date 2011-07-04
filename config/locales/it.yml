@@ -17,8 +17,10 @@ it:
   Availability_report_for: Report di disponibilità per %{wisp}
   Avg_availability: Disponibilità media
   Back: Indietro
+  Cancel: Annulla
   City: Città
   Click_and_drag_to_zoom_in: Clicca e trascina per ingrandire una sezione
+  Click_to_edit: Clicca per modificare
   Cluster: Cluster
   Cluster_info: "Questo cluster contiene:"
   Connected_users: Utenti connessi
@@ -55,12 +57,16 @@ it:
   Latest_seen: Ultimo avvistamento
   Loading: Caricamento
   Map: Mappa
+  More_info: Altre informazioni
   Name: Nome
   Next: Seguente
   No_data_to_display: Hotspot sconosciuto, non ci sono dati da visualizzare.
   No_description_available: Non è disponibile la descrizione per questo hotspot
   No_javascript: Javascript disabilitato!
-  Notes: Note
+  No_notes_available: Non sono disponibili note aggiuntive
+  No_site_description_available: Non è disponible una descrizione per il sito di installazione
+  Notes: Note aggiuntive
+  Ok: Ok
   Prev: Precedente
   Quick_search: Ricerca rapida
   Remember_me: Ricordami
@@ -69,12 +75,14 @@ it:
   Show_all_hotspots: Mostra tutti gli hotspot
   Sign_in: Accedi
   Sign_out: Esci
+  Site_description: Sito di installazione
   Status: Stato
   There_are_no_connected_clients: Non ci sono utenti connessi
   Unknown: Sconosciuto
   Up: Up
   Update: Aggiorna
   Username: Username
+  Will_be_rendered_in_georss: Verrà visualizzato nel GeoRSS
   Wisp_list: Lista Wisp
   
   # Lowercase
@@ -82,6 +90,7 @@ it:
   back: indietro
   details: dettagli
   down: down
+  false: no
   higher: maggiore
   higher_lower: "maggiore/minore"
   lower: minore
@@ -91,6 +100,7 @@ it:
     one: 1 giorno fa
     other: "#{count} giorni fa"
   than: del
+  true: sì
   unknown: sconosciuto
   up: up
 
@@ -144,7 +154,7 @@ it:
 
   date:
     formats:
-      default: "%d-%m-%Y"
+      default: "%d/%m/%Y"
       short: "%d %b"
       long: "%d %B %Y"
 

@@ -8,11 +8,14 @@ class Hotspot < ActiveRecord::Base
   CLUSTER_HOTSPOTS_WITHIN_KM = 2
 
   belongs_to :wisp
-  has_one :property_set
+  has_one :property_set, :autosave => true, :dependent => :destroy
   has_many :activities
   has_many :activity_histories
 
   delegate :reachable, :to => :property_set, :allow_nil => true
+  delegate :notes, :notes=, :site_description, :site_description=,
+           :public, :public=,
+           :to => :property_set, :allow_nil => true
 
   def coords
     [lat, lng]
