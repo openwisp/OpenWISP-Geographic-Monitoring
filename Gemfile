@@ -1,17 +1,20 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.0.3'
-gem 'mysql'
+gem 'mysql', '2.8.1'
 
-gem 'jquery-rails'
-gem 'geokit'
-gem 'net-ping'
-gem 'nokogiri'
-gem 'warden'
-gem 'devise'
-gem 'acl9'
-gem 'geokit-rails3'
-gem 'kaminari'
+gem 'jquery-rails', '~> 1.0.11'
+gem 'kaminari', '~> 0.12.4'
+
+gem 'geokit', '~> 1.5.0'
+gem 'geokit-rails3', '~> 0.1.2'
+
+gem 'net-ping', '~> 1.5.0'
+gem 'nokogiri', '~> 1.4.6'
+
+gem 'warden', '~> 1.0.4'
+gem 'devise', '~> 1.3.4'
+gem 'acl9', '~> 0.12.0'
 
 gem 'packet', '0.1.15', :git => 'git://github.com/dguerri/packet.git'
-gem 'backgroundrb-rails3', :require => 'backgroundrb'
+gem 'backgroundrb-rails3', '~> 1.1.5', :require => 'backgroundrb'

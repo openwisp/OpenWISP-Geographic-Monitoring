@@ -102,16 +102,16 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acl9
-  backgroundrb-rails3
-  devise
-  geokit
-  geokit-rails3
-  jquery-rails
-  kaminari
-  mysql
-  net-ping
-  nokogiri
+  acl9 (~> 0.12.0)
+  backgroundrb-rails3 (~> 1.1.5)
+  devise (~> 1.3.4)
+  geokit (~> 1.5.0)
+  geokit-rails3 (~> 0.1.2)
+  jquery-rails (~> 1.0.11)
+  kaminari (~> 0.12.4)
+  mysql (= 2.8.1)
+  net-ping (~> 1.5.0)
+  nokogiri (~> 1.4.6)
   packet (= 0.1.15)!
   rails (= 3.0.3)
-  warden
+  warden (~> 1.0.4)
