@@ -15,7 +15,3 @@ gem 'kaminari'
 
 gem 'packet', '0.1.15', :git => 'git://github.com/dguerri/packet.git'
 gem 'backgroundrb-rails3', :require => 'backgroundrb'
-
-group :development do
-  gem 'capistrano'
-end
