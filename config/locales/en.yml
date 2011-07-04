@@ -68,6 +68,7 @@ en:
   Notes: Additional notes
   Ok: Ok
   Prev: Previous
+  Public_on_Georss: Visible on GeoRSS
   Quick_search: Quick search
   Remember_me: Remember me
   Reset_zoom: Reset zoom
@@ -90,6 +91,7 @@ en:
   back: back
   details: details
   down: down
+  'false': 'no'
   higher: higher
   higher_lower: "higher/lower"
   lower: lower
@@ -99,6 +101,7 @@ en:
     one: 1 day ago
     other: "#{count} days ago"
   than: than
+  'true': 'yes'
   unknown: unknown
   up: up
   

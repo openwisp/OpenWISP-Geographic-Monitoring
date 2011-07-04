@@ -15,6 +15,9 @@ class PropertySetsController < ApplicationController
       @property_set = @hotspot.property_set
       attr, val = params[:property_set].first # For security, restrict only one attribute at a time
       status = @property_set.update_attributes({attr => val}) ? :ok : :unprocessable_entity
+
+      # In case a boolean field is updated, translate!
+      val = I18n.t(val) if val == 'true' || val == 'false'
       
       render :text => val, :status => status
     else
