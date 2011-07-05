@@ -7,7 +7,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   # Scrub sensitive parameters from your log
-  # filter_parameter_logging :password
+  filter_parameter_logging :password
+
+  add_breadcrumb proc{ I18n.t(:Wisp_list) }, :root_path
 
   before_filter :set_locale
 

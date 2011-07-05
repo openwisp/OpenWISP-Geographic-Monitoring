@@ -40,7 +40,10 @@
     </h1>
 
     <ul class="nav main">
-      <%= render 'common/navigation' %>
+      <% if user_signed_in? %>
+          <%= render_breadcrumbs :tag => :li, :separator => '<li class="spacer">&raquo</li>' %>
+          <li id="logout"><%= link_to t(:Sign_out), destroy_user_session_path %></li>
+      <% end %>
     </ul>
 
     <% if flash[:notice] || flash[:alert] %>

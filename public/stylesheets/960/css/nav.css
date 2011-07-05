@@ -64,7 +64,7 @@ ul.nav li a:focus {color:#000; background:#ccc;}
 ul.nav li a:active {color:#666; background:#fff;}
 ul.nav li:hover ul {left:0;z-index:10}
 ul.nav li ul,
-ul.nav li {background:#ccc !important}
+ul.nav li {background:#ccc}
 ul.nav li:hover ul li a {color:#444;}
 ul.nav li:hover ul li a:hover {color:#000; background:#fff;}
 ul.nav li:hover ul li a:active {color:#666; background:#fff;}

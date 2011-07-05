@@ -15,10 +15,15 @@ class HotspotsController < ApplicationController
       format.any(:html, :js) { @hotspots = hotspots_with_sort_seach_and_paginate.of_wisp(@wisp) }
       format.json { @hotspots = hotspots_with_filter.of_wisp(@wisp).draw_map }
     end
+
+    crumb_for_wisp
   end
 
   def show
     @hotspot = Hotspot.find params[:id]
+
+    crumb_for_wisp
+    crumb_for_hotspot
   end
 
   private
@@ -57,5 +62,17 @@ class HotspotsController < ApplicationController
     end
 
     i18n_columns.include?(column) ? i18n_columns[column] : 'hostname'
+  end
+
+  def crumb_for_wisp
+    begin
+      add_breadcrumb I18n.t(:Hotspots_for, :wisp => @wisp.name), wisp_hotspots_path(@wisp)
+    rescue
+      add_breadcrumb I18n.t(:Hotspots_of_every_wisp), hotspots_path
+    end
+  end
+
+  def crumb_for_hotspot
+    add_breadcrumb I18n.t(:Hotspot_named, :hostname => @hotspot.hostname), wisp_hotspot_path(@hotspot.wisp, @hotspot)
   end
 end
