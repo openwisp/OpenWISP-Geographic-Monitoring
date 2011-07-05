@@ -122,6 +122,10 @@ class Hotspot < ActiveRecord::Base
     select("`hotspots`.*").geo_scope(:within => CLUSTER_HOTSPOTS_WITHIN_KM, :origin => coords)
   end
 
+  def self.on_georss
+    with_properties.where(:property_sets => {:public => true})
+  end
+
   def self.up
     with_properties.where(:property_sets => {:reachable => true})
   end

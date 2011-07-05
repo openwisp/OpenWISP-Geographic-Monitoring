@@ -14,6 +14,7 @@ class HotspotsController < ApplicationController
     respond_to do |format|
       format.any(:html, :js) { @hotspots = hotspots_with_sort_seach_and_paginate.of_wisp(@wisp) }
       format.json { @hotspots = hotspots_with_filter.of_wisp(@wisp).draw_map }
+      format.rss { @hotspots = Hotspot.on_georss }
     end
 
     crumb_for_wisp
