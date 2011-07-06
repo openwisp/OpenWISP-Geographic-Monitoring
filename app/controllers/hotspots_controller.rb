@@ -1,5 +1,6 @@
 class HotspotsController < ApplicationController
-  before_filter :authenticate_user!, :load_wisp
+  before_filter :authenticate_user!, :unless => :georss?
+  before_filter :load_wisp
 
   access_control do
     default :deny
@@ -8,6 +9,8 @@ class HotspotsController < ApplicationController
       allow :wisps_viewer
       allow :wisp_hotspots_viewer, :of => :wisp, :if => :wisp_loaded?
     end
+
+    allow all, :to => :index, :if => :georss?
   end
 
   def index
@@ -63,6 +66,10 @@ class HotspotsController < ApplicationController
     end
 
     i18n_columns.include?(column) ? i18n_columns[column] : 'hostname'
+  end
+
+  def georss?
+    request.format.rss?
   end
 
   def crumb_for_wisp
