@@ -1,5 +1,5 @@
 class ActivityHistory < ActiveRecord::Base
-  belongs_to :hotspot
+  belongs_to :access_point
 
   default_scope order(:start_time)
 

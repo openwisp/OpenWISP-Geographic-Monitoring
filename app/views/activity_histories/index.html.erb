@@ -7,7 +7,7 @@
             function(){
                 $('#report').tablesorter({widgets:['zebra'],dateFormat:'#{locale == :en ? 'us' : 'uk'}'});
                 owgm.dateRangePicker();
-                owgm.highlightHotspotsReport('#report', '.up', '.down', '#up_down_status', '#than_percent', '#percent_value');
+                owgm.highlightAccessPointsReport('#report', '.up', '.down', '#up_down_status', '#than_percent', '#percent_value');
             }
     );" %>
 <% end %>
@@ -33,7 +33,7 @@
 
     <div class="grid_6">
       <div class="box">
-        <h5><%=t :Highlight_hotspots_with %></h5>
+        <h5><%=t :Highlight_access_points_with %></h5>
 
         <%= select 'up_down', 'status', [[t(:Status), ''], [t(:Up), 1], [t(:Down), 0]] %>
         <%= select 'than', 'percent', [[t(:higher_lower), ''], [t(:higher), '>'], [t(:lower), '<']] %>
@@ -56,15 +56,15 @@
       </thead>
 
       <tbody>
-      <% @hotspots.each do |hotspot| %>
+      <% @access_points.each do |access_point| %>
           <tr>
-            <td><%= link_to hotspot.hostname, [@wisp, hotspot] %></td>
-            <td><%=l hotspot.activation_date %></td>
-            <td><%= hotspot.address %></td>
-            <td><%= hotspot.city %></td>
-            <td><%= hotspot.description %></td>
-            <td class="center up"><%= hotspot.up_average @from, @to %>%</td>
-            <td class="center down"><%= hotspot.down_average @from, @to %>%</td>
+            <td><%= link_to access_point.hostname, [@wisp, access_point] %></td>
+            <td><%=l access_point.activation_date %></td>
+            <td><%= access_point.address %></td>
+            <td><%= access_point.city %></td>
+            <td><%= access_point.description %></td>
+            <td class="center up"><%= access_point.up_average @from, @to %>%</td>
+            <td class="center down"><%= access_point.down_average @from, @to %>%</td>
           </tr>
       <% end %>
       </tbody>

@@ -1,32 +1,32 @@
 class Cluster
-  def initialize(hotspots)
-    if hotspots.is_a?(Array) && hotspots.all? {|hotspot| hotspot.is_a?(Hotspot)}
-      @hotspots = hotspots
+  def initialize(access_points)
+    if access_points.is_a?(Array) && access_points.all? {|access_point| access_point.is_a?(AccessPoint)}
+      @access_points = access_points
     else 
-      raise "Cluster must be an Array of Hotspot models"
+      raise "Cluster must be an Array of AccessPoint models"
     end
   end
 
   def size
-    @hotspots.count
+    @access_points.count
   end
 
-  def hotspots
-    @hotspots
+  def access_points
+    @access_points
   end
 
   def lat
-    @hotspots.inject(0.0) {|sum, hotspot| sum + hotspot.lat} / size
+    @access_points.inject(0.0) {|sum, access_point| sum + access_point.lat} / size
   end
 
   def lng
-    @hotspots.inject(0.0) {|sum, hotspot| sum + hotspot.lng} / size
+    @access_points.inject(0.0) {|sum, access_point| sum + access_point.lng} / size
   end
 
   def status
-    up = @hotspots.find_all{|hotspot| hotspot.up?}.count
-    down = @hotspots.find_all{|hotspot| hotspot.down?}.count
-    unknown = @hotspots.find_all{|hotspot| hotspot.unknown?}.count
+    up = @access_points.find_all{|access_point| access_point.up?}.count
+    down = @access_points.find_all{|access_point| access_point.down?}.count
+    unknown = @access_points.find_all{|access_point| access_point.unknown?}.count
 
     if down >= up && down >= unknown
       0

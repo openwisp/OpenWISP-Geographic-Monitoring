@@ -1,5 +1,5 @@
 class Activity < ActiveRecord::Base
-  belongs_to :hotspot
+  belongs_to :access_point
 
   def status
     st = read_attribute :status

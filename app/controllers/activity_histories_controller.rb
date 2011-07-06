@@ -13,13 +13,13 @@ class ActivityHistoriesController < ApplicationController
   def index
     @from = Date.strptime(params[:from], I18n.t('date.formats.default')) rescue 365.days.ago.to_date
     @to = Date.strptime(params[:to], I18n.t('date.formats.default')) rescue Date.today
-    @hotspots = Hotspot.activated(@to).of_wisp(@wisp)
+    @access_points = AccessPoint.activated(@to).of_wisp(@wisp)
 
     crumb_for_report
   end
 
   def show
-    @activity_history = ActivityHistory.where(:hotspot_id => params[:hotspot_id]).older_than(30.days.ago)
+    @activity_history = ActivityHistory.where(:access_point_id => params[:access_point_id]).older_than(30.days.ago)
 
     respond_to do |format|
       format.json { render :json => @activity_history }

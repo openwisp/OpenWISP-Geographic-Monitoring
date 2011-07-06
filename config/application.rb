@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
-# Specify where to look for the wisps and hotspots table
+# Specify where to look for the wisps and access_points table
 # data. Only one value can be enable at a time.
 # Possible values:
 # :table => true || :table => false

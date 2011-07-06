@@ -6,7 +6,7 @@
   
 :schedules:
  :monitoring_worker:
-  :hotspots_monitoring:
+  :access_points_monitoring:
    :trigger_args: 0  */5  *  * * *
   :consolidate:
    :trigger_args: 0   30  */1 * * *

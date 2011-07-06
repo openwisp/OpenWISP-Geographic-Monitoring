@@ -4,22 +4,22 @@ var gmaps = {
     mapDiv: '#gmap_index',
     mapDivSingle: '#gmap_show',
     mapLoadingDiv: '#map_loading',
-    hotspotTemplate: '#hotspot_infowindow_templ',
+    accessPointTemplate: '#access_point_infowindow_templ',
     clusterTemplate: '#cluster_infowindow_templ',
-    hotspotClusterTemplate: '#hotspots_infowindow_templ',
+    accessPointClusterTemplate: '#access_points_infowindow_templ',
     markerShadow: 'shadow.png',
     map: undefined, // will be defined in drawGoogleMap
     mgr: undefined, // will be defined in drawMarkers
     bnds: undefined, // will be defined in as LatLngBounds
     latSelector: 'data-lat',
     lngSelector: 'data-lng',
-    singleHotspotIcon: '#hs_icon',
+    singleAccessPointIcon: '#hs_icon',
     min_zoom: 0,
     cluster_till_zoom: 12,
     max_zoom: 19,
-    hotspots: [],
+    accessPoints: [],
     clusters: [],
-    hotspots_clustered: [],
+    accessPointsClustered: [],
 
     /* Google Maps Specific Configuration Variables */
     opts: {
@@ -36,9 +36,9 @@ var gmaps = {
         if(owgm.exists(gmaps.mapDiv)) {
             $(gmaps.mapLoadingDiv).show();
             gmaps.bnds = new google.maps.LatLngBounds();
-            // Hotspots (many) index view. Fetch data to draw
+            // accessPoints (many) index view. Fetch data to draw
             // by parsing JSON data retrieved from the save view.
-            // Hotspots are drawn via MarkerManager v3
+            // accessPoints are drawn via MarkerManager v3
             var map_div_id = $(gmaps.mapDiv).attr('id');
             gmaps.map = new google.maps.Map(document.getElementById(map_div_id), $.extend(gmaps.opts, {
                 zoom: 7,
@@ -50,23 +50,23 @@ var gmaps = {
                 google.maps.event.removeListener(listener);
             });
         } else if (owgm.exists(gmaps.mapDivSingle)) {
-            // Hotspot (just one) show view. Fetch data to draw
+            // accessPoint (just one) show view. Fetch data to draw
             // by parsing directly html tag attributes.
             var map_div_id = $(gmaps.mapDivSingle).attr('id');
-            var hotspot_coords = gmaps.getCoords($(gmaps.mapDivSingle).attr(gmaps.latSelector), $(gmaps.mapDivSingle).attr(gmaps.lngSelector));
+            var access_point_coords = gmaps.getCoords($(gmaps.mapDivSingle).attr(gmaps.latSelector), $(gmaps.mapDivSingle).attr(gmaps.lngSelector));
             gmaps.map = new google.maps.Map(document.getElementById(map_div_id), $.extend(gmaps.opts, {
                 zoom: 13,
-                center: hotspot_coords,
+                center: access_point_coords,
                 draggable: false,
                 navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
                 disableDoubleClickZoom: true,
                 keyboardShortcuts: false
             }));
             var _marker = new google.maps.Marker({
-                position: hotspot_coords,
+                position: access_point_coords,
                 map: gmaps.map,
-                icon: gmaps.gIcon($(gmaps.singleHotspotIcon).attr('src')),
-                shadow: gmaps.gShadow($(gmaps.singleHotspotIcon).attr('src'))
+                icon: gmaps.gIcon($(gmaps.singleAccessPointIcon).attr('src')),
+                shadow: gmaps.gShadow($(gmaps.singleAccessPointIcon).attr('src'))
             });
         }
     },
@@ -82,9 +82,9 @@ var gmaps = {
         if (! gmaps.mgr) {
             gmaps.mgr = new MarkerManager(gmaps.map);
             google.maps.event.addListener(gmaps.mgr, 'loaded', function(){
-                gmaps.mgr.addMarkers(gmaps.hotspots, gmaps.min_zoom, gmaps.max_zoom);
+                gmaps.mgr.addMarkers(gmaps.accessPoints, gmaps.min_zoom, gmaps.max_zoom);
                 gmaps.mgr.addMarkers(gmaps.clusters, gmaps.min_zoom, gmaps.cluster_till_zoom);
-                gmaps.mgr.addMarkers(gmaps.hotspots_clustered, gmaps.cluster_till_zoom+1, gmaps.max_zoom);
+                gmaps.mgr.addMarkers(gmaps.accessPointsClustered, gmaps.cluster_till_zoom+1, gmaps.max_zoom);
                 gmaps.mgr.refresh();
                 $(gmaps.mapLoadingDiv).fadeOut('slow');
             });
@@ -96,14 +96,14 @@ var gmaps = {
         $.getJSON(location.href, function(markers){
             $.each(markers, function(){
                 var marker_container;
-                if (this.hotspot) {
+                if (this.access_point) {
                     marker_container = new google.maps.Marker({
-                        position: gmaps.getCoords(this.hotspot.lat, this.hotspot.lng),
-                        icon: gmaps.gIcon(this.hotspot.icon),
-                        shadow: gmaps.gShadow(this.hotspot.icon)
+                        position: gmaps.getCoords(this.access_point.lat, this.access_point.lng),
+                        icon: gmaps.gIcon(this.access_point.icon),
+                        shadow: gmaps.gShadow(this.access_point.icon)
                     });
-                    gmaps.hotspots.push(marker_container);
-                    gmaps.addInfoWindow(marker_container, gmaps.buildHotspotInfo(this.hotspot));
+                    gmaps.accessPoints.push(marker_container);
+                    gmaps.addInfoWindow(marker_container, gmaps.buildAccessPointInfo(this.access_point));
                     gmaps.bnds.extend(marker_container.getPosition());
                 } else if (this.cluster) {
                     marker_container = new google.maps.Marker({
@@ -114,14 +114,14 @@ var gmaps = {
                     gmaps.clusters.push(marker_container);
                     gmaps.addInfoWindow(marker_container, gmaps.buildClusterInfo(this.cluster));
                     gmaps.bnds.extend(marker_container.getPosition());
-                    $.each(this.cluster.hotspots, function(){
+                    $.each(this.cluster.access_points, function(){
                         marker_container = new google.maps.Marker({
-                            position: gmaps.getCoords(this.hotspot.lat, this.hotspot.lng),
-                            icon: gmaps.gIcon(this.hotspot.icon),
-                            shadow: gmaps.gShadow(this.hotspot.icon)
+                            position: gmaps.getCoords(this.access_point.lat, this.access_point.lng),
+                            icon: gmaps.gIcon(this.access_point.icon),
+                            shadow: gmaps.gShadow(this.access_point.icon)
                         });
-                        gmaps.hotspots_clustered.push(marker_container);
-                        gmaps.addInfoWindow(marker_container, gmaps.buildHotspotInfo(this.hotspot));
+                        gmaps.accessPointsClustered.push(marker_container);
+                        gmaps.addInfoWindow(marker_container, gmaps.buildAccessPointInfo(this.access_point));
                     });
                 }
             });
@@ -147,30 +147,30 @@ var gmaps = {
         });
     },
 
-    buildHotspotInfo: function(hotspot) {
-        var _content = $(gmaps.hotspotTemplate).clone().html();
-        _content = _content.replace(/__hostname__/, hotspot.hostname);
-        _content = _content.replace(/__address__/, hotspot.address);
-        _content = _content.replace(/__city__/, hotspot.city);
-        _content = _content.replace(/__url__/, hotspot.url);
-        _content = _content.replace(/__icon__/, hotspot.icon);
+    buildAccessPointInfo: function(access_point) {
+        var _content = $(gmaps.accessPointTemplate).clone().html();
+        _content = _content.replace(/__hostname__/, access_point.hostname);
+        _content = _content.replace(/__address__/, access_point.address);
+        _content = _content.replace(/__city__/, access_point.city);
+        _content = _content.replace(/__url__/, access_point.url);
+        _content = _content.replace(/__icon__/, access_point.icon);
         return _content;
     },
 
     buildClusterInfo: function(cluster) {
         var _content = $(gmaps.clusterTemplate).clone().html();
-        var _hotspots, _hotspot;
-        _hotspots = "";
+        var _access_points, _access_point;
+        _access_points = "";
 
-        $.each(cluster.hotspots, function(){
-            _hotspot = $(gmaps.hotspotClusterTemplate).clone().html();
-            _hotspot = _hotspot.replace(/__icon__/, this.hotspot.icon);
-            _hotspot = _hotspot.replace(/__hostname__/, this.hotspot.hostname);
-            _hotspot = _hotspot.replace(/__url__/, this.hotspot.url);
-            _hotspots += _hotspot;
+        $.each(cluster.access_points, function(){
+            _access_point = $(gmaps.accessPointClusterTemplate).clone().html();
+            _access_point = _access_point.replace(/__icon__/, this.access_point.icon);
+            _access_point = _access_point.replace(/__hostname__/, this.access_point.hostname);
+            _access_point = _access_point.replace(/__url__/, this.access_point.url);
+            _access_points += _access_point;
         });
 
-        _content = _content.replace(/__hotspots__/, _hotspots);
+        _content = _content.replace(/__access_points__/, _access_points);
         return _content;
     }
 }

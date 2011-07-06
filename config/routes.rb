@@ -4,16 +4,16 @@ Owgm::Application.routes.draw do
 
   devise_for :users
 
-  resources :hotspots, :only => [:index]
+  resources :access_points, :only => [:index]
 
   resources :wisps, :only => :index do
 
-    resources :hotspots, :only => [:index, :show] do
+    resources :access_points, :only => [:index, :show] do
       resource :property_set, :only => :update
     end
 
     resources :activity_histories, :only => :index
-    match 'hotspots/:hotspot_id/activity_histories' => 'activity_histories#show', :as => :hotspot_activity_histories
+    match 'access_points/:access_point_id/activity_histories' => 'activity_histories#show', :as => :access_point_activity_histories
     match 'availability_report' => 'activity_histories#index', :as => :availability_report
   end
 

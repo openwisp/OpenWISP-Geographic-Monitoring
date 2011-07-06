@@ -110,17 +110,17 @@
     float: right;
 }
 
-#hotspots_quicksearch {
+#access_points_quicksearch {
     float: right;
 }
 
-#hotspots_quicksearch .spin {
+#access_points_quicksearch .spin {
     float: left;
     padding-right: 3px;
     margin-top: 4px;
 }
 
-#hotspots_paginate .spin {
+#access_points_paginate .spin {
     float: left;
     padding-left: 1px;
     margin-top: 1px;

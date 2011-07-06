@@ -2,8 +2,8 @@
 
 one:
   reachable: false
-  hotspot: 
+  access_point:
 
 two:
   reachable: false
-  hotspot: 
+  access_point:

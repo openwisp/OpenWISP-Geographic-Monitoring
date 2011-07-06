@@ -4,7 +4,7 @@
 it:
   activerecord:
     attributes:
-      hotspot:
+      access_point:
         address: indirizzo
         city: città
         hostname: hostname
@@ -31,21 +31,21 @@ it:
   Earliest_seen: Primo avvistamento
   Filter_data_by_date: Filtra per data
   Filter_instructions_1: "
-    Le date sono relative ai dati per ogni hotspot a partire dalla data di attivazione, o dalla
+    Le date sono relative ai dati per ogni access point dalla data di attivazione, o dalla
   "
   Filter_instructions_2: "
     prima data del periodo di osservazione, fino alla data superiore del periodo d'osservazione.
   "
   Graphs: Grafici
-  Highlight_hotspots_with: Evidenzia gli hotspot con
+  Highlight_access_points_with: Evidenzia gli access point con
   Hostname: Hostname
-  Hotspot: Hotspot
-  Hotspot_info: "Informazioni veloci:"
-  Hotspot_named: Hotspot %{hostname}
-  Hotspots: Hotspot
-  Hotspots_for: Hotspot di %{wisp}
-  Hotspots_of_every_wisp: Hotspot di ogni wisp
-  Hotspots_map: Mappa degli Hotspot
+  Access_point: Access point
+  Access_point_info: "Informazioni veloci:"
+  Access_point_named: Access point %{hostname}
+  Access_points: Access point
+  Access_points_for: Access point di %{wisp}
+  Access_points_of_every_wisp: Access point di tutti i wisp
+  Access_points_map: Mappa degli Access point
   Info: Informazioni
   Interface_address: Indirizzo apparato
   Interface_vendor: Vendor apparato
@@ -60,8 +60,8 @@ it:
   More_info: Altre informazioni
   Name: Nome
   Next: Seguente
-  No_data_to_display: Hotspot sconosciuto, non ci sono dati da visualizzare.
-  No_description_available: Non è disponibile la descrizione per questo hotspot
+  No_data_to_display: Access point sconosciuto, non ci sono dati da visualizzare.
+  No_description_available: Non è disponibile la descrizione per questo access point
   No_javascript: Javascript disabilitato!
   No_notes_available: Non sono disponibili note aggiuntive
   No_site_description_available: Non è disponible una descrizione per il sito di installazione
@@ -73,7 +73,7 @@ it:
   Remember_me: Ricordami
   Reset_zoom: Reimposta zoom
   Show: Mostra
-  Show_all_hotspots: Mostra tutti gli hotspot
+  Show_all_access_points: Mostra tutti gli access point
   Sign_in: Accedi
   Sign_out: Esci
   Site_description: Sito di installazione

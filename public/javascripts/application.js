@@ -17,7 +17,7 @@ $(document).ready(function() {
 var owgm = {
 
     /*** Settings and Variables ***/
-    quickSearchDiv: '#hotspots_quicksearch',
+    quickSearchDiv: '#access_points_quicksearch',
     loadingDiv: '#loading',
     noJsDiv: '.no_js',
 
@@ -53,7 +53,7 @@ var owgm = {
         }
     },
 
-    highlightHotspotsReport: function(tableId, upClass, downClass, statusId, highLowId, percentId) {
+    highlightAccessPointsReport: function(tableId, upClass, downClass, statusId, highLowId, percentId) {
         var status = $(statusId);
         var highLow = $(highLowId);
         var percent = $(percentId);

@@ -10,28 +10,44 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110704121922) do
+ActiveRecord::Schema.define(:version => 20110706082525) do
+
+  create_table "access_points", :id => false, :force => true do |t|
+    t.integer  "id",              :default => 0, :null => false
+    t.string   "hostname",                       :null => false
+    t.float    "lat",                            :null => false
+    t.float    "lng",                            :null => false
+    t.string   "address",                        :null => false
+    t.string   "city",                           :null => false
+    t.string   "mng_ip"
+    t.text     "description"
+    t.string   "common_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "wisp_id"
+    t.date     "activation_date"
+  end
 
   create_table "activities", :force => true do |t|
     t.integer  "status"
-    t.integer  "hotspot_id"
+    t.integer  "access_point_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "activities", ["access_point_id"], :name => "index_activities_on_access_point_id"
   add_index "activities", ["created_at"], :name => "index_activities_on_created_at"
-  add_index "activities", ["hotspot_id"], :name => "index_activities_on_hotspot_id"
 
   create_table "activity_histories", :force => true do |t|
     t.float    "status"
     t.datetime "start_time"
     t.datetime "last_time"
-    t.integer  "hotspot_id"
+    t.integer  "access_point_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "activity_histories", ["hotspot_id"], :name => "index_activity_histories_on_hotspot_id"
+  add_index "activity_histories", ["access_point_id"], :name => "index_activity_histories_on_access_point_id"
   add_index "activity_histories", ["last_time"], :name => "index_activity_histories_on_last_time"
   add_index "activity_histories", ["start_time"], :name => "index_activity_histories_on_start_time"
 
@@ -62,22 +78,6 @@ ActiveRecord::Schema.define(:version => 20110704121922) do
     t.datetime "updated_at"
   end
 
-  create_table "hotspots", :id => false, :force => true do |t|
-    t.integer  "id",              :default => 0, :null => false
-    t.string   "hostname",                       :null => false
-    t.float    "lat",                            :null => false
-    t.float    "lng",                            :null => false
-    t.string   "address",                        :null => false
-    t.string   "city",                           :null => false
-    t.string   "mng_ip"
-    t.text     "description"
-    t.string   "common_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "wisp_id"
-    t.date     "activation_date"
-  end
-
   create_table "mac_vendors", :force => true do |t|
     t.string   "vendor"
     t.string   "oui"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(:version => 20110704121922) do
 
   create_table "property_sets", :force => true do |t|
     t.boolean "reachable"
-    t.integer "hotspot_id"
+    t.integer "access_point_id"
     t.text    "notes"
     t.string  "site_description"
     t.boolean "public"

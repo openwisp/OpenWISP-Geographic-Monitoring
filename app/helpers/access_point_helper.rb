@@ -1,8 +1,8 @@
-module HotspotHelper
+module AccessPointHelper
   def image_path_for(marker)
     image = ''
 
-    if marker.is_a? Hotspot
+    if marker.is_a? AccessPoint
       image = 'ap_'
     elsif marker.is_a? Cluster
       image = 'cluster_'

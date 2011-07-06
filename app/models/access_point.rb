@@ -1,11 +1,11 @@
-class Hotspot < ActiveRecord::Base
+class AccessPoint < ActiveRecord::Base
   require 'ipaddr'
 
   acts_as_authorization_object
   acts_as_mappable :default_units => :kms
 
   paginates_per 10
-  CLUSTER_HOTSPOTS_WITHIN_KM = 2
+  CLUSTER_ACCESS_POINTS_WITHIN_KM = 2
 
   belongs_to :wisp
   has_one :property_set, :autosave => true, :dependent => :destroy
@@ -83,26 +83,26 @@ class Hotspot < ActiveRecord::Base
 
   def associated_users(scope = :all)
     AssociatedUser.active_resource_from(wisp.owmw_url, wisp.owmw_username, wisp.owmw_password)
-    AssociatedUser.find(scope, :params => {:hotspot => hostname})
+    AssociatedUser.find(scope, :params => {:access_point => hostname})
   end
 
 
   ##### Static methods #####
 
   def self.draw_map
-    clustered_hotspots = []
+    clustered_access_points = []
     already_clustered = []
 
     find_each do |hs|
       cluster = around(hs.coords)
       cluster -= already_clustered
 
-      clustered_hotspots << ( cluster.count > 1 ? Cluster.new(cluster) : cluster.first )
+      clustered_access_points << ( cluster.count > 1 ? Cluster.new(cluster) : cluster.first )
 
       already_clustered += cluster
     end
 
-    clustered_hotspots
+    clustered_access_points
   end
 
   def self.of_wisp(wisp)
@@ -119,7 +119,7 @@ class Hotspot < ActiveRecord::Base
   end
 
   def self.around(coords)
-    select("`hotspots`.*").geo_scope(:within => CLUSTER_HOTSPOTS_WITHIN_KM, :origin => coords)
+    select("`access_points`.*").geo_scope(:within => CLUSTER_ACCESS_POINTS_WITHIN_KM, :origin => coords)
   end
 
   def self.on_georss
@@ -147,15 +147,15 @@ class Hotspot < ActiveRecord::Base
   end
 
   def self.all_up(regex=nil)
-    Hotspot.up.hostname_like regex
+    AccessPoint.up.hostname_like regex
   end
 
   def self.all_down(regex=nil)
-    Hotspot.down.hostname_like regex
+    AccessPoint.down.hostname_like regex
   end
 
   def self.all_unknown(regex=nil)
-    Hotspot.unknown.hostname_like regex
+    AccessPoint.unknown.hostname_like regex
   end
 
   def self.hostname_like(name)
@@ -165,10 +165,10 @@ class Hotspot < ActiveRecord::Base
   private
 
   def self.with_properties
-    joins("LEFT JOIN `property_sets` ON `property_sets`.`hotspot_id` = `hotspots`.`id`")
+    joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`")
   end
 
   def set_reachable_to(boolean)
-    property_set.update_attribute(:reachable, boolean) rescue PropertySet.create(:reachable => boolean, :hotspot => self)
+    property_set.update_attribute(:reachable, boolean) rescue PropertySet.create(:reachable => boolean, :access_point => self)
   end
 end

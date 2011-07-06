@@ -4,7 +4,7 @@
 en:
   activerecord:
     attributes:
-      hotspot:
+      access_point:
         address: address
         city: city
         hostname: hostname
@@ -31,21 +31,21 @@ en:
   Earliest_seen: Earliest seen on
   Filter_data_by_date: Filter by date
   Filter_instructions_1: "
-    Dates are relative for each hotspot's data starting from the activation date, or
+    Dates are relative for each access point's data starting from the activation date, or
   "
   Filter_instructions_2: "
     the first date of the observation period, to the latest observation period's date.
   "
   Graphs: Graphs
-  Highlight_hotspots_with: Highlight hotspots with
+  Highlight_access_points_with: Highlight access points with
   Hostname: Hostname
-  Hotspot: Hotspot
-  Hotspot_info: "Quick info:"
-  Hotspot_named: Hotspot %{hostname}
-  Hotspots: Hotspots
-  Hotspots_for: %{wisp}'s Hotspots
-  Hotspots_of_every_wisp: Hotspots of every wisp
-  Hotspots_map: Hotspots Map
+  Access_point: Access point
+  Access_point_info: "Quick info:"
+  Access_point_named: Access point %{hostname}
+  Access_points: Access points
+  Access_points_for: %{wisp}'s Access points
+  Access_points_of_every_wisp: Access points of every wisp
+  Access_points_map: Access points Map
   Info: Info
   Interface_address: Inteface address
   Interface_vendor: Inteface vendor
@@ -60,8 +60,8 @@ en:
   More_info: Altre informazioni
   Name: Name
   Next: Next
-  No_data_to_display: Hotspot unknown, there is no data to display.
-  No_description_available: No description is available for this hotspot
+  No_data_to_display: Access point unknown, there is no data to display.
+  No_description_available: No description is available for this access point
   No_javascript: Javascript disabled!
   No_notes_available: No additional notes available
   No_site_description_available: Description for installation site is not available
@@ -73,7 +73,7 @@ en:
   Remember_me: Remember me
   Reset_zoom: Reset zoom
   Show: Show
-  Show_all_hotspots: Show all hotspots
+  Show_all_access_points: Show all access points
   Sign_in: Sign in
   Sign_out: Sign out
   Site_description: Installation site

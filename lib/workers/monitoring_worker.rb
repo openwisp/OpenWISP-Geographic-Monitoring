@@ -15,9 +15,9 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
 
   end
 
-  def hotspots_monitoring
+  def access_points_monitoring
     threads = []
-    Hotspot.all.each do |ap|
+    AccessPoint.all.each do |ap|
 
       while threads.length >= MAX_THREADS
         threads.delete_if do |th|
@@ -62,7 +62,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
   end
 
   def consolidate
-    Hotspot.all.each do |ap|
+    AccessPoint.all.each do |ap|
       @@semaphore.synchronize {
         if ap.activities.count > 0
           first_time = ap.activities.first(:order => "created_at").created_at.change(:min => 0, :sec => 0)
@@ -70,7 +70,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
           avg = ap.activities.average(:status, :conditions => ["created_at < ?", last_time]).to_f
           ah = ap.activity_histories.build(:status => avg, :start_time => first_time, :last_time => last_time)
           ah.save!
-          Activity.destroy_all(["hotspot_id = ? AND created_at < ?", ap.id, last_time])
+          Activity.destroy_all(["access_point_id = ? AND created_at < ?", ap.id, last_time])
         end
       }
     end

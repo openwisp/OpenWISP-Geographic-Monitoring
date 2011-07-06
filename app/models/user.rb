@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :username, :email, :password, :password_confirmation
 
-  ROLES = [:wisps_viewer, :wisp_hotspots_viewer, :wisp_activity_histories_viewer]
+  ROLES = [:wisps_viewer, :wisp_access_points_viewer, :wisp_activity_histories_viewer]
 
   def roles
     @rs = []

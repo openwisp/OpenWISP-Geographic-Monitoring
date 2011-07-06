@@ -1,3 +1,3 @@
 class PropertySet < ActiveRecord::Base
-  belongs_to :hotspot
+  belongs_to :access_point
 end
