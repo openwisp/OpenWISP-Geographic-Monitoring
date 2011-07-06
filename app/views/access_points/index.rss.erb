@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:georss="http://www.georss.org/georss">
+  <channel>
+    <title><%= "#{@wisp.name} " rescue nil %>GeoRSS feed</title>
+    <link>http://www.caspur.it/</link>
+    <author>
+      <name>WiFi Team - CASPUR</name>
+      <email>wifi@caspur.it</email>
+    </author>
+    <description><%= "#{@wisp.name} " rescue nil %>Access Points</description>
+    <language>en-us</language>
+    <% @access_points.each do |ap| %>
+        <item>
+          <title><%= ap.wisp.name %></title>
+          <updated><%= ap.updated_at  %></updated>
+          <summary><%= ap.hostname %></summary>
+          <description><%= ap.site %></description>
+          <georss:point><%= ap.lat %> <%= ap.lng %></georss:point>
+        </item>
+    <% end %>
+  </channel>
+</rss>

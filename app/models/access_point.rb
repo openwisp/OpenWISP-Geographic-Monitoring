@@ -21,6 +21,11 @@ class AccessPoint < ActiveRecord::Base
     [lat, lng]
   end
 
+  def site
+    base = site_description.present? ? "#{site_description} - " : ""
+    base << city
+  end
+
   def ip
     mng_ip.nil? ? nil : IPAddr.new(read_attribute(:mng_ip), Socket::AF_INET).to_s
   end
