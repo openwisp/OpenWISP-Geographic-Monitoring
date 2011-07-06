@@ -2,7 +2,7 @@
 module ApplicationHelper
   def link_to_locale(locale)
     html_opts = locale.to_sym == I18n.locale ? {:class => "current_#{locale}"} : {}
-    link_to(image_tag("locale/#{locale}.jpg", :size => "26x26"), {:locale => locale}, html_opts)
+    link_to(image_tag("locale/#{locale}.jpg", :size => "26x26"), request.path+"?locale=#{locale}", html_opts)
   end
 
   def link_to_sort(text, column = nil)
