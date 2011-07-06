@@ -1,0 +1,31 @@
+<% content_for :after_defaults do %>
+    <%= javascript_include_tag 'https://maps.google.com/maps/api/js?sensor=false', 'gmaps.markermanager', 'owgm.gmaps' %>
+<% end %>
+
+<div id="gmap_index">
+  <p class="no_js"><%=t :No_javascript %></p>
+</div>
+
+<br />
+<p>
+  <strong><%=t :Show %>:</strong>
+  <% active = params[:filter] || 'all' %>
+
+  <%= link_to t(:all),
+      @wisp ? wisp_access_points_path(@wisp, :filter => 'all') : {:filter => 'all'},
+      :class => (active == 'all' ? 'hl' : 'nohl')
+  %>
+  <%= link_to t(:up),
+      @wisp ? wisp_access_points_path(@wisp, :filter => 'up') : {:filter => 'up'},
+      :class => (active == 'up' ? 'hl' : 'nohl')
+  %>
+  <%= link_to t(:down),
+      @wisp ? wisp_access_points_path(@wisp, :filter => 'down') : {:filter => 'down'},
+      :class => (active == 'down' ? 'hl' : 'nohl')
+  %>
+  <%= link_to t(:unknown),
+      @wisp ? wisp_access_points_path(@wisp, :filter => 'unknown') : {:filter => 'unknown'},
+      :class => (active == 'unknown' ? 'hl' : 'nohl')
+  %>
+</p>
+

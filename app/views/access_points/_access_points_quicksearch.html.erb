@@ -1,0 +1,4 @@
+<%= form_tag access_points_with_or_without_wisp_path(@wisp), :method => :get, :remote => true do %>
+	<%= label_tag :q, t(:Quick_search) %>
+	<%= text_field_tag :q, nil, :size => 10 %>
+<% end %>

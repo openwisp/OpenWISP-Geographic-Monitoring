@@ -1,0 +1,62 @@
+<% content_for :after_defaults do %>
+    <%= javascript_include_tag 'https://maps.google.com/maps/api/js?sensor=false', 'gmaps.markermanager', 'owgm.gmaps', 'jquery.jeditable' %>
+
+    <%= javascript_tag "$(function(){
+            $('#notes').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
+                submitdata: {authenticity_token:'#{form_authenticity_token}'},
+                name: 'property_set[notes]', method: 'PUT',
+                type: 'textarea', rows: 10,
+                submit: '#{t :Ok}', cancel: '#{t :Cancel}',
+                tooltip: '#{t :Click_to_edit}',
+                placeholder: '#{t :No_notes_available}'
+            });
+            $('#site_description').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
+                submitdata: {authenticity_token:'#{form_authenticity_token}'},
+                name: 'property_set[site_description]', method: 'PUT',
+                submit: '#{t :Ok}', cancel: '#{t :Cancel}',
+                tooltip: '#{t :Click_to_edit}',
+                placeholder: '#{t :No_notes_available}'
+            });
+            $('#public').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
+                submitdata: {authenticity_token:'#{form_authenticity_token}'},
+                name: 'property_set[public]', method: 'PUT', type: 'select',
+                submit: '#{t :Ok}', cancel: '#{t :Cancel}',
+                data: {true:'#{t :true}', false:'#{t :false}'}
+            });
+    });" %>
+<% end %>
+
+<div class="grid_12">
+  <h1><%=t :Access_point %> <%= @access_point.hostname %></h1>
+
+  <div class="grid_6">
+    <div class="box">
+      <h2><%=t :Map %></h2>
+      <br />
+      <div id="gmap_show" data-lat="<%= @access_point.lat %>" data-lng="<%= @access_point.lng %>">
+        <p class="no_js"><%=t :No_javascript %></p>
+      </div>
+      <br />
+    </div>
+  </div>
+
+  <div class="grid_6">
+    <div class="box">
+      <%= render :partial => 'access_point_info' %>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+
+  <div class="grid_12">
+    <div class="box">
+      <%= render :partial => 'access_point_graphs' %>
+    </div>
+  </div>
+
+  <div class="grid_12">
+    <div class="box">
+      <%= render :partial => 'access_point_more_info' %>
+    </div>
+  </div>
+</div>

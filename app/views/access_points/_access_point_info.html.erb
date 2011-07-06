@@ -1,0 +1,59 @@
+<h2><%=t :Info %></h2>
+<br />
+<table>
+  <tbody class="hover">
+  <tr>
+    <td><strong><%=t :Hostname %></strong></td>
+    <td class="right"><%= @access_point.hostname %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Address %></strong></td>
+    <td class="right"><%= @access_point.address %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :City %></strong></td>
+    <td class="right"><%= @access_point.city %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Status %></strong></td>
+    <td class="right">
+      <% if @access_point.up? %>
+          <%=t :up %>
+      <% elsif @access_point.down? %>
+          <%=t :down %>
+      <% elsif @access_point.unknown? %>
+          <%=t :unknown %>
+      <% end %>
+      <%= image_tag_for @access_point, :id => 'hs_icon', :class => 'hidden' %>
+    </td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Ip_addr %></strong></td>
+    <td class="right"><%= @access_point.ip %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Coordinates %></strong></td>
+    <td class="right"><%= @access_point.lat %>, <%= @access_point.lng %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Activation_date %></strong></td>
+    <td class="right"><%=l @access_point.activation_date rescue '-' %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Earliest_seen %></strong></td>
+    <td class="right"><%= l(@access_point.earliest_seen, :format => :short) rescue '-' %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Latest_seen %></strong></td>
+    <td class="right"><%= l(@access_point.latest_seen, :format => :short) rescue '-' %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Connected_users %></strong></td>
+    <td class="right"><%= @access_point.associated_users.count rescue 0 %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Public_on_Georss %></strong></td>
+    <td id="public" class="right"><%=t @access_point.public ? :true : :false %></td>
+  </tr>
+  </tbody>
+</table>

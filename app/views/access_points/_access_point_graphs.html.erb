@@ -1,0 +1,24 @@
+<% content_for :after_defaults do %>
+    <%= javascript_include_tag 'highcharts', 'owgm.graphs', 'owgm.activity_graph'  %>
+<% end %>
+
+<h2><%=t :Graphs %></h2>
+<% if @access_point.known? %>
+    <p class="howto right bold hidden">(<%=t :Click_and_drag_to_zoom_in %>)</p>
+
+    <div class="box">
+      <h5><%=t :Activity_graph %></h5>
+      <p class="no_js"><%=t :No_javascript %></p>
+      <div id="activity_graph"></div>
+      <br />
+      <div id="act_controls" class="hidden">
+        <%= link_to t(:Last_day), '', :class => 'last_day' %> |
+        <%= link_to t(:Last_week), '', :class => 'last_week' %> |
+        <%= link_to t(:Last_month), '', :class => 'last_month' %>
+      </div>
+    </div>
+<% else %>
+    <br />
+    <h5 class="nodata center"><%=t :No_data_to_display %></h5>
+    <br />
+<% end %>

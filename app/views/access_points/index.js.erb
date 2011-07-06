@@ -1,0 +1,11 @@
+$('#access_points_thead').html(
+    '<%= escape_javascript(render :partial => 'access_points_thead') %>'
+);
+
+$('#access_points').html(
+    '<%= escape_javascript(render :partial => 'access_point', :collection => @access_points) %>'
+);
+
+$('#access_points_paginate').html(
+    '<%= escape_javascript(paginate(@access_points, :remote => true).to_s) %>'
+);

@@ -1,0 +1,56 @@
+<% content_for :js_templates do %>
+    <%= render 'marker_info_window_templates' %>
+<% end %>
+
+<div class="grid_12">
+  <div class="box">
+    <h2><%=t :Access_points_map %></h2>
+    <br />
+    <div id="access_points_map">
+      <%= render 'access_points_map' %>
+    </div>
+    <div id="map_loading" class="hidden">
+      <p><%=t :Loading %> <%=t :markers%> <%= image_tag 'spinner.gif', :size => '22x22' %></p>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+
+  <div class="box">
+    <h2>
+      <%=t :Access_point %>
+      <span class="rfloat">
+        <%=t :up %>: <%= @access_points.up.count %>
+        <%=t :down %>: <%= @access_points.down.count %>
+        <%=t :unknown %>: <%= @access_points.unknown.count %>
+      </span>
+    </h2>
+
+    <br />
+
+    <table>
+      <thead id="access_points_thead">
+      <%= render 'access_points_thead' %>
+      </thead>
+
+      <tbody id="access_points">
+      <%= render @access_points %>
+      </tbody>
+    </table>
+
+    <div id="access_points_quicksearch" class="bold">
+      <%= render 'access_points_quicksearch' %>
+    </div>
+
+    <div id="access_points_paginate">
+      <%= paginate @access_points, :remote => true %>
+    </div>
+    <br />
+
+    <div id="loading" class="hidden">
+      <p><%=t :Loading %> <%= image_tag 'spinner.gif' %></p>
+    </div>
+    <br />
+
+  </div>
+</div>

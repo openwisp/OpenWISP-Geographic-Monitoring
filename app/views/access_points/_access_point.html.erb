@@ -1,0 +1,6 @@
+<tr>
+  <td class="middle"><%= link_to access_point.hostname, wisp_access_point_path(access_point.wisp, access_point) %></td>
+  <td class="middle"><%= access_point.address %></td>
+  <td class="middle"><%= access_point.city %></td>
+  <td class="middle right"><%= image_tag_for access_point, :size => "30x35", :class => 'right' %></td>
+</tr>
