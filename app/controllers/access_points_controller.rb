@@ -1,6 +1,5 @@
 class AccessPointsController < ApplicationController
-  before_filter :authenticate_user!, :unless => :georss?
-  before_filter :load_wisp
+  before_filter :authenticate_user!, :load_wisp
 
   access_control do
     default :deny
@@ -9,8 +8,6 @@ class AccessPointsController < ApplicationController
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
-
-    allow all, :to => :index, :if => :georss?
   end
 
   def index
@@ -67,11 +64,7 @@ class AccessPointsController < ApplicationController
 
     i18n_columns.include?(column) ? i18n_columns[column] : 'hostname'
   end
-
-  def georss?
-    request.format.rss?
-  end
-
+  
   def crumb_for_wisp
     begin
       add_breadcrumb I18n.t(:Access_points_for, :wisp => @wisp.name), wisp_access_points_path(@wisp)
