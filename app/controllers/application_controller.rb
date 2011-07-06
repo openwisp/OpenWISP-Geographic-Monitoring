@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   end
 
   def load_wisp
-    @wisp = Wisp.find(params[:wisp_id] || params[:id]) rescue nil
+    @wisp = Wisp.find_by_name(params[:wisp_id] || params[:id]) rescue nil
   end
 
   def wisp_loaded?
