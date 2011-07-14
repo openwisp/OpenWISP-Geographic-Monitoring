@@ -11,10 +11,9 @@
     <language>en-us</language>
     <% @access_points.each do |ap| %>
         <item>
-          <title><%= ap.wisp.name %></title>
+          <title><%= ap.site_description %></title>
+          <description><%= ap.city %></description>
           <updated><%= ap.updated_at  %></updated>
-          <summary><%= ap.hostname %></summary>
-          <description><%= ap.site %></description>
           <georss:point><%= ap.lat %> <%= ap.lng %></georss:point>
         </item>
     <% end %>
