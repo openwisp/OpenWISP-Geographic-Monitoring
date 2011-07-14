@@ -19,9 +19,9 @@
             });
             $('#public').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
                 submitdata: {authenticity_token:'#{form_authenticity_token}'},
-                name: 'property_set[public]', method: 'PUT', type: 'select',
-                submit: '#{t :Ok}', cancel: '#{t :Cancel}',
-                data: {true:'#{t :true}', false:'#{t :false}'}
+                name: 'property_set[public]', method: 'PUT', 
+		type: 'select', data: {'true':'#{t :true}', 'false':'#{t :false}'},
+                submit: '#{t :Ok}', cancel: '#{t :Cancel}'
             });
     });" %>
 <% end %>
