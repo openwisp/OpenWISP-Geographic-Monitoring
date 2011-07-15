@@ -91,6 +91,7 @@ it:
   # Lowercase
   all: tutti
   back: indietro
+  click_to_edit: clicca per modificare
   details: dettagli
   down: down
   'false': 'no'
