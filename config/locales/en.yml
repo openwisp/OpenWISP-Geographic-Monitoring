@@ -8,6 +8,7 @@ en:
         address: address
         city: city
         hostname: hostname
+        public: public
         status: status
   # Uppercase
   Activation_date: Activation date
@@ -68,6 +69,7 @@ en:
   Notes: Additional notes
   Ok: Ok
   Prev: Previous
+  Public: Public
   Public_on_Georss: Visible on GeoRSS
   Quick_search: Quick search
   Remember_me: Remember me

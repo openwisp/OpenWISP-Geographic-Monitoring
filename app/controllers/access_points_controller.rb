@@ -57,6 +57,7 @@ class AccessPointsController < ApplicationController
   def t_column(column)
     i18n_columns = {}
     i18n_columns[I18n.t(:status, :scope => [:activerecord, :attributes, :access_point])] = 'status'
+    i18n_columns[I18n.t(:public, :scope => [:activerecord, :attributes, :access_point])] = 'public'
 
     AccessPoint.column_names.each do |col|
       i18n_columns[I18n.t(col, :scope => [:activerecord, :attributes, :access_point])] = col

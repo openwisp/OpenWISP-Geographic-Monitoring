@@ -116,10 +116,13 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def self.sort_with(attribute, direction)
-    if attribute == 'status'
-      with_properties.order("`reachable` #{direction}")
-    else
-      order("#{attribute} #{direction}")
+    case attribute
+      when 'status' then
+        with_properties.order("`reachable` #{direction}")
+      when 'public' then
+        with_properties.order("`public` #{direction}")
+      else
+        order("#{attribute} #{direction}")
     end
   end
 
