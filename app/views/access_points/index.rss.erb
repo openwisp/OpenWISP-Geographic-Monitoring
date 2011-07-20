@@ -12,7 +12,11 @@
     <% @access_points.each do |ap| %>
         <item>
           <title><%= ap.site_description %></title>
-          <description><%= ap.city %></description>
+          <% if params[:details] %>
+            <description><%= ap.address %> - <%= ap.city %></description>
+          <% else %>
+            <description><%= ap.city %></description>
+          <% end %>
           <updated><%= ap.updated_at  %></updated>
           <georss:point><%= ap.lat %> <%= ap.lng %></georss:point>
         </item>
