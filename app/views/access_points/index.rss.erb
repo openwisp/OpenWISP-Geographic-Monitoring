@@ -13,12 +13,20 @@
         <item>
           <title><%= ap.site_description %></title>
           <% if params[:details] %>
+	    <category></category>
+          <% end %>
+          <% if params[:details] %>
             <description><%= ap.address %> - <%= ap.city %></description>
           <% else %>
             <description><%= ap.city %></description>
           <% end %>
-          <updated><%= ap.updated_at  %></updated>
-          <georss:point><%= ap.lat %> <%= ap.lng %></georss:point>
+          <% if params[:details] %>
+            <georss:lat><%= ap.lat %></georss:lat>
+            <georss:long><%= ap.lng %></georss:long>
+          <% else %>
+            <georss:point><%= ap.lat %> <%= ap.lng %></georss:point>
+          <% end %>
+          <updated><%= ap.updated_at %></updated>
         </item>
     <% end %>
   </channel>
