@@ -19,6 +19,7 @@ en:
   Avg_availability: Average availability
   Back: Back
   Cancel: Cancel
+  Category: Category
   City: City
   Click_and_drag_to_zoom_in: You can click and drag to zoom in
   Click_to_edit: Click to edit
@@ -26,6 +27,7 @@ en:
   Cluster_info: "This cluster contains:"
   Connected_users: Connected users
   Coordinates: Coordinates
+  Create_new_category: Create new category
   Description: Description
   Details: Details
   Down: Down

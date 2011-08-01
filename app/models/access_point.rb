@@ -14,7 +14,7 @@ class AccessPoint < ActiveRecord::Base
 
   delegate :reachable, :to => :property_set, :allow_nil => true
   delegate :notes, :notes=, :site_description, :site_description=,
-           :public, :public=,
+           :public, :public=, :category, :category=,
            :to => :property_set, :allow_nil => true
 
   def coords

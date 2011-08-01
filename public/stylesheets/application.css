@@ -126,6 +126,10 @@
     margin-top: 1px;
 }
 
+#category_text {
+    display: none;
+}
+
 .with_border {
     border:1px dotted gray;
 }

@@ -2,6 +2,13 @@
     <%= javascript_include_tag 'https://maps.google.com/maps/api/js?sensor=false', 'gmaps.markermanager', 'owgm.gmaps', 'jquery.jeditable' %>
 
     <%= javascript_tag "$(function(){
+            $('#category_select').live('change', function(){
+                if ($(this).find('select').val() == '!new!') {
+                    $(this).hide();
+                    $('#category_text').click();
+                    $('#category_text').show();
+                }
+            });
             $('#notes').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
                 submitdata: {authenticity_token:'#{form_authenticity_token}'},
                 name: 'property_set[notes]', method: 'PUT',
@@ -20,8 +27,28 @@
             $('#public').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
                 submitdata: {authenticity_token:'#{form_authenticity_token}'},
                 name: 'property_set[public]', method: 'PUT', 
-		type: 'select', data: {'true':'#{t :true}', 'false':'#{t :false}'},
+		        type: 'select', data: {'true':'#{t :true}', 'false':'#{t :false}'},
                 submit: '#{t :Ok}', cancel: '#{t :Cancel}'
+            });
+            $('#category_select').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
+                submitdata: {authenticity_token:'#{form_authenticity_token}'},
+                name: 'property_set[category]', method: 'PUT',
+		        type: 'select', data: #{categories_select_data(@wisp, @access_point)},
+                submit: '#{t :Ok}', cancel: '#{t :Cancel}'
+            });
+            $('#category_text').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
+                submitdata: {authenticity_token:'#{form_authenticity_token}'},
+                name: 'property_set[category]', method: 'PUT',
+                submit: '#{t :Ok}', cancel: '#{t :Cancel}', width: 50,
+                onreset: function() {
+                    $('#category_text').hide();
+                    $('#category_select').show();
+                },
+                callback: function(value, settings) {
+                    $('#category_text').hide();
+                    $('#category_select').html(value);
+                    $('#category_select').show();
+                }
             });
     });" %>
 <% end %>

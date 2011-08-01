@@ -1,4 +1,11 @@
 module AccessPointHelper
+  def categories_select_data(wisp, access_point)
+    data = PropertySet.categories(wisp).map{ |category| "'#{category}':'#{category}'"  unless category.blank? }
+    data << "'-': '-'" if access_point.category.blank?
+    data << "'!new!': '#{t :Create_new_category}'"
+    "{#{data.join(',')}}"
+  end
+
   def image_path_for(marker)
     image = ''
 

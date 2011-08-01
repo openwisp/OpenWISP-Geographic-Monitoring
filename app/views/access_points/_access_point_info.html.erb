@@ -55,5 +55,12 @@
     <td><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
     <td id="public" class="right"><%=t @access_point.public ? :true : :false %></td>
   </tr>
+  <tr>
+    <td><strong><%=t :Category %></strong> (<%=t :click_to_edit %>)</td>
+    <td id="category" class="right">
+      <span id="category_text"><%= @access_point.category || '-' %></span>
+      <span id="category_select"><%= @access_point.category || '-' %></span>
+    </td>
+  </tr>
   </tbody>
 </table>

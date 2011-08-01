@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110706082525) do
+ActiveRecord::Schema.define(:version => 20110801102720) do
 
   create_table "access_points", :id => false, :force => true do |t|
     t.integer  "id",              :default => 0, :null => false
@@ -71,6 +71,12 @@ ActiveRecord::Schema.define(:version => 20110706082525) do
     t.datetime "scheduled_at"
   end
 
+  create_table "categories", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "configurations", :force => true do |t|
     t.string   "key",                        :null => false
     t.string   "value",      :default => "", :null => false
@@ -91,6 +97,7 @@ ActiveRecord::Schema.define(:version => 20110706082525) do
     t.text    "notes"
     t.string  "site_description"
     t.boolean "public"
+    t.string  "category"
   end
 
   create_table "roles", :force => true do |t|

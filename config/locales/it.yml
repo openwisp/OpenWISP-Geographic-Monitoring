@@ -19,6 +19,7 @@ it:
   Avg_availability: Disponibilità media
   Back: Indietro
   Cancel: Annulla
+  Category: Categoria
   City: Città
   Click_and_drag_to_zoom_in: Clicca e trascina per ingrandire una sezione
   Click_to_edit: Clicca per modificare
@@ -26,6 +27,7 @@ it:
   Cluster_info: "Questo cluster contiene:"
   Connected_users: Utenti connessi
   Coordinates: Coordinate
+  Create_new_category: Crea nuova categoria
   Description: Descrizione
   Details: Dettagli
   Down: Down
