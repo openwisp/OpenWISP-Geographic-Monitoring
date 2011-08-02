@@ -58,8 +58,8 @@
   <tr>
     <td><strong><%=t :Category %></strong> (<%=t :click_to_edit %>)</td>
     <td id="category" class="right">
-      <span id="category_text"><%= @access_point.category.present? ? @access_point.category : t(:None) %></span>
       <span id="category_select"><%= @access_point.category.present? ? @access_point.category : t(:None) %></span>
+      <span id="category_text"></span>
     </td>
   </tr>
   </tbody>
