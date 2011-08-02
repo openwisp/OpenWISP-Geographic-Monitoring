@@ -34,19 +34,17 @@
                 submitdata: {authenticity_token:'#{form_authenticity_token}'},
                 name: 'property_set[category]', method: 'PUT',
 		        type: 'select', data: #{categories_select_data(@wisp, @access_point)},
+                callback: function(value, settings) { location.reload(); },
+                placeholder: '#{t :None}',
                 submit: '#{t :Ok}', cancel: '#{t :Cancel}'
             });
             $('#category_text').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
                 submitdata: {authenticity_token:'#{form_authenticity_token}'},
                 name: 'property_set[category]', method: 'PUT',
-                submit: '#{t :Ok}', cancel: '#{t :Cancel}', width: 50,
+                submit: '#{t :Ok}', cancel: '#{t :Cancel}', width: 60,
+                callback: function(value, settings) { location.reload(); },
                 onreset: function() {
                     $('#category_text').hide();
-                    $('#category_select').show();
-                },
-                callback: function(value, settings) {
-                    $('#category_text').hide();
-                    $('#category_select').html(value);
                     $('#category_select').show();
                 }
             });

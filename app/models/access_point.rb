@@ -13,8 +13,9 @@ class AccessPoint < ActiveRecord::Base
   has_many :activity_histories
 
   delegate :reachable, :to => :property_set, :allow_nil => true
+  delegate :category, :category=, :to => :property_set, :allow_nil => true
   delegate :notes, :notes=, :site_description, :site_description=,
-           :public, :public=, :category, :category=,
+           :public, :public=,
            :to => :property_set, :allow_nil => true
 
   def coords
@@ -91,6 +92,9 @@ class AccessPoint < ActiveRecord::Base
     AssociatedUser.find(scope, :params => {:access_point => hostname})
   end
 
+  def properties
+    property_set.nil? ? build_property_set : property_set
+  end
 
   ##### Static methods #####
 

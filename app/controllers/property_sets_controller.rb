@@ -12,7 +12,7 @@ class PropertySetsController < ApplicationController
   
   def update
     if request.xhr?
-      @property_set = @access_point.property_set
+      @property_set = @access_point.properties
       attr, val = params[:property_set].first # For security, restrict only one attribute at a time
       status = @property_set.update_attributes({attr => val}) ? :ok : :unprocessable_entity
 
