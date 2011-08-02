@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110801102720) do
+ActiveRecord::Schema.define(:version => 20110802100254) do
 
   create_table "access_points", :id => false, :force => true do |t|
     t.integer  "id",              :default => 0, :null => false
@@ -109,10 +109,8 @@ ActiveRecord::Schema.define(:version => 20110801102720) do
   end
 
   create_table "roles_users", :id => false, :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "role_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer "user_id"
+    t.integer "role_id"
   end
 
   create_table "users", :force => true do |t|
