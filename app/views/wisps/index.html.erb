@@ -33,7 +33,9 @@
     </table>
 
     <% if auth? :wisps_viewer %>
-        <h6><%= link_to t(:Show_all_access_points), access_points_path %></h6>
+        <% if @wisps.count > 1 %>
+            <h6><%= link_to t(:Show_all_access_points), access_points_path %></h6>
+        <% end %>
     <% end %>
   </div>
 </div>
