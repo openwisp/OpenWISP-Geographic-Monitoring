@@ -11,20 +11,21 @@
     <language>en-us</language>
     <% @access_points.each do |ap| %>
         <item>
+          <guid><%= ap.hostname %><%= ap.created_at %></guid>
           <title><%= ap.site_description %></title>
           <% if params[:details] %>
-	    <category></category>
+              <category><%= ap.category %></category>
           <% end %>
           <% if params[:details] %>
-            <description><%= ap.address %> - <%= ap.city %></description>
+              <description><%= ap.address %> - <%= ap.city %></description>
           <% else %>
-            <description><%= ap.city %></description>
+              <description><%= ap.city %></description>
           <% end %>
           <% if params[:details] %>
-            <georss:lat><%= ap.lat %></georss:lat>
-            <georss:long><%= ap.lng %></georss:long>
+              <georss:lat><%= ap.lat %></georss:lat>
+              <georss:long><%= ap.lng %></georss:long>
           <% else %>
-            <georss:point><%= ap.lat %> <%= ap.lng %></georss:point>
+              <georss:point><%= ap.lat %> <%= ap.lng %></georss:point>
           <% end %>
           <updated><%= ap.updated_at %></updated>
         </item>
