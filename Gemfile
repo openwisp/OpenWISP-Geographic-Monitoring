@@ -6,6 +6,7 @@ gem 'mysql', '2.8.1'
 gem 'jquery-rails', '~> 1.0.11'
 gem 'kaminari', '~> 0.12.4'
 gem 'breadcrumbs_on_rails', '~> 2.0.0'
+gem 'app-config', '~> 0.1.1'
 
 gem 'geokit', '~> 1.5.0'
 gem 'geokit-rails3', '~> 0.1.2'

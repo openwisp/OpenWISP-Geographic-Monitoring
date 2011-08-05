@@ -1,9 +1,17 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 
-# Clean the User model
-puts 'Emptying the User model with User.delete_all'
-User.delete_all
+
+# Create configurations key:value needed to run OWGM
+puts 'Creating necessary configuration keys'
+Configuration.set(
+    :owmw_enabled,
+    false,
+    :boolean,
+    "This configuration enables/disables interaction with the OWMW middleware"
+)
+
+
 
 # Create an admin user with every role contained in User::ROLES
 puts 'Creating admin user with password admin'

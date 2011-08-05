@@ -1,21 +1,35 @@
 class Configuration < ActiveRecord::Base
 
-  validates_presence_of :key
-  validates_format_of :key, :with => /\A[a-z_\.,]+\Z/
-  validates_presence_of :value
+  validates :key, :presence => true
+  #:format => { :with => /\A[a-z_\.,]+\Z/ }
+  validates :value, :presence => true
+  validates :value_format, :presence => true
 
   def self.get(key)
-    unless res = Configuration.find_by_key(key)
-      raise("BUG: value for key " + key + " not found!")
-    end
-    res.value
+    value = AppConfig[key]
+    raise("BUG: value for key #{key} not found!") if value.nil?
+
+    value
   end
 
-  def self.set(key, value)
-    if prev = Configuration.find_by_key(key)
-      prev.set(value)
-    else
-      Configuration.new(:key => key, :value => value).save!
+  def self.set(key, value, format, description = nil)
+    key = key.to_s
+    value = value.to_s
+    format = format.to_s
+
+    begin
+      AppConfig.set_key(key, value, format)
+
+      configuration = find_or_initialize_by_key(key)
+
+      configuration.update_attributes!(
+          :key => key,
+          :value => value,
+          :value_format => format,
+          :description => description
+      )
+    rescue
+      raise("BUG: key #{key} could not be set!")
     end
   end
 end
