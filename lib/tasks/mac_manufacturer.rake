@@ -1,7 +1,3 @@
-Rake::Task["db:seed"].enhance do
-  Rake::Task["mac_vendors:update"].invoke
-end
-
 namespace :mac_vendors do
   desc "Fetch oui <-> manufacturer association file from http://standards.ieee.org/develop/regauth/oui/oui.txt"
   task :update => :environment do
