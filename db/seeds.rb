@@ -11,6 +11,13 @@ Configuration.set(
     "This configuration enables/disables interaction with the OWMW middleware"
 )
 
+Configuration.set(
+    :wisps_with_owmw,
+    [],
+    :array,
+    "This configuration enables/disables interaction with the OWMW middleware for specific wisps"
+)
+
 
 
 # Create an admin user with every role contained in User::ROLES
