@@ -2,7 +2,6 @@ class Configuration < ActiveRecord::Base
 
   validates :key, :presence => true,
             :format => { :with => /\A[a-z_\.,]+\Z/ }
-  validates :value, :presence => true
   validates :value_format, :presence => true
 
   def self.get(key)
@@ -17,7 +16,7 @@ class Configuration < ActiveRecord::Base
     value = value.to_s
     format = format.to_s
 
-    begin
+    #begin
       AppConfig.set_key(key, value, format)
 
       configuration = find_or_initialize_by_key(key)
@@ -28,8 +27,8 @@ class Configuration < ActiveRecord::Base
           :value_format => format,
           :description => description
       )
-    rescue
-      raise("BUG: key #{key} could not be set!")
-    end
+    #rescue
+    #  raise("BUG: key #{key} could not be set!")
+    #end
   end
 end
