@@ -1,7 +1,7 @@
 class Configuration < ActiveRecord::Base
 
-  validates :key, :presence => true
-  #:format => { :with => /\A[a-z_\.,]+\Z/ }
+  validates :key, :presence => true,
+            :format => { :with => /\A[a-z_\.,]+\Z/ }
   validates :value, :presence => true
   validates :value_format, :presence => true
 
