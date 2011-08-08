@@ -79,10 +79,16 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
   def associated_user_counts_monitoring
     Wisp.all.each do |wisp|
       if wisp.owmw_enabled?
+        aps_with_users = []
         AssociatedUser.active_resource_from(wisp.owmw_url, wisp.owmw_username, wisp.owmw_password)
 
         AssociatedUser.all.group_by(&:access_point_id).each do |ap_id, users|
           AssociatedUserCount.create!(:count => users.count, :access_point_id => ap_id)
+          aps_with_users << ap_id
+        end
+
+        AccessPoint.where(["id NOT IN (?)", aps_with_users]).each do |ap|
+          AssociatedUserCount.create!(:count => 0, :access_point_id => ap.id)
         end
       end
     end
