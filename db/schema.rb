@@ -87,12 +87,6 @@ ActiveRecord::Schema.define(:version => 20110805131215) do
     t.datetime "scheduled_at"
   end
 
-  create_table "categories", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "configurations", :force => true do |t|
     t.string   "key",                                :null => false
     t.string   "value",        :default => "",       :null => false

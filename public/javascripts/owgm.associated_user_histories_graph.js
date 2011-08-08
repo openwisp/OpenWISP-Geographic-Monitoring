@@ -28,7 +28,6 @@ $.getJSON(owgm.path('associated_user_count_histories.json'), function(associated
             minorGridLineWidth: 0.3,
             minorTickInterval: 'auto',
 	    min: -0.01,
-	    max: 1.01,
             showFirstLabel: false,
 	    showLastLabel: false
         },
