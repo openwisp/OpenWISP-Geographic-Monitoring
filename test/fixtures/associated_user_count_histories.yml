@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  count: 1.5
+  start_time: 2011-08-05 15:12:15
+  last_time: 2011-08-05 15:12:15
+  access_point_id: 1
+
+two:
+  count: 1.5
+  start_time: 2011-08-05 15:12:15
+  last_time: 2011-08-05 15:12:15
+  access_point_id: 1

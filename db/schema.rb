@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110805090653) do
+ActiveRecord::Schema.define(:version => 20110805131215) do
 
   create_table "access_points", :id => false, :force => true do |t|
     t.integer  "id",              :default => 0, :null => false
@@ -50,6 +50,22 @@ ActiveRecord::Schema.define(:version => 20110805090653) do
   add_index "activity_histories", ["access_point_id"], :name => "index_activity_histories_on_access_point_id"
   add_index "activity_histories", ["last_time"], :name => "index_activity_histories_on_last_time"
   add_index "activity_histories", ["start_time"], :name => "index_activity_histories_on_start_time"
+
+  create_table "associated_user_count_histories", :force => true do |t|
+    t.float    "count"
+    t.datetime "start_time"
+    t.datetime "last_time"
+    t.integer  "access_point_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "associated_user_counts", :force => true do |t|
+    t.integer  "count"
+    t.integer  "access_point_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "bdrb_job_queues", :force => true do |t|
     t.text     "args"

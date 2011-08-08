@@ -61,7 +61,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
 
   end
 
-  def consolidate
+  def consolidate_access_points_monitoring
     AccessPoint.all.each do |ap|
       @@semaphore.synchronize {
         if ap.activities.count > 0
@@ -76,9 +76,37 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     end
   end
 
+  def associated_user_counts_monitoring
+    Wisp.all.each do |wisp|
+      if wisp.owmw_enabled?
+        AssociatedUser.all.group_by(&:access_point_id).each do |ap_id, users|
+          AssociatedUserCount.create!(:count => users.count, :access_point_id => ap_id)
+        end
+      end
+    end
+  end
+
+  def consolidate_associated_user_counts_monitoring
+    Wisp.all.each do |wisp|
+      if wisp.owmw_enabled?
+        wisp.access_points.each do |ap|
+          if ap.associated_user_counts.count > 0
+            first_time = ap.associated_user_counts.first(:order => "created_at").created_at.change(:min => 0, :sec => 0)
+            last_time = ap.associated_user_counts.first(:order => "created_at DESC").created_at.change(:min => 0, :sec => 0)
+            avg = ap.associated_user_counts.average(:count, :conditions => ["created_at < ?", last_time]).to_f
+            ah = ap.associated_user_count_histories.build(:count => avg, :start_time => first_time, :last_time => last_time)
+            ah.save!
+            AssociatedUserCount.destroy_all(["access_point_id = ? AND created_at < ?", ap.id, last_time])
+          end
+        end
+      end
+    end
+  end
+
   def housekeeping
     time = 6.months.to_i.ago
     ActivityHistory.destroy_all(["created_at < ?", time])
+    AssociatedUserCountHistory.destroy_all(["created_at < ?", time])
   end
 
 end
