@@ -11,7 +11,7 @@ class AccessPoint < ActiveRecord::Base
   has_one :property_set, :autosave => true, :dependent => :destroy
   has_many :activities
   has_many :activity_histories
-  has_many :associated_user_count
+  has_many :associated_user_counts
   has_many :associated_user_count_histories
 
   delegate :reachable, :to => :property_set, :allow_nil => true
