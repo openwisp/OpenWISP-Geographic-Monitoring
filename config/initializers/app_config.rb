@@ -1,7 +1,6 @@
-AppConfig.configure(:model => Configuration, :key => 'key')
-
 begin
+  AppConfig.configure(:model => Configuration, :key => 'key')
   AppConfig.load
-rescue Exception
+rescue
   puts 'Disabling AppConfig because of bad Configuration schema...'
 end
