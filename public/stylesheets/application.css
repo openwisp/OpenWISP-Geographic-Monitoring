@@ -65,7 +65,7 @@
     color: white;
 }
 
-#activity_graph {
+#activity_graph, #associated_users_graph {
     width: 870px;
     height: 240px;
     margin-left: 5px;

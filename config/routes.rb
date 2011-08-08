@@ -14,6 +14,8 @@ Owgm::Application.routes.draw do
 
     resources :activity_histories, :only => :index
     match 'access_points/:access_point_id/activity_histories' => 'activity_histories#show', :as => :access_point_activity_histories
+    match 'access_points/:access_point_id/associated_user_count_histories' => 'associated_user_count_histories#show',
+          :as => :associated_user_count_histories
     match 'availability_report' => 'activity_histories#index', :as => :availability_report
   end
 
