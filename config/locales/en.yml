@@ -15,6 +15,7 @@ en:
   Activity_graph: Activity Graph
   Address: Address
   Associated_users_graph: Associated users graph
+  Associated_users_average_graph: Average associated users graph
   Availability_report: Availability report
   Availability_report_for: Availability report for %{wisp}
   Avg_availability: Average availability

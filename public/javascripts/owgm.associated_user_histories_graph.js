@@ -1,7 +1,7 @@
-$.getJSON(owgm.path('associated_user_counts.json'), function(associated_user_counts){
+$.getJSON(owgm.path('associated_user_count_histories.json'), function(associated_user_count_histories){
     graphs.init({
         chart: {
-            renderTo: 'associated_user_counts_graph',
+            renderTo: 'associated_user_histories_graph',
             zoomType: 'x',
 	    plotBorderWidth: 1
         },
@@ -67,7 +67,7 @@ $.getJSON(owgm.path('associated_user_counts.json'), function(associated_user_cou
 	    }
 	},
         series: [{
-            data: associated_user_counts
+            data: associated_user_count_histories
         }]
     });
 });

@@ -15,6 +15,7 @@ it:
   Activity_graph: Grafico Attività
   Address: Indirizzo
   Associated_users_graph: Grafico utenti associati
+  Associated_users_average_graph: Grafico media utenti associati
   Availability_report: Report di disponibilità
   Availability_report_for: Report di disponibilità per %{wisp}
   Avg_availability: Disponibilità media
