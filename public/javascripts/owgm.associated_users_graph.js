@@ -2,7 +2,6 @@ $.getJSON(owgm.path('associated_user_counts.json'), function(associated_user_cou
     graphs.init({
         chart: {
             renderTo: 'associated_user_counts_graph',
-            zoomType: 'x',
 	    plotBorderWidth: 1
         },
         title: { text: null },
@@ -26,9 +25,9 @@ $.getJSON(owgm.path('associated_user_counts.json'), function(associated_user_cou
             title: { text: null },
 	    labels: {style: {fontWeight: 'bold'}},
             minorGridLineWidth: 0.3,
+            allowDecimals: false,
             minorTickInterval: 'auto',
-	    min: -0.01,
-	    max: 1.01,
+	    min: 0,
             showFirstLabel: false,
 	    showLastLabel: false
         },

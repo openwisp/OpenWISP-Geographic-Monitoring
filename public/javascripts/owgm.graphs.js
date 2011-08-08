@@ -29,7 +29,7 @@ var graphs = {
     setLocale: function() {
         $.each(graphs.locales, function(){
             if (owgm.exists(this.triggerIfExists)) {
-                Highcharts.setOptions({lang: this.lang});
+                Highcharts.setOptions({global:{useUTC:false},lang: this.lang});
             }
         });
     }
