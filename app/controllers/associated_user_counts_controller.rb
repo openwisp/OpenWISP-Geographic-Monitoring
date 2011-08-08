@@ -11,10 +11,10 @@ class AssociatedUserCountsController < ApplicationController
   end
 
   def show
-    @associated_user_count_history = AssociatedUserCount.where(:access_point_id => params[:access_point_id])
+    @associated_user_count = AssociatedUserCount.where(:access_point_id => params[:access_point_id])
 
     respond_to do |format|
-      format.json { render :json => @associated_user_count_history }
+      format.json { render :json => @associated_user_count }
     end
   end
 end
