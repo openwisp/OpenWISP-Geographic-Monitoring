@@ -2,53 +2,59 @@
     <%= javascript_include_tag 'highcharts', 'owgm.graphs', 'owgm.activity_graph', 'owgm.associated_users_graph', 'owgm.associated_user_histories_graph'  %>
 <% end %>
 
-<h2><%=t :Graphs %></h2>
 <% if @access_point.known? %>
-    <p class="howto right bold hidden">(<%=t :Click_and_drag_to_zoom_in %>)</p>
-
     <% if auth?(:wisps_viewer) || auth?(:wisp_activity_histories_viewer, @wisp)%>
-        <div class="box">
-          <h5><%=t :Activity_graph %></h5>
-          <p class="no_js"><%=t :No_javascript %></p>
-          <div id="activity_graph"></div>
-          <br />
-          <div id="act_controls" class="hidden">
-            <%= link_to t(:Last_day), '', :class => 'last_day' %> |
-            <%= link_to t(:Last_week), '', :class => 'last_week' %> |
-            <%= link_to t(:Last_month), '', :class => 'last_month' %>
+        <div class="grid_12">
+          <div class="box">
+            <h2><%=t :Activity_graph %></h2>
+            <p class="howto right bold">(<%=t :Click_and_drag_to_zoom_in %>)</p>
+            <p class="no_js"><%=t :No_javascript %></p>
+            <div id="activity_graph"></div>
+            <br />
+            <div id="act_controls" class="hidden">
+              <%= link_to t(:Last_day), '', :class => 'last_day' %> |
+              <%= link_to t(:Last_week), '', :class => 'last_week' %> |
+              <%= link_to t(:Last_month), '', :class => 'last_month' %>
+            </div>
           </div>
         </div>
     <% end %>
 
-    <% if @wisp.owmw_enabled? %>
-        <% if auth?(:wisps_viewer) || auth?(:wisp_associated_user_counts_viewer, @wisp)%>
-            <div class="box">
-              <h5><%=t :Associated_users_graph %></h5>
-              <p class="no_js"><%=t :No_javascript %></p>
-              <div id="associated_user_counts_graph"></div>
-              <br />
-              <div id="assuc_controls" class="hidden">
-                <%= link_to t(:Last_day), '', :class => 'last_day' %> |
-                <%= link_to t(:Last_week), '', :class => 'last_week' %> |
-                <%= link_to t(:Last_month), '', :class => 'last_month' %>
-              </div>
+    <%# if @wisp.owmw_enabled? %>
+    <% if auth?(:wisps_viewer) || auth?(:wisp_associated_user_counts_viewer, @wisp)%>
+        <div class="grid_6">
+          <div class="box">
+            <h2><%=t :Associated_users_graph %></h2>
+            <p>&nbsp;</p>
+            <p class="no_js"><%=t :No_javascript %></p>
+            <div id="associated_user_counts_graph"></div>
+            <br />
+            <div id="assuc_controls" class="hidden">
+              <%= link_to t(:Last_day), '', :class => 'last_day' %> |
+              <%= link_to t(:Last_week), '', :class => 'last_week' %> |
+              <%= link_to t(:Last_month), '', :class => 'last_month' %>
             </div>
-        <% end %>
-
-        <% if auth?(:wisps_viewer) || auth?(:wisp_associated_user_count_histories_viewer, @wisp)%>
-            <div class="box">
-              <h5><%=t :Associated_users_average_graph %></h5>
-              <p class="no_js"><%=t :No_javascript %></p>
-              <div id="associated_user_histories_graph"></div>
-              <br />
-              <div id="assuh_controls" class="hidden">
-                <%= link_to t(:Last_day), '', :class => 'last_day' %> |
-                <%= link_to t(:Last_week), '', :class => 'last_week' %> |
-                <%= link_to t(:Last_month), '', :class => 'last_month' %>
-              </div>
-            </div>
-        <% end %>
+          </div>
+        </div>
     <% end %>
+
+    <% if auth?(:wisps_viewer) || auth?(:wisp_associated_user_count_histories_viewer, @wisp)%>
+        <div class="grid_6">
+          <div class="box">
+            <h2><%=t :Associated_users_average_graph %></h2>
+            <p class="howto right bold">(<%=t :Click_and_drag_to_zoom_in %>)</p>
+            <p class="no_js"><%=t :No_javascript %></p>
+            <div id="associated_user_histories_graph"></div>
+            <br />
+            <div id="assuh_controls" class="hidden">
+              <%= link_to t(:Last_day), '', :class => 'last_day' %> |
+              <%= link_to t(:Last_week), '', :class => 'last_week' %> |
+              <%= link_to t(:Last_month), '', :class => 'last_month' %>
+            </div>
+          </div>
+        </div>
+    <% end %>
+    <%# end %>
 <% else %>
     <br />
     <h5 class="nodata center"><%=t :No_data_to_display %></h5>
