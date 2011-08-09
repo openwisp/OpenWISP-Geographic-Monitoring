@@ -5,6 +5,7 @@ $.getJSON(owgm.path('associated_user_counts.json'), function(associated_user_cou
 	    plotBorderWidth: 1
         },
         title: { text: null },
+        colors: ['#BF2424'],
         xAxis: {
             type: 'datetime',
             title: { text: null },
@@ -27,7 +28,7 @@ $.getJSON(owgm.path('associated_user_counts.json'), function(associated_user_cou
             minorGridLineWidth: 0.3,
             allowDecimals: false,
             minorTickInterval: 'auto',
-	    min: 0,
+	    min: -0.01,
             showFirstLabel: false,
 	    showLastLabel: false
         },

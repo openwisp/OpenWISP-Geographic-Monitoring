@@ -6,6 +6,7 @@ $.getJSON(owgm.path('associated_user_count_histories.json'), function(associated
 	    plotBorderWidth: 1
         },
         title: { text: null },
+        colors: ['#FF9431'],
         xAxis: {
             type: 'datetime',
             title: { text: null },
