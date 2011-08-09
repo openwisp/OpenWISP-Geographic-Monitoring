@@ -11,7 +11,7 @@ class AssociatedUserCountsController < ApplicationController
   end
 
   def show
-    @associated_user_count = AssociatedUserCount.where(:access_point_id => params[:access_point_id])
+    @associated_user_count = AssociatedUserCount.where(:access_point_id => params[:access_point_id]).recent
 
     respond_to do |format|
       format.json { render :json => @associated_user_count }
