@@ -87,7 +87,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
           aps_with_users << ap_id
         end
 
-        AccessPoint.where(["id NOT IN (?)", aps_with_users]).each do |ap|
+        wisp.access_points.where(["id NOT IN (?)", aps_with_users]).each do |ap|
           AssociatedUserCount.create!(:count => 0, :access_point_id => ap.id)
         end
       end
