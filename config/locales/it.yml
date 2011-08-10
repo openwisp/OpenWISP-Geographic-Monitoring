@@ -12,7 +12,8 @@ it:
         status: stato
   # Uppercase
   Activation_date: Data di attivazione
-  Activity_graph: Grafico Attività
+  Activity_graph: Grafico attività
+  Activity_average_graph: Grafico media attività
   Address: Indirizzo
   Associated_users_graph: Grafico utenti associati
   Associated_users_average_graph: Grafico media utenti associati

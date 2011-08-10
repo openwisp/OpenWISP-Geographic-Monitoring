@@ -65,7 +65,7 @@
     color: white;
 }
 
-#activity_graph {
+#activity_graph, #activity_histories_graph {
     height: 240px;
     margin-left: 5px;
 }

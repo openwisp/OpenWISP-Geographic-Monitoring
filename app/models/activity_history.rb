@@ -10,7 +10,7 @@ class ActivityHistory < ActiveRecord::Base
   end
 
   def self.older_than(time)
-    where(:start_time => time.to_time..Time.now)
+    where(:start_time => time.to_time..6.hours.ago)
   end
 
   def self.observe(from, to)

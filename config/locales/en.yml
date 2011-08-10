@@ -12,7 +12,8 @@ en:
         status: status
   # Uppercase
   Activation_date: Activation date
-  Activity_graph: Activity Graph
+  Activity_graph: Activity graph
+  Activity_average_graph: Average activity graph
   Address: Address
   Associated_users_graph: Associated users graph
   Associated_users_average_graph: Average associated users graph

@@ -65,12 +65,22 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     AccessPoint.all.each do |ap|
       @@semaphore.synchronize {
         if ap.activities.count > 0
-          first_time = ap.activities.first(:order => "created_at").created_at.change(:min => 0, :sec => 0)
-          last_time = ap.activities.first(:order => "created_at DESC").created_at.change(:min => 0, :sec => 0)
-          avg = ap.activities.average(:status, :conditions => ["created_at < ?", last_time]).to_f
-          ah = ap.activity_histories.build(:status => avg, :start_time => first_time, :last_time => last_time)
-          ah.save!
-          Activity.destroy_all(["access_point_id = ? AND created_at < ?", ap.id, last_time])
+          last_history_time = ap.activity_histories.last.try(:last_time)
+
+          if last_history_time
+            first_time = ap.activities.where('created_at > ?', last_history_time).first.created_at.change(:min => 0, :sec => 0)
+          else
+            first_time = ap.activities.first.created_at.change(:min => 0, :sec => 0)
+          end
+          last_time = ap.activities.last.created_at.change(:min => 0, :sec => 0)
+
+          avg = ap.activities.where(:created_at => first_time..last_time).average(:status)
+          if avg
+            history = ap.activity_histories.build(:status => avg.to_f, :start_time => first_time, :last_time => last_time)
+            history.save!
+          end
+
+          ap.activities.not_recent.destroy_all
         end
       }
     end
@@ -116,7 +126,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
               history.save!
             end
             
-            AssociatedUserCount.destroy_all(["created_at <= ?", 2.days.ago])
+            ap.associated_user_counts.not_recent.destroy_all
           end
         end
       end
