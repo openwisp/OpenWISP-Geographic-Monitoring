@@ -3,7 +3,7 @@ class AssociatedUserCount < ActiveRecord::Base
 
   default_scope order(:created_at)
 
-  scope :recent, proc{ where("created_at > ?", 2.days.ago) }
+  scope :recent, proc{ where("created_at > ?", 6.hours.ago) }
 
   def as_json(options={})
     # Time should be in unix epoch time in
