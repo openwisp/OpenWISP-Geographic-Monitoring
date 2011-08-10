@@ -6,6 +6,12 @@ class Activity < ActiveRecord::Base
   scope :recent, proc{ where("created_at > ?", 6.hours.ago) }
   scope :not_recent, proc{ where("created_at <= ?", 6.hours.ago) }
 
+  def as_json(options={})
+    # Time should be in unix epoch time in
+    # milliseconds...
+    [ created_at.to_i * 1000, read_attribute(:status) ]
+  end
+
   def status
     st = read_attribute :status
     st == 1
