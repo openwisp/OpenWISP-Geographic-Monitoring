@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110805131215) do
+ActiveRecord::Schema.define(:version => 20110811083048) do
 
   create_table "access_points", :id => false, :force => true do |t|
     t.integer  "id",              :default => 0, :null => false
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(:version => 20110805131215) do
   add_index "activity_histories", ["start_time"], :name => "index_activity_histories_on_start_time"
 
   create_table "associated_user_count_histories", :force => true do |t|
-    t.float    "count"
+    t.integer  "count"
     t.datetime "start_time"
     t.datetime "last_time"
     t.integer  "access_point_id"
@@ -85,6 +85,12 @@ ActiveRecord::Schema.define(:version => 20110805131215) do
     t.string   "runner_info"
     t.string   "worker_key"
     t.datetime "scheduled_at"
+  end
+
+  create_table "categories", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "configurations", :force => true do |t|
