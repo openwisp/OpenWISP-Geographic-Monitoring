@@ -11,7 +11,7 @@ class AssociatedUserCountHistoriesController < ApplicationController
   end
 
   def show
-    @associated_user_count_history = AssociatedUserCountHistory.where(:access_point_id => params[:access_point_id]).older_than(30.days.ago)
+    @associated_user_count_history = AssociatedUserCountHistory.where(:access_point_id => params[:access_point_id]).older_than(31.days.ago)
 
     respond_to do |format|
       format.json { render :json => @associated_user_count_history }

@@ -1,7 +1,7 @@
 class AssociatedUserCountHistory < ActiveRecord::Base
   belongs_to :access_point
 
-  default_scope order(:last_time)
+  default_scope order(:start_time)
 
   def as_json(options={})
     # Time should be in unix epoch time in
