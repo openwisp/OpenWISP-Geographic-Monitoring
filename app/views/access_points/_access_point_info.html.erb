@@ -47,14 +47,6 @@
     <td><strong><%=t :Latest_seen %></strong></td>
     <td class="right"><%= l(@access_point.latest_seen, :format => :short) rescue '-' %></td>
   </tr>
-  <% if @wisp.owmw_enabled? %>
-      <% if auth?(:wisps_viewer) || auth?(:wisp_associated_user_counts_viewer, @wisp)%>
-          <tr>
-            <td><strong><%=t :Connected_users %></strong></td>
-            <td class="right"><%= @access_point.associated_users.count rescue 0 %></td>
-          </tr>
-      <% end %>
-  <% end %>
   <tr>
     <td><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
     <td id="public" class="right"><%=t @access_point.public ? :true : :false %></td>
