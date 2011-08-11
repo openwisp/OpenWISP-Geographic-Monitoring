@@ -97,7 +97,13 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
           aps_with_users << ap_id
         end
 
-        wisp.access_points.where(["id NOT IN (?)", aps_with_users]).each do |ap|
+        if aps_with_users.empty?
+          aps_without_users = wisp.access_points
+        else
+          aps_without_users = wisp.access_points.where(["id NOT IN (?)", aps_with_users])
+        end
+
+        aps_without_users.each do |ap|
           AssociatedUserCount.create!(:count => 0, :access_point_id => ap.id)
         end
       end
@@ -125,7 +131,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
               history = ap.associated_user_count_histories.build(:count => max, :start_time => first_time, :last_time => last_time)
               history.save!
             end
-            
+
             ap.associated_user_counts.not_recent.destroy_all
           end
         end
