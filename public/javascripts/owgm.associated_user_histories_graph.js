@@ -27,6 +27,7 @@ $.getJSON(owgm.path('associated_user_count_histories.json'), function(associated
             title: { text: null },
             labels: {style: {fontWeight: 'bold'}},
             minorGridLineWidth: 0.3,
+            allowDecimals: false,
             minorTickInterval: 'auto',
             min: -0.01,
             showFirstLabel: false,

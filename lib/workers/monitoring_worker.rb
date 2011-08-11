@@ -120,9 +120,9 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
             end
             last_time = ap.associated_user_counts.last.created_at.change(:min => 0, :sec => 0)
 
-            avg = ap.associated_user_counts.where(:created_at => first_time..last_time).average(:count)
-            if avg
-              history = ap.associated_user_count_histories.build(:count => avg.to_f, :start_time => first_time, :last_time => last_time)
+            max = ap.associated_user_counts.where(:created_at => first_time..last_time).maximum(:count)
+            if max
+              history = ap.associated_user_count_histories.build(:count => max, :start_time => first_time, :last_time => last_time)
               history.save!
             end
             
