@@ -80,78 +80,108 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
 
   def consolidate_access_points_monitoring
     AccessPoint.all.each do |ap|
-      @@semaphore.synchronize {
-        if ap.activities.count > 0
-          last_history_time = ap.activity_histories.last.try(:last_time)
+      begin
+        @@semaphore.synchronize {
+          if ap.activities.count > 0
+            last_history_time = ap.activity_histories.last.try(:last_time)
 
-          if last_history_time
-            first_time = ap.activities.where('created_at > ?', last_history_time).first.created_at.change(:min => 0, :sec => 0)
-          else
-            first_time = ap.activities.first.created_at.change(:min => 0, :sec => 0)
+            if last_history_time
+              first_time = ap.activities.where('created_at > ?', last_history_time).first.created_at.change(:min => 0, :sec => 0)
+            else
+              first_time = ap.activities.first.created_at.change(:min => 0, :sec => 0)
+            end
+            last_time = ap.activities.last.created_at.change(:min => 0, :sec => 0)
+
+            avg = ap.activities.where(:created_at => first_time..last_time).average(:status)
+            if avg
+              history = ap.activity_histories.build(:status => avg.to_f, :start_time => first_time, :last_time => last_time)
+              history.save!
+            end
+
+            ap.activities.not_recent.destroy_all
           end
-          last_time = ap.activities.last.created_at.change(:min => 0, :sec => 0)
-
-          avg = ap.activities.where(:created_at => first_time..last_time).average(:status)
-          if avg
-            history = ap.activity_histories.build(:status => avg.to_f, :start_time => first_time, :last_time => last_time)
-            history.save!
-          end
-
-          ap.activities.not_recent.destroy_all
-        end
-      }
+        }
+      rescue Exception => e
+        puts "[#{Time.now}] Problem in consolidate_access_points_monitoring() for access point '#{ap.hostname}': #{e}"
+        next
+      end
     end
   end
 
   def associated_user_counts_monitoring
     Wisp.all.each do |wisp|
-      if wisp.owmw_enabled?
-        aps_with_users = []
-        AssociatedUser.active_resource_from(wisp.owmw_url, wisp.owmw_username, wisp.owmw_password)
+      begin
+        if wisp.owmw_enabled?
+          aps_with_users = []
+          AssociatedUser.active_resource_from(wisp.owmw_url, wisp.owmw_username, wisp.owmw_password)
 
-        AssociatedUser.all.group_by(&:access_point_id).each do |ap_id, users|
-          AssociatedUserCount.create!(:count => users.count, :access_point_id => ap_id)
-          aps_with_users << ap_id
-        end
+          AssociatedUser.all.group_by(&:access_point_id).each do |ap_id, users|
+            begin
+              AssociatedUserCount.create!(:count => users.count, :access_point_id => ap_id)
+              aps_with_users << ap_id
+            rescue Exception => e
+              puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}', access point id '#{ap_id}': #{e}"
+              next
+            end
+          end
 
-        if aps_with_users.empty?
-          aps_without_users = wisp.access_points
-        else
-          aps_without_users = wisp.access_points.where(["id NOT IN (?)", aps_with_users])
-        end
+          if aps_with_users.empty?
+            aps_without_users = wisp.access_points
+          else
+            aps_without_users = wisp.access_points.where(["id NOT IN (?)", aps_with_users])
+          end
 
-        aps_without_users.each do |ap|
-          AssociatedUserCount.create!(:count => 0, :access_point_id => ap.id)
+          aps_without_users.each do |ap|
+            begin
+              AssociatedUserCount.create!(:count => 0, :access_point_id => ap.id)
+            rescue Exception => e
+              puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}', access point '#{ap.hostname}': #{e}"
+              next
+            end
+          end
         end
+      rescue Exception => e
+        puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}': #{e}"
+        next
       end
     end
   end
 
   def consolidate_associated_user_counts_monitoring
     Wisp.all.each do |wisp|
-      if wisp.owmw_enabled?
-        AssociatedUser.active_resource_from(wisp.owmw_url, wisp.owmw_username, wisp.owmw_password)
+      begin
+        if wisp.owmw_enabled?
+          AssociatedUser.active_resource_from(wisp.owmw_url, wisp.owmw_username, wisp.owmw_password)
 
-        wisp.access_points.each do |ap|
-          if ap.associated_user_counts.count > 0
-            last_history_time = ap.associated_user_count_histories.last.try(:last_time)
+          wisp.access_points.each do |ap|
+            begin
+              if ap.associated_user_counts.count > 0
+                last_history_time = ap.associated_user_count_histories.last.try(:last_time)
 
-            if last_history_time
-              first_time = ap.associated_user_counts.where('created_at > ?', last_history_time).first.created_at.change(:min => 0, :sec => 0)
-            else
-              first_time = ap.associated_user_counts.first.created_at.change(:min => 0, :sec => 0)
+                if last_history_time
+                  first_time = ap.associated_user_counts.where('created_at > ?', last_history_time).first.created_at.change(:min => 0, :sec => 0)
+                else
+                  first_time = ap.associated_user_counts.first.created_at.change(:min => 0, :sec => 0)
+                end
+                last_time = ap.associated_user_counts.last.created_at.change(:min => 0, :sec => 0)
+
+                max = ap.associated_user_counts.where(:created_at => first_time..last_time).maximum(:count)
+                if max
+                  history = ap.associated_user_count_histories.build(:count => max, :start_time => first_time, :last_time => last_time)
+                  history.save!
+                end
+
+                ap.associated_user_counts.not_recent.destroy_all
+              end
+            rescue Exception => e
+              puts "[#{Time.now}] Problem in consolidate_associated_user_counts_monitoring() for wisp '#{wisp.name}', access point '#{ap.hostname}': #{e}"
+              next
             end
-            last_time = ap.associated_user_counts.last.created_at.change(:min => 0, :sec => 0)
-
-            max = ap.associated_user_counts.where(:created_at => first_time..last_time).maximum(:count)
-            if max
-              history = ap.associated_user_count_histories.build(:count => max, :start_time => first_time, :last_time => last_time)
-              history.save!
-            end
-
-            ap.associated_user_counts.not_recent.destroy_all
           end
         end
+      rescue Exception => e
+        puts "[#{Time.now}] Problem in consolidate_associated_user_counts_monitoring() for wisp '#{wisp.name}': #{e}"
+        next
       end
     end
   end
