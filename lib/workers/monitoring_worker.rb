@@ -63,7 +63,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     end
 
     # collect remaining threads that are finished theirs job
-    while threads.length >= MAX_THREADS
+    while threads.length > 0
       threads.delete_if { |th| th.alive? ? false : th.join() }
       sleep(0.2)
     end
@@ -157,7 +157,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     end
 
     # collect remaining threads that are finished theirs job
-    while threads.length >= MAX_THREADS
+    while threads.length > 0
       threads.delete_if { |th| th.alive? ? false : th.join() }
       sleep(0.2)
     end
