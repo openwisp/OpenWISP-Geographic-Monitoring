@@ -20,3 +20,8 @@ gem 'acl9', '~> 0.12.0'
 
 gem 'packet', '0.1.15', :git => 'git://github.com/dguerri/packet.git'
 gem 'backgroundrb-rails3', '~> 1.1.5', :require => 'backgroundrb'
+
+gem 'capistrano', '~> 2.9.0', :require => false
+gem 'capistrano-ext', '~> 1.2.1', :require => false
+gem 'cap-recipes', '~> 0.3.36', :require => false
+gem 'capistrano_colors', '~> 0.5.4', :require => false
