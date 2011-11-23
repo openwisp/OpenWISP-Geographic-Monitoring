@@ -65,6 +65,7 @@
       <thead>
       <tr>
         <th class="header"><%=t :Name %></th>
+        <th><%=t :Site_description %></th>
         <th><%=t :Activation_date %></th>
         <th><%=t :Address %></th>
         <th><%=t :City %></th>
@@ -78,10 +79,11 @@
       <% @access_points.each do |access_point| %>
           <tr>
             <td><%= link_to access_point.hostname, [@wisp, access_point] %></td>
+            <td><%= access_point.site_description.truncate(40) rescue '' %></td>
             <td><%=l access_point.activation_date %></td>
             <td><%= access_point.address %></td>
             <td><%= access_point.city %></td>
-            <td><%= access_point.description %></td>
+            <td><%= access_point.description.truncate(40) rescue '' %></td>
             <td class="center up"><%= access_point.up_average @from, @to %>%</td>
             <td class="center down"><%= access_point.down_average @from, @to %>%</td>
           </tr>
