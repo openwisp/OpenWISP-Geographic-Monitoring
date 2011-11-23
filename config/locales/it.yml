@@ -9,6 +9,7 @@ it:
         city: città
         hostname: hostname
         public: pubblico
+        site_description: sito di installazione
         status: stato
   # Uppercase
   Activation_date: Data di attivazione

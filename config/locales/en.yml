@@ -9,6 +9,7 @@ en:
         city: city
         hostname: hostname
         public: public
+        site_description: site description
         status: status
   # Uppercase
   Activation_date: Activation date

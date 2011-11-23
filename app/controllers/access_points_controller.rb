@@ -29,7 +29,7 @@ class AccessPointsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.any(:html, :js) { @access_points = access_points_with_sort_seach_and_paginate.of_wisp(@wisp) }
+      format.any(:html, :js) { @access_points = access_points_with_sort_search_and_paginate.of_wisp(@wisp) }
       format.json { @access_points = access_points_with_filter.of_wisp(@wisp).draw_map }
       format.rss { @access_points = AccessPoint.of_wisp(@wisp).on_georss }
     end
@@ -59,7 +59,7 @@ class AccessPointsController < ApplicationController
     end
   end
 
-  def access_points_with_sort_seach_and_paginate
+  def access_points_with_sort_search_and_paginate
     query = params[:q] || nil
     column = params[:column] ? params[:column].downcase : nil
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
@@ -75,6 +75,7 @@ class AccessPointsController < ApplicationController
     i18n_columns = {}
     i18n_columns[I18n.t(:status, :scope => [:activerecord, :attributes, :access_point])] = 'status'
     i18n_columns[I18n.t(:public, :scope => [:activerecord, :attributes, :access_point])] = 'public'
+    i18n_columns[I18n.t(:site_description, :scope => [:activerecord, :attributes, :access_point])] = 'site_description'
 
     AccessPoint.column_names.each do |col|
       i18n_columns[I18n.t(col, :scope => [:activerecord, :attributes, :access_point])] = col
