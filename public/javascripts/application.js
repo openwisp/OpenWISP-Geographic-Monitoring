@@ -22,6 +22,7 @@
 
 /* document.ready callback... */
 $(document).ready(function() {
+    $.ajaxSetup({ cache: false });
     owgm.enableJavascript();
     owgm.ajaxQuickSearch();
     owgm.ajaxLoading();
