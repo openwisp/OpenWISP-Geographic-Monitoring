@@ -129,7 +129,9 @@
     padding-left: 1px;
     margin-top: 1px;
 }
-
+#clickable_notes, #clickable_site_description, #clickable_public, #clickable_category{
+    cursor: pointer;
+}
 #category_text {
     display: none;
 }

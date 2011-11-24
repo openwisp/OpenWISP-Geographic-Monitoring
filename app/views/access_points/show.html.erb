@@ -21,6 +21,12 @@
     <%= javascript_include_tag 'https://maps.google.com/maps/api/js?sensor=false', 'gmaps.markermanager', 'owgm.gmaps', 'jquery.jeditable' %>
 
     <%= javascript_tag "$(function(){
+
+            $('#clickable_public').click(function() { $('#public').click() });
+            $('#clickable_category').click(function() { $('#category_select').click() });
+            $('#clickable_site_description').click(function() { $('#site_description').click() });
+            $('#clickable_notes').click(function() { $('#notes').click() });
+
             $('#category_select').live('change', function(){
                 if ($(this).find('select').val() == '!new!') {
                     $(this).hide();
