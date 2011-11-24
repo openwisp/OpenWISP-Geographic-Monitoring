@@ -19,7 +19,7 @@
 
 <tr>
   <td class="middle"><%= link_to access_point.hostname, wisp_access_point_path(access_point.wisp, access_point) %></td>
-  <td class="middle"><%= access_point.site_description.truncate(40) rescue '-'%></td>
+  <td class="middle"><%= access_point.site_description.truncate(40) rescue '' %></td>
   <td class="middle"><%= access_point.address %></td>
   <td class="middle"><%= access_point.city %></td>
   <td class="middle"><%=t access_point.public ? :true : :false %></td>
