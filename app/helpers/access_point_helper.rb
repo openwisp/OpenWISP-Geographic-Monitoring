@@ -16,7 +16,7 @@
 
 module AccessPointHelper
   def categories_select_data(wisp, access_point)
-    data = PropertySet.categories(wisp).map{ |category| "'#{category}':'#{category}'"  unless category.blank? }
+    data = PropertySet.categories(wisp).map{ |category| "'#{escape_javascript(category)}':'#{escape_javascript(category)}'"  unless category.blank? }
     data.compact!
     data << "'': '#{t :None}'"
     data << "'!new!': '#{t :Create_new_category}'"
