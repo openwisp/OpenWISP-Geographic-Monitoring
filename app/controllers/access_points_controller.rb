@@ -65,7 +65,7 @@ class AccessPointsController < ApplicationController
 
     access_points = AccessPoint.scoped
     access_points = access_points.sort_with(t_column(column), direction) if column
-    access_points = access_points.hostname_like(query) if query
+    access_points = access_points.quicksearch(query) if query
 
     access_points.page params[:page]
   end

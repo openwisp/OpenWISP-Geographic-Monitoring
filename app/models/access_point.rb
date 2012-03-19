@@ -194,6 +194,10 @@ class AccessPoint < ActiveRecord::Base
     where("`hostname` LIKE ?", "%#{name}%")
   end
 
+  def self.quicksearch(name)
+    where("`hostname` LIKE ? OR `address` LIKE ? OR `city` LIKE ?", *(["%#{name}%"]*3) )
+  end
+
   private
 
   def self.with_properties
