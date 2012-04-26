@@ -1,0 +1,173 @@
+= OpenWISP Geographic Monitoring
+
+== What is it?
+
+OpenWISP Geographic Monitoring (OWGM) is a Ruby on Rails application, capable of monitoring a wISP's access points. 
+
+OWGM supports the following functionalities:
+* monitoring access point availability and position via GMaps
+* english/italian translation
+
+Even though the application can be used as standalone, such use will result in a pretty useless application. OpenWISP Geographic Monitoring is in fact made to be integrated OWM. 
+
+== How to install
+
+=== Prerequisites
+
+The OpenWISP Gegraphic Monitoring is currently being developed with Ruby on Rails 3.0. Being a RoR application, it can be 
+deployed using any of the methods Rails supports. 
+Even so, what we are currently using (and find quite stable) is the following environment:
+
+* Ruby Enterprise Edition 1.8 (http://www.rubyenterpriseedition.com/index.html)
+* Apache 2.2 (http://www.apache.org/)
+* Phusion Passenger 2.2 or 3.0 (http://www.modrails.com/index.html)
+* MySQL 5.1 (http://dev.mysql.com/downloads/mysql/)
+
+=== Installation
+
+Once deployed using your favourite environment, you need to configure a deamon OpenWISP Geographic Monitoring needs to perform its usual activities (mainly using ICMP to check for AP connectivity). 
+
+To do this, you can use the following init.d script (customization may be needed, this script was coded for Ubuntu 10.04). 
+
+==== Startup script
+
+The following script (Ubuntu/Debian style) should be named owgm-daemons. It assumes OpenWISP Geographic Monitoring running on ruby enterprise and that the application was deployed to /var/rails/owgm.
+Of course you can change any of that to whatever fits your needs.
+
+
+    #!/bin/sh
+    ### BEGIN INIT INFO
+    # Provides:          owgm-daemons
+    # Required-Start:    $local_fs $network  
+    # Required-Stop:     $local_fs $network 
+    # Default-Start:     2 3 4 5
+    # Default-Stop:      0 1 6
+    # Short-Description: Starting owgm-daemons
+    # Description:       Starting owgm-daemons
+    ### END INIT INFO#
+
+    ########## Variables for openwisp-daemons ##########
+
+    # The directory in which all the various OpenWisp
+    # applications are deployed. Generally it's /var/www
+    # or /var/rails
+    OPENWISP_BASE_PATH="/var/rails"
+
+    # The daemon you wish to start with this script
+    # (it must have already been deployed of course).
+    OPENWISP_APP="owgm" 
+
+    # The Rails environment in which the script must be run.
+    # It will almost always be set to production.
+    RAILS_ENV="production" 
+
+    ####################################################
+
+    export PATH RAILS_ENV
+
+    # Define LSB log_* functions.
+    # Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+    . /lib/lsb/init-functions
+
+    bundle_exec() {
+      cd $1 && bundle exec $2
+      return $?
+    }
+
+    openwisp_daemons_start() {
+      bundle_exec $OPENWISP_BASE_PATH/$OPENWISP_APP 'rake daemons:start'
+    }
+
+    openwisp_daemons_stop() {
+      bundle_exec $OPENWISP_BASE_PATH/$OPENWISP_APP 'rake daemons:stop'
+    }
+
+    openwisp_daemons_restart() {
+      bundle_exec $OPENWISP_BASE_PATH/$OPENWISP_APP 'rake daemons:restart'
+    }
+
+    openwisp_daemons_status() {
+      bundle_exec $OPENWISP_BASE_PATH/$OPENWISP_APP 'rake daemons:status'
+    }
+
+    case "$1" in
+      start)
+        log_daemon_msg "Starting OpenWISP daemon" "$NAME" 
+        openwisp_daemons_start
+        RET="$?" 
+        log_end_msg $RET
+        return $RET
+        ;;
+      stop)
+        log_daemon_msg "Stopping OpenWISP daemon" "$NAME" 
+        openwisp_daemons_stop
+        RET="$?" 
+        log_end_msg $RET
+        return $RET
+        ;;
+      restart)
+        log_daemon_msg "Restarting OpenWISP daemon" "$NAME" 
+        openwisp_daemons_restart
+        RET="$?" 
+        log_end_msg $RET
+        return $RET
+        ;;
+      status)
+        openwisp_daemons_status
+        RET="$?" 
+        return $RET
+        ;;
+      *)
+        echo "Usage: /etc/init.d/$NAME {start|stop|restart|status}" >&2
+        exit 1
+        ;;
+    esac
+
+    exit 0
+
+As usual, you need to
+
+    chmod +x owgm-daemons
+    /etc/init.d/owgm-daemons start
+
+and enable the script to be run at boot (_e.g._: with the @update-rc.d@ command).
+
+==== Logs rotation
+
+To enable the rotation of logs it is possible to use following @logrotate@ script (it could be saved as /etc/logrotate.d/rails).
+
+    /var/rails/*/log/*.log {
+        weekly
+        missingok
+        rotate 52
+        compress
+        delaycompress
+        notifempty
+        copytruncate
+    ## It's possible to use the following macros instead of the "copytruncate" option
+    #   create 660 root www-data
+    #   sharedscripts
+    #  postrotate
+    #    if [ -f "`. /etc/apache2/envvars ; echo ${APACHE_PID_FILE:-/var/run/apache2.pid}`" ]; then
+    #      /etc/init.d/apache2 reload > /dev/null
+    #    fi
+    #    /etc/init.d/owgm-daemons restart
+    #  endscript
+    }
+
+== Copyright
+
+Copyright (C) 2012 OpenWISP.org
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
