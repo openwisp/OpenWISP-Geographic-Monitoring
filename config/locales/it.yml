@@ -29,6 +29,9 @@ it:
   Click_to_edit: Clicca per modificare
   Cluster: Cluster
   Cluster_info: "Questo cluster contiene:"
+  Comma_separated_wisps: "Wisp separati da virgola..."
+  Configuration_list: "Lista delle configurazioni"
+  Configure_owmw: "Configura Owmw"
   Connected_users: Utenti connessi
   Coordinates: Coordinate
   Create_new_category: Crea nuova categoria
@@ -46,6 +49,8 @@ it:
   Graphs: Grafici
   Highlight_access_points_with: Evidenzia gli access point con
   Hostname: Hostname
+  Key: Chiave
+  Value: Valore
   Access_point: Access point
   Access_point_info: "Informazioni veloci:"
   Access_point_named: Access point %{hostname}
