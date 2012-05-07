@@ -6,6 +6,8 @@ Owgm::Application.routes.draw do
 
   resources :access_points, :only => [:index]
 
+  resources :configurations, :only => [:edit, :update]
+
   resources :wisps, :only => :index do
 
     resources :access_points, :only => [:index, :show] do

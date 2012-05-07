@@ -29,6 +29,9 @@ en:
   Click_to_edit: Click to edit
   Cluster: Cluster
   Cluster_info: "This cluster contains:"
+  Comma_separated_wisps: "Comma separated Wisps..."
+  Configuration_list: "Configurations list"
+  Configure_owmw: "Configure Owmw"
   Connected_users: Connected users
   Coordinates: Coordinates
   Create_new_category: Create new category
@@ -46,6 +49,8 @@ en:
   Graphs: Graphs
   Highlight_access_points_with: Highlight access points with
   Hostname: Hostname
+  Key: Key
+  Value: Value
   Access_point: Access point
   Access_point_info: "Quick info:"
   Access_point_named: Access point %{hostname}

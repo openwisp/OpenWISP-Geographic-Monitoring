@@ -52,9 +52,12 @@
     </table>
 
     <% if auth? :wisps_viewer %>
+      <h6>
         <% if @wisps.count > 1 %>
-            <h6><%= link_to t(:Show_all_access_points), access_points_path %></h6>
+          <%= link_to t(:Show_all_access_points), access_points_path %> -
         <% end %>
+        <%= link_to t(:Configure_owmw), edit_configuration_path('owmw') %>
+      </h6>
     <% end %>
   </div>
 </div>

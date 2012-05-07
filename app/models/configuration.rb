@@ -48,4 +48,20 @@ class Configuration < ActiveRecord::Base
       raise("BUG: key #{key} could not be set!")
     end
   end
+
+  def self.owmw
+    where("`key` LIKE ?", "%owmw%")
+  end
+
+  def is_boolean?
+    value_format == 'boolean'
+  end
+
+  def is_array?
+    value_format == 'array'
+  end
+
+  def is_hash?
+    value_format == 'hash'
+  end
 end

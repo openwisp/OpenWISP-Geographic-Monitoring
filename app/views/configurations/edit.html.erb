@@ -1,0 +1,35 @@
+<div class="grid_12">
+  <div class="box">
+    <h1><%=t :Configuration_list %></h1>
+
+	<%= form_tag({:controller => "configurations", :action => "update"}, :method => "put", :class => "nifty_form") do %>
+	    <table>
+	      <thead>
+	      <tr>
+	        <th><%= label :key, t(:Key) %></th>
+	        <th><%= label :value, t(:Value) %></th>
+	      </tr>
+	      </thead>
+
+	      <tbody>
+	      <% @configurations.each do |conf| %>
+	      	<tr class="<%= cycle 'odd', 'even' %>">
+	      		<td class="bold"><%= conf.key %></td>
+
+	      		<%= hidden_field_tag "configurations[#{conf.key}][format]", conf.value_format %>
+
+	      		<% if conf.is_boolean? %>
+	      			<td><%= check_box_tag "configurations[#{conf.key}][value]", 'true', conf.value == 'true' %></td>
+	      		<% elsif conf.is_array? %>
+	      			<td><%= text_field_tag "configurations[#{conf.key}][value]", conf.value.split("\n").join(", "), :placeholder => t(:Comma_separated_wisps), :size => 50 %></td>
+	      		<% end %>
+	      	</tr>
+	     <% end %>
+	      </tbody>
+	    </table>
+
+	    <%= submit_tag t(:Update) %>
+    <% end %>
+
+  </div>
+</div>
