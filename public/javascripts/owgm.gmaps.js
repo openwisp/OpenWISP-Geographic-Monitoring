@@ -23,6 +23,8 @@ var gmaps = {
     mapDiv: '#gmap_index',
     mapDivSingle: '#gmap_show',
     mapLoadingDiv: '#map_loading',
+    mapToggle: '#map_toggle',
+    mapContainer: '#map_container',
     accessPointTemplate: '#access_point_infowindow_templ',
     clusterTemplate: '#cluster_infowindow_templ',
     accessPointClusterTemplate: '#access_points_infowindow_templ',
@@ -52,7 +54,8 @@ var gmaps = {
     },
 
     drawGoogleMap: function() {
-        if(owgm.exists(gmaps.mapDiv)) {
+        // if mapContainer is not visible don't load 
+        if($(gmaps.mapContainer).is(':visible') && owgm.exists(gmaps.mapDiv)) {
             $(gmaps.mapLoadingDiv).show();
             gmaps.bnds = new google.maps.LatLngBounds();
             // accessPoints (many) index view. Fetch data to draw

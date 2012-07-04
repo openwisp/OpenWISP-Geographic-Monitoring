@@ -1,0 +1,11 @@
+defaults: &defaults
+  showmap: true
+
+production:
+  <<: *defaults
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
