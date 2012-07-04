@@ -27,6 +27,22 @@ $(document).ready(function() {
     owgm.ajaxQuickSearch();
     owgm.ajaxLoading();
     if (typeof(gmaps) !== 'undefined') {
+        // bind click event to the <a> that toggles the map container
+        $(gmaps.mapToggle).click(function(e){
+            // cache some stuff
+            var container = $(gmaps.mapContainer);
+            var is_visible = container.is(':visible');
+            // prevent default link behaviour
+            e.preventDefault();
+            // toggle class hidden
+            $(this).toggleClass('hidden');
+            // toggle container and initialize gmap if necessary
+            container.slideToggle('slow', function(){
+                if(!is_visible && gmaps.map == undefined){
+                    gmaps.drawGoogleMap();    
+                }
+            });
+        });
         gmaps.drawGoogleMap();
     }
 });
