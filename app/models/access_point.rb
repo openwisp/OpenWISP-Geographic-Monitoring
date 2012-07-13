@@ -21,6 +21,7 @@ class AccessPoint < ActiveRecord::Base
   acts_as_authorization_object
   acts_as_mappable :default_units => :kms
 
+  # pagination is handled by kaminari (gem)
   paginates_per 10
   CLUSTER_ACCESS_POINTS_WITHIN_KM = 2
 

@@ -161,8 +161,8 @@ it:
 
   views:
     pagination:
-      first: ""
-      last: ""
+      first: "&laquo; Inizio"
+      last: "Fine &raquo;"
       previous: "&laquo; Precedente"
       next: "Successivo &raquo;"
       truncate: "..."
