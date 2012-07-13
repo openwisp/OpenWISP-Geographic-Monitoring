@@ -161,8 +161,8 @@ en:
 
   views:
     pagination:
-      first: ""
-      last: ""
+      first: "&laquo; First"
+      last: "Last &raquo;"
       previous: "&laquo; Prev"
       next: "Next &raquo;"
       truncate: "..."

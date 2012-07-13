@@ -45,6 +45,7 @@ $(document).ready(function() {
         });
         gmaps.drawGoogleMap();
     }
+    owgm.paginator();
 });
 
 
@@ -149,8 +150,11 @@ var owgm = {
     ajaxLoading: function() {
         $('[data-remote=true]').live('click', function(){
             $(owgm.loadingDiv).fadeIn();
+            $('body, .container12, .pagination a').css('cursor', 'progress');
         }).ajaxStop(function(){
             $(owgm.loadingDiv).fadeOut();
+            $('body, .container12').css('cursor', 'auto');
+            $('.pagination a').css('cursor', 'pointer');
         });
     },
 
@@ -183,6 +187,10 @@ var owgm = {
 
     today: function() {
         return new Date();
+    },
+    
+    paginator: function(){
+        $("#combobox select").combobox();    
     }
 };
 

@@ -17,6 +17,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
 
+<% content_for :after_defaults do %>
+    <%= stylesheet_link_tag 'jquery-ui/styles' %>
+    <%= javascript_include_tag 'jquery-ui', 'jquery.combobox' %>
+<% end %>
 <% content_for :js_templates do %>
     <%= render 'marker_info_window_templates' %>
 <% end %>
@@ -53,7 +57,13 @@
       </span>
     </h2>
 
-    <br />
+    <div id="access_points_quicksearch" class="bold">
+      <%= render 'access_points_quicksearch' %>
+    </div>
+
+    <div id="loading" class="hidden">
+      <p><%=t :Loading %> <%= image_tag 'spinner.gif' %></p>
+    </div>
 
     <table>
       <thead id="access_points_thead">
@@ -65,19 +75,18 @@
       </tbody>
     </table>
 
-    <div id="access_points_quicksearch" class="bold">
-      <%= render 'access_points_quicksearch' %>
+    <div id="page_controls">
+	<div id="access_points_paginate">
+	  <%= paginate @access_points, :remote => true %>
+	</div>
+	<div id="combobox">
+	    <select>
+		<option value="100">100</option>
+		<option value="50">50</option>
+		<option value="20">20</option>
+		<option value="10" selected="selected">10</option>
+	    </select>
+	</div>
     </div>
-
-    <div id="access_points_paginate">
-      <%= paginate @access_points, :remote => true %>
-    </div>
-    <br />
-
-    <div id="loading" class="hidden">
-      <p><%=t :Loading %> <%= image_tag 'spinner.gif' %></p>
-    </div>
-    <br />
-
   </div>
 </div>
