@@ -69,7 +69,8 @@ class AccessPointsController < ApplicationController
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query
 
-    access_points.page params[:page]
+    per_page = params[:per]
+    access_points.page(params[:page]).per(per_page)
   end
 
   def t_column(column)
