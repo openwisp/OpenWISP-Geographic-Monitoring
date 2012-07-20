@@ -7,6 +7,15 @@ require 'rails/all'
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 CONFIG = YAML.load_file("config/config.yml")[Rails.env]
+# default value for pagination in case it has not been specified in config.yml
+CONFIG['default_pagination'] = CONFIG['access_point_pagination'][0]['value']
+# if a default value has been specified in config.yml use that one instead
+CONFIG['access_point_pagination'].each do |item|
+    if item['default'] === true
+        CONFIG['default_pagination'] = item['value']
+        break
+    end
+end
 
 # Specify where to look for the wisps and access_points table
 # data. Only one value can be enable at a time.

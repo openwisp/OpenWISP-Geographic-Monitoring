@@ -4,25 +4,46 @@
         options:{
             // links to edit per_page querystring value
             links: '#access_points_paginate .pagination a',
+            form: '#access_points_quicksearch form',
             // maximum custom value
             max_value: 100,
             // function that is executed when selected value changes
             onChange: function(val){
-                $(this.links).each(function(i, el){
-                    var href = $(el).attr('href');
-                    if(href.indexOf('&per=') < 0){
-                        $(el).attr('href', href + '&per=' + val);
-                    }			    
-                    else{
-                        href = href.replace(
-                            new RegExp(
-                                "(&per=)(\\d+)"
-                           ), "$1" + val
-                        )
-                        $(el).attr('href', href);
+                // function to update the href or action attributes with correct pagination value
+                // $el: jquery element, attribute: string, value: string
+                var updateUrl = function($el, attribute, value){
+                    // cache attribute value
+                    var attr_value = $el.attr(attribute),
+                    // and querystring value for pagination
+                        key = 'per=';
+                    // if querystring doesn't contains key just append the key at the end
+                    if(attr_value.indexOf(key) < 0){
+                        // if no querystring at all add the ?
+                        key = (attr_value.indexOf('?') < 0) ? key = '?'+key : '&'+key;
+                        // change the attribute
+                        $el.attr(attribute, attr_value + key + value);
                     }
+                    // otherwise use regular expression to change the value
+                    else{
+                        attr_value = attr_value.replace(
+                            new RegExp(
+                                "(per=)(\\d+)"
+                           ), "$1" + value
+                        )
+                        $el.attr(attribute, attr_value);
+                    }
+                }
+                // update each pagination link
+                $(this.links).each(function(i, el){
+                    updateUrl($(el), 'href', val);
+                    // trigger click
                     $('#access_points_paginate .page a').eq(0).trigger('click');
                 });
+                // if form is defined
+                if(this.form){
+                    // update action
+                    updateUrl($(this.form), 'action', val);
+                }
             }    
         },
         _create: function() {
@@ -31,7 +52,7 @@
             select = this.element.hide(),
             selected = select.children(":selected"),
             initial_value = selected.val() ? selected.text() : "",
-            wrapper = this.wrapper = $("<span>")
+            wrapper = this.wrapper = $("<form>")
             .addClass("ui-combobox")
             .insertAfter(select);
     
@@ -99,6 +120,13 @@
                 .append("<a>" + item.label + "</a>")
                 .appendTo(ul);
             };
+            // if pressing enter in the input
+            wrapper.submit(function(e){
+                // prevent default form behaviour
+                e.preventDefault();
+                // trigger action
+                input.trigger('blur');
+            });
     
             $("<a>")
             .attr("tabIndex", -1)
