@@ -81,8 +81,8 @@ it:
   Notes: Note aggiuntive
   Ok: Ok
   Prev: Precedente
-  Public: Pubblico
-  Public_on_Georss: Visibile su GeoRSS
+  Public: Pubblicato
+  Public_on_Georss: Pubblicato sulla mappa pubblica
   Quick_search: Ricerca rapida
   Remember_me: Ricordami
   Reset_zoom: Reimposta zoom
@@ -96,7 +96,7 @@ it:
   Up: Up
   Update: Aggiorna
   Username: Username
-  Will_be_rendered_in_georss: Verrà visualizzato nel GeoRSS
+  Will_be_rendered_in_georss: Verrà visualizzato sulla mappa pubblica (GeoRSS)
   Wisp_list: Lista Wisp
   
   # Lowercase
