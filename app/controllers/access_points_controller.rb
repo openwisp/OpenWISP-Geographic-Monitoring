@@ -29,6 +29,7 @@ class AccessPointsController < ApplicationController
 
   def index
     @showmap = CONFIG['showmap']
+    @access_point_pagination = CONFIG['access_point_pagination']
     respond_to do |format|
       format.any(:html, :js) { @access_points = access_points_with_sort_search_and_paginate.of_wisp(@wisp) }
       format.json { @access_points = access_points_with_filter.of_wisp(@wisp).draw_map }

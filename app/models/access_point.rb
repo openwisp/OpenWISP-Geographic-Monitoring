@@ -22,7 +22,7 @@ class AccessPoint < ActiveRecord::Base
   acts_as_mappable :default_units => :kms
 
   # pagination is handled by kaminari (gem)
-  paginates_per 10
+  paginates_per CONFIG['default_pagination']
   CLUSTER_ACCESS_POINTS_WITHIN_KM = 2
 
   belongs_to :wisp
