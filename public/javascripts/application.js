@@ -190,7 +190,9 @@ var owgm = {
     },
     
     paginator: function(){
-        $("#combobox select").combobox();    
+        if($('#access_points_paginate').length > 0){
+            $("#combobox select").combobox();    
+        }
     }
 };
 
