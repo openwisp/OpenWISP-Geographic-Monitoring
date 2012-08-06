@@ -22,25 +22,25 @@
     <%= javascript_include_tag 'jquery-ui', 'jquery.tablesorter' %>
     <%= javascript_include_tag "jquery-ui.datepicker-#{locale}" %>
 
-    <%= javascript_tag "$(
-            function(){
-                $('#report').tablesorter({widgets:['zebra'],dateFormat:'#{locale == :en ? 'us' : 'uk'}'});
-                owgm.dateRangePicker();
-                owgm.highlightAccessPointsReport('#report', '.up', '.down', '#up_down_status', '#than_percent', '#percent_value');
-            }
-    );" %>
+    <%= javascript_tag "$(function(){
+        $('#report').tablesorter({widgets:['zebra'],dateFormat:'#{locale == :en ? 'us' : 'uk'}'}); 
+        owgm.dateRangePicker();
+        owgm.highlightAccessPointsReport('#report', '.up', '.down', '#up_down_status', '#than_percent', '#percent_value');
+        $('#export_link').click(function(e){
+            e.preventDefault();
+            owgm.exportReport($(this).attr('href'), '%sreport.xls');
+        });
+    });" % [root_path.scan('?locale=').length > 0 ? '/' : root_path] %>
 <% end %>
 
 
 <div class="grid_12">
   <div class="box">
     <h1><%=t :Availability_report_for, :wisp => @wisp.name %></h1>
-
     <div class="grid_6">
       <div class="box">
         <h5><%=t :Filter_data_by_date %></h5>
         <span><%=t :Filter_instructions_1 %><br/><%=t :Filter_instructions_2 %></span>
-
         <form action="<%= wisp_activity_histories_path %>" method="get">
           <%= text_field_tag 'from', l(@from) %>
           <strong>-</strong>
@@ -58,20 +58,24 @@
         <%= select 'than', 'percent', [[t(:higher_lower), ''], [t(:higher), '>'], [t(:lower), '<']] %>
         <span><%=t :than %></span>
         <%= select 'percent', 'value', ['',0,10,20,30,40,50,60,70,80,90,100].map{|percent| ["#{percent}%", percent]} %>
+        <p id="export-controls">
+            <a href="javascript:owgm.resetHighlighting('<%= t :Reset_highlighting_fallback_message %>')" id="reset_link"><%= t :Reset_highlighting %></a> <a id="export_link" href="<%= appendToQuerystring(url_for(:action => 'export', :only_path => false), { 'authenticity_token' => form_authenticity_token }) %>"><%= t :Export_data %></a>
+        </o>
       </div>
     </div>
 
     <table id="report" class="tablesorter">
       <thead>
       <tr>
-        <th class="header"><%=t :Name %></th>
-        <th><%=t :Site_description %></th>
-        <th><%=t :Activation_date %></th>
-        <th><%=t :Address %></th>
-        <th><%=t :City %></th>
-        <th><%=t :Description %></th>
-        <th class="green center small"><%=t :Up %></th>
-        <th class="red center small"><%=t :Down %></th>
+        <th class="header" data-dbname="hostname"><%=t :Name %></th>
+        <th data-dbname="site_description"><%=t :Site_description %></th>
+        <th data-dbname="activation_date"><%=t :Activation_date %></th>
+        <th data-dbname="address"><%=t :Address %></th>
+        <th data-dbname="city"><%=t :City %></th>
+        <th data-dbname="description"><%=t :Description %></th>
+        <th data-dbname="public"><%=t :Public %></th>
+        <th class="green center small" data-dbname="up_average"><%=t :Up %></th>
+        <th class="red center small" data-dbname="down-average"><%=t :Down %></th>
       </tr>
       </thead>
 
@@ -80,10 +84,11 @@
           <tr>
             <td><%= link_to access_point.hostname, [@wisp, access_point] %></td>
             <td><%= access_point.site_description.truncate(40) rescue '' %></td>
-            <td><%=l access_point.activation_date %></td>
+            <td><%= access_point.activation_date %></td>
             <td><%= access_point.address %></td>
             <td><%= access_point.city %></td>
             <td><%= access_point.description.truncate(40) rescue '' %></td>
+            <td style="text-align: center"><%=t access_point.public ? :true : :false %></td>
             <td class="center up"><%= access_point.up_average @from, @to %>%</td>
             <td class="center down"><%= access_point.down_average @from, @to %>%</td>
           </tr>
