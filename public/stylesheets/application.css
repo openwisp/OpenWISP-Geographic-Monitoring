@@ -159,6 +159,8 @@ th {
     width: 30%;
 }
 
+ul.nav.main{ padding: 0 8px }
+
 ul.nav.main li {
     color:#fff;
     background:#666;
@@ -166,7 +168,7 @@ ul.nav.main li {
     text-decoration:none;
     display:block;
     float:left;
-    padding:0 1em;
+    margin: 0 4px;
     height:2.4em;
     line-height:2.5em;
 }
@@ -175,6 +177,8 @@ ul.nav li a {
     text-decoration:underline;
     padding:0;
 }
+ul.nav li a:hover{ background: #666666; text-decoration: none !important }
+ul.nav li:hover{ background: #666666 }
 
 /* pagination tweaks july 2012 */
 
@@ -225,4 +229,18 @@ input.ui-autocomplete-input{ background: #fff none }
 .ui-combobox-input {
     margin: 0;
     padding: 0.3em;
+}
+.mainheading{ margin-left: 1% }
+#export-controls{ margin-top: 10px }
+#export-controls a{ float: left; height: 16px; line-height: 17px; padding-left: 20px; margin-right: 20px }
+#export-controls a{ background: transparent url(../images/table.png) no-repeat scroll 0 center }
+#export_link{ background-image: url(../images/page_excel.png) !important }
+
+#progress-ind{
+	position: fixed;
+	z-index: 9999;
+	display: none;
+	width:55px;height:55px;
+	background:#232323 url(../images/progress.gif) no-repeat scroll center center;
+	border-radius:5px;
 }

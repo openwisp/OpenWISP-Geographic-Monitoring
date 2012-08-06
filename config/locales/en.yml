@@ -39,6 +39,7 @@ en:
   Details: Details
   Down: Down
   Earliest_seen: Earliest seen on
+  Export_data: Export data
   Filter_data_by_date: Filter by date
   Filter_instructions_1: "
     Dates are relative for each access point's data starting from the activation date, or
@@ -85,6 +86,8 @@ en:
   Public_on_Georss: Visible on GeoRSS
   Quick_search: Quick search
   Remember_me: Remember me
+  Reset_highlighting: Reset highlighting
+  Reset_highlighting_fallback_message: There are no records highlighted at the moment
   Reset_zoom: Reset zoom
   Show: Show
   Show_all_access_points: Show all access points

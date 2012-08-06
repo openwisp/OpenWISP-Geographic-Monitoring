@@ -21,7 +21,7 @@ class ActivityHistoriesController < ApplicationController
   access_control do
     default :deny
 
-    actions :index, :show do
+    actions :index, :show, :export do
       allow :wisps_viewer
       allow :wisp_activity_histories_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -41,6 +41,75 @@ class ActivityHistoriesController < ApplicationController
     respond_to do |format|
       format.json { render :json => @activity_history }
     end
+  end
+  
+  # accepts only POST
+  def export
+    
+    # prepare header row
+    header = [
+      I18n.t('Name'),
+      I18n.t('Site_description'),
+      I18n.t('Activation_date'),
+      I18n.t('Address'),
+      I18n.t('City'),
+      I18n.t('Description'),
+      I18n.t('Public'),
+      I18n.t('Up'),
+      I18n.t('Down')
+    ]
+    
+    # entity body is a json string, decode it to get the data for the excel
+    @access_points = ActiveSupport::JSON.decode(request.body.read)
+    
+    # load spreadsheet gem and Date
+    require 'spreadsheet'
+    require 'date'
+    # prepare file
+    book = Spreadsheet::Workbook.new
+    sheet1 = book.create_worksheet
+    today = Date.today()
+    today = today.strftime('%d-%m-%Y')
+    sheet1.name = 'Report %s' % [today]
+    header.each_with_index do |cell, i|      
+      sheet1.row(0).push cell
+    end
+      
+    sheet1.row(0).height = 25
+    heading_cells = Spreadsheet::Format.new :color => :black,
+                                     :weight => :bold,
+                                     :size => 11,
+                                     :vertical_align => :middle,
+                                     :horizontal_align => :center
+    centered_cells = Spreadsheet::Format.new :horizontal_align => :center
+    
+    sheet1.column(0).width = 20
+    sheet1.column(1).width = 22
+    sheet1.column(2).width = 18
+    sheet1.column(3).width = 20
+    sheet1.column(4).width = 16
+    sheet1.column(5).width = 22
+    sheet1.column(6).width = 16
+    
+    sheet1.row(0).default_format = heading_cells
+    
+    @access_points.each_with_index do |access_point, i|
+      # init new row
+      row = sheet1.row(1+i)
+      # write data in the row
+      row.push access_point[0], access_point[1], access_point[2], access_point[3], access_point[4], access_point[5], access_point[6], access_point[7], access_point[8]    
+      # center the activation date column
+      row.set_format(2, centered_cells)
+      # center the last 3 columns
+      3.times{ |i|
+        row.set_format(i+6, centered_cells)
+      }
+    end
+    # write excel in public folder
+    book.write '%s/report.xls' % [Rails.public_path]
+    
+    # render without layout
+    render :layout => false
   end
 
   private

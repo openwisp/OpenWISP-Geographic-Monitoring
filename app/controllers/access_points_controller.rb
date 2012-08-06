@@ -34,7 +34,7 @@ class AccessPointsController < ApplicationController
       format.any(:html, :js) { @access_points = access_points_with_sort_search_and_paginate.of_wisp(@wisp) }
       format.json { @access_points = access_points_with_filter.of_wisp(@wisp).draw_map }
       format.rss { @access_points = AccessPoint.of_wisp(@wisp).on_georss }
-    end
+  end
 
     crumb_for_wisp
   end

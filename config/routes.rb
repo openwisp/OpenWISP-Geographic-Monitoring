@@ -22,6 +22,7 @@ Owgm::Application.routes.draw do
     match 'access_points/:access_point_id/associated_user_count_histories' => 'associated_user_count_histories#show',
           :as => :associated_user_count_histories
     match 'availability_report' => 'activity_histories#index', :as => :availability_report
+    match 'export' => 'activity_histories#export', :as => :export, :via => [:post, :get]
   end
 
   # Sample of regular route:
