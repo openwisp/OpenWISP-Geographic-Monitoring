@@ -26,4 +26,5 @@ gem 'capistrano-ext', '~> 1.2.1', :require => false
 gem 'cap-recipes', '~> 0.3.36', :require => false
 gem 'capistrano_colors', '~> 0.5.4', :require => false
 
+gem "ruby-ole", "~> 1.2.11.4"
 gem "spreadsheet", "~> 0.7.3"

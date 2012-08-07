@@ -146,5 +146,6 @@ DEPENDENCIES
   nokogiri (~> 1.4.6)
   packet (= 0.1.15)!
   rails (= 3.0.9)
+  ruby-ole (~> 1.2.11.4)
   spreadsheet (~> 0.7.3)
   warden (~> 1.0.4)
