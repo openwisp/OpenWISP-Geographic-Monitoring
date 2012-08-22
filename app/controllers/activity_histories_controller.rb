@@ -105,8 +105,14 @@ class ActivityHistoriesController < ApplicationController
         row.set_format(i+6, centered_cells)
       }
     end
+    # directory where we'll write the file
+    directory = '%s/excel' % [Rails.public_path]
+    # if the directory doesn't exist create it
+    unless File.directory?(directory)
+      Dir.mkdir(directory, 0755)
+    end
     # write excel in public folder
-    book.write '%s/report.xls' % [Rails.public_path]
+    book.write '%s/report.xls' % directory
     
     # render without layout
     render :layout => false
