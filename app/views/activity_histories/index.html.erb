@@ -28,7 +28,7 @@
         owgm.highlightAccessPointsReport('#report', '.up', '.down', '#up_down_status', '#than_percent', '#percent_value');
         $('#export_link').click(function(e){
             e.preventDefault();
-            owgm.exportReport($(this).attr('href'), '%sreport.xls');
+            owgm.exportReport($(this).attr('href'), '%sexcel/report.xls');
         });
     });" % [root_path.scan('?locale=').length > 0 ? '/' : root_path] %>
 <% end %>
