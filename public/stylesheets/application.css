@@ -184,14 +184,15 @@ ul.nav li:hover{ background: #666666 }
 
 .pagination{ float: left; margin: 4px 10px 0 0 }
 
-.pagination a{
+.pagination a, a.button{
     padding: 4px 10px;
     margin: 0 3px 0 0;
     background: #333;
     color: #fff;
     border-radius: 3px;
 }
-.pagination a:hover, .pagination a:focus{ background: #515252 }
+.pagination a:hover, .pagination a:focus,
+a.button:hover, a.button:focus{ background: #515252 }
 
 .pagination .current{ font-weight: bold }
 .pagination .current a{ background: #d3d3d3; color: #333; cursor: default  }
@@ -244,3 +245,5 @@ input.ui-autocomplete-input{ background: #fff none }
 	background:#232323 url(../images/progress.gif) no-repeat scroll center center;
 	border-radius:5px;
 }
+
+.clear{ clear: both }

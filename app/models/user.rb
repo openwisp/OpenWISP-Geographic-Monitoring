@@ -43,15 +43,25 @@ class User < ActiveRecord::Base
   def roles=(new_roles)
     to_remove = self.roles - new_roles
     to_remove.each do |role|
-      self.has_no_role!(role, self.wisp) if self.wisp
+      #self.has_no_role!(role, self.wisp) if self.wisp
       self.has_no_role!(role)
     end
 
     new_roles.map!{|role| role.to_sym}
     new_roles.each do |role|
       if ROLES.include? role
-        self.wisp ? self.has_role!(role, self.wisp) : self.has_role!(role)
+        #self.wisp ? self.has_role!(role, self.wisp) : self.has_role!(role)
+        self.has_role!(role)
       end
     end
+  end
+  
+  def display_roles(separator=', ')
+    roles = self.roles()
+    @output = ''
+    roles.each_with_index do |role, i|
+      @output += i < 1 ? '%s' % role : '%s %s' % [separator, role]
+    end
+    @output
   end
 end

@@ -4,6 +4,8 @@ Owgm::Application.routes.draw do
 
   devise_for :users
 
+  resources :users
+
   resources :access_points, :only => [:index]
 
   resources :configurations, :only => [:edit, :update]

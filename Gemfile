@@ -28,3 +28,4 @@ gem 'capistrano_colors', '~> 0.5.4', :require => false
 
 gem "ruby-ole", "~> 1.2.11.4"
 gem "spreadsheet", "~> 0.7.3"
+gem "dynamic_form", "~> 1.1.4"

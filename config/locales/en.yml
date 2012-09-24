@@ -21,6 +21,7 @@ en:
   Availability_report: Availability report
   Availability_report_for: Availability report for %{wisp}
   Avg_availability: Average availability
+  Are_you_sure: Are you sure?
   Back: Back
   Cancel: Cancel
   Category: Category
@@ -101,6 +102,20 @@ en:
   Username: Username
   Will_be_rendered_in_georss: Will be rendered in GeoRSS
   Wisp_list: Wisps List
+  User: User
+  username: Username
+  email: email
+  change_password: change password
+  Password: password
+  password_confirmation: password confirmation
+  Edit: Edit
+  Create: Create
+  Roles: Roles
+  Edit_user: Edit user
+  New_user: New user
+  Account_updated: User account modified successfully
+  Select: Select
+  Account_registered: New user account registered
   
   # Lowercase
   all: all

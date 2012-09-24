@@ -56,7 +56,8 @@
         <% if @wisps.count > 1 %>
           <%= link_to t(:Show_all_access_points), access_points_path %> -
         <% end %>
-        <%= link_to t(:Configure_owmw), edit_configuration_path('owmw') %>
+        <%= link_to t(:Configure_owmw), edit_configuration_path('owmw') %> -
+        <%= link_to t(:Manage_users), users_path() %>
       </h6>
     <% end %>
   </div>

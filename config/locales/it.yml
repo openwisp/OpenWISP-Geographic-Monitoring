@@ -21,6 +21,7 @@ it:
   Availability_report: Report di disponibilità
   Availability_report_for: Report di disponibilità per %{wisp}
   Avg_availability: Disponibilità media
+  Are_you_sure: Sei sicuro?
   Back: Indietro
   Cancel: Annulla
   Category: Categoria
@@ -101,6 +102,21 @@ it:
   Username: Username
   Will_be_rendered_in_georss: Verrà visualizzato sulla mappa pubblica (GeoRSS)
   Wisp_list: Lista Wisp
+  Manage_users: Gestione utenti
+  User: Utente
+  username: username
+  email: email
+  Password: password
+  Change_password: Cambia password
+  password_confirmation: conferma password
+  Edit: Modifica
+  Create: Crea
+  Roles: Ruoli
+  Edit_user: Modifica utente
+  New_user: Nuovo utente
+  Account_registered: Nuovo account utente registrato con successo
+  Account_updated: Utente modificato con successo
+  Select: Seleziona
   
   # Lowercase
   all: tutti
