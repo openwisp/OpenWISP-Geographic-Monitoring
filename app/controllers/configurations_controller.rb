@@ -17,6 +17,11 @@
 
 class ConfigurationsController < ApplicationController
 	before_filter :authenticate_user!
+
+	access_control do
+    default :deny
+    allow :wisps_viewer
+  end
 	
 	def edit
 		to_configure = params[:id]
