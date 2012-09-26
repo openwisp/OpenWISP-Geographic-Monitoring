@@ -1,6 +1,11 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!
   
+  access_control do
+    default :deny
+    allow :wisps_viewer
+  end
+  
   def index
     @users = User.all
   end

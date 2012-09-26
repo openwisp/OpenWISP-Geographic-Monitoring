@@ -27,9 +27,9 @@ class User < ActiveRecord::Base
   attr_accessible :username, :email, :password, :password_confirmation
 
   ROLES = [
-    :wisps_viewer, :wisp_access_points_viewer,
-    :wisp_activities_viewer, :wisp_activity_histories_viewer,
-    :wisp_associated_user_counts_viewer, :wisp_associated_user_count_histories_viewer
+    :wisps_viewer, # higher role
+    :wisp_access_points_viewer, :wisp_activities_viewer, :wisp_activity_histories_viewer,
+    :wisp_associated_user_counts_viewer, :wisp_associated_user_count_histories_viewer,
   ]
 
   def roles
