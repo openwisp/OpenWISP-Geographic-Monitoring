@@ -28,6 +28,7 @@ class ActivityHistoriesController < ApplicationController
   end
 
   def index
+    @showstatus=CONFIG['showstatus']
     @from = Date.strptime(params[:from], I18n.t('date.formats.default')) rescue 365.days.ago.to_date
     @to = Date.strptime(params[:to], I18n.t('date.formats.default')) rescue Date.today
     @access_points = AccessPoint.activated(@to).of_wisp(@wisp)
@@ -46,6 +47,7 @@ class ActivityHistoriesController < ApplicationController
   # accepts only POST
   def export
     
+    @showstatus=CONFIG['showstatus']
     # prepare header row
     header = [
       I18n.t('Name'),
@@ -59,6 +61,9 @@ class ActivityHistoriesController < ApplicationController
       I18n.t('Down')
     ]
     
+    if @showstatus == true
+        header.push(I18n.t('Status'))
+    end
     # entity body is a json string, decode it to get the data for the excel
     @access_points = ActiveSupport::JSON.decode(request.body.read)
     
@@ -90,6 +95,8 @@ class ActivityHistoriesController < ApplicationController
     sheet1.column(4).width = 16
     sheet1.column(5).width = 22
     sheet1.column(6).width = 16
+    #Value of status could be quite long
+    sheet1.column(9).width = 22
     
     sheet1.row(0).default_format = heading_cells
     
@@ -97,7 +104,10 @@ class ActivityHistoriesController < ApplicationController
       # init new row
       row = sheet1.row(1+i)
       # write data in the row
-      row.push access_point[0], access_point[1], access_point[2], access_point[3], access_point[4], access_point[5], access_point[6], access_point[7], access_point[8]    
+      row.push access_point[0], access_point[1], access_point[2], access_point[3], access_point[4], access_point[5], access_point[6], access_point[7], access_point[8]
+      if @showstatus == true
+         row.push access_point [9]
+      end
       # center the activation date column
       row.set_format(2, centered_cells)
       # center the last 3 columns
