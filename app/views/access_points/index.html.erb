@@ -17,19 +17,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
 
+<% content_for :after_defaults do %>
+    <%= stylesheet_link_tag 'jquery-ui/styles' %>
+    <%= javascript_include_tag 'jquery-ui', 'jquery.combobox' %>
+<% end %>
 <% content_for :js_templates do %>
     <%= render 'marker_info_window_templates' %>
 <% end %>
 
 <div class="grid_12">
   <div class="box">
-    <h2><%=t :Access_points_map %></h2>
-    <br />
-    <div id="access_points_map">
-      <%= render 'access_points_map' %>
-    </div>
-    <div id="map_loading" class="hidden">
-      <p><%=t :Loading %> <%=t :markers%> <%= image_tag 'spinner.gif', :size => '22x22' %></p>
+    <h2><a id="map_toggle" href="#"<% if not @showmap: %> class="hidden"<% end %>><%=t :Access_points_map %></a></h2>
+    <div id="map_container"<% if not @showmap: %> style="display:none"<% end %>>
+	<br />
+	<div id="access_points_map">
+	  <%= render 'access_points_map' %>
+	</div>
+	<div id="map_loading" class="hidden">
+	  <p><%=t :Loading %> <%=t :markers%> <%= image_tag 'spinner.gif', :size => '22x22' %></p>
+	</div>
     </div>
   </div>
 
@@ -51,7 +57,13 @@
       </span>
     </h2>
 
-    <br />
+    <div id="access_points_quicksearch" class="bold">
+      <%= render 'access_points_quicksearch' %>
+    </div>
+
+    <div id="loading" class="hidden">
+      <p><%=t :Loading %> <%= image_tag 'spinner.gif' %></p>
+    </div>
 
     <table>
       <thead id="access_points_thead">
@@ -63,19 +75,17 @@
       </tbody>
     </table>
 
-    <div id="access_points_quicksearch" class="bold">
-      <%= render 'access_points_quicksearch' %>
+    <div id="page_controls">
+	<div id="access_points_paginate">
+	  <%= paginate @access_points, :remote => true %>
+	</div>
+	<div id="combobox">
+	    <select>
+	    <% @access_point_pagination.reverse.each do |item| %>
+		<option value="<%= item['value'] %>"<% if item['default'] %> selected="selected"<% end %>><%= item['value'] %></option>
+	    <% end %>
+	    </select>
+	</div>
     </div>
-
-    <div id="access_points_paginate">
-      <%= paginate @access_points, :remote => true %>
-    </div>
-    <br />
-
-    <div id="loading" class="hidden">
-      <p><%=t :Loading %> <%= image_tag 'spinner.gif' %></p>
-    </div>
-    <br />
-
   </div>
 </div>

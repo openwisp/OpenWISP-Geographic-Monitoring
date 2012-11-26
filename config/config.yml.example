@@ -1,0 +1,18 @@
+defaults: &defaults
+  showmap: true
+  # values should be between 1 and 100
+  access_point_pagination: [
+    { value: 10, default: false },
+    { value: 20, default: true },
+    { value: 50, default: false },
+    { value: 100, default: false }
+  ]
+
+production:
+  <<: *defaults
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults

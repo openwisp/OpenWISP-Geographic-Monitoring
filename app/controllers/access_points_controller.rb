@@ -28,11 +28,13 @@ class AccessPointsController < ApplicationController
   end
 
   def index
+    @showmap = CONFIG['showmap']
+    @access_point_pagination = CONFIG['access_point_pagination']
     respond_to do |format|
       format.any(:html, :js) { @access_points = access_points_with_sort_search_and_paginate.of_wisp(@wisp) }
       format.json { @access_points = access_points_with_filter.of_wisp(@wisp).draw_map }
       format.rss { @access_points = AccessPoint.of_wisp(@wisp).on_georss }
-    end
+  end
 
     crumb_for_wisp
   end
@@ -68,7 +70,8 @@ class AccessPointsController < ApplicationController
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query
 
-    access_points.page params[:page]
+    per_page = params[:per]
+    access_points.page(params[:page]).per(per_page)
   end
 
   def t_column(column)

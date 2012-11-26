@@ -100,10 +100,11 @@
 }
 
 #loading {
-    height: 30px;
-    font-size: 20px;
-    margin-top: -15px;
-    float: left;
+    float: right;
+    width: 200px;
+    margin: 15px 0 !important;
+    height: 20px;
+    font-size: 20px    
 }
 
 #login {
@@ -114,9 +115,7 @@
     float: right;
 }
 
-#access_points_quicksearch {
-    float: right;
-}
+#access_points_quicksearch { float: left; width: 400px; margin: 15px 0  }
 
 #access_points_quicksearch .spin {
     float: left;
@@ -160,6 +159,8 @@ th {
     width: 30%;
 }
 
+ul.nav.main{ padding: 0 8px }
+
 ul.nav.main li {
     color:#fff;
     background:#666;
@@ -167,7 +168,7 @@ ul.nav.main li {
     text-decoration:none;
     display:block;
     float:left;
-    padding:0 1em;
+    margin: 0 4px;
     height:2.4em;
     line-height:2.5em;
 }
@@ -175,4 +176,71 @@ ul.nav.main li {
 ul.nav li a {
     text-decoration:underline;
     padding:0;
+}
+ul.nav li a:hover{ background: #666666; text-decoration: none !important }
+ul.nav li:hover{ background: #666666 }
+
+/* pagination tweaks july 2012 */
+
+.pagination{ float: left; margin: 4px 10px 0 0 }
+
+.pagination a{
+    padding: 4px 10px;
+    margin: 0 3px 0 0;
+    background: #333;
+    color: #fff;
+    border-radius: 3px;
+}
+.pagination a:hover, .pagination a:focus{ background: #515252 }
+
+.pagination .current{ font-weight: bold }
+.pagination .current a{ background: #d3d3d3; color: #333; cursor: default  }
+
+#access_points_paginate{ overflow: hidden; margin-top: 18px; display: inline }
+#access_points_quicksearch #q{ width: 200px; margin: 2px 0 0 5px }
+
+#page_controls{ overflow: hidden; margin: 15px 0 }
+#combobox{ float: left }
+#combobox .ui-combobox input{ width: 29px; padding-left: 6px }
+
+input.ui-autocomplete-input{ background: #fff none }
+.ui-menu .ui-menu-item a{ padding: 1px 0 1px 4px !important }
+.ui-combobox {
+    float: left;
+    width: 200px;
+    position: relative;
+}
+.ui-combobox a{
+    float: left;
+    display: block;
+    padding: 6px 0 7px;
+}
+.ui-combobox input{ float: left }
+.ui-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+    /* adjust styles for IE 6/7 */
+    *height: 1.7em;
+    *top: 0.1em;
+}
+.ui-combobox-input {
+    margin: 0;
+    padding: 0.3em;
+}
+.mainheading{ margin-left: 1% }
+#export-controls{ margin-top: 10px }
+#export-controls a{ float: left; height: 16px; line-height: 17px; padding-left: 20px; margin-right: 20px }
+#export-controls a{ background: transparent url(../images/table.png) no-repeat scroll 0 center }
+#export_link{ background-image: url(../images/page_excel.png) !important }
+
+#progress-ind{
+	position: fixed;
+	z-index: 9999;
+	display: none;
+	width:55px;height:55px;
+	background:#232323 url(../images/progress.gif) no-repeat scroll center center;
+	border-radius:5px;
 }

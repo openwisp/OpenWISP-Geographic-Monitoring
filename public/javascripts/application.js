@@ -27,8 +27,25 @@ $(document).ready(function() {
     owgm.ajaxQuickSearch();
     owgm.ajaxLoading();
     if (typeof(gmaps) !== 'undefined') {
+        // bind click event to the <a> that toggles the map container
+        $(gmaps.mapToggle).click(function(e){
+            // cache some stuff
+            var container = $(gmaps.mapContainer);
+            var is_visible = container.is(':visible');
+            // prevent default link behaviour
+            e.preventDefault();
+            // toggle class hidden
+            $(this).toggleClass('hidden');
+            // toggle container and initialize gmap if necessary
+            container.slideToggle('slow', function(){
+                if(!is_visible && gmaps.map == undefined){
+                    gmaps.drawGoogleMap();    
+                }
+            });
+        });
         gmaps.drawGoogleMap();
     }
+    owgm.paginator();
 });
 
 
@@ -133,8 +150,11 @@ var owgm = {
     ajaxLoading: function() {
         $('[data-remote=true]').live('click', function(){
             $(owgm.loadingDiv).fadeIn();
+            $('body, .container12, .pagination a').css('cursor', 'progress');
         }).ajaxStop(function(){
             $(owgm.loadingDiv).fadeOut();
+            $('body, .container12').css('cursor', 'auto');
+            $('.pagination a').css('cursor', 'pointer');
         });
     },
 
@@ -167,6 +187,90 @@ var owgm = {
 
     today: function() {
         return new Date();
+    },
+    
+    paginator: function(){
+        if($('#access_points_paginate').length > 0){
+            $("#combobox select").combobox();    
+        }
+    },
+    
+    exportReport: function(export_url, file){
+        this.toggleProgress();
+        // local variables
+        var data = [], // init array that will contain data for the excel
+            $tr = $('#report tbody tr'), // the table rows
+            $highlighted = $('#report tbody tr.highlighted'), // the highlighted table rows
+            $elements = $highlighted.length ? $highlighted : $tr; // if any highlighted row, then pass the highlighted ones, otherwise all the rows
+        // loop over each row
+        $elements.each(function(i, tr){
+            var row = []; // init array that will contain row info
+            // loop over each table cell of current row
+            $(tr).find('td').each(function(i, td){
+                // push the text of this cell in the "row" array
+                row.push($(td).text());
+            })
+            // add current row array to the "data" array
+            data.push(row);
+        });
+        // convert data array to JSON string
+        json_data = JSON.stringify(data);
+        // POST the JSON string to Rails
+        $.ajax({
+            type: 'post',
+            url: export_url,
+            data: json_data,
+            // if file excel has been generated successfully
+            success: function(data){
+                if(data == 'success'){
+                    // download file
+                    window.location.href = file;
+                    owgm.toggleProgress();
+                }
+            },
+            // otherwise alert user (exceptional case)
+            error: function(xhr, response) {
+                alert("Error: "+ xhr.status);
+                owgm.toggleProgress();
+            }
+        });
+    },
+    
+    // reset highlighting
+    resetHighlighting: function(msg){
+        var rows = $('.highlighted');
+        // if any
+        if(rows.length){
+            // reset highlighting
+            rows.removeClass('highlighted');
+            // and restore default values for the selects
+            $('#export-controls').parent().find('select').val(this.defaultValue)
+        }
+        // otherwise alert message
+        else{
+            alert(msg);
+        }
+    },
+    
+    // toggle progress indicator
+    toggleProgress: function(id){
+        // if no id specified defaults to progress-ind
+        if(!id){
+            id = 'progress-ind';
+        }
+        // create div if necessary
+        if($('#'+id).length < 1){
+            $('body').append('<div id="'+id+'"></div>');
+            // center to the window and show
+            $('#'+id).css({
+                top: ($(window).height() - 55) / 2,
+                left: ($(window).width() - 55) / 2
+            }).fadeIn(250);
+        }
+        // otherwise if div has been already created before just toggle with a quick fade animation
+        else{
+            $('#'+id).fadeToggle(250);
+        }
     }
 };
 

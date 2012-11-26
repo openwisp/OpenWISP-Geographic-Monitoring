@@ -39,6 +39,7 @@ it:
   Details: Dettagli
   Down: Down
   Earliest_seen: Primo avvistamento
+  Export_data: Esporta Dati
   Filter_data_by_date: Filtra per data
   Filter_instructions_1: "
     Le date sono relative ai dati per ogni access point dalla data di attivazione, o dalla
@@ -81,10 +82,12 @@ it:
   Notes: Note aggiuntive
   Ok: Ok
   Prev: Precedente
-  Public: Pubblico
-  Public_on_Georss: Visibile su GeoRSS
+  Public: Pubblicato
+  Public_on_Georss: Pubblicato sulla mappa (GeoRSS)
   Quick_search: Ricerca rapida
   Remember_me: Ricordami
+  Reset_highlighting: Resetta evidenziazione
+  Reset_highlighting_fallback_message: Nessuna riga è evidenziata al momento
   Reset_zoom: Reimposta zoom
   Show: Mostra
   Show_all_access_points: Mostra tutti gli access point
@@ -96,7 +99,7 @@ it:
   Up: Up
   Update: Aggiorna
   Username: Username
-  Will_be_rendered_in_georss: Verrà visualizzato nel GeoRSS
+  Will_be_rendered_in_georss: Verrà visualizzato sulla mappa pubblica (GeoRSS)
   Wisp_list: Lista Wisp
   
   # Lowercase
@@ -161,8 +164,8 @@ it:
 
   views:
     pagination:
-      first: ""
-      last: ""
+      first: "&laquo; Inizio"
+      last: "Fine &raquo;"
       previous: "&laquo; Precedente"
       next: "Successivo &raquo;"
       truncate: "..."
