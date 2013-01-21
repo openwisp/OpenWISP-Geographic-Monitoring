@@ -76,6 +76,7 @@
         <th><%=t :Public %></th>
         <th class="green center small"><%=t :Up %></th>
         <th class="red center small"><%=t :Down %></th>
+        <% if @showstatus: %><th><%=t :Status %></th><% end %>
       </tr>
       </thead>
 
@@ -91,6 +92,7 @@
             <td style="text-align: center"><%=t access_point.public ? :true : :false %></td>
             <td class="center up"><%= access_point.up_average @from, @to %>%</td>
             <td class="center down"><%= access_point.down_average @from, @to %>%</td>
+            <% if @showstatus %><td><%= display_status(access_point) %></td><% end %>
           </tr>
       <% end %>
       </tbody>
