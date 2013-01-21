@@ -106,7 +106,7 @@ class ActivityHistoriesController < ApplicationController
       # write data in the row
       row.push access_point[0], access_point[1], access_point[2], access_point[3], access_point[4], access_point[5], access_point[6], access_point[7], access_point[8]
       if @showstatus == true
-         row.push access_point [9]
+         row.push access_point[9]
       end
       # center the activation date column
       row.set_format(2, centered_cells)
