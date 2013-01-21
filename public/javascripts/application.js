@@ -222,9 +222,9 @@ var owgm = {
             data: json_data,
             // if file excel has been generated successfully
             success: function(data){
-                if(data == 'success'){
+                if(data.result == 'success'){
                     // download file
-                    window.location.href = file;
+                    window.location.href = data.url;
                     owgm.toggleProgress();
                 }
             },
