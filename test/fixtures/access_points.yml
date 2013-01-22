@@ -1,0 +1,20 @@
+wherecamp:
+    id: 1
+    hostname: wherecamp
+    lat: 45.6431
+    lng: 13.8313
+    address: 'via test'
+    city: 'Roma'
+    description: 'test'
+    wisp_id: 1
+
+eduroam:
+    id: 2
+    hostname: eduroam
+    lat: 46.6431
+    lng: 12.8313
+    address: 'via test'
+    city: 'Roma'
+    description: 'test'
+    wisp_id: 1
+    

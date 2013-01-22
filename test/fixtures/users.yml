@@ -1,0 +1,11 @@
+admin:
+    id: 1
+    email: 'admin@admin.it'
+    encrypted_password: '$2a$10$zP76I4at9EDWkb8UnSTXleWpn6uheM4WUOlRz3JStC4veZiuhmhrG'
+    password_salt: '$2a$10$GwtIZLsEH44fCSVuWWUrB.'
+
+sfigato:
+    id: 2
+    email: 'user@user.it'
+    encrypted_password: '$2a$10$zP76I4at9EDWkb8UnSTXleWpn6uheM4WUOlRz3JStC4veZiuhmhrG'
+    password_salt: '$2a$10$GwtIZLsEH44fCSVuWWUrB.'

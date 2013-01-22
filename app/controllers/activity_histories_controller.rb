@@ -120,8 +120,6 @@ class ActivityHistoriesController < ApplicationController
     begin
       # send file and trigger download
       send_file file, :filename => "report-#{today}.xls", :type =>  "application/vnd.ms-excel"
-      # wait a bit
-      #sleep(3)
       # delete file
       File.delete(file)
     rescue Errno::ENOENT
