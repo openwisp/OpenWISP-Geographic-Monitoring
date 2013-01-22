@@ -10,7 +10,7 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 begin
     CONFIG = YAML.load_file("config/config.yml")[Rails.env]
 rescue Errno::ENOENT
-    CONFIG = YAML.load_file("config/config.yml.example")[Rails.env]
+    CONFIG = YAML.load_file("config/config.default.yml")[Rails.env]
 end
 # default value for pagination in case it has not been specified in config.yml
 CONFIG['default_pagination'] = CONFIG['access_point_pagination'][0]['value']
