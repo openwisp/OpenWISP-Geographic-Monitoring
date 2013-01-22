@@ -1,0 +1,7 @@
+.DS_STORE
+.idea
+*.komodoproject
+vendor/
+*report.xls
+db/schema.rb
+db/test.sqlite3
