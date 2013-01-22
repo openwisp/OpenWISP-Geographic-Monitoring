@@ -7,7 +7,7 @@ defaults: &defaults
     { value: 50, default: false },
     { value: 100, default: false }
   ]
-  showstatus: true
+  showstatus: false
   
 production:
   <<: *defaults
