@@ -1,12 +1,19 @@
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
-  test "only wisp viewer can get index" do
+  test "unauthenticated user cannot get index" do
     get :index
     assert_redirected_to '/users/sign_in'
   end
   
-  test "wisp_viewer should get index" do
+  test "non wisp_viewer cannot get index" do
+    sign_in users(:sfigato)
+    assert_raise Acl9::AccessDenied do
+      get :index
+    end
+  end
+  
+  test "wisp_viewer can get index" do
     sign_in users(:admin)
     get :index
     assert_response :success

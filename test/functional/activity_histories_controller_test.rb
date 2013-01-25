@@ -41,4 +41,20 @@ class ActivityHistoriesControllerTest < ActionController::TestCase
       get :send_report, :wisp_id => wisp.name
     end
   end
+  
+  test "status column is present if configured accordingly" do
+    debugger
+    
+    sign_in users(:admin)
+    wisp = wisps(:provincia_wifi)
+    get :index, :wisp_id => wisp.name
+    
+    if CONFIG['showstatus']
+      assert_select '#report th.status', I18n.t(:Status)
+    else
+      assert !response.body.index('class="status">%s</th>' % I18n.t(:Status))
+    end
+    
+  end
+  
 end
