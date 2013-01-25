@@ -155,6 +155,18 @@ To enable the rotation of logs it is possible to use following @logrotate@ scrip
     #  endscript
     }
 
+==== Configuration options
+
+in the YAML file in *config/config.default.yml* are specified some configuration options for this web application.
+
+If you need to customize these options proceed by copying the file and rename it *config/config.yml*
+
+    $ cp config/config.default.yml config/config.yml
+
+The options you can customize are:
+* pagination in access point list
+* show "status" column in availability report 
+
 == Copyright
 
 Copyright (C) 2012 OpenWISP.org

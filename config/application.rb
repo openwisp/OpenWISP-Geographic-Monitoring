@@ -6,7 +6,12 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
-CONFIG = YAML.load_file("config/config.yml")[Rails.env]
+# in case config.yml does not exist load the default example file
+begin
+    CONFIG = YAML.load_file("config/config.yml")[Rails.env]
+rescue Errno::ENOENT
+    CONFIG = YAML.load_file("config/config.default.yml")[Rails.env]
+end
 # default value for pagination in case it has not been specified in config.yml
 CONFIG['default_pagination'] = CONFIG['access_point_pagination'][0]['value']
 # if a default value has been specified in config.yml use that one instead
