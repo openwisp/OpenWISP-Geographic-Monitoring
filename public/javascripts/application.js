@@ -46,6 +46,7 @@ $(document).ready(function() {
         gmaps.drawGoogleMap();
     }
     owgm.paginator();
+    owgm.initNotice();
 });
 
 
@@ -271,7 +272,14 @@ var owgm = {
         else{
             $('#'+id).fadeToggle(250);
         }
-    }
+    },
+    
+    initNotice: function(){
+        $('.message .close').click(function(e){
+            e.preventDefault();
+            $(this).parent().fadeToggle(400);
+        });
+    },
 };
 
 /************************/

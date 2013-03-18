@@ -5,3 +5,6 @@ vendor/
 *report.xls
 db/schema.rb
 db/test.sqlite3
+tmp/*
+config/config.yml
+config/database.yml

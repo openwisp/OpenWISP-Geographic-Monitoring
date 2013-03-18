@@ -247,3 +247,28 @@ input.ui-autocomplete-input{ background: #fff none }
 }
 
 .clear{ clear: both }
+
+.message{
+    padding: 10px 15px;
+	margin: 20px 50px 5px;
+    font-size: 14px;
+	font-weight:bold;
+    color: #fff;
+	text-align: center;
+	border-radius: 5px;
+}
+.notice{ background-color: #3b6d08 }
+.alert{ background-color: #fb4848 }
+.message p{ margin: 0; text-align: center }
+.message .close{
+    background-color: #003500 !important;
+    padding: 5px 10px;
+    color: white;
+    margin-left: 13px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.alert .close{ background-color: #980000 !important }
+.message .close:hover{ background-color: #000 !important }
+.alert .close:hover{ background-color: #660000 !important }

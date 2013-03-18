@@ -60,16 +60,19 @@
 
     <ul class="nav main">
       <% if user_signed_in? %>
-          <%= render_breadcrumbs :tag => :li, :separator => '<li class="spacer">&raquo</li>' %>
-          <li id="logout"><%= link_to t(:Sign_out), destroy_user_session_path %></li>
+        <%= render_breadcrumbs :tag => :li, :separator => '<li class="spacer">&raquo</li>' %>
+        <li id="logout"><%= link_to t(:Sign_out), destroy_user_session_path %></li>
       <% end %>
     </ul>
-
-    <% if flash[:notice] || flash[:alert] %>
-        <div class="box">
-          <p class="notice"><%= flash[:notice] %></p>
-          <p class="alert"><%= flash[:alert] %></p>
-        </div>
+    <% if flash[:notice] %>
+    <div class="message notice">
+      <%= flash[:notice] %> <a class="close">&times;&nbsp;chiudi</a></p>
+    </div>
+    <% end %>
+    <% if flash[:alert] %>
+    <div class="message alert">
+      <%= flash[:alert] %> <a class="close">&times;&nbsp;chiudi</a></p>
+    </div>
     <% end %>
   </div>
 
