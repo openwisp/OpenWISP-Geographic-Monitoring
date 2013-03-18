@@ -29,4 +29,17 @@ class Wisp < ActiveRecord::Base
   def owmw_enabled?
     Configuration.get(:owmw_enabled) && Configuration.get(:wisps_with_owmw).include?(name)
   end
+  
+  # create unassigned roles for this wisp
+  def create_roles
+    roles = User.available_roles
+    new_roles = []
+    roles.each do |role|
+      next if role == :wisps_viewer
+      unless Role.where({:authorizable_id => self.id, :name => role.to_s}).length > 0
+        new_roles << Role.create({:authorizable_type => 'Wisp', :name => role.to_s, :authorizable_id => self.id})
+      end      
+    end
+    new_roles
+  end
 end

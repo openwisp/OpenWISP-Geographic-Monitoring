@@ -16,10 +16,13 @@ class UsersController < ApplicationController
   
   def edit
     @user = User.find(params[:id])
+    # custom query to get wisp name without querying too much the database
+    @roles = Role.all_join_wisp
   end
   
   def new
     @user = User.new
+    @roles = Role.all_join_wisp
   end
   
   def create
@@ -43,8 +46,11 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    
+    #@roles = Role.all_join_wisp
+    @params = params[:roles]
 
-    @selected_roles = params[:roles]# (params[:roles].nil? || params[:roles].length == 0) ? [] : params[:roles]
+    @selected_roles = Role.find_all_by_id(params[:roles])
 
     if @user.update_attributes(params[:user])
       @user.roles = @selected_roles
@@ -55,6 +61,8 @@ class UsersController < ApplicationController
       end
     else
       respond_to do |format|
+        #flash[:alert] = t(:Errors)
+        # qui va forse fatto redirect
         format.html { render :action => "edit" }
       end
     end
