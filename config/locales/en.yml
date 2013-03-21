@@ -11,6 +11,7 @@ en:
         public: public
         site_description: installation site
         status: status
+        favourite: favourite
   # Uppercase
   Activation_date: Activation date
   Activity_graph: Activity graph

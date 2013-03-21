@@ -21,7 +21,7 @@ class AccessPointsController < ApplicationController
   access_control do
     default :deny
 
-    actions :index, :show do
+    actions :index, :show, :favourite do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -69,6 +69,7 @@ class AccessPointsController < ApplicationController
     access_points = AccessPoint.scoped
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query
+    access_points = access_points.quickfavourite(query) if query
 
     per_page = params[:per]
     access_points.page(params[:page]).per(per_page)
@@ -98,4 +99,12 @@ class AccessPointsController < ApplicationController
   def crumb_for_access_point
     add_breadcrumb I18n.t(:Access_point_named, :hostname => @access_point.hostname), wisp_access_point_path(@access_point.wisp, @access_point)
   end
+
+# def favourite
+#    @wisp
+#    @prova ="*****"
+#    respond_to do |format|
+#      format.html
+#    end 
+#  end 
 end

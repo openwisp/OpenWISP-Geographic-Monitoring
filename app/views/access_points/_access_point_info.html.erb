@@ -47,6 +47,11 @@
     </td>
   </tr>
   <tr>
+    <td><strong><%=t :Favourite %></strong></td>
+    <td id="favourite" class="right"><%= @access_point.favourite ? image_tag ('favourite.png', :size => "30x30") : image_tag ('not_favourite.png', :size => "30x30") %></td>
+    
+  </tr>
+  <tr>
     <td><strong><%=t :Ip_addr %></strong></td>
     <td class="right"><%= @access_point.ip %></td>
   </tr>

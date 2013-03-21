@@ -11,6 +11,7 @@ it:
         public: pubblico
         site_description: sito di installazione
         status: stato
+        favourite: preferito
   # Uppercase
   Activation_date: Data di attivazione
   Activity_graph: Grafico attività

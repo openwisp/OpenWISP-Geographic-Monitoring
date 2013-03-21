@@ -35,7 +35,7 @@ class AccessPoint < ActiveRecord::Base
   delegate :reachable, :to => :property_set, :allow_nil => true
   delegate :category, :category=, :to => :property_set, :allow_nil => true
   delegate :notes, :notes=, :site_description, :site_description=,
-           :public, :public=,
+           :public, :public=, :favourite, :favourite=,
            :to => :property_set, :allow_nil => true
 
   def coords
@@ -51,6 +51,9 @@ class AccessPoint < ActiveRecord::Base
     mng_ip.nil? ? nil : IPAddr.new(read_attribute(:mng_ip), Socket::AF_INET).to_s
   end
 
+  def favourite?
+    favourite == true
+  end
   def up?
     reachable == true
   end
@@ -198,6 +201,10 @@ class AccessPoint < ActiveRecord::Base
 
   def self.quicksearch(name)
     where("`hostname` LIKE ? OR `address` LIKE ? OR `city` LIKE ?", *(["%#{name}%"]*3) )
+  end
+
+  def self.quickfavourite(condition)
+    with_properties.where(:property_sets => {:favourite => condition})
   end
 
   private

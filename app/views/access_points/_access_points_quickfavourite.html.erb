@@ -1,3 +1,4 @@
+<%#
 # This file is part of the OpenWISP Geographic Monitoring
 #
 # Copyright (C) 2012 OpenWISP.org
@@ -14,21 +15,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#%>
 
-class WispsController < ApplicationController
-  before_filter :authenticate_user!
-
-  access_control do
-    default :deny
-
-    action :index do
-      allow :wisps_viewer
-      allow :wisp_access_points_viewer, :of => :wisp
-    end
-  end
-
-  def index
-    @wisps = Wisp.all
-  end
-
-end
+<%= form_tag access_points_with_or_without_wisp_path(@wisp), :method => :get, :remote => true do %>
+	<%= label_tag :q, t(:Quick_search) %>
+	<%= text_field_tag :q, nil, :size => 10, :class => 'ui-state-default ui-combobox-input ui-autocomplete-input ui-widget ui-widget-content ui-corner-all' %>
+<% end %>
