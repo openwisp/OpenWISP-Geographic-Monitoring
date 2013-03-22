@@ -16,12 +16,13 @@ class UsersController < ApplicationController
   
   def edit
     @user = User.find(params[:id])
-    # custom query to get wisp name without querying too much the database
+    Wisp.create_all_roles_if_necessary
     @roles = Role.all_join_wisp
   end
   
   def new
     @user = User.new
+    Wisp.create_all_roles_if_necessary
     @roles = Role.all_join_wisp
   end
   

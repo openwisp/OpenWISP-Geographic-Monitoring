@@ -19,12 +19,6 @@
 
 <%= form_for @user do |f| %>
 
-<% unless @params.nil? %>
-<% @params.each do |key, value| %>
-    <%= key %>: <%= value %><br />
-<% end %>
-<%end%>
-
     <fieldset>
       <legend><strong><%=t :User %>:</strong> <%= @user.username %></legend>
       <p><%= f.error_messages %></p>
@@ -60,15 +54,6 @@
       
       <br />
       
-      <!--<p>
-        <%= f.label t(:Roles) %><br />
-        <%= select_tag 'roles[]', 
-          options_for_select(
-            User::ROLES.map { |r| [r, r] }, @selected_roles), 
-          :multiple => true
-        %>
-      </p>-->
-      
       <table id="user_roles">
         <thead>
         <tr>
@@ -80,19 +65,11 @@
         <tbody>
             <% @roles.each do |role| %>
             <tr>
-              <td><%= check_box_tag("roles[]", role['id'], @user.roles_id.include?(role['id'].to_i)) %></td>
-              <td><%= role['name'] %></td>
-              <td><%= role['wisp_name'] %></td>
+              <td><%= check_box_tag("roles[]", role.id, @user.roles_id.include?(role.id)) %></td>
+              <td><%= role.name %></td>
+              <td><%= role.wisp_name %></td>
             </tr>
             <% end %>
-        <!--<% User::ROLES.each do |role| %>
-            <tr>
-              <td><%= check_box_tag("roles[]", role, @user.roles.include?(role)) %></td>
-              <td><%= role %></td>
-              <td><%= role %></td>
-            </tr>
-        <% end %>-->
-        
         </tbody>
       </table>
       

@@ -31,14 +31,6 @@ class User < ActiveRecord::Base
     :wisp_access_points_viewer, :wisp_activities_viewer, :wisp_activity_histories_viewer,
     :wisp_associated_user_counts_viewer, :wisp_associated_user_count_histories_viewer,
   ]
-
-  #def roles
-  #  @rs = []
-  #  ROLES.each do |r|
-  #    @rs << r if self.has_role?(r)
-  #  end
-  #  @rs
-  #end
   
   def roles
     if self.id
@@ -51,8 +43,10 @@ class User < ActiveRecord::Base
   def roles_id
     roles = self.roles()
     list = []
-    roles.each do |role|
-      list << role.id
+    unless self.id.nil?
+      roles.each do |role|
+        list << role.id
+      end
     end
     list
   end
@@ -66,14 +60,6 @@ class User < ActiveRecord::Base
     new_roles.each do |role|
       assign_role(role.name, role.authorizable_id)
     end
-
-    #new_roles.map!{|role| role.name.to_sym}
-    #new_roles.each do |role|
-    #  if ROLES.include? role
-    #    #self.wisp ? self.has_role!(role, self.wisp) : self.has_role!(role)
-    #    self.has_role!(role)
-    #  end
-    #end
   end
   
   def assign_role(name, wisp_id=nil)
@@ -85,7 +71,7 @@ class User < ActiveRecord::Base
   end
   
   def remove_role(role)
-    ActiveRecord::Base.connection.execute("DELETE FROM roles_users WHERE roles_users.user_id = #{self.id.to_i} AND roles_users.role_id = #{role.id} LIMIT 1")
+    ActiveRecord::Base.connection.execute("DELETE FROM roles_users WHERE roles_users.user_id = #{self.id.to_i} AND roles_users.role_id = #{role.id}")
   end
   
   def display_roles(separator=', ')

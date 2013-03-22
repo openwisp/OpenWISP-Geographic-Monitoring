@@ -23,8 +23,8 @@ class Role < ActiveRecord::Base
   end
   
   def self.all_join_wisp
-    self.connection.select_all("SELECT roles.*, wisps.name AS wisp_name, wisps.id AS wisp_id
-                               FROM roles LEFT JOIN wisps ON wisps.id = roles.authorizable_id
-                               ORDER BY wisp_id")
+    self.find_by_sql("SELECT roles.*, wisps.name AS wisp_name, wisps.id AS wisp_id
+                    FROM roles LEFT JOIN wisps ON wisps.id = roles.authorizable_id
+                    ORDER BY wisp_id")
   end
 end

@@ -42,4 +42,20 @@ class Wisp < ActiveRecord::Base
     end
     new_roles
   end
+  
+  def self.create_all_roles
+    self.all.each do |wisp|
+      wisp.create_roles
+    end
+  end
+  
+  # creates all roles if it finds a number of roles that is less than expected
+  # is run automatically when displaying "edit user" and "new user" pages
+  def self.create_all_roles_if_necessary
+    wisps = Wisp.count
+    roles = Role.count
+    if roles < wisps * 5 + 1
+      self.create_all_roles
+    end
+  end
 end
