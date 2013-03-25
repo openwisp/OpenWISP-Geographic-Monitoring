@@ -8,9 +8,8 @@ class UsersControllerTest < ActionController::TestCase
   
   test "non wisp_viewer cannot get index" do
     sign_in users(:sfigato)
-    assert_raise Acl9::AccessDenied do
-      get :index
-    end
+    get :index
+    assert :forbidden
   end
   
   test "wisp_viewer can get index" do

@@ -26,6 +26,9 @@ class ApplicationController < ActionController::Base
   add_breadcrumb proc{ I18n.t(:Wisp_list) }, :root_path
 
   before_filter :set_locale
+  
+  # catch Access Denied exception
+  rescue_from 'Acl9::AccessDenied', :with => :access_denied
 
   private
 
@@ -44,5 +47,17 @@ class ApplicationController < ActionController::Base
 
   def wisp_loaded?
     !@wisp.nil?
+  end
+  
+  def access_denied
+    if current_user
+      # It's presumed you have a template with words of pity and regret
+      # for unhappy user who is not authorized to do what he wanted
+      render :template => 'layouts/access_denied', :status => 403
+    else
+      # In this case user has not even logged in. Might be OK after login.
+      flash[:notice] = 'Access denied. Try to log in first.'
+      redirect_to login_path
+    end
   end
 end
