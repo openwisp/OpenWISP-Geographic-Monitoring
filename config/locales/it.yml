@@ -119,6 +119,7 @@ it:
   Select: Seleziona
   
   # Lowercase
+  logged_as: autenticato come
   all: tutti
   back: indietro
   click_to_edit: clicca per modificare

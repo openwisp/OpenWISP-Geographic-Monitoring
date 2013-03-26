@@ -14,11 +14,11 @@ ul.nav {
   height:2.5em;
   }
 ul.nav li {
-	cursor:pointer;
 	float:left;
 	text-align:center;
 	list-style-type:none;
 	font-weight:normal;
+	cursor: default
 }
 ul.nav li ul {
 	cursor:default;
@@ -165,3 +165,7 @@ ul.nav li.secondary:hover a:hover {
 	background:#555;
 }
 ul.nav li.secondary:hover a:active {background:#444;}
+
+#logout { float: right; font-weight: normal }
+#logout:hover a{ background: transparent }
+#logout a{ display: inline; float: none; font-weight: bold }

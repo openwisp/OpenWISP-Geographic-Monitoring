@@ -118,6 +118,7 @@ en:
   Account_registered: New user account registered
   
   # Lowercase
+  logged_as: logged in as
   all: all
   back: back
   click_to_edit: click to edit

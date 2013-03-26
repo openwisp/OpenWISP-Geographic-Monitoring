@@ -61,7 +61,7 @@
     <ul class="nav main">
       <% if user_signed_in? %>
         <%= render_breadcrumbs :tag => :li, :separator => '<li class="spacer">&raquo</li>' %>
-        <li id="logout"><%= link_to t(:Sign_out), destroy_user_session_path %></li>
+        <li id="logout"><%= t :authenticated_as %> <b><%= current_user.username %></b> &nbsp; - &nbsp; <%= link_to t(:Sign_out), destroy_user_session_path %></li>
       <% end %>
     </ul>
     <% if flash[:notice] %>
