@@ -21,7 +21,7 @@ class PropertySetsController < ApplicationController
   access_control do
     default :deny
 
-    actions :update do
+    actions :update, :update_favourite do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -41,6 +41,17 @@ class PropertySetsController < ApplicationController
       render :nothing => true, :status => :not_acceptable
     end
   end
+
+  def update_favourite
+    @property_set = @access_point.properties
+    @property_set.update_attributes(:favourite => '0' )
+    respond_to do |format|
+       format.html { redirect_to wisp_access_points_path }
+    end
+  end
+    
+   
+
 
   private
 

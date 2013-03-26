@@ -9,8 +9,9 @@ Owgm::Application.routes.draw do
   resources :configurations, :only => [:edit, :update]
 
   resources :wisps, :only => :index do
-    resources :access_points, :only => [:index, :show] do
+    resources :access_points, :only => [:index, :show, :update] do
       resource :property_set, :only => :update
+      match 'property_set_favourite' => 'property_sets#update_favourite', :as => :property_set_favourite
     end
 
     resources :activity_histories, :only => :index
