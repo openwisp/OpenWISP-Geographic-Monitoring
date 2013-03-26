@@ -30,6 +30,10 @@ gem "ruby-ole", "~> 1.2.11.4"
 gem "spreadsheet", "~> 0.7.3"
 gem "dynamic_form", "~> 1.1.4"
 
+group :development do
+  gem "rack-mini-profiler"
+end
+
 group :test do
   gem "sqlite3"
 end
