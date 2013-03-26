@@ -17,6 +17,7 @@
 
 class PropertySet < ActiveRecord::Base
   belongs_to :access_point
+  belongs_to :group
 
   validates :access_point_id, :presence => true
   validates :category, :format => {

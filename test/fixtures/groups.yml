@@ -1,0 +1,27 @@
+default:
+  id: 1
+  wisp_id: 
+  name: "no group"
+  description: "default group"
+  monitor: true
+
+squares_1:
+  id: 2
+  wisp_id: 1 
+  name: "public squares"
+  description: "access points installed in public squares"
+  monitor: true
+
+libraries_1:
+  id: 3
+  wisp_id: 1 
+  name: "libraries"
+  description: "access points installed in libraries"
+  monitor: true
+
+archived:
+  id: 4
+  wisp_id: 
+  name: "archived"
+  description: "archived access points"
+  monitor: false

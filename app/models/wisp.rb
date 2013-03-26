@@ -19,6 +19,7 @@ class Wisp < ActiveRecord::Base
   acts_as_authorization_object
 
   has_many :access_points
+  has_many :groups, :dependent => :destroy
 
   delegate :up, :down, :known, :unknown, :to => :access_points, :prefix => true
 
@@ -57,5 +58,13 @@ class Wisp < ActiveRecord::Base
     if roles < wisps * 5 + 1
       self.create_all_roles
     end
+  end
+  
+  def self.collection
+    collection = [[I18n.t('No_wisp'), nil]]
+    Wisp.select([:id, :name]).all.each do |wisp|
+      collection << [wisp.name, wisp.id]
+    end
+    collection
   end
 end

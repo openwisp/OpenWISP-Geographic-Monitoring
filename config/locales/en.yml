@@ -116,6 +116,20 @@ en:
   Account_updated: User account modified successfully
   Select: Select
   Account_registered: New user account registered
+  Delete: Delete
+  Last_login: Last login
+  Actions: Actions
+  Online_users: Online users
+  Group: Group
+  Groups: Groups
+  Group_list: Group list
+  New_group: New Group  
+  Edit_group: Modifica gruppo
+  Total_AP: Total AP
+  Monitor: Monitoring active?
+  No_wisp: No wisp associated
+  Users: Users
+  User_management: User management interface
   
   # Lowercase
   logged_as: logged in as

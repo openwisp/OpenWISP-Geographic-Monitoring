@@ -111,10 +111,6 @@
     margin: 0 32%;
 }
 
-#logout {
-    float: right;
-}
-
 #access_points_quicksearch { float: left; width: 400px; margin: 15px 0  }
 
 #access_points_quicksearch .spin {
@@ -191,11 +187,13 @@ ul.nav li:hover{ background: #666666 }
     color: #fff;
     border-radius: 3px;
 }
+a.button{ font-size: 13px }
+.pagination a.button{ font-size: 12px }
 .pagination a:hover, .pagination a:focus,
 a.button:hover, a.button:focus{ background: #515252 }
 
 .pagination .current{ font-weight: bold }
-.pagination .current a{ background: #d3d3d3; color: #333; cursor: default  }
+.pagination .current a{ background: #d3d3d3 !important; color: #333; cursor: default  }
 
 #access_points_paginate{ overflow: hidden; margin-top: 18px; display: inline }
 #access_points_quicksearch #q{ width: 200px; margin: 2px 0 0 5px }
@@ -258,7 +256,7 @@ input.ui-autocomplete-input{ background: #fff none }
 	border-radius: 5px;
 }
 .notice{ background-color: #3b6d08 }
-.alert{ background-color: #fb4848 }
+.alert{ background-color: #ff6666 }
 .message p{ margin: 0; text-align: center }
 .message .close{
     background-color: #003500 !important;
@@ -272,3 +270,64 @@ input.ui-autocomplete-input{ background: #fff none }
 .alert .close{ background-color: #980000 !important }
 .message .close:hover{ background-color: #000 !important }
 .alert .close:hover{ background-color: #660000 !important }
+
+#errorExplanation{
+	margin: 10px 5px 20px;
+	padding: 20px 25px 5px 25px;
+	background: #ff6666;
+	color: #fff;
+	font: normal 13px "Arial", sans-serif;
+	border-radius: 3px
+}
+#errorExplanation h2{
+	width: auto; margin: 0; padding: 0; background: transparent; text-transform: none;
+	font-size: 16px; font-weight: bold; margin-bottom: 10px;
+}
+#errorExplanation li{ font-weight: bold }
+.field_with_errors input[type=text]{ border: 1px solid red }
+
+#user_info p.clear{ margin-top: 10px }
+
+#group_list th, #group_list td{ width: auto; vertical-align: middle }
+#group_list .name{ padding-left: 1.2em }
+#group_list td.name{ width: 200px }
+#group_list .wisp{ width: 150px }
+#group_list .up, #group_list .down, #group_list total{ width: 50px }
+#group_list .total_users{ width: 100px }
+#group_list { margin-bottom: 20px }
+
+#group_form textarea{ width: 98%; height: 100px }
+#group_form input[type=checkbox]{ width: auto }
+
+#group_stats{ margin-top: 20px; padding-bottom: 10px; width: 98% }
+#group_stats h2{ margin-bottom: 15px }
+#group_stats p{ padding: 0 15px }
+
+#user_roles .first{ padding-left: 30px }
+#user_roles td.first{ padding-left: 100px }
+
+table.selectable td{ cursor: pointer }
+table.selectable td.first{ padding-left: 60px; background: #EEE url(../images/delete.png) no-repeat scroll 40px center }
+table.selectable tr.selected td{ background-color: #fff1ce }
+table.selectable tr.selected td.first{ background-image: url(../images/accept.png) }
+
+input.submit{
+	display: block;
+	width: 40%;
+	margin: 20px auto 10px;
+	padding: 10px 20px;
+    font: normal 15px Helvetica, Arial, Freesans, sans-serif;
+	color: #545454;
+	background: -moz-linear-gradient(top,#ffffff 0%,#cccccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff),to(#cccccc));
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #fafafa;
+	-moz-box-shadow: 0px 1px 2px rgba(000,000,000,0.4),inset 0px 0px 1px rgba(255,255,255,1);
+	-webkit-box-shadow:0px 1px 2px rgba(000,000,000,0.4),inset 0px 0px 1px rgba(255,255,255,1);
+	box-shadow:0px 1px 2px rgba(000,000,000,0.4),inset 0px 0px 1px rgba(255,255,255,1);
+	text-shadow:0px -1px 0px rgba(000,000,000,0.7),0px 1px 0px rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+    cursor: pointer;
+}

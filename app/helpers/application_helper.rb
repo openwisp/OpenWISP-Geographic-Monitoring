@@ -64,4 +64,10 @@ module ApplicationHelper
   def access_points_with_or_without_wisp_path(wisp)
     wisp ? wisp_access_points_path(wisp) : access_points_path
   end
+  
+  def active_link_if(path)
+    if (request.fullpath.include?(path) and path != root_path) or (path == root_path and request.fullpath == root_path)
+      return (' class="active"').html_safe
+    end
+  end
 end

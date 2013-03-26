@@ -166,6 +166,24 @@ ul.nav li.secondary:hover a:hover {
 }
 ul.nav li.secondary:hover a:active {background:#444;}
 
+nav ul, nav li, nav a{ background-color: #464646 !important }
+nav ul{ height: 35px !important }
+#main-nav{ padding: 0 }
+#main-nav li{ padding: 0; margin: 0 }
+#main-nav li.first a{ padding: 0 15px }
+#main-nav a{
+  font: bold 14px "Helvetica", "Arial", sans-serif;
+  line-height: 35px;
+  text-decoration: none;
+  margin: 0;
+  padding: 0 10px;
+}
+#main-nav a:hover{ background-color: #2B2B2B !important }
+#main-nav a.active{ background-color: #6D6D6D !important; cursor: default; padding: 0 15px; border-top: 3px solid #464646; border-radius: 5px }
+#main-nav li.first a.active{ margin-left: 5px }
+#breadcrumbs{ padding: 3px 11px; font-size: 11px }
+#breadcrumbs, #breadcrumbs li{ height: 30px; line-height: 30px; }
+#breadcrumbs, #breadcrumbs li, #breadcrumbs a{ background-color: #6D6D6D }
 #logout { float: right; font-weight: normal }
 #logout:hover a{ background: transparent }
 #logout a{ display: inline; float: none; font-weight: bold }

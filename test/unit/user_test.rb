@@ -1,7 +1,14 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
+  test "uniqueness of email" do
+    user = User.new({ :username => 'test1', :email => 'user@user.it', :password => 'tester03' })
+    assert !user.save, 'should not save'
+    assert user.errors.keys.include?(:email), 'erros has should contain email key'
+    user.email = 'not_taken@user.it'
+    assert user.save
+  end
+  
   test "first user role should be wisp_viewer" do
     assert User.available_roles[0].to_s == 'wisps_viewer'
   end

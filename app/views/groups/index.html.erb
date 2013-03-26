@@ -1,0 +1,37 @@
+<div class="grid_12">
+  <div class="box">
+    <h1><%=t :Group_list %></h1>
+    
+    <table id="group_list">
+      <thead>
+        <tr>
+          <th class="name"><%=t :Name %></th>
+          <th><%=t :Wisp %></th>
+          <th class="center"><%=t :Monitor %></th>
+          <th class="center"><%=t :Total_AP %></th>
+          <th class="green center"><%=t :Up %></th>
+          <th class="red center"><%=t :Down %></th>
+          <th class="center"><%=t :Online_users %></th>
+          <th class="center"><%=t :Actions %></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @groups.each do |group| %>
+        <%# if auth?(:wisps_viewer) || auth?(:wisp_access_points_viewer, wisp) %>
+        <tr class="<%= cycle 'odd', 'even' %>">
+          <td class="name"><%= link_to group.name, edit_group_url(group.id) %><%#= link_to wisp.name, wisp_access_points_path(wisp) %></td>
+          <td class="wisp"><%= group.wisp_name %></td>
+          <td class="monitor center"><img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt=""></td>
+          <td class="total center"><%= group.total_ap %></td>
+          <td class="total_up center"><%= group.up %></td>
+          <td class="total_down center"><%= group.down %></td>
+          <td class="total_users center"><%= group.online_users %></td>
+          <td class="center"><%= link_to t(:Delete), group_path(group), :method => :delete, :confirm => t(:Are_you_sure) %></td>
+        </tr>
+        <%# end %>
+      <% end %>
+      </tbody>
+    </table>
+    <p><%= link_to t(:New_group), new_group_url, :class => 'button' %></p>    
+  </div>
+</div>

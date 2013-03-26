@@ -37,11 +37,11 @@
       </tr>
       <tr>
         <td><strong><%=t :Current_sign_in_at %></strong></td>
-        <td><%=@user.current_sign_in_at %></td>
+        <td><%=@user.current_sign_in_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></td>
       </tr>
       <tr>
         <td><strong><%=t :Last_sign_in_at %></strong></td>
-        <td><%=@user.last_sign_in_at %></td>
+        <td><%=@user.last_sign_in_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></td>
       </tr>
       <tr>
         <td><strong><%=t :Current_sign_in_ip %></strong></td>
@@ -53,11 +53,11 @@
       </tr>
       <tr>
         <td><strong><%=t :Created_at %></strong></td>
-        <td><%=@user.created_at %></td>
+        <td><%=@user.created_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></td>
       </tr>
       <tr>
         <td><strong><%=t :Updated_at %></strong></td>
-        <td><%=@user.updated_at %></td>
+        <td><%=@user.updated_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></td>
       </tr>
       </tbody>
     </table>

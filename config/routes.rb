@@ -26,6 +26,8 @@ Owgm::Application.routes.draw do
     match 'export' => 'activity_histories#export', :as => :export, :via => [:post]
     match 'send_report' => 'activity_histories#send_report', :as => :send_report#, :via => [:get]
   end
+  
+  resources :groups
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'

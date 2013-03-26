@@ -30,6 +30,8 @@ class ConfigurationsController < ApplicationController
 		when 'owmw'
 			@configurations = Configuration.owmw
 		end
+		
+		add_breadcrumb(I18n.t(:Configure_owmw), edit_configuration_path('owmw'))
 	end
 
 	def update

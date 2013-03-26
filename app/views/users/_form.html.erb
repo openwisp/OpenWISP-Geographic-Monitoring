@@ -21,32 +21,31 @@
 
     <fieldset>
       <legend><strong><%=t :User %>:</strong> <%= @user.username %></legend>
-      <p><%= f.error_messages %></p>
-
-      <p>
+      <%= f.error_messages %>
+      <div class="field">
         <strong><%= label_tag t(:username) %>:</strong>
         <% if @user.new_record? %>
             <%= f.text_field :username %>
         <% else %>
             <%= f.text_field :username, :disabled => true %>
         <% end %>
-      </p>
+      </div>
       
-      <p>
+      <div class="field">
         <strong><%= label_tag t(:email) %>:</strong>
         <%= f.text_field :email %>
-      </p>
+      </div>
       
-      <p>
+      <div class="field">
         <strong><%= f.label t(:Password), f.object.new_record? ? nil : t(:Change_password) %>:</strong>
         <br />
         <%= f.password_field :password %>
-      </p>
-      <p>
+      </div>
+      <div class="field">
         <strong><%= label_tag t(:password_confirmation) %>:</strong>
         <br />
         <%= f.password_field :password_confirmation %>
-      </p>
+      </div>
       
       <br />
       
@@ -54,24 +53,26 @@
       
       <br />
       
-      <table id="user_roles">
+      <table id="user_roles" class="selectable">
         <thead>
         <tr>
-          <th><%=t :Select %></th>
-          <th><%=t :Name %></th>
+          <th class="first"><%=t :Name %></th>
           <th><%=t :Wisp %></th>
         </tr>
         </thead>
         <tbody>
             <% @roles.each do |role| %>
-            <tr>
-              <td><%= check_box_tag("roles[]", role.id, @user.roles_id.include?(role.id)) %></td>
-              <td><%= role.name %></td>
-              <td><%= role.wisp_name %></td>
+            <tr id="row_role_<%= role.id %>"<% if @user.roles_id.include?(role.id) %> class="selected"<% end %>>
+                <td class="first">
+                    <strong><%= role.name %></strong>
+                    <span class="hidden"><%= check_box_tag("roles[]", role.id, @user.roles_id.include?(role.id), :id => "role_#{role.id}") %></span>
+                </td>
+                <td><%= role.wisp_name %></td>
             </tr>
             <% end %>
         </tbody>
       </table>
+      <script>$('#user_roles').selectable();</script>
       
       <p>
         <% if @user.new_record? %>

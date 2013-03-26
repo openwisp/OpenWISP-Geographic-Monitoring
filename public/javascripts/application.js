@@ -283,3 +283,15 @@ var owgm = {
 };
 
 /************************/
+
+$.fn.selectable = function(){
+    var table = $(this);
+    table.addClass('selectable');
+    
+    table.find('tr').click(function(e){
+        el = $(this);
+        var checkbox = el.find('input[type=checkbox]');
+        checkbox.attr('checked', !checkbox.attr('checked'))
+        el.toggleClass('selected');
+    });
+}

@@ -24,19 +24,21 @@
 
     <table id="users_table">
       <thead>
-				<th><%=t :Username %></th>
-				<th><%=t :Email %></th>
-				<th><%=t :Last_login %></th>
-				<th colspan="2"><%=t :Operations %></th>
+				<tr>
+					<th><%=t :Username %></th>
+					<th><%=t :Email %></th>
+					<th><%=t :Last_login %></th>
+					<th colspan="2"><%=t :Actions %></th>
+				</tr>
       </thead>
       <tbody>
 				<% @users.each do |user| %>
 						<tr>
-								<td class="middle"><%= link_to(user.username, user) %></td>
-								<td class="middle"><%= user.email %></td>
-								<td class="middle"><%= user.last_sign_in_at %></td>
-								<td class="middle"><%= link_to t(:Edit), edit_user_path(user) %></td>
-								<td class="middle"><%= link_to t(:Destroy), user_path(user), :method => :delete, :confirm => t(:Are_you_sure) %></td>
+							<td class="middle"><%= link_to(user.username, user) %></td>
+							<td class="middle"><%= user.email %></td>
+							<td class="middle"><%= user.last_sign_in_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></td>
+							<td class="middle"><%= link_to t(:Edit), edit_user_path(user) %></td>
+							<td class="middle"><%= link_to t(:Delete), user_path(user), :method => :delete, :confirm => t(:Are_you_sure) %></td>
 						</tr>
 				<% end %>
       </tbody>

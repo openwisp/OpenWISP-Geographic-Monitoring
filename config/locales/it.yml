@@ -11,6 +11,22 @@ it:
         public: pubblico
         site_description: sito di installazione
         status: stato
+      group:
+        name: nome
+    errors:
+      template:
+        header: "Errore di validazione"
+        body: "L'operazione ha avuto esito negativo, controlla gli errori riportati in seguito e riprova."
+      models:
+        user:
+          attributes:
+            email:
+              taken: 'email già utilizzata da un altro utente'
+        group:
+          attributes:
+            name:
+              blank: 'prova pro'
+
   # Uppercase
   Activation_date: Data di attivazione
   Activity_graph: Grafico attività
@@ -56,7 +72,7 @@ it:
   Access_point: Access point
   Access_point_info: "Informazioni veloci:"
   Access_point_named: Access point %{hostname}
-  Access_points: Access point
+  Access_points: Access points
   Access_points_for: Access point di %{wisp}
   Access_points_of_every_wisp: Access point di tutti i wisp
   Access_points_map: Mappa degli Access point
@@ -117,6 +133,20 @@ it:
   Account_registered: Nuovo account utente registrato con successo
   Account_updated: Utente modificato con successo
   Select: Seleziona
+  Delete: Elimina
+  Last_login: Ultimo login
+  Actions: Azioni
+  Online_users: Utenti online
+  Group: Gruppo
+  Groups: Gruppi
+  Group_list: Lista gruppi
+  New_group: Nuovo gruppo
+  Edit_group: Modifica gruppo  
+  Total_AP: AP Totali
+  Monitor: Monitoraggio attivo?
+  No_wisp: Nessun wisp associato
+  Users: Utenti
+  User_management: Interfaccia gestione utenti
   
   # Lowercase
   logged_as: autenticato come
@@ -138,6 +168,9 @@ it:
   'true': 'sì'
   unknown: sconosciuto
   up: up
+  description: descrizione
+  name: nome
+  monitor: monitoraggio
 
   # Defaults for rails
   errors:
