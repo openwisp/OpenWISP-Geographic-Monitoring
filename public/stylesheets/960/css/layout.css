@@ -70,6 +70,8 @@ h2#page-heading {
 
 /* boxes
 ----------------------------------------------- */
+#container{ width: 95%; min-width: 960px }
+
 .box {
 	background:#ddd;
 	margin-bottom:20px;
