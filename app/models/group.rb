@@ -4,6 +4,12 @@ class Group < ActiveRecord::Base
   
   validates_presence_of :name
   
+  def toggle_monitor!
+    self.monitor = !self.monitor
+    self.save
+    self.monitor
+  end
+  
   # DB query
   def self.all_join_wisp
     self.find_by_sql('SELECT groups.*, wisps.name AS wisp_name FROM groups

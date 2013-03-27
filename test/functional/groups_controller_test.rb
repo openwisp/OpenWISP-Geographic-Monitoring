@@ -43,4 +43,12 @@ class GroupsControllerTest < ActionController::TestCase
     assert :success
     assert_select "#group_form", 1
   end
+  
+  test "should destroy group" do
+    sign_in users(:admin)
+    group_count = Group.count
+    delete :destroy, { :id => 1 }
+    assert_redirected_to groups_path, 'should redirect to group list after success'
+    assert Group.count == group_count - 1
+  end
 end

@@ -1,6 +1,8 @@
 class GroupsController < ApplicationController
   before_filter :authenticate_user!#, :load_wisp
   
+  skip_before_filter :verify_authenticity_token, :only => [:toggle_monitor]
+  
   # implement access control
   
   def index    
@@ -49,5 +51,16 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
     @group.destroy
     redirect_to(groups_url)
+  end
+  
+  def toggle_monitor
+    group = Group.find(params[:id])
+    group.toggle_monitor!
+    respond_to do |format|
+      format.json{
+        image = view_context.image_path(group.monitor ? 'accept.png' : 'delete.png')
+        render :json => { 'monitor' => group.monitor, 'image' => image }
+      }
+    end
   end
 end

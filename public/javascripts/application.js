@@ -47,6 +47,7 @@ $(document).ready(function() {
     }
     owgm.paginator();
     owgm.initNotice();
+    owgm.init
 });
 
 
@@ -280,6 +281,20 @@ var owgm = {
             $(this).parent().fadeToggle(400);
         });
     },
+    
+    initToggleMonitor: function(){
+        $('.toggle-monitor').click(function(e){
+            var el = $(this);
+            $.ajax({
+                url: el.attr('data-href'),
+                type: 'POST'
+            }).done(function(result) {
+                el.find('img').attr('src', result.image);
+            }).fail(function(result){
+                alert('ERROR');
+            });
+        }).css('cursor','pointer');
+    }
 };
 
 /************************/
@@ -287,7 +302,6 @@ var owgm = {
 $.fn.selectable = function(){
     var table = $(this);
     table.addClass('selectable');
-    
     table.find('tr').click(function(e){
         el = $(this);
         var checkbox = el.find('input[type=checkbox]');

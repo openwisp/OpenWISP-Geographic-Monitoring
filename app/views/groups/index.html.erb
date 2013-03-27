@@ -19,9 +19,13 @@
       <% @groups.each do |group| %>
         <%# if auth?(:wisps_viewer) || auth?(:wisp_access_points_viewer, wisp) %>
         <tr class="<%= cycle 'odd', 'even' %>">
-          <td class="name"><%= link_to group.name, edit_group_url(group.id) %><%#= link_to wisp.name, wisp_access_points_path(wisp) %></td>
+          <td class="name"><%= link_to group.name, edit_group_url(group.id) %></td>
           <td class="wisp"><%= group.wisp_name %></td>
-          <td class="monitor center"><img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt=""></td>
+          <td class="monitor center">
+            <a class="toggle-monitor" data-href="<%= toggle_monitor_group_path(group.id) %>">
+              <img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
+            </a>
+          </td>
           <td class="total center"><%= group.total_ap %></td>
           <td class="total_up center"><%= group.up %></td>
           <td class="total_down center"><%= group.down %></td>
@@ -35,3 +39,4 @@
     <p><%= link_to t(:New_group), new_group_url, :class => 'button' %></p>    
   </div>
 </div>
+<script>owgm.initToggleMonitor()</script>

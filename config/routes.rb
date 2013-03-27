@@ -27,7 +27,11 @@ Owgm::Application.routes.draw do
     match 'send_report' => 'activity_histories#send_report', :as => :send_report#, :via => [:get]
   end
   
-  resources :groups
+  resources :groups, :only => [:index, :new, :edit, :create, :update, :destroy] do
+    member do
+      post 'toggle_monitor'
+    end
+  end
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
