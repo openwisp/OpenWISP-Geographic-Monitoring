@@ -188,11 +188,10 @@ ul.nav li:hover{ background: #666666 }
     border-radius: 3px;
 }
 a.button{ font-size: 13px }
-.pagination a.button{ font-size: 12px }
-.pagination a:hover, .pagination a:focus,
-a.button:hover, a.button:focus{ background: #515252 }
-
+.pagination a{ font-size: 13px }
 .pagination .current{ font-weight: bold }
+.pagination a:hover, .pagination a:focus,
+a.button:hover, a.button:focus{ background: #000 !important }
 .pagination .current a{ background: #d3d3d3 !important; color: #333; cursor: default  }
 
 #access_points_paginate{ overflow: hidden; margin-top: 18px; display: inline }
@@ -335,4 +334,3 @@ input.submit{
     letter-spacing: 1px;
     cursor: pointer;
 }
-
