@@ -48,7 +48,9 @@
   </tr>
   <tr>
     <td><strong><%=t :Favourite %></strong></td>
-    <td id="favourite" class="right"><%= @access_point.favourite ? image_tag ('favourite.png', :size => "30x30") : image_tag ('not_favourite.png', :size => "30x30") %></td>
+    <td id="favourite" class="right"><%= @access_point.favourite ? image_tag ('favourite.png', :size => "30x30") : image_tag ('not_favourite.png', :size => "30x30") %>
+    <%= button_to 'aggiorna', wisp_access_point_property_set_favourite_path(@wisp, @access_point) %>
+    </td>
     
   </tr>
   <tr>

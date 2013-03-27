@@ -19,8 +19,8 @@
 
 <div class="grid_12">
   <div class="box">
-    <h1><%=t :Wisp_list %></h1>
-
+    <h1><%=t :Accesspoint_favourite %></h1>
+    <%= link_to 'Elimina', wisp_erase_favourite_path(@wisp) %>
     <table>
      <thead id="access_points_thead">
       <%= render 'access_points_thead' %>

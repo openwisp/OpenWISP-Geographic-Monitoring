@@ -19,8 +19,7 @@
 
 <% content_for :after_defaults do %>
     <%= stylesheet_link_tag 'jquery-ui/styles' %>
-    <%= javascript_include_tag 'jquery-ui', 'jquery.combobox' , 'jquery.jeditable'%>
-    
+    <%= javascript_include_tag 'jquery-ui', 'jquery.combobox'%>
 <% end %>
 <% content_for :js_templates do %>
     <%= render 'marker_info_window_templates' %>

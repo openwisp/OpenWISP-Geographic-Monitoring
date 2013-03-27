@@ -21,7 +21,7 @@ class AccessPointsController < ApplicationController
   access_control do
     default :deny
 
-    actions :index, :show, :favourite, :update do
+    actions :index, :show, :update, :favourite, :erase_favourite do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -44,6 +44,16 @@ class AccessPointsController < ApplicationController
 
     crumb_for_wisp
     crumb_for_access_point
+  end
+
+  def erase_favourite
+    @access_points = AccessPoint.where(:wisp_id => @wisp.id).with_properties
+    @access_points.each do |ap|
+      if ap.favourite?: ap.property_set.update_attributes(:favourite => '0' ); end
+    end
+    respond_to do |format|
+       format.html { redirect_to wisp_access_point_favourite_path }
+    end
   end
 
   private

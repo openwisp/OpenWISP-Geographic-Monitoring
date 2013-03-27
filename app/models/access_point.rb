@@ -54,6 +54,7 @@ class AccessPoint < ActiveRecord::Base
   def favourite?
     favourite == true
   end
+
   def up?
     reachable == true
   end

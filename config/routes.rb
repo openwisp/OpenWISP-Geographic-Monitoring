@@ -9,6 +9,7 @@ Owgm::Application.routes.draw do
   resources :configurations, :only => [:edit, :update]
 
   resources :wisps, :only => :index do
+    match 'erase_favourite' => 'access_points#erase_favourite', :as => :erase_favourite
     resources :access_points, :only => [:index, :show, :update] do
       resource :property_set, :only => :update
       match 'property_set_favourite' => 'property_sets#update_favourite', :as => :property_set_favourite

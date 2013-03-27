@@ -16,13 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
-
+<tr>
   <td class="middle"><%= link_to access_point.hostname, wisp_access_point_path(access_point.wisp, access_point) %></td>
   <td class="middle"><%= access_point.site_description.truncate(40) rescue '' %></td>
   <td class="middle"><%= access_point.address %></td>
   <td class="middle"><%= access_point.city %></td>
   <td class="middle"><%=t access_point.public ? :true : :false %></td>
-  <td class="middle"><%= access_point.favourite ? image_tag ('favourite.png', :size => "30x30") : image_tag ('not_favourite.png', :size => "30x30", :id => 'mouseover', :style => 'display: inline') %>
+  <td class="middle"><%= access_point.favourite ? image_tag('favourite.png', :size => "30x30") : image_tag('not_favourite.png', :size => "30x30") %>
+       <%#= form_tag wisp_access_point_property_set_favourite_path(access_point.wisp, :access_point_id => access_point.id), :class => access_point.hostname %>
+       <%= button_to 'aggiorna', wisp_access_point_property_set_favourite_path(access_point.wisp, :access_point_id => access_point.id) %>
 	</td>
   <td class="middle right"><%= image_tag_for access_point, :size => "30x35", :class => 'right' %></td>
 </tr>

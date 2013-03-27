@@ -11,7 +11,6 @@ en:
         public: public
         site_description: installation site
         status: status
-        favourite: favourite
   # Uppercase
   Activation_date: Activation date
   Activity_graph: Activity graph
@@ -102,6 +101,8 @@ en:
   Username: Username
   Will_be_rendered_in_georss: Will be rendered in GeoRSS
   Wisp_list: Wisps List
+  Accesspoint_favourite: Favourite Access Point
+  Favourite: Favourite
   
   # Lowercase
   all: all
