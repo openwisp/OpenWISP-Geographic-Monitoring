@@ -85,6 +85,7 @@ it:
   Public: Pubblicato
   Public_on_Georss: Pubblicato sulla mappa (GeoRSS)
   Quick_search: Ricerca rapida
+  Filter_fav: Filtra preferiti
   Remember_me: Ricordami
   Reset_highlighting: Resetta evidenziazione
   Reset_highlighting_fallback_message: Nessuna riga è evidenziata al momento

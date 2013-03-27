@@ -85,6 +85,7 @@ en:
   Public: Public
   Public_on_Georss: Visible on GeoRSS
   Quick_search: Quick search
+  Filter_fav: Filter favourite
   Remember_me: Remember me
   Reset_highlighting: Reset highlighting
   Reset_highlighting_fallback_message: There are no records highlighted at the moment

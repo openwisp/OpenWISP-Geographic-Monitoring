@@ -73,12 +73,14 @@ class AccessPointsController < ApplicationController
 
   def access_points_with_sort_search_and_paginate
     query = params[:q] || nil
+    queryf = params[:f] || nil
     column = params[:column] ? params[:column].downcase : nil
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
 
     access_points = AccessPoint.scoped
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query
+    access_points = access_points.quickfavourite(queryf) if queryf
 
     per_page = params[:per]
     access_points.page(params[:page]).per(per_page)
