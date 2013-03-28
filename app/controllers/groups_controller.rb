@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_filter :authenticate_user!#, :load_wisp
+  before_filter :authenticate_user!
   
   skip_before_filter :verify_authenticity_token, :only => [:toggle_monitor]
   

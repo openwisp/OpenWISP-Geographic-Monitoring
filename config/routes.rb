@@ -25,6 +25,9 @@ Owgm::Application.routes.draw do
     match 'availability_report' => 'activity_histories#index', :as => :availability_report
     match 'export' => 'activity_histories#export', :as => :export, :via => [:post]
     match 'send_report' => 'activity_histories#send_report', :as => :send_report#, :via => [:get]
+    
+    match 'access_points/:access_point_id/select_group' => 'access_points#select_group', :as => :access_point_select_group, :via => [:get]
+    match 'access_points/:access_point_id/change_group/:group_id' => 'access_points#change_group', :as => :access_point_change_group, :via => [:post]
   end
   
   resources :groups, :only => [:index, :new, :edit, :create, :update, :destroy] do

@@ -294,18 +294,72 @@ var owgm = {
                 alert('ERROR');
             });
         }).css('cursor','pointer');
-    }
+    },
+    
+    toggleOverlay: function(closeCallback){
+        var mask = $('#mask'),
+            close = $('.close'),
+            overlay = $('.overlay');
+            
+        var closeOverlay = function(){
+            if(close.attr('data-confirm-message') !== undefined && !window.confirm(close.attr('data-confirm-message'))){
+               return false;
+            }
+            overlay.fadeOut();
+            mask.fadeOut();
+            if(closeCallback && typeof(closeCallback) === "function" ){
+                closeCallback();
+            }
+            return true;
+        }
+        
+        if(!overlay.is(':visible')){
+            mask.css('opacity','0').show().fadeTo(250, 0.7);
+            overlay.centerElement().fadeIn(250);
+        }
+        else{
+            closeOverlay();
+        }
+        if($.data(close.get(0), 'events') === undefined){
+            close.click(function(e){
+                closeOverlay();
+            });
+        }
+    },
 };
 
 /************************/
 
-$.fn.selectable = function(){
+$.fn.selectable = function(options){
+    var opts = $.extend({
+        'init': null,
+        'beforeSelect': null,
+        'afterSelect': null
+    }, options);
     var table = $(this);
     table.addClass('selectable');
-    table.find('tr').click(function(e){
+    if(opts.init){ opts.init.apply(table) }
+    table.find('tbody tr').click(function(e){
+        if(opts.beforeSelect){ opts.beforeSelect.apply($(this)) }
         el = $(this);
         var checkbox = el.find('input[type=checkbox]');
         checkbox.attr('checked', !checkbox.attr('checked'))
         el.toggleClass('selected');
+        if(opts.afterSelect){ opts.afterSelect.apply($(this)) }
     });
+    return table;
+}
+
+$.fn.centerElement = function(){
+    var el = $(this);
+    el.css('top', ($(window).height() - (el.height() + parseInt(el.css('padding-top')) + parseInt(el.css('padding-bottom'))) ) / 2)
+    .css('left', ($(window).width() - (el.width() + parseInt(el.css('padding-left')) + parseInt(el.css('padding-right'))) ) / 2);
+    return el;
+}
+$.fn.togglePop = function(speed){
+    speed = speed || 150;
+    var el = $(this);
+    el.centerElement();
+    (el.is(':visible')) ? el.fadeOut(speed) : el.fadeIn(speed);
+    return el;
 }

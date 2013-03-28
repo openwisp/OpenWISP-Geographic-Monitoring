@@ -10,10 +10,17 @@ class Group < ActiveRecord::Base
     self.monitor
   end
   
-  # DB query
   def self.all_join_wisp
     self.find_by_sql('SELECT groups.*, wisps.name AS wisp_name FROM groups
                     LEFT JOIN wisps ON wisps.id = groups.wisp_id
                     ORDER BY wisp_id')
+  end
+  
+  # DB query
+  def self.all_join_wisp(where='')
+    self.find_by_sql("SELECT groups.*, wisps.name AS wisp_name FROM groups
+                    LEFT JOIN wisps ON wisps.id = groups.wisp_id
+                    #{where}
+                    ORDER BY wisp_id")
   end
 end

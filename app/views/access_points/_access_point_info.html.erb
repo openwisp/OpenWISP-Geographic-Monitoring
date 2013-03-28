@@ -26,6 +26,14 @@
     <td class="right"><%= @access_point.hostname %></td>
   </tr>
   <tr>
+    <td><strong><%=t :Mac_address %></strong></td>
+    <td class="right"><%= @access_point.common_name %></td>
+  </tr>
+  <tr id="group-row">
+    <td><strong><%=t :Group %></strong></td>
+    <td class="right" id="group-info" data-groupid="<%= @access_point.property_set.group.id %>"><%= @access_point.property_set.group.name %></td>
+  </tr>
+  <tr>
     <td><strong><%=t :Address %></strong></td>
     <td class="right"><%= @access_point.address %></td>
   </tr>

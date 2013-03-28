@@ -17,11 +17,13 @@
 
 class AccessPointsController < ApplicationController
   before_filter :authenticate_user!, :load_wisp
+  
+  skip_before_filter :verify_authenticity_token, :only => [:change_group]
 
   access_control do
     default :deny
 
-    actions :index, :show do
+    actions :index, :show, :change_group, :select_group do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -34,16 +36,33 @@ class AccessPointsController < ApplicationController
       format.any(:html, :js) { @access_points = access_points_with_sort_search_and_paginate.of_wisp(@wisp) }
       format.json { @access_points = access_points_with_filter.of_wisp(@wisp).draw_map }
       format.rss { @access_points = AccessPoint.of_wisp(@wisp).on_georss }
-  end
+    end
 
     crumb_for_wisp
   end
 
   def show
-    @access_point = AccessPoint.find params[:id]
+    @access_point = AccessPoint.with_properties_and_group.find(params[:id])
 
     crumb_for_wisp
     crumb_for_access_point
+  end
+  
+  def select_group
+    # TODO watch out SQL injections
+    @access_point_id = params[:access_point_id]
+    @groups = Group.all_join_wisp("WHERE (wisp_id = #{@wisp.id} OR wisp_id IS NULL)")
+    render :layout => false
+  end
+  
+  def change_group
+    property_set = PropertySet.find_by_access_point_id(params[:access_point_id])
+    group = Group.select([:id, :name]).find(params[:group_id])
+    property_set.group_id = group.id
+    property_set.save!
+    respond_to do |format|
+      format.json { render :json => group.attributes }
+    end
   end
 
   private

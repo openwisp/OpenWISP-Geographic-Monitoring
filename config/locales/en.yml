@@ -130,6 +130,7 @@ en:
   No_wisp: No wisp associated
   Users: Users
   User_management: User management interface
+  Mac_address: Mac address
   
   # Lowercase
   logged_as: logged in as
