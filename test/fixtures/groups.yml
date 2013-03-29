@@ -25,3 +25,10 @@ archived:
   name: "archived"
   description: "archived access points"
   monitor: false
+
+onlygroup2:
+  id: 5
+  wisp_id: 2 
+  name: "onlygroup2"
+  description: "onlygroup"
+  monitor: true

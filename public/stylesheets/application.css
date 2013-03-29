@@ -81,8 +81,8 @@
 }
 
 #gmap_show {
-    width: 430px;
-    height: 227px;
+    width: 100%;
+    height: 396px;
 }
 
 #map_loading {
@@ -309,7 +309,10 @@ select{ padding: 10px 0 10px 5px }
 #users_table .last{ padding-right: 25px }
 .monitor img{ vertical-align: top }
 
+#select-group{ width: 700px }
 #select-group table{ margin: 0 }
+#select-group .total-ap{ width:100px }
+#scroller{ overflow: auto }
 
 table.selectable td{ cursor: pointer }
 table.selectable td.first{ padding-left: 60px; background: #EEE url(../images/delete.png) no-repeat scroll 40px center }
@@ -396,3 +399,6 @@ input.submit{
     overflow: hidden;
     text-indent: -1000px;
 }
+
+#public img{ vertical-align: top }
+#group-info{ padding-left: 25px; background: transparent url(../images/edit.png) no-repeat scroll 0 center }

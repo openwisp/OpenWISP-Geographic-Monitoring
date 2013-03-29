@@ -109,43 +109,7 @@
 
 <div id="mask"></div>
 <div id="loading-indicator"></div>
-
 <script>
 		owgm.group_select_url = "<%= wisp_access_point_select_group_url(@wisp, @access_point) %>";
-		owgm.loading_indicator = $('#loading-indicator')
-		$('#group-row').css('cursor','pointer').click(function(e){
-				owgm.loading_indicator.togglePop();
-				$.ajax({
-						'url': owgm.group_select_url,
-				}).done(function(result){
-						$('body').append(result);
-						owgm.toggleOverlay();
-						owgm.loading_indicator.togglePop();
-						$('#select-group table').selectable({
-								'init': function(){
-										var group_id = $('#group-info').attr('data-groupid');
-										$('#group_'+group_id).addClass('selected');
-								},
-								'afterSelect': function(){
-										var url = $(this).attr('data-href');
-										response = $.ajax({
-												'url': url,
-												'type': 'POST'
-										}).done(function(result){
-												owgm.loading_indicator.togglePop();
-												owgm.toggleOverlay();
-												$('#group-info').html(result.name).attr('data-groupid', result.id);
-												$('#select-group').remove();
-										}).fail(function(){
-												alert('ERROR');
-										});
-								},
-								'beforeSelect': function(){
-										$(this).parent().find('.selected').removeClass('selected');
-										owgm.loading_indicator.togglePop();
-								}
-						});
-				})
-				
-		});
+		owgm.initSelectGroup()
 </script>

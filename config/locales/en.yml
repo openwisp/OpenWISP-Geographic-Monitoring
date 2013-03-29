@@ -24,7 +24,7 @@ en:
   Are_you_sure: Are you sure?
   Back: Back
   Cancel: Cancel
-  Category: Category
+  Category: Category (GeoRSS)
   City: City
   Click_and_drag_to_zoom_in: You can click and drag to zoom in
   Click_to_edit: Click to edit
@@ -101,6 +101,7 @@ en:
   Update: Update
   Username: Username
   Will_be_rendered_in_georss: Will be rendered in GeoRSS
+  Wisp: Wisp
   Wisp_list: Wisps List
   User: User
   username: Username

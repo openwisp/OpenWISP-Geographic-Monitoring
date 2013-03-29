@@ -326,6 +326,60 @@ var owgm = {
             });
         }
     },
+    
+    initSelectGroup: function(){
+        owgm.loading_indicator = $('#loading-indicator');
+        $('#group-row').css('cursor','pointer').click(function(e){
+            owgm.loading_indicator.togglePop();
+            // retrieve remote group list
+            $.ajax({
+                'url': owgm.group_select_url,
+            }).done(function(result){
+                // insert HTML and open overlay
+                $('body').append(result);
+                owgm.toggleOverlay(function(){$('#select-group').remove()});
+                owgm.loading_indicator.togglePop();
+                owgm.select_group = $('#select-group');
+                // determine css max-height
+                var max_height = $(window).height()-$(window).height()/4;
+                owgm.select_group.css('max-height', max_height);
+                $('#scroller').css('max-height', max_height);
+                // center overlay in the middle of the screen
+                owgm.select_group.centerElement();
+                // reposition when resizing
+                $(window).resize(function(){
+                    owgm.select_group.centerElement();
+                });
+                $('#select-group table').selectable({
+                    'init': function(){
+                        // mark current group as selected
+                        var group_id = $('#group-info').attr('data-groupid');
+                        $('#group_'+group_id).addClass('selected');
+                    },
+                    'afterSelect': function(){
+                        // query the database, update group name, close overlay and remove HTML
+                        var url = $(this).attr('data-href');
+                        response = $.ajax({
+                            'url': url,
+                            'type': 'POST'
+                        }).done(function(result){
+                            owgm.loading_indicator.togglePop();
+                            owgm.toggleOverlay();
+                            $('#group-info').html(result.name).attr('data-groupid', result.id);
+                            $('#select-group').remove();
+                        }).fail(function(){
+                            alert('ERROR');
+                        });
+                    },
+                    'beforeSelect': function(){
+                        // there can be only one item selected
+                        $(this).parent().find('.selected').removeClass('selected');
+                        owgm.loading_indicator.togglePop();
+                    }
+                });
+            })
+        });    
+    }
 };
 
 /************************/

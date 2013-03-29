@@ -40,7 +40,7 @@ it:
   Are_you_sure: Sei sicuro?
   Back: Indietro
   Cancel: Annulla
-  Category: Categoria
+  Category: Categoria (GeoRSS)
   City: Città
   Click_and_drag_to_zoom_in: Clicca e trascina per ingrandire una sezione
   Click_to_edit: Clicca per modificare
@@ -117,6 +117,7 @@ it:
   Update: Aggiorna
   Username: Username
   Will_be_rendered_in_georss: Verrà visualizzato sulla mappa pubblica (GeoRSS)
+  Wisp: Wisp
   Wisp_list: Lista Wisp
   Manage_users: Gestione utenti
   User: Utente

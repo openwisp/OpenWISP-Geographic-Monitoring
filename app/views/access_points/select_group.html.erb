@@ -1,27 +1,29 @@
 <div id="select-group" class="overlay">
 		<div class="close">x</div>
-		<table>
-      <thead>
-        <tr>
-          <th class="name"><%=t :Name %></th>
-          <th><%=t :Wisp %></th>
-					<th class="center"><%=t :Total_AP %></th>
-          <th class="center"><%=t :Monitor %></th>
-        </tr>
-      </thead>
-      <tbody>
-      <% @groups.each do |group| %>
-        <%# if auth?(:wisps_viewer) || auth?(:wisp_access_points_viewer, wisp) %>
-        <tr class="<%= cycle 'odd', 'even' %>" id="group_<%= group.id %>" data-href="<%= wisp_access_point_change_group_path(@wisp.id, @access_point_id, group.id) %>">
-          <td class="name"><strong><%= group.name %></strong></td>
-          <td class="wisp"><%= group.wisp_name %></td>
-					<td class="total center"><%= group.total_ap %></td>
-          <td class="monitor center">
-              <img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
-          </td>
-        </tr>
-        <%# end %>
-      <% end %>
-      </tbody>
-    </table>
+		<div id="scroller">
+				<table>
+					<thead>
+						<tr>
+							<th class="name"><%=t :Name %></th>
+							<th><%=t :Wisp %></th>
+							<th class="center total-ap"><%=t :Total_AP %></th>
+							<th class="center"><%=t :Monitor %></th>
+						</tr>
+					</thead>
+					<tbody>
+					<% @groups.each do |group| %>
+						<%# if auth?(:wisps_viewer) || auth?(:wisp_access_points_viewer, wisp) %>
+						<tr class="<%= cycle 'odd', 'even' %>" id="group_<%= group.id %>" data-href="<%= wisp_access_point_change_group_path(@wisp.id, @access_point_id, group.id) %>">
+							<td class="name"><strong><%= group.name %></strong></td>
+							<td class="wisp"><%= group.wisp_name %></td>
+							<td class="total center"><%= group.total_ap %></td>
+							<td class="monitor center">
+									<img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
+							</td>
+						</tr>
+						<%# end %>
+					<% end %>
+					</tbody>
+				</table>
+		</div>
 </div>

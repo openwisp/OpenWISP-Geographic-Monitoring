@@ -12,4 +12,23 @@ class AccessPointsControllerTest < ActionController::TestCase
     get :index
     assert :forbidden
   end
+  
+  test "select groups" do
+    sign_in users(:admin)
+    get :select_group, { :wisp_id => 'provinciawifi', :access_point_id => 1 }
+    assert :success
+    assert_select "#select-group", 1
+    assert_select "#select-group tbody tr", 4
+  end
+  
+  test "change group" do
+    sign_in users(:admin)
+    # check fixture is correct
+    assert PropertySet.find_by_access_point_id(1).group_id == 1
+    # POST change group to group with id 2
+    post :change_group, { :wisp_id => 'provinciawifi', :access_point_id => 1, :group_id => 2 }
+    assert :success
+    # ensure group has changed
+    assert PropertySet.find_by_access_point_id(1).group_id == 2
+  end
 end

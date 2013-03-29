@@ -49,9 +49,8 @@ class AccessPointsController < ApplicationController
   end
   
   def select_group
-    # TODO watch out SQL injections
     @access_point_id = params[:access_point_id]
-    @groups = Group.all_join_wisp("WHERE (wisp_id = #{@wisp.id} OR wisp_id IS NULL)")
+    @groups = Group.all_join_wisp("wisp_id = ? OR wisp_id IS NULL", [@wisp.id])
     render :layout => false
   end
   
