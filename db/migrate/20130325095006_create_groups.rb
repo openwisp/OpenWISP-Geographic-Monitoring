@@ -6,10 +6,10 @@ class CreateGroups < ActiveRecord::Migration
       t.text :description, :null => true
       t.boolean :monitor, :default => true
       t.integer :total_ap, :default => 0
-      t.integer :down, :default => 0
       t.integer :up, :default => 0
+      t.integer :down, :default => 0
+      t.integer :unkown, :default => 0
       t.integer :online_users, :default => 0
-
       t.timestamps
     end
     

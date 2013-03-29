@@ -11,6 +11,7 @@
           <th class="center"><%=t :Total_AP %></th>
           <th class="green center"><%=t :Up %></th>
           <th class="red center"><%=t :Down %></th>
+          <th class="center"><%=t :Uknown %></th>
           <th class="center"><%=t :Online_users %></th>
           <th class="center"><%=t :Actions %></th>
         </tr>
@@ -29,6 +30,7 @@
           <td class="total center"><%= group.total_ap %></td>
           <td class="total_up center"><%= group.up %></td>
           <td class="total_down center"><%= group.down %></td>
+          <td class="total_unkown center"><%= group.unknown %></td>
           <td class="total_users center"><%= group.online_users %></td>
           <td class="center"><%= link_to t(:Delete), group_path(group), :method => :delete, :confirm => t(:Are_you_sure) %></td>
         </tr>
