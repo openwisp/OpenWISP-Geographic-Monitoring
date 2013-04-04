@@ -52,7 +52,7 @@ class AccessPointsController < ApplicationController
       if ap.favourite?: ap.property_set.update_attributes(:favourite => '0' ); end
     end
     respond_to do |format|
-       format.html { redirect_to wisp_access_point_favourite_path }
+       format.json {  }
     end
   end
 

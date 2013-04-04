@@ -35,7 +35,9 @@
                 <td><%=ap.address%> </td>
                 <td><%=ap.city%> </td>
                 <td><%=t ap.public ? :true : :false %></td>
-                <td><%= image_tag ('favourite.png', :size => "30x30") %></td>
+                <td><%= image_tag ('favourite.png', :size => "30x30") %>
+		<%= button_to 'aggiorna', wisp_access_point_property_set_favourite_path(@wisp, :access_point_id => ap.id) %>
+			</td>
                 <td><%= image_tag_for ap, :size => "30x35", :class => 'right' %></td>
                <% end %>
               </tr>
