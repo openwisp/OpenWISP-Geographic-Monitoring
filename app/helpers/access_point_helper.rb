@@ -16,11 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 module AccessPointHelper
-  def categories_select_data(wisp, access_point)
-    data = PropertySet.categories(wisp).map{ |category| "'#{escape_javascript(category)}':'#{escape_javascript(category)}'"  unless category.blank? }
-    data.compact!
+  def categories_select_data(wisp, access_point)    
+    data = PropertySet.categories(wisp)
+    data.compact! # remove nil
+    data.delete("") # remove ""
+    # prepare list for javascript
+    data = data.map do |category|
+      "'#{escape_javascript(category)}':'#{escape_javascript(category)}'" unless category.blank?
+    end
     data << "'': '#{t :None}'"
     data << "'!new!': '#{t :Create_new_category}'"
+    # return javascript object with list of categories
     "{#{data.join(',')}}"
   end
 

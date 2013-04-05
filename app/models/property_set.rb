@@ -29,8 +29,15 @@ class PropertySet < ActiveRecord::Base
     # Categories should be specific for each wisp
     # and dynamic based on which categories are defined
     # on a wisp's access points
-    wisp.access_points.map{|ap|
-        ap.category
-    }.compact.uniq.sort
+    #wisp.access_points.map{|ap|
+    #    ap.category
+    #}.compact.uniq.sort
+    
+    # the old method was refactored because it translated in too many queries on each page view
+    # 308 queries on the test database of Provincia Wi-fi (Province of Rome wifi service)
+    # this line does just 1 query instead
+    access_points = AccessPoint.select('property_sets.category AS c').joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`").where(:wisp_id => wisp.id).group('c')
+    # returns a list of categories
+    access_points.map{ |ap| ap.c }
   end
 end
