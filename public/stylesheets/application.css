@@ -307,7 +307,7 @@ select{ padding: 10px 0 10px 5px }
 #user_roles td.first{ padding-left: 100px }
 #users_table .first{ padding-left: 25px }
 #users_table .last{ padding-right: 25px }
-.monitor img{ vertical-align: top }
+.monitor img, #clickable_public img{ vertical-align: top }
 
 #select-group{ width: 700px }
 #select-group table{ margin: 0 }

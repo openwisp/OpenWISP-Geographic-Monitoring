@@ -78,9 +78,13 @@
     <td><strong><%=t :Latest_seen %></strong></td>
     <td class="right"><%= l(@access_point.latest_seen, :format => :short) rescue '-' %></td>
   </tr>
-  <tr>
-    <td id="clickable_public"><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
-    <td id="public" class="right"><%=t @access_point.public ? :true : :false %> <img src="<%= image_path(@access_point.public ? 'accept.png' : 'delete.png') %>" alt=""></td>
+  <tr id="clickable_public">
+    <td><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
+    <td id="public" class="right">
+      <a class="toggle-monitor" data-href="<%= toggle_monitor_group_path(@access_point.property_set.group_id) %>">
+        <img src="<%= image_path(@access_point.public ? 'accept.png' : 'delete.png') %>" alt="">
+      </a>
+    </td>
   </tr>
   <tr>
     <td id="clickable_category"><strong><%=t :Category %></strong> (<%=t :click_to_edit %>)</td>
