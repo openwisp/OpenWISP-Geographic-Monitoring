@@ -27,7 +27,7 @@ class GroupTest < ActiveSupport::TestCase
     assert group.monitor == false, 'monitor attribute should be false again'
   end
   
-  test "Group join_all_wisp" do
+  test "group join_all_wisp" do
     groups = Group.all_join_wisp
     assert groups[0].attributes.include?('wisp_name')
     
@@ -37,5 +37,13 @@ class GroupTest < ActiveSupport::TestCase
     groups = Group.all_join_wisp("wisp_id = ?", [1])
     assert groups[0].attributes.include?('wisp_name')
     assert groups.length == 2
+  end
+  
+  test "delete default group" do
+    default_group = groups(:default)
+    group_count = Group.count()
+    default_group.destroy
+    #assert !, 
+    assert Group.count() == group_count, "should not be possible to delete default group"
   end
 end

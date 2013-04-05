@@ -8,12 +8,12 @@ class CreateGroups < ActiveRecord::Migration
       t.integer :total_ap, :default => 0
       t.integer :up, :default => 0
       t.integer :down, :default => 0
-      t.integer :unkown, :default => 0
+      t.integer :unknown, :default => 0
       t.integer :online_users, :default => 0
       t.timestamps
     end
     
-    group = Group.create(:name => 'no group', :description => 'default group')
+    group = Group.create(:id => 1, :name => 'no group', :description => 'default group')
     
     add_column :property_sets, :group_id, :integer, :default => 1
   end

@@ -11,7 +11,7 @@ class GroupsControllerTest < ActionController::TestCase
     get :index
     assert :success
     assert_select "table#group_list tbody" do
-      assert_select "tr", 4
+      assert_select "tr", 5
     end
   end
   
@@ -47,8 +47,24 @@ class GroupsControllerTest < ActionController::TestCase
   test "should destroy group" do
     sign_in users(:admin)
     group_count = Group.count
-    delete :destroy, { :id => 1 }
+    delete :destroy, { :id => 2 }
     assert_redirected_to groups_path, 'should redirect to group list after success'
     assert Group.count == group_count - 1
+  end
+  
+  test "should not find delete button for default group" do
+    sign_in users(:admin)
+    get :index
+    assert :success
+    assert_select "#group_list tbody tr:first-child td:last-child", ""
+  end
+  
+  test "should not destroy group 1" do
+    sign_in users(:admin)
+    group_count = Group.count
+    delete :destroy, { :id => 1 }
+    assert Group.count == group_count
+    default_group = Group.find(1)
+    assert !default_group.nil?
   end
 end

@@ -4,6 +4,8 @@ class Group < ActiveRecord::Base
   
   validates_presence_of :name
   
+  before_destroy :is_default_group?
+  
   def toggle_monitor!
     self.monitor = !self.monitor
     self.save
@@ -17,5 +19,12 @@ class Group < ActiveRecord::Base
                     LEFT JOIN wisps ON wisps.id = groups.wisp_id
                     WHERE #{where}
                     ORDER BY wisp_id", params])
+  end
+  
+  private
+
+  def is_default_group?
+    errors.add(:base, "Cannot delete default group") unless self.id != 1
+    errors.blank?
   end
 end
