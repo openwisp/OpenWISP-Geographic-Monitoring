@@ -6,19 +6,41 @@ class GroupsControllerTest < ActionController::TestCase
     assert_redirected_to new_user_session_url
   end
   
+  test "group index permissions" do
+    sign_in users(:sfigato)
+    get :index
+    assert_response :forbidden, 'sfigato should not get group index'
+    sign_out users(:sfigato)
+    
+    sign_in users(:brescia_admin)
+    get :index
+    assert_response :success, 'brescia_admin should get group index'
+    assert_select "table#group_list tbody" do
+      assert_select "tr", 3, "brescia_admin should see only 3 records"
+    end
+    
+    sign_out users(:brescia_admin)
+    sign_in users(:mixed_operator)
+    get :index
+    assert_response :success, 'mixed_operator should get group index'
+    assert_select "table#group_list tbody" do
+      assert_select "tr", 5, "mixed_operator should only 5 records"
+    end
+  end
+    
   test "should get index" do
     sign_in users(:admin)
     get :index
-    assert :success
+    assert_response :success
     assert_select "table#group_list tbody" do
-      assert_select "tr", 5
+      assert_select "tr", Group.all.count
     end
   end
   
   test "should get new" do
     sign_in users(:admin)
     get :new
-    assert :success
+    assert_response :success
     assert_select "#group_form", 1
   end
   
@@ -40,7 +62,7 @@ class GroupsControllerTest < ActionController::TestCase
   test "should get edit group" do
     sign_in users(:admin)
     get :edit, { :id => 1 }
-    assert :success
+    assert_response :success
     assert_select "#group_form", 1
   end
   
@@ -55,7 +77,7 @@ class GroupsControllerTest < ActionController::TestCase
   test "should not find delete button for default group" do
     sign_in users(:admin)
     get :index
-    assert :success
+    assert_response :success
     assert_select "#group_list tbody tr:first-child td:last-child", ""
   end
   

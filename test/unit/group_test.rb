@@ -43,7 +43,13 @@ class GroupTest < ActiveSupport::TestCase
     default_group = groups(:default)
     group_count = Group.count()
     default_group.destroy
-    #assert !, 
     assert Group.count() == group_count, "should not be possible to delete default group"
+  end
+  
+  test "Group all_accessible_to method" do
+    assert_equal Group.all.count, Group.all_accessible_to(users(:admin)).length, "admin should see all the groups"
+    assert_equal 3, Group.all_accessible_to(users(:brescia_admin)).length, "brescia_admin should see only 3 groups (2 general groups and 1 specific to his wisp)"
+    assert_equal 0, Group.all_accessible_to(users(:sfigato)).length, "sfigato should not see any group"
+    assert_equal 5, Group.all_accessible_to(users(:mixed_operator)).length, "mixed_operator should not see 5 groups (2 general groups, 1 for brescia and 2 for provincia)"
   end
 end

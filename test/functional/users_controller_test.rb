@@ -9,7 +9,7 @@ class UsersControllerTest < ActionController::TestCase
   test "non wisp_viewer cannot get index" do
     sign_in users(:sfigato)
     get :index
-    assert :forbidden
+    assert_response :forbidden
   end
   
   test "wisp_viewer can get index" do
@@ -60,7 +60,7 @@ class UsersControllerTest < ActionController::TestCase
       :email => 'admin@admin.it'
     }
     # response is not a redirect to user list
-    assert :success
+    assert_response :success
     # should find errors
     assert_select "#errorExplanation", 1
   end
@@ -95,7 +95,7 @@ class UsersControllerTest < ActionController::TestCase
       :email => 'new_user@testing.com'
     }, :roles => Role.last(6)
     # response is not a redirect to user list
-    assert :success
+    assert_response :success
     # user total is the same as before because the operation did not succeed
     assert user_count == User.count, 'user count should not have changed'
     assert_select "#errorExplanation", 1

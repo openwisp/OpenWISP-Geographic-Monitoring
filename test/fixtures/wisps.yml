@@ -7,3 +7,8 @@ freewifibrescia:
   id: 2
   name: 'freewifibrescia'
   notes: 'testing 2'
+
+small:
+  id: 3
+  name: 'small_wisp'
+  notes: 'testing 3'

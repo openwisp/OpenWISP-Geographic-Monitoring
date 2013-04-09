@@ -52,6 +52,14 @@ class User < ActiveRecord::Base
     end
     list
   end
+  
+  def roles_search(role_name)
+    if self.id
+      @roles = Role.find_by_sql(["SELECT * FROM roles LEFT JOIN roles_users ON roles.id = roles_users.role_id WHERE roles_users.user_id = ? AND name = ?", self.id, role_name])
+    else
+      []
+    end
+  end
 
   def roles=(new_roles)
     to_remove = self.roles - new_roles

@@ -3,10 +3,14 @@ class GroupsController < ApplicationController
   
   skip_before_filter :verify_authenticity_token, :only => [:toggle_monitor]
   
-  # implement access control
+  access_control do
+    default :deny
+    allow :wisps_viewer
+    allow :wisp_access_points_viewer
+  end
   
-  def index    
-    @groups = Group.all_join_wisp
+  def index
+    @groups = Group.all_accessible_to(@current_user)
     
     add_breadcrumb(I18n.t(:Group_list), groups_url)
   end

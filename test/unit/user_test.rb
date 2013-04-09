@@ -9,7 +9,7 @@ class UserTest < ActiveSupport::TestCase
     assert user.save
   end
   
-  test "first user role should be wisp_viewer" do
+  test "first user role should be wisps_viewer" do
     assert User.available_roles[0].to_s == 'wisps_viewer'
   end
   
@@ -24,13 +24,17 @@ class UserTest < ActiveSupport::TestCase
     Wisp.create_all_roles
     all_roles = Role.all
     admin.roles = all_roles
-    assert admin.roles.length == 11, 'should have 11 roles assigned'
+    
+    # expected roles forumla explained:
+    # ([ALL_ROLES_COUNT] - [:wisps_viewer]) * [ALL_WISP_COUNT] + [:wisp_viewer]
+    expected_roles_count = (User.available_roles.length - 1) * Wisp.all.count + 1
+    assert admin.roles.length == expected_roles_count, 'should have 11 roles assigned'
   end
   
   test "test assign_role method" do
     Wisp.create_all_roles
     user = users(:sfigato)
-    user.assign_role('wisp_viewer')
+    user.assign_role('wisps_viewer')
     assert user.roles.length == 1, 'user should have 1 role assigned'
     user.assign_role('wisp_access_points_viewer', 1)
     assert user.roles.length == 2, 'user should have 2 roles assigned'
@@ -39,7 +43,13 @@ class UserTest < ActiveSupport::TestCase
   test "test remove_role method" do
     Wisp.create_all_roles
     user = users(:sfigato)
-    user.assign_role('wisp_viewer')
+    user.assign_role('wisps_viewer')
     user.remove_role(user.roles[0])
+  end
+  
+  test "test roles_search" do
+    assert_equal 1, users(:brescia_admin).roles_search(:wisp_access_points_viewer).length
+    assert_equal 0, users(:admin).roles_search(:wisp_access_points_viewer).length # because wisps_viewer role does not need wisp specific roles
+    assert_equal 2, users(:mixed_operator).roles_search(:wisp_access_points_viewer).length
   end
 end

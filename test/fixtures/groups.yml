@@ -32,3 +32,10 @@ onlygroup2:
   name: "onlygroup2"
   description: "onlygroup"
   monitor: true
+
+small_group:
+  id: 6
+  wisp_id: 3 
+  name: "small group"
+  description: "group of small wisp"
+  monitor: true
