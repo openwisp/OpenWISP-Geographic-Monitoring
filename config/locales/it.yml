@@ -149,6 +149,7 @@ it:
   Users: Utenti
   User_management: Interfaccia gestione utenti
   Mac_address: Mac address
+  Cannot_delete_default_group: Impossibile eliminare il gruppo di default
   
   # Lowercase
   logged_as: autenticato come

@@ -56,7 +56,7 @@
       <h1 id="branding">Geographic Monitoring</h1>
       <div id="lang"><%= link_to_locale 'it' %> <%= link_to_locale 'en' %></div>
     </div>
-
+    <% if user_signed_in? %>
     <nav>
       <ul class="nav main" id="main-nav">
         <li class="first">
@@ -65,24 +65,27 @@
         <li>
           <a href="<%= access_points_url %>"<%= active_link_if access_points_path %>><%= t :Access_points %></a>
         </li>
+        <% if auth?(:wisps_viewer) or auth?(:wisp_access_points_viewer) %>
         <li>
           <a href="<%= groups_url %>" title="<%= t :Group_list %>"<%= active_link_if groups_path %>><%= t :Groups %></a>
         </li>
+        <% end %>
+        <% if auth? :wisps_viewer %>
         <li>
           <a href="<%= users_url %>" title="<%= t :User_management %>"<%= active_link_if users_path %>><%= t :Users %></a>
-        </li>
+        </li>        
         <li>
           <a href="<%= edit_configuration_path('owmw') %>" title="<%= t(:Configure_owmw) %>"<%= active_link_if edit_configuration_path('owmw') %>><%= t(:Configure_owmw) %></a>
         </li>
+        <% end %>
       </ul>
     </nav>
     
     <ul class="nav main" id="breadcrumbs">
-      <% if user_signed_in? %>
-        <%= render_breadcrumbs :tag => :li, :separator => '<li class="spacer">&raquo</li>' %>
-        <li id="logout"><%= t :logged_as %> <b><%= current_user.username %></b> &nbsp; - &nbsp; <%= link_to t(:Sign_out), destroy_user_session_path %></li>
-      <% end %>
+      <%= render_breadcrumbs :tag => :li, :separator => '<li class="spacer">&raquo</li>' %>
+      <li id="logout"><%= t :logged_as %> <b><%= current_user.username %></b> &nbsp; - &nbsp; <%= link_to t(:Sign_out), destroy_user_session_path %></li>
     </ul>
+    <% end %>
     <% if flash[:notice] %>
     <div class="message notice">
       <%= flash[:notice] %> <a class="close">&times;&nbsp;chiudi</a>

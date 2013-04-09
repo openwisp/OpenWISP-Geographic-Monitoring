@@ -132,6 +132,7 @@ en:
   Users: Users
   User_management: User management interface
   Mac_address: Mac address
+  Cannot_delete_default_group: Cannot delete default group
   
   # Lowercase
   logged_as: logged in as
