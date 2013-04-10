@@ -25,10 +25,7 @@ class UserTest < ActiveSupport::TestCase
     all_roles = Role.all
     admin.roles = all_roles
     
-    # expected roles forumla explained:
-    # ([ALL_ROLES_COUNT] - [:wisps_viewer]) * [ALL_WISP_COUNT] + [:wisp_viewer]
-    expected_roles_count = (User.available_roles.length - 1) * Wisp.all.count + 1
-    assert admin.roles.length == expected_roles_count, 'should have 11 roles assigned'
+    assert admin.roles.length == self.expected_roles_count, 'should have #{expected_roles_count} roles assigned'
   end
   
   test "test assign_role method" do

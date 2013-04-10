@@ -26,9 +26,9 @@ class UsersControllerTest < ActionController::TestCase
   
   test "wisp_viewer can get edit" do
     sign_in users(:admin)
-    assert Role.count == 1, 'there should be only 1 role in the DB'
+    assert Role.count == 4, 'there should be only 4 role in the DB'
     get :edit, :id => 1
-    assert Role.count == 11, 'there should be 11 roles in the DB now'
+    assert Role.count == self.expected_roles_count, 'there should be #{expected_roles_count] roles in the DB now'
     assert_response :success
   end
   
@@ -67,10 +67,10 @@ class UsersControllerTest < ActionController::TestCase
   
   test "wisp_viewer can get new" do
     sign_in users(:admin)
-    assert Role.count == 1, 'there should be only 1 role in the DB'
+    assert Role.count == 4, 'there should be only 4 role in the DB'
     get :new
     assert_response :success
-    assert Role.count == 11, 'there should be 11 roles in the DB now'
+    assert Role.count == self.expected_roles_count, 'there should be #{expected_roles_count] roles in the DB now'
   end
   
   test "wisp_viewer can create user" do
@@ -102,18 +102,21 @@ class UsersControllerTest < ActionController::TestCase
   end
   
   test "create user with wisp_viewer" do
-    user_count = User.count
-    post :create, :user => {
-      :username => 'new_user3',
-      :email => 'new_user3@testing.com'
-    }, :roles => Role.find_by_name('wisp_viewer')
-    assert user_count = User.count + 1
+    sign_in users(:admin)
+    assert_difference('User.count') do
+      post :create, :user => {
+        :username => 'new_user3',
+        :email => 'new_user3@testing.com'
+      }, :roles => Role.find_by_name('wisp_viewer')
+    end
+    assert_redirected_to users_path, 'should redirect to user list after success'
   end
   
   test "wisp_viewer can delete user" do
     sign_in users(:admin)
-    get :destroy, :id => 2
+    assert_difference('User.count', -1) do
+      get :destroy, :id => 2
+    end
     assert_redirected_to users_path, 'should redirect to user list after successful delete operation'
-    assert User.all.length <= 1, 'there should be only one remaining user in the DB'
   end
 end

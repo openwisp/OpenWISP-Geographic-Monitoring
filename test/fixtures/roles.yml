@@ -4,15 +4,18 @@ wisps_viewer:
 
 wisps_viewer_provinciawifi:
     id: 2
+    authorizable_type: Wisp
     authorizable_id: 1
     name: wisp_access_points_viewer
 
 wisps_viewer_brescia:
     id: 3
+    authorizable_type: Wisp
     authorizable_id: 2
     name: wisp_access_points_viewer
 
 wisps_viewer_small:
     id: 4
+    authorizable_type: Wisp
     authorizable_id: 3
     name: wisp_access_points_viewer
