@@ -5,10 +5,10 @@ provincia_wifi:
 
 freewifibrescia:
   id: 2
-  name: 'freewifibrescia'
+  name: 'freewifi brescia'
   notes: 'testing 2'
 
 small:
   id: 3
-  name: 'small_wisp'
+  name: 'small wisp'
   notes: 'testing 3'

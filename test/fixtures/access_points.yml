@@ -17,4 +17,24 @@ eduroam:
     city: 'Roma'
     description: 'test'
     wisp_id: 1
+
+brescia1:
+    id: 3
+    hostname: brescia_ap1
+    lat: 46.7431
+    lng: 12.1313
+    address: 'via test'
+    city: 'Brescia'
+    description: 'test'
+    wisp_id: 2
+
+brescia2:
+    id: 4
+    hostname: brescia_ap2
+    lat: 46.7441
+    lng: 12.1323
+    address: 'via test 2'
+    city: 'Brescia'
+    description: 'test 2'
+    wisp_id: 2
     

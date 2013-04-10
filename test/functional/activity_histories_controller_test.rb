@@ -3,7 +3,7 @@ require 'test_helper'
 class ActivityHistoriesControllerTest < ActionController::TestCase
   test "should not get index unless authenticated" do
     get :index, :wisp_id => 1
-    assert_redirected_to '/users/sign_in'
+    assert_redirected_to new_user_session_url
   end
 
   test "should get index if wisp_viewer" do
@@ -42,19 +42,30 @@ class ActivityHistoriesControllerTest < ActionController::TestCase
     end
   end
   
-  test "status column is present if configured accordingly" do
-    debugger
-    
+  test "status column is present if configured accordingly" do   
     sign_in users(:admin)
     wisp = wisps(:provincia_wifi)
+    
+    CONFIG['showstatus'] = true
     get :index, :wisp_id => wisp.name
+    assert_select '#report th.status', I18n.t(:Status)
     
-    if CONFIG['showstatus']
-      assert_select '#report th.status', I18n.t(:Status)
-    else
-      assert !response.body.index('class="status">%s</th>' % I18n.t(:Status))
-    end
-    
+    CONFIG['showstatus'] = false
+    get :index, :wisp_id => wisp.name
+    assert !response.body.index('class="status">%s</th>' % I18n.t(:Status))
   end
   
+  test "availability report" do
+    sign_in users(:admin)
+    get :index, { :wisp_id => wisps(:provincia_wifi).name }
+    assert_response :success
+    assert_select 'table#report', 1
+  end
+  
+  test "availability report for wisp name containing space" do
+    sign_in users(:admin)
+    get :index, { :wisp_id => wisps(:freewifibrescia).name.gsub(' ', '-') }
+    assert_response :success
+    assert_select 'table#report', 1
+  end
 end

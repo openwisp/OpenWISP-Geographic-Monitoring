@@ -1,10 +1,42 @@
 require 'test_helper'
 
 class AccessPointsControllerTest < ActionController::TestCase
-  test "non wisp_viewer should get all access points" do
+  test "wisp_viewer should get all access points" do
     sign_in users(:admin)
     get :index
     assert_response :success
+    assert_select '#access_points' do
+      assert_select 'tr', AccessPoint.count
+    end
+  end
+  
+  test "get access points of wisp provinciawifi" do
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    get :index, { :wisp_id => @wisp.name }
+    assert_response :success
+    assert_select '#access_points' do
+      assert_select 'tr', AccessPoint.where(:wisp_id => @wisp.id).count
+    end
+  end
+  
+  test "get access points of wisp name containing space" do    
+    def do_space_test
+      @wisp = wisps(:freewifibrescia)
+      get :index, { :wisp_id => @wisp.name.gsub(' ', '-') }
+      assert_response :success
+      assert_select '#access_points' do
+        assert_select 'tr', AccessPoint.where(:wisp_id => @wisp.id).count
+      end
+    end
+    
+    sign_in users(:admin)
+    do_space_test()
+    sign_out users(:admin)
+    
+    sign_in users(:brescia_admin)
+    do_space_test()
+    sign_out users(:brescia_admin)
   end
   
   test "non wisp_viewer should not get all access points" do
