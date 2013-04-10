@@ -67,7 +67,7 @@
         </li>
         <% if auth?(:wisps_viewer) or auth?(:wisp_access_points_viewer) %>
         <li>
-          <a href="<%= groups_url %>" title="<%= t :Group_list %>"<%= active_link_if groups_path %>><%= t :Groups %></a>
+          <a href="<%= groups_url %>" title="<%= t :Group_list %>"<%= active_link_if groups_path and not request.path.include?(access_points_path) %>><%= t :Groups %></a>
         </li>
         <% end %>
         <% if auth? :wisps_viewer %>

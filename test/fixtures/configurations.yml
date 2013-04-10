@@ -9,3 +9,13 @@
 #
 #two: {}
 #  column: value
+
+owmw_enabled:
+    key: owmw_enabled
+    value: 'false'
+    value_format: 'boolean'
+    
+wisps_with_owmw:
+    key: wisps_with_owmw
+    value: ''
+    value_format: 'array'

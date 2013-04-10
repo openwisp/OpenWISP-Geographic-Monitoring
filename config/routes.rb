@@ -11,6 +11,11 @@ Owgm::Application.routes.draw do
   resources :configurations, :only => [:edit, :update]
 
   resources :wisps, :only => :index do
+    
+    resources :groups, :only => [:index] do
+      match 'access_points' => 'access_points#index'
+    end
+    
     resources :access_points, :only => [:index, :show] do
       resource :property_set, :only => :update
     end
@@ -24,7 +29,7 @@ Owgm::Application.routes.draw do
           :as => :associated_user_count_histories
     match 'availability_report' => 'activity_histories#index', :as => :availability_report
     match 'export' => 'activity_histories#export', :as => :export, :via => [:post]
-    match 'send_report' => 'activity_histories#send_report', :as => :send_report#, :via => [:get]
+    match 'send_report' => 'activity_histories#send_report', :as => :send_report
     
     match 'access_points/:access_point_id/select_group' => 'access_points#select_group', :as => :access_point_select_group, :via => [:get]
     match 'access_points/:access_point_id/change_group/:group_id' => 'access_points#change_group', :as => :access_point_change_group, :via => [:post]

@@ -43,6 +43,7 @@ class AccessPointsController < ApplicationController
 
   def show
     @access_point = AccessPoint.with_properties_and_group.find(params[:id])
+    @properties = @access_point.properties
 
     crumb_for_wisp
     crumb_for_access_point
@@ -85,6 +86,9 @@ class AccessPointsController < ApplicationController
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
 
     access_points = AccessPoint.scoped
+    if params[:group_id]
+      access_points = AccessPoint.select('access_points.*, property_sets.group_id').with_properties.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
+    end
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query
 

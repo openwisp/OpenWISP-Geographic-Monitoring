@@ -76,7 +76,7 @@
 }
 
 #gmap_index {
-    width: 920px;
+    width: 100%;
     height: 500px;
 }
 
@@ -85,18 +85,21 @@
     height: 396px;
 }
 
+#map_container{ position: relative }
+
 #map_loading {
     position: absolute;
-    width: 921px;
+    width: 100%;
     height: 544px;
-    margin-top: -545px;
+    margin-top: -550px;
     background-color: #ddd;
 }
 
 #map_loading p{
     font-size: 30px;
     margin-top: 250px;
-    margin-left: 350px;
+	width: 100%;
+	text-align: center;
 }
 
 #loading {

@@ -39,6 +39,22 @@ class AccessPointsControllerTest < ActionController::TestCase
     sign_out users(:brescia_admin)
   end
   
+  test "get access points with missing property_set" do
+    sign_in users(:admin)
+    @wisp = wisps(:freewifibrescia)
+    get :show, { :wisp_id => @wisp.name.gsub(' ', '-'), :id => 3 }
+    assert_response :success
+    assert_select '#group-info', 'no group'
+  end
+  
+  test "get access point wherecamp" do
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
+    assert_response :success
+    assert_select '#group-info', 'no group'
+  end
+  
   test "non wisp_viewer should not get all access points" do
     sign_in users(:sfigato)
     get :index
@@ -62,5 +78,22 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_response :success
     # ensure group has changed
     assert PropertySet.find_by_access_point_id(1).group_id == 2, 'group change failed'
+  end
+  
+  test "show access points by group" do
+    sign_in users(:admin)
+    # move all the ap in group public squares
+    access_points = AccessPoint.where(:wisp_id => 1).limit(1)
+    ap_count = access_points.length
+    access_points.each do |ap|
+      p = ap.properties
+      p.group_id = groups(:squares_1).id
+      p.save!
+    end
+    get :index, { :wisp_id => wisps(:provincia_wifi).name, :group_id => groups(:squares_1).id }
+    assert_response :success
+    assert_select '#access_points' do
+      assert_select 'tr', ap_count
+    end
   end
 end

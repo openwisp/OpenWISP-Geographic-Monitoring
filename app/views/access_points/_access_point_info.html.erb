@@ -32,8 +32,8 @@
   <tr id="group-row">
     <td><strong><%=t :Group %></strong></td>
     <td class="right">
-      <a id="group-info" data-groupid="<%= @access_point.property_set.group.id %>">
-        <%= @access_point.property_set.group.name %>
+      <a id="group-info" data-groupid="<%= @properties.group.id %>">
+        <%= @properties.group.name %>
       </a>
     </td>
   </tr>
@@ -81,7 +81,7 @@
   <tr id="clickable_public">
     <td><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
     <td id="public" class="right">
-      <a class="toggle-monitor" data-href="<%= toggle_monitor_group_path(@access_point.property_set.group_id) %>">
+      <a class="toggle-monitor" data-href="<%= toggle_monitor_group_path(@properties.group_id) %>">
         <img src="<%= image_path(@access_point.public ? 'accept.png' : 'delete.png') %>" alt="">
       </a>
     </td>
