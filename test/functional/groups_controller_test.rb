@@ -35,6 +35,7 @@ class GroupsControllerTest < ActionController::TestCase
     assert_select "table#group_list tbody" do
       assert_select "tr", Group.all.count
     end
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Groups)}
   end
   
   test "should get new" do
@@ -42,9 +43,10 @@ class GroupsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_select "#group_form", 1
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Groups)}
   end
   
-  test "can create user" do
+  test "can create group" do
     sign_in users(:admin)
     group_count = Group.count
     # crete new user with 6 roles assigned
@@ -64,6 +66,7 @@ class GroupsControllerTest < ActionController::TestCase
     get :edit, { :id => 1 }
     assert_response :success
     assert_select "#group_form", 1
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Groups)}
   end
   
   test "should destroy group" do
@@ -88,5 +91,16 @@ class GroupsControllerTest < ActionController::TestCase
     assert Group.count == group_count
     default_group = Group.find(1)
     assert !default_group.nil?
+  end
+  
+  test "should get wisp group list" do
+    sign_in users(:admin)
+    wisp = wisps(:provincia_wifi)
+    get :list, { :wisp_id => wisp.name }
+    assert_response :success
+    assert_select "table#group_list tbody" do
+      assert_select "tr", 4
+    end
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Groups)}
   end
 end

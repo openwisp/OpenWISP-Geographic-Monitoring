@@ -12,9 +12,8 @@ Owgm::Application.routes.draw do
 
   resources :wisps, :only => :index do
     
-    resources :groups, :only => [:index] do
-      match 'access_points' => 'access_points#index'
-    end
+    match 'groups' => 'groups#list', :as => :groups, :via => [:get]
+    match 'groups/:group_id/access_points' => 'access_points#index', :as => :group_access_points, :via => [:get]
     
     resources :access_points, :only => [:index, :show] do
       resource :property_set, :only => :update

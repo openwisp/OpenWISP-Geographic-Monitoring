@@ -5,7 +5,7 @@
         #TODO: access control
         <div class="field">
             <strong><%= label_tag :wisp, t(:Wisp) %>:</strong>
-            <%= f.select(:wisp_id, Wisp.collection) %>
+            <%= f.select(:wisp_id, Wisp.collection(@current_user)) %>
         </div>
         <div class="field">
             <strong><%= label_tag :group_name, t(:Name) %>:</strong>

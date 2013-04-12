@@ -32,12 +32,24 @@ class AccessPointsController < ApplicationController
   def index
     @showmap = CONFIG['showmap']
     @access_point_pagination = CONFIG['access_point_pagination']
+    
+    # if group view
+    if params[:group_id]
+      begin
+        @group = Group.select([:id, :name, :monitor, :up, :down, :unknown]).where(['wisp_id IS NULL or wisp_id = ?', @wisp.id]).find(params[:group_id])  
+      rescue ActiveRecord::RecordNotFound
+        render :file => "#{Rails.root}/public/404.html", :status => 404, :layout => false
+        return
+      end
+    end
+    
     respond_to do |format|
       format.any(:html, :js) { @access_points = access_points_with_sort_search_and_paginate.of_wisp(@wisp) }
       format.json { @access_points = access_points_with_filter.of_wisp(@wisp).draw_map }
       format.rss { @access_points = AccessPoint.of_wisp(@wisp).on_georss }
     end
 
+    crumb_for_group
     crumb_for_wisp
   end
 
@@ -56,8 +68,18 @@ class AccessPointsController < ApplicationController
   end
   
   def change_group
-    property_set = PropertySet.find_by_access_point_id(params[:access_point_id])
-    group = Group.select([:id, :name]).find(params[:group_id])
+    # ensure AP and Group are correct otherwise return 404
+    begin
+      ap = AccessPoint.find(params[:access_point_id])
+      # ensure group is a general group of specific of this wisp
+      group = Group.select([:id, :name]).where(['wisp_id IS NULL or wisp_id = ?', @wisp.id]).find(params[:group_id])
+    rescue ActiveRecord::RecordNotFound
+      render :status => 404, :nothing => true
+      return
+    end
+    # get or create property set
+    property_set = ap.properties
+    # change gorup, save and return json response
     property_set.group_id = group.id
     property_set.save!
     respond_to do |format|
@@ -111,7 +133,11 @@ class AccessPointsController < ApplicationController
   
   def crumb_for_wisp
     begin
-      add_breadcrumb I18n.t(:Access_points_for, :wisp => @wisp.name), wisp_access_points_path(@wisp)
+      if params[:group_id]
+        add_breadcrumb I18n.t(:Access_points_for, :wisp => @wisp.name), wisp_group_access_points_path(@wisp, @group)
+      else
+        add_breadcrumb I18n.t(:Access_points_for, :wisp => @wisp.name), wisp_access_points_path(@wisp)
+      end
     rescue
       add_breadcrumb I18n.t(:Access_points_of_every_wisp), access_points_path
     end
@@ -119,5 +145,12 @@ class AccessPointsController < ApplicationController
 
   def crumb_for_access_point
     add_breadcrumb I18n.t(:Access_point_named, :hostname => @access_point.hostname), wisp_access_point_path(@access_point.wisp, @access_point)
+  end
+  
+  def crumb_for_group
+    if params[:group_id]
+      add_breadcrumb(I18n.t(:Group_list_of_wisp, :wisp => @wisp.name), wisp_groups_path(@wisp))
+      add_breadcrumb I18n.t(:Group_named, :group => @group.name), edit_group_path(params[:group_id])
+    end
   end
 end

@@ -18,6 +18,7 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_select '#access_points' do
       assert_select 'tr', AccessPoint.where(:wisp_id => @wisp.id).count
     end
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Access_points)}
   end
   
   test "get access points of wisp name containing space" do    
@@ -53,6 +54,7 @@ class AccessPointsControllerTest < ActionController::TestCase
     get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
     assert_response :success
     assert_select '#group-info', 'no group'
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Access_points)}
   end
   
   test "non wisp_viewer should not get all access points" do
@@ -80,6 +82,37 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert PropertySet.find_by_access_point_id(1).group_id == 2, 'group change failed'
   end
   
+  test "change group of a nonexistent propertyset" do
+    sign_in users(:admin)
+    # check fixture is correct, property set should not exist
+    assert_nil PropertySet.find_by_access_point_id(3)
+    # it should succeed anyway because the property set will be created
+    post :change_group, { :format => 'json', :wisp_id => 'freewifi brescia', :access_point_id => 3, :group_id => 5 }
+    assert_response :success
+  end
+  
+  test "change group 404" do
+    sign_in users(:admin)
+    # check fixture is correct
+    assert PropertySet.find_by_access_point_id(1).group_id == 1
+    # POST change group to a group that does not exist
+    post :change_group, { :format => 'json', :wisp_id => 'provinciawifi', :access_point_id => 1, :group_id => 10 }
+    assert_response :not_found
+  end
+  
+  test "change group of another wisp" do
+    sign_in users(:admin)
+    # group_id 2 is of WISP provincia wifi so we should not be allowed
+    post :change_group, { :format => 'json', :wisp_id => 'freewifi brescia', :access_point_id => 3, :group_id => 2 }
+    assert_response :not_found
+  end
+  
+  test "change group of a nonexistent AP" do
+    sign_in users(:admin)
+    post :change_group, { :format => 'json', :wisp_id => 'freewifi brescia', :access_point_id => 99, :group_id => 5 }
+    assert_response :not_found
+  end
+  
   test "show access points by group" do
     sign_in users(:admin)
     # move all the ap in group public squares
@@ -95,5 +128,24 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_select '#access_points' do
       assert_select 'tr', ap_count
     end
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Access_points)}
+  end
+  
+  test "show access points by wrong group" do
+    sign_in users(:admin)
+    get :index, { :wisp_id => wisps(:provincia_wifi).name, :group_id => groups(:brescia_group1).id }
+    assert_response :not_found
+  end
+  
+  test "show empty access point list" do
+    sign_in users(:admin)
+    get :index, { :wisp_id => 'small wisp' }
+    assert_response :success
+    assert_select '.empty-page-msg', I18n.t(:No_AP)
+    
+    get :index, { :wisp_id => 'small wisp', :group_id => groups(:small_group).id }
+    assert_response :success
+    assert_select '.empty-page-msg', I18n.t(:No_AP)
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Access_points)}
   end
 end

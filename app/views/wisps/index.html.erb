@@ -32,6 +32,7 @@
         <th class="red"><%=t :Down %></th>
         <th><%=t :Unknown %></th>
         <th>&nbsp;</th>
+        <th>&nbsp;</th>
       </tr>
       </thead>
 
@@ -44,6 +45,7 @@
                 <td class="center"><%= wisp.access_points_up.count %></td>
                 <td class="center"><%= wisp.access_points_down.count %></td>
                 <td class="center"><%= wisp.access_points_unknown.count %></td>
+                <td><%= link_to t(:Groups), wisp_groups_path(wisp) %></td>
                 <td><%= link_to t(:Availability_report), wisp_availability_report_path(wisp) %></td>
               </tr>
           <% end %>

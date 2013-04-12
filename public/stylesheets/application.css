@@ -383,13 +383,6 @@ input.submit{
     border-radius: 4px;
 }
 
-/*.nolayout{
-    width: 90%;
-    height: 93%;
-    padding: 3.5% 5%;
-    background: #EEEEEE; font: 14px/1.5 Helvetica,Arial,'Liberation Sans',FreeSans,sans-serif
-}*/
-
 .overlay .close {
     background-image:url(../images/close.png);
     position:absolute;
@@ -405,3 +398,4 @@ input.submit{
 
 #public img{ vertical-align: top }
 #group-info{ padding-left: 25px; background: transparent url(../images/edit.png) no-repeat scroll 0 center }
+.empty-page-msg{ text-align: center; font-size: 14px; font-weight: bold; padding: 30px 0 20px }

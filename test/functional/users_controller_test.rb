@@ -16,12 +16,14 @@ class UsersControllerTest < ActionController::TestCase
     sign_in users(:admin)
     get :index
     assert_response :success
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Users)}
   end
   
   test "wisp_viewer can get show" do
     sign_in users(:admin)
     get :show, :id => 1
     assert_response :success
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Users)}
   end
   
   test "wisp_viewer can get edit" do
@@ -30,6 +32,7 @@ class UsersControllerTest < ActionController::TestCase
     get :edit, :id => 1
     assert Role.count == self.expected_roles_count, 'there should be #{expected_roles_count] roles in the DB now'
     assert_response :success
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Users)}
   end
   
   test "wisp_viewer can edit user" do
@@ -71,6 +74,7 @@ class UsersControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert Role.count == self.expected_roles_count, 'there should be #{expected_roles_count] roles in the DB now'
+    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Users)}
   end
   
   test "wisp_viewer can create user" do

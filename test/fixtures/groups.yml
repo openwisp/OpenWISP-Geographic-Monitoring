@@ -26,11 +26,11 @@ archived:
   description: "archived access points"
   monitor: false
 
-onlygroup2:
+brescia_group1:
   id: 5
   wisp_id: 2 
-  name: "onlygroup2"
-  description: "onlygroup"
+  name: "brescia_group1"
+  description: "brescia_group1"
   monitor: true
 
 small_group:

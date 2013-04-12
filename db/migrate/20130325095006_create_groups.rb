@@ -13,7 +13,7 @@ class CreateGroups < ActiveRecord::Migration
       t.timestamps
     end
     
-    group = Group.create(:id => 1, :name => 'no group', :description => 'default group')
+    group = Group.create(:id => 1, :name => 'No Group', :description => 'Default Group')
     
     add_column :property_sets, :group_id, :integer, :default => 1
   end

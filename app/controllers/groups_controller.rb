@@ -1,18 +1,32 @@
 class GroupsController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :load_wisp, :only => [:list]
   
   skip_before_filter :verify_authenticity_token, :only => [:toggle_monitor]
   
   access_control do
     default :deny
     allow :wisps_viewer
-    allow :wisp_access_points_viewer
+    
+    actions :list do
+      allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
+    end
+    
+    actions :index, :new, :create, :update, :edit, :destroy, :toggle_monitor do
+      allow :wisp_access_points_viewer
+    end
   end
   
   def index
     @groups = Group.all_accessible_to(@current_user)
     
     add_breadcrumb(I18n.t(:Group_list), groups_url)
+  end
+  
+  def list
+    @groups = Group.all_join_wisp('wisp_id IS NULL OR wisp_id = ?', [@wisp.id])
+    
+    add_breadcrumb(I18n.t(:Group_list_of_wisp, :wisp => @wisp.name), wisp_groups_path(@wisp))
   end
   
   def new

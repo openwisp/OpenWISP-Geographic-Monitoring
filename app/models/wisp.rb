@@ -60,10 +60,12 @@ class Wisp < ActiveRecord::Base
     end
   end
   
-  def self.collection
+  def self.collection(user)
     collection = [[I18n.t('No_wisp'), nil]]
+    #roles = user.roles 
+    is_wisp_viewer = user.roles_include?(:wisps_viewer)
     Wisp.select([:id, :name]).all.each do |wisp|
-      collection << [wisp.name, wisp.id]
+      collection << [wisp.name, wisp.id] if is_wisp_viewer or user.roles_include?(:wisp_access_points_viewer, wisp.id)
     end
     collection
   end

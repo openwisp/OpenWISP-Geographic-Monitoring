@@ -140,7 +140,7 @@ it:
   Online_users: Utenti online
   Group: Gruppo
   Groups: Gruppi
-  Group_list: Lista gruppi
+  Group_list: Gestione gruppi
   New_group: Nuovo gruppo
   Edit_group: Modifica gruppo  
   Total_AP: AP Totali
@@ -150,6 +150,12 @@ it:
   User_management: Interfaccia gestione utenti
   Mac_address: Mac address
   Cannot_delete_default_group: Impossibile eliminare il gruppo di default
+  No_AP: Nessun access point presente
+  Group_named: Gruppo "%{group}"
+  Monitoring_disabled_for_group: Monitoring disattivato per questo gruppo
+  Manage_groups: Gestisci gruppi
+  Group_modified: Gruppo modificato con successo
+  Group_list_of_wisp: 'Lista gruppi di "%{wisp}"'
   
   # Lowercase
   logged_as: autenticato come

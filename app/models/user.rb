@@ -53,7 +53,24 @@ class User < ActiveRecord::Base
     list
   end
   
+  # retrieve roles from the database and loop over them to find a specific one
+  # makes it possible to do several searchs during an iteration with only 1 DB query
+  def roles_include?(name, object_id=nil)
+    name = name.to_s
+    # get roles from DB if not already available
+    @roles = @roles || self.roles()
+    # loop over each role and if the role we are looking for is there return true
+    @roles.each do |role|
+      if role.name == name and (object_id.nil? or role.authorizable_id == object_id)
+        return true
+      end
+    end
+    # if nothing found
+    return false
+  end
+  
   def roles_search(role_name)
+    # return a list of roles that have the same name (but possibly different authorizable_id)
     if self.id
       @roles = Role.find_by_sql(["SELECT * FROM roles LEFT JOIN roles_users ON roles.id = roles_users.role_id WHERE roles_users.user_id = ? AND name = ?", self.id, role_name])
     else

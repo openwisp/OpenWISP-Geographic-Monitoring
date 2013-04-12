@@ -123,7 +123,7 @@ en:
   Online_users: Online users
   Group: Group
   Groups: Groups
-  Group_list: Group list
+  Group_list: Group management
   New_group: New Group  
   Edit_group: Modifica gruppo
   Total_AP: Total AP
@@ -133,6 +133,11 @@ en:
   User_management: User management interface
   Mac_address: Mac address
   Cannot_delete_default_group: Cannot delete default group
+  No_AP: There are no access points yet
+  Monitoring_disabled_for_group: Monitoring disabled for this group
+  Manage_groups: Manage groups
+  Group_modified: Group modified successfully
+  Group_list_of_wisp: 'Group list of "%{wisp}"'
   
   # Lowercase
   logged_as: logged in as
