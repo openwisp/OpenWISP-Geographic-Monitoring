@@ -51,9 +51,12 @@ h1#branding {
 	font: normal 3em "Helvetica", sans-serif;
 	letter-spacing: -1px;
 	text-align:left;
+	margin-bottom:0;
+}
+h1#branding a{
+	display: block;
 	background:#aaa url(../../../images/openwisp-logo.png) no-repeat scroll 40px center;
 	padding:50px 1em 50px 230px;
-	margin-bottom:0;
 }
 #header{ position: relative }
 #lang{ position: absolute; right: 45px; top: 40% }

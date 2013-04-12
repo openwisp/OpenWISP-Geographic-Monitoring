@@ -34,7 +34,7 @@ class UserTest < ActiveSupport::TestCase
     user.assign_role('wisps_viewer')
     assert user.roles.length == 1, 'user should have 1 role assigned'
     user.assign_role('wisp_access_points_viewer', 1)
-    assert user.roles.length == 2, 'user should have 2 roles assigned'
+    assert user.roles(force_query=true).length == 2, 'user should have 2 roles assigned'
   end
   
   test "remove_role method" do

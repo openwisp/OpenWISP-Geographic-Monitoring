@@ -18,7 +18,7 @@
 require 'spreadsheet'
 
 class ActivityHistoriesController < ApplicationController
-  before_filter :authenticate_user!, :load_wisp
+  before_filter :authenticate_user!, :load_wisp, :wisp_breadcrumb
 
   access_control do
     default :deny

@@ -53,21 +53,21 @@
 <div class="container_12" id="container">
   <div class="grid_12">
     <div id="header">
-      <h1 id="branding">Geographic Monitoring</h1>
+      <h1 id="branding"><a href="<%= root_path %>">Geographic Monitoring</a></h1>
       <div id="lang"><%= link_to_locale 'it' %> <%= link_to_locale 'en' %></div>
     </div>
     <% if user_signed_in? %>
     <nav>
       <ul class="nav main" id="main-nav">
         <li class="first">
-          <a href="<%= root_url %>" title="<%= t :Wisp_list %>"<%= active_link_if root_path %>><%= t :Wisp %></a>
+          <a href="<%= wisps_path %>" title="<%= t :Wisp_list %>"<%= active_link_if wisps_path, '/access_points', '/groups' %>><%= t :Wisp %></a>
         </li>
         <li>
           <a href="<%= access_points_url %>"<%= active_link_if access_points_path %>><%= t :Access_points %></a>
         </li>
         <% if auth?(:wisps_viewer) or auth?(:wisp_access_points_viewer) %>
         <li>
-          <a href="<%= groups_url %>" title="<%= t :Group_list %>"<%= active_link_if groups_path, access_points_path %>><%= t :Groups %></a>
+          <a href="<%= groups_url %>" title="<%= t :Group_list %>"<%= active_link_if groups_path, '/access_points' %>><%= t :Groups %></a>
         </li>
         <% end %>
         <% if auth? :wisps_viewer %>

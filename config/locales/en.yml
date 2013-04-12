@@ -58,8 +58,10 @@ en:
   Access_point_named: Access point %{hostname}
   Access_points: Access points
   Access_points_for: %{wisp}'s Access points
+  Access_points_for_group: 'Access points of group "%{group}"'
   Access_points_of_every_wisp: Access points of every wisp
   Access_points_map: Access points Map
+  Home: Home
   Info: Info
   Interface_address: Inteface address
   Interface_vendor: Inteface vendor

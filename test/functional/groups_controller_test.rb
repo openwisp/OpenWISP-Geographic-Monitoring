@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class GroupsControllerTest < ActionController::TestCase
+class GroupsControllerTest < ActionController::TestCase  
   test "unauthenticated user cannot get index" do
     get :index
     assert_redirected_to new_user_session_url
@@ -35,7 +35,7 @@ class GroupsControllerTest < ActionController::TestCase
     assert_select "table#group_list tbody" do
       assert_select "tr", Group.all.count
     end
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Groups)}
+    activemenu_test()
   end
   
   test "should get new" do
@@ -43,7 +43,7 @@ class GroupsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_select "#group_form", 1
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Groups)}
+    activemenu_test()
   end
   
   test "can create group" do
@@ -66,7 +66,7 @@ class GroupsControllerTest < ActionController::TestCase
     get :edit, { :id => 1 }
     assert_response :success
     assert_select "#group_form", 1
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Groups)}
+    
   end
   
   test "should destroy group" do
@@ -101,6 +101,13 @@ class GroupsControllerTest < ActionController::TestCase
     assert_select "table#group_list tbody" do
       assert_select "tr", 4
     end
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Groups)}
+    activemenu_test()
+  end
+  
+  private
+  
+  def activemenu_test
+    assert_select "#main-nav a.active", 1
+    assert_select "#main-nav a.active", I18n.t(:Groups)
   end
 end

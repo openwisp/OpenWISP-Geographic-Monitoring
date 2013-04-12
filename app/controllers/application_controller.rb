@@ -23,13 +23,28 @@ class ApplicationController < ActionController::Base
   helper_method :wisp_loaded?
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
-  add_breadcrumb proc{ I18n.t(:Wisp_list) }, :root_path
+  add_breadcrumb proc{ I18n.t(:Home) }, :root_path
 
   before_filter :set_locale
+  before_filter :authenticate_user!, :only => :index
   
   # catch Access Denied exception
   rescue_from 'Acl9::AccessDenied', :with => :access_denied
-
+  
+  def index
+    # if admin of a specific wisp only
+    wisp_access_points_viewers = current_user.roles_search(:wisp_access_points_viewer)
+    if not current_user.has_role?(:wisps_viewer) and wisp_access_points_viewers.length <= 1
+      # redirect to group view
+      @index_redirect = wisp_groups_path(Wisp.find(wisp_access_points_viewers[0].authorizable_id))
+      redirect_to @index_redirect
+    else
+      @index_redirect = wisps_path
+      # redirect to wisp list
+      redirect_to @index_redirect
+    end
+  end
+  
   private
 
   def set_locale
@@ -53,6 +68,12 @@ class ApplicationController < ActionController::Base
 
   def wisp_loaded?
     !@wisp.nil?
+  end
+  
+  def wisp_breadcrumb(force=false)
+    if force or wisp_loaded?
+      add_breadcrumb(I18n.t(:Wisp_list), wisps_path)
+    end
   end
   
   def access_denied

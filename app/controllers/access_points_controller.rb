@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class AccessPointsController < ApplicationController
-  before_filter :authenticate_user!, :load_wisp
+  before_filter :authenticate_user!, :load_wisp, :wisp_breadcrumb
   
   skip_before_filter :verify_authenticity_token, :only => [:change_group]
 
@@ -134,7 +134,7 @@ class AccessPointsController < ApplicationController
   def crumb_for_wisp
     begin
       if params[:group_id]
-        add_breadcrumb I18n.t(:Access_points_for, :wisp => @wisp.name), wisp_group_access_points_path(@wisp, @group)
+        add_breadcrumb I18n.t(:Access_points_for_group, :group => @group.name), wisp_group_access_points_path(@wisp, @group)
       else
         add_breadcrumb I18n.t(:Access_points_for, :wisp => @wisp.name), wisp_access_points_path(@wisp)
       end
@@ -150,7 +150,6 @@ class AccessPointsController < ApplicationController
   def crumb_for_group
     if params[:group_id]
       add_breadcrumb(I18n.t(:Group_list_of_wisp, :wisp => @wisp.name), wisp_groups_path(@wisp))
-      add_breadcrumb I18n.t(:Group_named, :group => @group.name), edit_group_path(params[:group_id])
     end
   end
 end

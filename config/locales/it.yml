@@ -74,8 +74,10 @@ it:
   Access_point_named: Access point %{hostname}
   Access_points: Access points
   Access_points_for: Access point di %{wisp}
+  Access_points_for_group: 'Access point del gruppo "%{group}"'
   Access_points_of_every_wisp: Access point di tutti i wisp
   Access_points_map: Mappa degli Access point
+  Home: Inizio
   Info: Informazioni
   Interface_address: Indirizzo apparato
   Interface_vendor: Vendor apparato

@@ -34,7 +34,11 @@ class User < ActiveRecord::Base
     :wisp_associated_user_counts_viewer, :wisp_associated_user_count_histories_viewer,
   ]
   
-  def roles
+  def roles(force_query=false)
+    # don't query the database multiple times if it is not necessary unless explicitly specified
+    if not force_query and @roles
+      return @roles
+    end
     if self.id
       @roles = Role.find_by_sql("SELECT * FROM roles LEFT JOIN roles_users ON roles.id = roles_users.role_id WHERE roles_users.user_id = #{self.id}")
     else
@@ -72,7 +76,7 @@ class User < ActiveRecord::Base
   def roles_search(role_name)
     # return a list of roles that have the same name (but possibly different authorizable_id)
     if self.id
-      @roles = Role.find_by_sql(["SELECT * FROM roles LEFT JOIN roles_users ON roles.id = roles_users.role_id WHERE roles_users.user_id = ? AND name = ?", self.id, role_name])
+      Role.find_by_sql(["SELECT * FROM roles LEFT JOIN roles_users ON roles.id = roles_users.role_id WHERE roles_users.user_id = ? AND name = ?", self.id, role_name])
     else
       []
     end
@@ -87,6 +91,8 @@ class User < ActiveRecord::Base
     new_roles.each do |role|
       assign_role(role.name, role.authorizable_id)
     end
+    
+    @roles = self.roles(force=true)
   end
   
   def assign_role(name, wisp_id=nil)

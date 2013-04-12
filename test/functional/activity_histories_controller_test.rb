@@ -11,6 +11,8 @@ class ActivityHistoriesControllerTest < ActionController::TestCase
     wisp = wisps(:provincia_wifi)
     get :index, :wisp_id => wisp.name
     assert_response :success
+    assert_select "#main-nav a.active", 1
+    assert_select "#main-nav a.active", I18n.t(:Wisp)
   end
   
   test "should write file in tmp folder" do

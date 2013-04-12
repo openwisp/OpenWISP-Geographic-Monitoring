@@ -18,7 +18,7 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_select '#access_points' do
       assert_select 'tr', AccessPoint.where(:wisp_id => @wisp.id).count
     end
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Access_points)}
+    activemenu_test()
   end
   
   test "get access points of wisp name containing space" do    
@@ -54,7 +54,7 @@ class AccessPointsControllerTest < ActionController::TestCase
     get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
     assert_response :success
     assert_select '#group-info', 'no group'
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Access_points)}
+    activemenu_test()
   end
   
   test "non wisp_viewer should not get all access points" do
@@ -123,16 +123,28 @@ class AccessPointsControllerTest < ActionController::TestCase
       p.group_id = groups(:squares_1).id
       p.save!
     end
-    get :index, { :wisp_id => wisps(:provincia_wifi).name, :group_id => groups(:squares_1).id }
+    
+    wisp = wisps(:provincia_wifi)
+    group = groups(:squares_1)
+    
+    get :index, { :wisp_id => wisp.name, :group_id => group.id }
+    
+    # TODO: problem here :(
+    assert_routing(wisp_group_access_points_path(wisp, group), { :controller => 'access_points', :action => 'index', :wisp_id => wisp.name, :group_id => group.id.to_s })
+    
+    assert_equal wisp_group_access_points_path(wisp, group), request.path
+    puts "\n\n\n%s\n\n\n" % [request.path]
+    
     assert_response :success
     assert_select '#access_points' do
       assert_select 'tr', ap_count
     end
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Access_points)}
+    activemenu_test()
   end
   
   test "show access points by wrong group" do
     sign_in users(:admin)
+    # TODO: this also does not work as expected
     get :index, { :wisp_id => wisps(:provincia_wifi).name, :group_id => groups(:brescia_group1).id }
     assert_response :not_found
   end
@@ -144,8 +156,19 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_select '.empty-page-msg', I18n.t(:No_AP)
     
     get :index, { :wisp_id => 'small wisp', :group_id => groups(:small_group).id }
+    
+    # TODO: this also does not work as expected
+    assert_equal wisp_group_access_points_path(wisps(:small), groups(:small_group)), request.path
+    
     assert_response :success
     assert_select '.empty-page-msg', I18n.t(:No_AP)
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Access_points)}
+    activemenu_test()
+  end
+  
+  private
+  
+  def activemenu_test
+    assert_select "#main-nav a.active", 1
+    assert_select "#main-nav a.active", I18n.t(:Access_points)
   end
 end

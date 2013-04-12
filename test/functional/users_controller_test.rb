@@ -16,14 +16,14 @@ class UsersControllerTest < ActionController::TestCase
     sign_in users(:admin)
     get :index
     assert_response :success
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Users)}
+    activemenu_test()
   end
   
   test "wisp_viewer can get show" do
     sign_in users(:admin)
     get :show, :id => 1
     assert_response :success
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Users)}
+    activemenu_test()
   end
   
   test "wisp_viewer can get edit" do
@@ -32,7 +32,7 @@ class UsersControllerTest < ActionController::TestCase
     get :edit, :id => 1
     assert Role.count == self.expected_roles_count, 'there should be #{expected_roles_count] roles in the DB now'
     assert_response :success
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Users)}
+    activemenu_test()
   end
   
   test "wisp_viewer can edit user" do
@@ -54,7 +54,8 @@ class UsersControllerTest < ActionController::TestCase
       :email => 'user@user.it'
     }, :roles => [1]
     assert_redirected_to users_path
-    assert user.roles.length >= 1, 'user should have 1 role assigned'
+    
+    assert user.roles(force_query=true).length >= 1, 'user should have 1 role assigned'
     
     # simple edit should fail
     user_count = User.count
@@ -74,7 +75,7 @@ class UsersControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert Role.count == self.expected_roles_count, 'there should be #{expected_roles_count] roles in the DB now'
-    assert_select "#main-nav a.active", {:count => 1, :text => I18n.t(:Users)}
+    activemenu_test()
   end
   
   test "wisp_viewer can create user" do
@@ -122,5 +123,12 @@ class UsersControllerTest < ActionController::TestCase
       get :destroy, :id => 2
     end
     assert_redirected_to users_path, 'should redirect to user list after successful delete operation'
+  end
+  
+  private
+  
+  def activemenu_test
+    assert_select "#main-nav a.active", 1
+    assert_select "#main-nav a.active", I18n.t(:Users)
   end
 end

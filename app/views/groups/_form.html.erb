@@ -2,7 +2,6 @@
     <fieldset id="group_form">
         <legend><strong><%= @group.new_record? ? t(:New_group) : t(:Edit_group) %></strong></legend>
         <p><%= f.error_messages %></p>
-        #TODO: access control
         <div class="field">
             <strong><%= label_tag :wisp, t(:Wisp) %>:</strong>
             <%= f.select(:wisp_id, Wisp.collection(@current_user)) %>
