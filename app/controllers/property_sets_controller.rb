@@ -17,7 +17,7 @@
 
 class PropertySetsController < ApplicationController
   before_filter :authenticate_user!, :load_wisp, :load_access_point
-
+  skip_before_filter :verify_authenticity_token, :only => [:update_favourite]
   access_control do
     default :deny
 
@@ -46,7 +46,11 @@ class PropertySetsController < ApplicationController
     @property_set = @access_point.properties
     @access_point.favourite? ?  @property_set.update_attributes(:favourite => '0' ) : @property_set.update_attributes(:favourite => '1' )
     respond_to do |format|
-       format.html { redirect_to :back }
+       #format.html { redirect_to :back }
+       format.json{
+        image = view_context.image_path(@access_point.favourite? ? 'favourite.png' : 'not_favourite.png')
+        render :json => { 'image' => image }
+       }
     end
   end
     

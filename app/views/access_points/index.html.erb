@@ -59,7 +59,7 @@
 
     <div id="access_points_quicksearch" class="bold">
       <%= render 'access_points_quicksearch' %>
-      <%= render 'access_points_quickfavourite' %>
+      <%#= render 'access_points_quickfavourite' %>
     </div>
 
     <div id="loading" class="hidden">
@@ -76,7 +76,7 @@
       <%= render @access_points %>
       </tbody>
     </table>
-
+    
     <div id="page_controls">
 	<div id="access_points_paginate">
 	  <%= paginate @access_points, :remote => true %>
@@ -91,3 +91,4 @@
     </div>
   </div>
 </div>
+<script>owgm.initFavourite()</script>

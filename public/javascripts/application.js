@@ -271,6 +271,34 @@ var owgm = {
         else{
             $('#'+id).fadeToggle(250);
         }
+    },
+    
+    initFavourite: function(){
+        $('.favourite-update').live('click',function(e){
+            var el = $(this);
+            $.ajax({
+                url: el.attr('data-href'),
+                type: 'POST'
+            }).done(function(result) {
+                el.find('img').attr('src', result.image);
+            }).fail(function(result){
+                alert('ERROR');
+            });
+        }).css('cursor','pointer');
+    },
+    
+    eraseAllFavourite: function(){
+        $('.favourite-erase').click(function(e){
+            var el = $(this);
+            $.ajax({
+                url: el.attr('data-href'),
+                type: 'POST'
+            }).done(function(result) {
+               $('.fav-ap').hide();
+            }).fail(function(result){
+                alert('ERROR');
+            });
+        }).css('cursor','pointer');
     }
     
 };

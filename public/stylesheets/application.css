@@ -244,3 +244,7 @@ input.ui-autocomplete-input{ background: #fff none }
 	background:#232323 url(../images/progress.gif) no-repeat scroll center center;
 	border-radius:5px;
 }
+
+.favourite-update{
+    cursor: pointer;
+}

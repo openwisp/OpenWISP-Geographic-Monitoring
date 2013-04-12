@@ -16,19 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
-<%= javascript_tag "$(function(){
-        $('.favourite').click(function(e){
-            var el = $(this);
-            $.ajax({
-                url: el.attr('data-href'),
-                type: 'POST'
-            }).done(function(result) {
-                el.find('img').attr('src', result.image);
-            }).fail(function(result){
-                alert('ERROR');
-            });
-        })"
-%>
+
 <h2><%=t :Info %></h2>
 <br />
 <table>
@@ -60,8 +48,10 @@
   </tr>
   <tr>
     <td><strong><%=t :Favourite %></strong></td>
-    <td id="favourite" class="right"><%= @access_point.favourite ? image_tag('favourite.png', :size => "25x25") : image_tag ('not_favourite.png', :size => "25x25") %>
-    <%= button_to 'aggiorna', wisp_access_point_property_set_favourite_path(@access_point.wisp, @access_point) %>
+    <td id="favourite" class="right">
+      <a class="favourite-update" data-href="<%= wisp_access_point_property_set_favourite_path(@access_point.wisp, :access_point_id => @access_point.id) %>">
+        <%= @access_point.favourite ? image_tag('favourite.png', :size => "25x25") : image_tag('not_favourite.png', :size => "25x25") %>
+      </a>  
     </td>
     
   </tr>
@@ -98,4 +88,4 @@
   </tr>
   </tbody>
 </table>
-
+<script>owgm.initFavourite()</script>

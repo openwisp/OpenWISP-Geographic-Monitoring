@@ -17,10 +17,9 @@
 
 class AccessPointsController < ApplicationController
   before_filter :authenticate_user!, :load_wisp
-
+  skip_before_filter :verify_authenticity_token, :only => [:erase_favourite]
   access_control do
     default :deny
-
     actions :index, :show, :update, :favourite, :erase_favourite do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
@@ -46,14 +45,29 @@ class AccessPointsController < ApplicationController
     crumb_for_access_point
   end
 
+  def favourite
+    @showmap = CONFIG['showmap']
+    @access_point_pagination = CONFIG['access_point_pagination']
+    ap_favourite=AccessPoint.scoped
+    ap_favourite=ap_favourite.where(:wisp_id => @wisp.id).quickfavourite('1')
+    per_page = params[:per]
+    #@ap_fav=ap_favourite.page(params[:page]).per(per_page)
+    respond_to do |format|
+      format.any(:html, :js) { @ap_fav=ap_favourite.page(params[:page]).per(per_page)  }
+    end
+  end
+
   def erase_favourite
     @access_points = AccessPoint.where(:wisp_id => @wisp.id).with_properties
     @access_points.each do |ap|
       if ap.favourite?: ap.property_set.update_attributes(:favourite => '0' ); end
     end
-    respond_to do |format|
-       format.json {  }
-    end
+    render :nothing => true
+    #respond_to do |format|
+    #format.json{
+    #    render :json => { 'style' => 'display: none' }
+    #   }
+    #end
   end
 
   private
@@ -71,16 +85,14 @@ class AccessPointsController < ApplicationController
     end
   end
 
-  def access_points_with_sort_search_and_paginate
+  def access_points_with_sort_search_and_paginate()
     query = params[:q] || nil
-    queryf = params[:f] || nil
     column = params[:column] ? params[:column].downcase : nil
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
 
     access_points = AccessPoint.scoped
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query
-    access_points = access_points.quickfavourite(queryf) if queryf
 
     per_page = params[:per]
     access_points.page(params[:page]).per(per_page)

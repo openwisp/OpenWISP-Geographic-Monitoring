@@ -20,30 +20,47 @@
 <div class="grid_12">
   <div class="box">
     <h1><%=t :Accesspoint_favourite %></h1>
-    <%= link_to 'Elimina', wisp_erase_favourite_path(@wisp) %>
-    <table>
+    <a class="favourite-erase" data-href="<%= wisp_erase_favourite_path(@wisp)%>">Elimina tutti</a>
+    <%#= link_to 'Elimina', wisp_erase_favourite_path(@wisp) %>
+    <table class="fav-ap">
      <thead id="access_points_thead">
       <%= render 'access_points_thead' %>
       </thead>
 
       <tbody>
-         <% @wisp.access_points.each do |ap| %>
+         <% #@wisp.access_points.each do |ap| %>
+	 <% @ap_fav.each do |ap| %>
               <tr class="<%= cycle 'odd', 'even' %>">
-               <% if ap.favourite? %>
+               <% #if ap.favourite? %>
                 <td><%=link_to ap.hostname, wisp_access_point_path(ap.wisp, ap)%> </td>
                 <td><%= access_point.site_description.truncate(40) rescue '' %></td>
-                <td><%=ap.address%> </td>
-                <td><%=ap.city%> </td>
+                <td><%=ap.address%></td>
+                <td><%=ap.city%></td>
                 <td><%=t ap.public ? :true : :false %></td>
-                <td><%= image_tag ('favourite.png', :size => "30x30") %>
-		<%= button_to 'aggiorna', wisp_access_point_property_set_favourite_path(@wisp, :access_point_id => ap.id) %>
-			</td>
+                <td>
+		  <a class="favourite-update" data-href="<%= wisp_access_point_property_set_favourite_path(ap.wisp, :access_point_id => ap.id) %>">
+                   <%= image_tag ('favourite.png', :size => "25x25") %>
+                  </a>  		  
+	        </td>
                 <td><%= image_tag_for ap, :size => "30x35", :class => 'right' %></td>
-               <% end %>
+               <%# end %>
               </tr>
          <% end %>
       </tbody>
     </table>
-
+    <div id="page_controls">
+	<div id="access_points_paginate">
+	  <%= paginate @ap_fav, :remote => true %>
+	</div>
+	<div id="combobox">
+	    <select>
+	    <% @access_point_pagination.reverse.each do |item| %>
+		<option value="<%= item['value'] %>"<% if item['default'] %> selected="selected"<% end %>><%= item['value'] %></option>
+	    <% end %>
+	    </select>
+	</div>
+    </div>
   </div>
 </div>
+<script>owgm.eraseAllFavourite()</script>
+<script>owgm.initFavourite()</script>

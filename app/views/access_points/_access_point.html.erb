@@ -22,9 +22,12 @@
   <td class="middle"><%= access_point.address %></td>
   <td class="middle"><%= access_point.city %></td>
   <td class="middle"><%=t access_point.public ? :true : :false %></td>
-  <td class="middle"><%= access_point.favourite ? image_tag('favourite.png', :size => "30x30") : image_tag('not_favourite.png', :size => "30x30") %>
+  <td class="middle"><%# access_point.favourite ? image_tag('favourite.png', :size => "30x30") : image_tag('not_favourite.png', :size => "30x30") %>
        <%#= form_tag wisp_access_point_property_set_favourite_path(access_point.wisp, :access_point_id => access_point.id), :class => access_point.hostname %>
-       <%= button_to 'aggiorna', wisp_access_point_property_set_favourite_path(access_point.wisp, :access_point_id => access_point.id) %>
-	</td>
+       <%#= button_to 'aggiorna', wisp_access_point_property_set_favourite_path(access_point.wisp, :access_point_id => access_point.id) %>
+       <a class="favourite-update" data-href="<%= wisp_access_point_property_set_favourite_path(access_point.wisp, :access_point_id => access_point.id) %>">
+        <%= access_point.favourite ? image_tag('favourite.png', :size => "25x25") : image_tag('not_favourite.png', :size => "25x25") %>
+      </a>
+  </td>
   <td class="middle right"><%= image_tag_for access_point, :size => "30x35", :class => 'right' %></td>
 </tr>
