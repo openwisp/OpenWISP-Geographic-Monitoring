@@ -6,12 +6,43 @@ class Group < ActiveRecord::Base
   
   before_destroy :is_default_group?
   
+  def up
+    monitor ? self.attributes['up'] : 'N/A'
+  end
+  
+  def down
+    monitor ? self.attributes['down'] : 'N/A'
+  end
+  
+  def unknown
+    monitor ? self.attributes['unknown'] : 'N/A'
+  end
+  
   def toggle_monitor!
     self.monitor = !self.monitor
     self.save
     self.monitor
   end
-   
+  
+  # update group statistics
+  def update_counts()
+    self.total = PropertySet.where(:group_id => self.id).count
+    # up, down and unknown will be updated only if monitoring == true
+    if self.monitor
+      self.up = PropertySet.where(:group_id => self.id, :reachable => 1).count
+      self.down = PropertySet.where(:group_id => self.id, :reachable => 0).count
+      self.unknown = PropertySet.where(:group_id => self.id, :reachable => nil).count
+    end
+    save!
+  end
+  
+  # update statistics for all groups
+  def self.update_all_counts()
+    self.all.each do |group|
+      group.update_counts()
+    end
+  end
+  
   # DB query
   def self.all_join_wisp(where=nil, params=[])
     if where.nil?: where = '1=1'; end

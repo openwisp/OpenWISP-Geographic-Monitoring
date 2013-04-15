@@ -82,6 +82,8 @@ class AccessPointsController < ApplicationController
     # change gorup, save and return json response
     property_set.group_id = group.id
     property_set.save!
+    # update group counts (total, up, down, unknown)
+    Group.update_all_counts()
     respond_to do |format|
       format.json { render :json => group.attributes }
     end

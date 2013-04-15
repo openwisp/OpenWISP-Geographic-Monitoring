@@ -23,10 +23,9 @@
         <% unless @group.new_record? %>
         <div class="box" id="group_stats">
             <h2><%= t :Group_statistics %></h2>
-            <p><strong><%= t(:Total_AP) %>:</strong> <%= @group.total_ap %></p>
+            <p><strong><%= t(:Total_AP) %>:</strong> <%= @group.total %></p>
             <p><strong><%= t(:Total_AP_up) %>:</strong> <%= @group.up %></p>
             <p><strong><%= t(:Total_AP_down) %>:</strong> <%= @group.down %></p>
-            <p><strong><%= t(:Online_users) %>:</strong> <%= @group.online_users %></p>
             <p><strong><%= t(:Created_at) %>:</strong> <%= @group.created_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></p>
             <p><strong><%= t(:Updated_at) %>:</strong> <%= @group.updated_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></p>
         </div>

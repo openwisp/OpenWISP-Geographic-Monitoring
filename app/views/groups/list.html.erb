@@ -11,7 +11,6 @@
           <th class="green center"><%=t :Up %></th>
           <th class="red center"><%=t :Down %></th>
           <th class="center"><%=t :Unknown %></th>
-          <th class="center"><%=t :Online_users %></th>
         </tr>
       </thead>
       <tbody>
@@ -24,11 +23,10 @@
               <img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
             </a>
           </td>
-          <td class="total center"><%= group.total_ap %></td>
+          <td class="total center"><%= group.total %></td>
           <td class="total_up center"><%= group.up %></td>
           <td class="total_down center"><%= group.down %></td>
           <td class="total_unkown center"><%= group.unknown %></td>
-          <td class="total_users center"><%= group.online_users %></td>
         </tr>
       <% end %>
       </tbody>

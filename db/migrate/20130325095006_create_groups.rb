@@ -5,11 +5,10 @@ class CreateGroups < ActiveRecord::Migration
       t.string :name, :null => false
       t.text :description, :null => true
       t.boolean :monitor, :default => true
-      t.integer :total_ap, :default => 0
+      t.integer :total, :default => 0
       t.integer :up, :default => 0
       t.integer :down, :default => 0
       t.integer :unknown, :default => 0
-      t.integer :online_users, :default => 0
       t.timestamps
     end
     

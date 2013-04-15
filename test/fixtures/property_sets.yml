@@ -9,3 +9,21 @@ eduroam:
   reachable: true
   access_point_id: 2
   group_id: 1
+
+
+## orphans
+
+orphan1:
+  reachable: false
+  access_point_id: 97
+  group_id: 1
+
+orphan2:
+  reachable: false
+  access_point_id: 98
+  group_id: 1
+
+orphan3:
+  reachable: false
+  access_point_id: 99
+  group_id: 1
