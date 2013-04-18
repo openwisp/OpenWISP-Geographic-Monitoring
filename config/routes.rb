@@ -10,13 +10,13 @@ Owgm::Application.routes.draw do
 
   resources :wisps, :only => :index do
     match 'erase_favourite' => 'access_points#erase_favourite', :as => :erase_favourite
+    match 'access_points_favourite' => 'access_points#favourite', :as => :access_point_favourite
     resources :access_points, :only => [:index, :show, :update] do
       resource :property_set, :only => :update
       match 'property_set_favourite' => 'property_sets#update_favourite', :as => :property_set_favourite
     end
 
     resources :activity_histories, :only => :index
-    match 'access_points_favourite' => 'access_points#favourite', :as => :access_point_favourite
     match 'access_points/:access_point_id/activities' => 'activities#show', :as => :access_point_activities
     match 'access_points/:access_point_id/activity_histories' => 'activity_histories#show', :as => :access_point_activity_histories
     match 'access_points/:access_point_id/associated_user_counts' => 'associated_user_counts#show',

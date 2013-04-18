@@ -40,20 +40,18 @@ class AccessPointsController < ApplicationController
 
   def show
     @access_point = AccessPoint.find params[:id]
-
     crumb_for_wisp
     crumb_for_access_point
   end
 
   def favourite
-    @showmap = CONFIG['showmap']
+    #@showmap = CONFIG['showmap']
     @access_point_pagination = CONFIG['access_point_pagination']
-    ap_favourite=AccessPoint.scoped
-    ap_favourite=ap_favourite.where(:wisp_id => @wisp.id).quickfavourite('1')
-    per_page = params[:per]
-    #@ap_fav=ap_favourite.page(params[:page]).per(per_page)
+    #ap_favourite=AccessPoint.scoped
+    #ap_favourite=ap_favourite.where(:wisp_id => @wisp.id).quickfavourite('1')
+    #per_page = params[:per]
     respond_to do |format|
-      format.any(:html, :js) { @ap_fav=ap_favourite.page(params[:page]).per(per_page)  }
+      format.any(:html, :js) { @ap_fav=access_points_with_sort_search_and_paginate(1).of_wisp(@wisp) }
     end
   end
 
@@ -85,7 +83,7 @@ class AccessPointsController < ApplicationController
     end
   end
 
-  def access_points_with_sort_search_and_paginate()
+  def access_points_with_sort_search_and_paginate(favourite=nil)
     query = params[:q] || nil
     column = params[:column] ? params[:column].downcase : nil
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
@@ -93,7 +91,7 @@ class AccessPointsController < ApplicationController
     access_points = AccessPoint.scoped
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query
-
+    access_points = access_points.quickfavourite(favourite) if favourite
     per_page = params[:per]
     access_points.page(params[:page]).per(per_page)
   end

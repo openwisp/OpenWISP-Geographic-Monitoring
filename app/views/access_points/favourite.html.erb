@@ -16,18 +16,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
-
+<% content_for :after_defaults do %>
+    <%= stylesheet_link_tag 'jquery-ui/styles' %>
+    <%= javascript_include_tag 'jquery-ui', 'jquery.combobox'%>
+<% end %>
 <div class="grid_12">
   <div class="box">
     <h1><%=t :Accesspoint_favourite %></h1>
+    <div id="access_points_quicksearch" class="bold">
+      <%= render 'access_points_quicksearch' %>
+    </div>
     <a class="favourite-erase" data-href="<%= wisp_erase_favourite_path(@wisp)%>">Elimina tutti</a>
     <%#= link_to 'Elimina', wisp_erase_favourite_path(@wisp) %>
+    
     <table class="fav-ap">
      <thead id="access_points_thead">
       <%= render 'access_points_thead' %>
       </thead>
 
-      <tbody>
+      <tbody id="access_points">
          <% #@wisp.access_points.each do |ap| %>
 	 <% @ap_fav.each do |ap| %>
               <tr class="<%= cycle 'odd', 'even' %>">
