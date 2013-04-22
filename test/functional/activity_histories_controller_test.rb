@@ -12,7 +12,7 @@ class ActivityHistoriesControllerTest < ActionController::TestCase
     get :index, :wisp_id => wisp.name
     assert_response :success
     assert_select "#main-nav a.active", 1
-    assert_select "#main-nav a.active", I18n.t(:Wisp)
+    assert_select "#main-nav a.active", "%s&#x25BE;" % [I18n.t(:Wisp)]
   end
   
   test "should write file in tmp folder" do

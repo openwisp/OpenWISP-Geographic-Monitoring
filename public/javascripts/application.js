@@ -47,7 +47,7 @@ $(document).ready(function() {
     }
     owgm.paginator();
     owgm.initNotice();
-    owgm.init
+    owgm.initMainMenu();
 });
 
 
@@ -379,6 +379,13 @@ var owgm = {
                 });
             })
         });    
+    },
+    
+    initMainMenu: function(){
+        $('.second-level').each(function(i, el){
+            width = $(el).width()
+            $(el).find('.third-level').attr('style', 'left: '+width+'px !important');
+        });
     }
 };
 

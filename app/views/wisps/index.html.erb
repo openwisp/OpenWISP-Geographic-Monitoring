@@ -24,15 +24,13 @@
     <table id="wisp-list">
       <thead>
       <tr>
-        <th><%=t :Name %></th>
-        <th><%=t :Notes %></th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
-        <th class="green"><%=t :Up %></th>
-        <th class="red"><%=t :Down %></th>
-        <th><%=t :Unknown %></th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
+        <th class="name"><%=t :Name %></th>
+        <th class="notes"><%=t :Notes %></th>
+        <th class="up green center"><%=t :Up %></th>
+        <th class="down red center"><%=t :Down %></th>
+        <th class="unknown center"><%=t :Unknown %></th>
+        <th class="groups center">&nbsp;</th>
+        <th class="report">&nbsp;</th>
       </tr>
       </thead>
 
@@ -40,20 +38,20 @@
       <% @wisps.each do |wisp| %>
           <% if auth?(:wisps_viewer) || auth?(:wisp_access_points_viewer, wisp) %>
               <tr class="<%= cycle 'odd', 'even' %>">
-                <td><%= link_to wisp.name, wisp_access_points_path(wisp) %></td>
-                <td colspan="3"><%= wisp.notes %></td>
-                <td class="center"><%= wisp.access_points_up.count %></td>
-                <td class="center"><%= wisp.access_points_down.count %></td>
-                <td class="center"><%= wisp.access_points_unknown.count %></td>
-                <td><%= link_to t(:Groups), wisp_groups_path(wisp) %></td>
-                <td><%= link_to t(:Availability_report), wisp_availability_report_path(wisp) %></td>
+                <td class="name"><%= link_to wisp.name, wisp_access_points_path(wisp) %></td>
+                <td class="notes"><%= wisp.notes %></td>
+                <td class="up center"><%= wisp.access_points_up.count %></td>
+                <td class="down center"><%= wisp.access_points_down.count %></td>
+                <td class="unknown center"><%= wisp.access_points_unknown.count %></td>
+                <td class="groups center"><%= link_to t(:Groups), wisp_groups_path(wisp) %></td>
+                <td class="report center"><%= link_to t(:Availability_report), wisp_availability_report_path(wisp) %></td>
               </tr>
           <% end %>
       <% end %>
       </tbody>
     </table>
 
-    <% if auth? :wisps_viewer %>
+    <!--<% if auth? :wisps_viewer %>
       <h6>
         <% if @wisps.count > 1 %>
           <%= link_to t(:Show_all_access_points), access_points_path %> -
@@ -61,6 +59,6 @@
         <%= link_to t(:Configure_owmw), edit_configuration_path('owmw') %> -
         <%= link_to t(:Manage_users), users_path() %>
       </h6>
-    <% end %>
+    <% end %>-->
   </div>
 </div>

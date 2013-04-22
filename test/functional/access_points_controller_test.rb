@@ -169,6 +169,6 @@ class AccessPointsControllerTest < ActionController::TestCase
   
   def activemenu_test
     assert_select "#main-nav a.active", 1
-    assert_select "#main-nav a.active", I18n.t(:Access_points)
+    assert_select "#main-nav a.active", "%s&#x25BE;" % [I18n.t(:Access_points)]
   end
 end

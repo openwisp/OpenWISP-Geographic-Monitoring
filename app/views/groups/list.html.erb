@@ -31,6 +31,9 @@
       <% end %>
       </tbody>
     </table>
-    <p><%= link_to t(:Manage_groups), groups_path, :class => 'button' %></p>    
+    <p>
+      <%= link_to t(:View_all_the_AP), wisp_access_points_path(@wisp), :class => 'button' %> &nbsp;
+      <%= link_to t(:Manage_groups), groups_path, :class => 'button' %>
+    </p>
   </div>
 </div>

@@ -11,6 +11,7 @@
           <th class="green center"><%=t :Up %></th>
           <th class="red center"><%=t :Down %></th>
           <th class="center"><%=t :Unknown %></th>
+          <th class="center"><%=t :View_AP %></th>
           <th class="center"><%=t :Actions %></th>
         </tr>
       </thead>
@@ -28,6 +29,11 @@
           <td class="total_up center"><%= group.up %></td>
           <td class="total_down center"><%= group.down %></td>
           <td class="total_unkown center"><%= group.unknown %></td>
+          <td class="view_ap center">
+            <% if group.wisp_id %>
+              <%= link_to t(:Access_points), wisp_group_access_points_path(slugify(group.wisp_name), group) %>
+            <% end %>
+          </td>
           <td class="center">
             <% if group.id != 1 %>
               <%= link_to t(:Delete), group_path(group), :method => :delete, :confirm => t(:Are_you_sure) %>

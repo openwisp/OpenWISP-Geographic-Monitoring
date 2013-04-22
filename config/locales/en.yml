@@ -140,6 +140,10 @@ en:
   Manage_groups: Manage groups
   Group_modified: Group modified successfully
   Group_list_of_wisp: 'Group list of "%{wisp}"'
+  View_AP: View AP
+  View_all_the_AP: All access points
+  Groups_of_this_wisp: Groups of this wisp
+  Access_points_of_wisp: Access points of this wisp
   
   # Lowercase
   logged_as: logged in as

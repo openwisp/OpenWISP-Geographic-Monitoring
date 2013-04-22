@@ -69,4 +69,24 @@ class Wisp < ActiveRecord::Base
     end
     collection
   end
+  
+  # select wisps accessible to user
+  def self.all_accessible_to(user)
+    if user.nil?
+      return []
+    end
+    # if user has role "wisps_viewer" he can see all the groups
+    if user.has_role?(:wisps_viewer)
+      Wisp.all
+    else
+      # if user has any role "wisp_access_points_viewer" of some specific wisp return those wisp
+      wisp_id_list = user.roles_search(:wisp_access_points_viewer).map{ |role| role.authorizable_id }
+      unless wisp_id_list.length <= 0
+        Wisp.find(wisp_id_list)
+      else
+        # if user has neither wisps_viewer nor wisp_access_points_viewer roles return an empty list
+        []
+      end
+    end
+  end
 end

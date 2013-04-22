@@ -70,4 +70,8 @@ module ApplicationHelper
       return (' class="active"').html_safe
     end
   end
+  
+  def slugify(string)
+    return string.downcase.gsub(' ', '-')
+  end
 end

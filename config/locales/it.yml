@@ -158,6 +158,10 @@ it:
   Manage_groups: Gestisci gruppi
   Group_modified: Gruppo modificato con successo
   Group_list_of_wisp: 'Lista gruppi di "%{wisp}"'
+  View_AP: Visualizza AP
+  View_all_the_AP: Tutti gli access points
+  Groups_of_this_wisp: Gruppi del wisp
+  Access_points_of_wisp: Access points del wisp
   
   # Lowercase
   logged_as: autenticato come

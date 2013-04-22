@@ -25,6 +25,7 @@ class ApplicationController < ActionController::Base
 
   add_breadcrumb proc{ I18n.t(:Home) }, :root_path
 
+  before_filter :load_menu_wisps
   before_filter :set_locale
   before_filter :authenticate_user!, :only => :index
   
@@ -46,6 +47,16 @@ class ApplicationController < ActionController::Base
   end
   
   private
+
+  def load_menu_wisps
+    cached = Rails.cache.fetch('wisps_menu')
+    if cached
+      @wisps_menu = cached
+    else
+      @wisps_menu = Wisp.all_accessible_to(current_user)
+      Rails.cache.write('wisps_menu', @wisps_menu)
+    end
+  end
 
   def set_locale
     # if params[:locale] is nil then I18n.default_locale will be used

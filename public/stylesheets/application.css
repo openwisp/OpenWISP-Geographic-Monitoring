@@ -158,27 +158,6 @@ th {
     width: 30%;
 }
 
-ul.nav.main{ padding: 0 8px }
-
-ul.nav.main li {
-    color:#fff;
-    background:#666;
-    font-weight:bold;
-    text-decoration:none;
-    display:block;
-    float:left;
-    margin: 0 4px;
-    height:2.4em;
-    line-height:2.5em;
-}
-
-ul.nav li a {
-    text-decoration:underline;
-    padding:0;
-}
-ul.nav li a:hover{ background: #666666; text-decoration: none !important }
-ul.nav li:hover{ background: #666666 }
-
 /* pagination tweaks july 2012 */
 
 .pagination{ float: left; margin: 4px 10px 0 0 }
@@ -295,7 +274,6 @@ input.ui-autocomplete-input{ background: #fff none }
 #group_list td.name{ width: 200px }
 #group_list .wisp{ width: 150px }
 #group_list .up, #group_list .down, #group_list total{ width: 50px }
-#group_list .total_users{ width: 100px }
 #group_list { margin-bottom: 20px }
 
 textarea{ width: 95%; height: 100px; padding: 10px 1.5%; font-size: 12px }
@@ -399,3 +377,14 @@ input.submit{
 #public img{ vertical-align: top }
 #group-info{ padding-left: 25px; background: transparent url(../images/edit.png) no-repeat scroll 0 center }
 .empty-page-msg{ text-align: center; font-size: 14px; font-weight: bold; padding: 30px 0 20px }
+#wisp-list tbody td{ vertical-align: middle }
+
+#wisp-list th.name,
+#wisp-list th.notes{ padding-left: 12px }
+#wisp-list .name{ width: 20% }
+#wisp-list .notes{ width: 35% }
+#wisp-list .groups{ width: 7% }
+#wisp-list .report{ width: 18% }
+#wisp-list .up{ width: 6% }
+#wisp-list .down{ width: 6% }
+#wisp-list .unknown{ width: 6% }
