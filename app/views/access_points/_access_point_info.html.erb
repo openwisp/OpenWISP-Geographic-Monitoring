@@ -26,6 +26,18 @@
     <td class="right"><%= @access_point.hostname %></td>
   </tr>
   <tr>
+    <td><strong><%=t :Mac_address %></strong></td>
+    <td class="right"><%= @access_point.common_name %></td>
+  </tr>
+  <tr id="group-row">
+    <td><strong><%=t :Group %></strong></td>
+    <td class="right">
+      <a id="group-info" data-groupid="<%= @properties.group.id %>">
+        <%= @properties.group.name %>
+      </a>
+    </td>
+  </tr>
+  <tr>
     <td><strong><%=t :Address %></strong></td>
     <td class="right"><%= @access_point.address %></td>
   </tr>
@@ -66,9 +78,13 @@
     <td><strong><%=t :Latest_seen %></strong></td>
     <td class="right"><%= l(@access_point.latest_seen, :format => :short) rescue '-' %></td>
   </tr>
-  <tr>
-    <td id="clickable_public"><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
-    <td id="public" class="right"><%=t @access_point.public ? :true : :false %></td>
+  <tr id="clickable_public">
+    <td><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
+    <td id="public" class="right">
+      <a class="toggle-monitor" data-href="<%= toggle_monitor_group_path(@properties.group_id) %>">
+        <img src="<%= image_path(@access_point.public ? 'accept.png' : 'delete.png') %>" alt="">
+      </a>
+    </td>
   </tr>
   <tr>
     <td id="clickable_category"><strong><%=t :Category %></strong> (<%=t :click_to_edit %>)</td>

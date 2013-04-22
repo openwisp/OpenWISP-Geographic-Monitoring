@@ -1,0 +1,39 @@
+<div class="grid_12">
+  <div class="box">
+    <h1><%=t :Group_list_of_wisp, :wisp => @wisp.name %></h1>
+    <table id="group_list">
+      <thead>
+        <tr>
+          <th class="name"><%=t :Name %></th>
+          <th><%=t :Wisp %></th>
+          <th class="center"><%=t :Monitor %></th>
+          <th class="center"><%=t :Total_AP %></th>
+          <th class="green center"><%=t :Up %></th>
+          <th class="red center"><%=t :Down %></th>
+          <th class="center"><%=t :Unknown %></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @groups.each do |group| %>
+        <tr class="<%= cycle 'odd', 'even' %>">
+          <td class="name"><%= link_to group.name, wisp_group_access_points_path(@wisp, group) %></td>
+          <td class="wisp"><%= group.wisp_name %></td>
+          <td class="monitor center">
+            <a class="toggle-monitor" data-href="<%= toggle_monitor_group_path(group.id) %>">
+              <img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
+            </a>
+          </td>
+          <td class="total center"><%= group.total %></td>
+          <td class="total_up center"><%= group.up %></td>
+          <td class="total_down center"><%= group.down %></td>
+          <td class="total_unkown center"><%= group.unknown %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <p>
+      <%= link_to t(:View_all_the_AP), wisp_access_points_path(@wisp), :class => 'button' %> &nbsp;
+      <%= link_to t(:Manage_groups), groups_path, :class => 'button' %>
+    </p>
+  </div>
+</div>

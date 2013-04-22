@@ -5,6 +5,21 @@ Navigation
 
 /* navigation (horizontal subnavigation)
 ----------------------------------------------- */
+
+ul.nav.main{ padding: 0 8px }
+
+ul.nav.main li {
+    color:#fff;
+    background:#666;
+    font-weight:bold;
+    text-decoration:none;
+    display:block;
+    float:left;
+    margin: 0 4px;
+    height:2.4em;
+    line-height:2.5em;
+}
+
 ul.nav,
 ul.nav * { margin:0;padding:0;}
 ul.nav {
@@ -14,19 +29,15 @@ ul.nav {
   height:2.5em;
   }
 ul.nav li {
-	cursor:pointer;
 	float:left;
 	text-align:center;
 	list-style-type:none;
 	font-weight:normal;
+	cursor: default
 }
 ul.nav li ul {
-	cursor:default;
-	width:100%;
-	max-width:100%;
 	position:absolute;
-	height:auto;
-	top:2.5em;
+	top:34px;
 	background-position:0 0 !important;
 	left:-9000px;
 }
@@ -35,6 +46,7 @@ ul.nav li ul li {
 	border:none;
 	width:auto;
 	max-width:none;
+	float: none !important;
 }
 ul.nav li a {
 	color:#fff;
@@ -62,22 +74,61 @@ ul.nav li:hover a,
 ul.nav li a:hover,
 ul.nav li a:focus {color:#000; background:#ccc;}
 ul.nav li a:active {color:#666; background:#fff;}
-ul.nav li:hover ul {left:0;z-index:10}
+ul.nav li:hover ul.second-level {left:-1px; z-index:10}
 ul.nav li ul,
 ul.nav li {background:#ccc}
-ul.nav li:hover ul li a {color:#444;}
-ul.nav li:hover ul li a:hover {color:#000; background:#fff;}
-ul.nav li:hover ul li a:active {color:#666; background:#fff;}
+ul.nav ul a{
+  height: 30px !important;
+  line-height: 30px !important;
+  font-size: 12px !important;
+  font-weight: normal !important;
+}
 
 ul.nav li.current a {color:#666; background:#fff; cursor:default; font-weight:bold;}
-ul.nav li.current ul {left:0;z-index:5}
 ul.nav li.current ul,
 ul.nav li.current {background:#ccc !important}
-ul.nav li.current ul li a {color:#444; background:#ccc; font-weight:normal;}
+ul.nav li.current ul li a {color:#444; font-weight:normal;}
 ul.nav li.current ul li a:hover {color:#000; background:#fff;}
 ul.nav li ul li.current a,
 ul.nav li ul li.current a:hover,
 ul.nav li.current:hover ul li a:active {color:#666; background:#fff;}
+
+ul.second-level{ 
+  width: 100% !important;
+  min-width: 120px;
+  max-width: 300px !important;
+  float: left;
+  background:#ccc !important;
+}
+
+ul.second-level li{
+  position: relative;
+  float: none !important;
+  width: auto !important;
+  min-width: 100%; max-width: 300px;
+  border: 1px solid #666666 !important;
+}
+ul.second-level a{ width: auto !important; float: none !important }
+
+ul.second-level a span, #main-nav li > a > span{ float: right; font-weight: bold; font-size: 20px }
+#main-nav li > a > span{ font-size: 18px; margin-left: 8px; margin-right: 3px; position: relative; top: -1px }
+
+ul.third-level{
+  position: absolute !important;
+  top: -9000px !important;
+  left: -9000px !important;
+  z-index: 0;
+  min-width: 110px;
+}
+ul.third-level a{ color:#fff; background: #2B2B2B !important; }
+ul.second-level > li:hover > ul.third-level{
+  top: -1px !important;
+  left: 118px !important;
+  z-index: 6;
+}
+#main-nav a:hover, #main-nav li:hover > a{ background-color: #2B2B2B !important }
+#main-nav ul.third-level a:hover{ text-decoration: underline !important }
+
 
 
 /* navigation (vertical subnavigation)
@@ -109,7 +160,6 @@ ul.main li ul li a {
   height:2em;
   text-align:left;
   color:#fff;
-  border-top:1px solid #444;
   background:#444;
 }
 ul.main li a:focus {color:#fff; background:#666;}
@@ -165,3 +215,31 @@ ul.nav li.secondary:hover a:hover {
 	background:#555;
 }
 ul.nav li.secondary:hover a:active {background:#444;}
+
+nav ul, nav li, nav a{ background-color: #464646 !important }
+nav ul.nav.main{ height: 35px !important }
+#main-nav{ padding: 0 }
+#main-nav li{ padding: 0; margin: 0 }
+#main-nav li.first a{ padding: 0 15px }
+#main-nav a{
+  font: bold 14px "Helvetica", "Arial", sans-serif;
+  line-height: 35px;
+  text-decoration: none;
+  margin: 0;
+  padding: 0 10px;
+}
+#main-nav li a.active{ background-color: #6D6D6D !important; cursor: default; padding: 0 15px; border-top: 3px solid #464646; border-radius: 5px }
+#main-nav li.first a.active{ margin-left: 5px }
+#breadcrumbs{ padding: 3px 11px; font-size: 11px }
+#breadcrumbs, #breadcrumbs li{ height: 30px; line-height: 30px; }
+#breadcrumbs, #breadcrumbs li, #breadcrumbs a{ background-color: #6D6D6D }
+#logout { float: right; font-weight: normal }
+#logout:hover a{ background: transparent }
+#logout a{ display: inline; float: none; font-weight: bold }
+
+ul.nav li a {
+  text-decoration:underline;
+  padding:0;
+}
+ul.nav li a:hover{ background: #666666; text-decoration: none !important }
+ul.nav li:hover{ background: #666666 }

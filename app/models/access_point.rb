@@ -205,6 +205,11 @@ class AccessPoint < ActiveRecord::Base
   def self.with_properties
     joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`")
   end
+  
+   def self.with_properties_and_group
+    joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`
+          LEFT JOIN `groups` ON `property_sets`.`group_id` = `groups`.`id`")
+  end
 
   def set_reachable_to(boolean)
     property_set.update_attribute(:reachable, boolean) rescue PropertySet.create(:reachable => boolean, :access_point => self)

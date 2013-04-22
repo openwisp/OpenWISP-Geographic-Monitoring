@@ -2,48 +2,38 @@ require 'test_helper'
 
 class WispsControllerTest < ActionController::TestCase
   setup do
-    @wisp = wisps(:one)
+    @wisp = wisps(:provincia_wifi)
   end
-
-  test "should get index" do
+  
+  test "unauthenticated user cannot get index" do
+    get :index
+    assert_redirected_to new_user_session_url
+  end
+  
+  test "non wisp_viewer cannot get index" do
+    sign_in users(:sfigato)
+    get :index
+    assert_response :forbidden
+  end
+  
+  test "wisp_viewer can get index" do
+    sign_in users(:admin)
     get :index
     assert_response :success
     assert_not_nil assigns(:wisps)
-  end
-
-  test "should get new" do
-    get :new
-    assert_response :success
-  end
-
-  test "should create wisp" do
-    assert_difference('Wisp.count') do
-      post :create, :wisp => @wisp.attributes
+    # wisps_viewer can see all wisps
+    assert_select "#wisp-list", 1 do
+      assert_select "#wisp-list tbody tr", 3
     end
-
-    assert_redirected_to wisp_path(assigns(:wisp))
   end
-
-  test "should show wisp" do
-    get :show, :id => @wisp.to_param
+  
+  test "limited wisp index access" do
+    sign_in users(:brescia_admin)
+    get :index
     assert_response :success
-  end
-
-  test "should get edit" do
-    get :edit, :id => @wisp.to_param
-    assert_response :success
-  end
-
-  test "should update wisp" do
-    put :update, :id => @wisp.to_param, :wisp => @wisp.attributes
-    assert_redirected_to wisp_path(assigns(:wisp))
-  end
-
-  test "should destroy wisp" do
-    assert_difference('Wisp.count', -1) do
-      delete :destroy, :id => @wisp.to_param
+    # brescia admin can see only 1 wisp
+    assert_select "#wisp-list", 1 do
+      assert_select "tbody tr", 1
     end
-
-    assert_redirected_to wisps_path
   end
 end

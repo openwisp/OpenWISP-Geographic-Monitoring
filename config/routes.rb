@@ -4,12 +4,17 @@ Owgm::Application.routes.draw do
 
   devise_for :users
 
+  resources :users
+
   resources :access_points, :only => [:index]
 
   resources :configurations, :only => [:edit, :update]
 
   resources :wisps, :only => :index do
-
+    
+    match 'groups' => 'groups#list', :as => :groups, :via => [:get]
+    match 'groups/:group_id/access_points' => 'access_points#index', :as => :group_access_points, :via => [:get]
+    
     resources :access_points, :only => [:index, :show] do
       resource :property_set, :only => :update
     end
@@ -22,56 +27,24 @@ Owgm::Application.routes.draw do
     match 'access_points/:access_point_id/associated_user_count_histories' => 'associated_user_count_histories#show',
           :as => :associated_user_count_histories
     match 'availability_report' => 'activity_histories#index', :as => :availability_report
-    match 'export' => 'activity_histories#export', :as => :export, :via => [:post, :get]
+    match 'export' => 'activity_histories#export', :as => :export, :via => [:post]
+    match 'send_report' => 'activity_histories#send_report', :as => :send_report
+    
+    match 'access_points/:access_point_id/select_group' => 'access_points#select_group', :as => :access_point_select_group, :via => [:get]
+    match 'access_points/:access_point_id/change_group/:group_id' => 'access_points#change_group', :as => :access_point_change_group, :via => [:post]
+  end
+  
+  resources :groups, :only => [:index, :new, :edit, :create, :update, :destroy] do
+    member do
+      post 'toggle_monitor'
+    end
   end
 
-  # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
-
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
-
+  match 'wisps/' => 'wisps#index', :via => [:get]
+  
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => "wisps#index"
+  root :to => "application#index"
 
   # See how all your routes lay out with "rake routes"
 

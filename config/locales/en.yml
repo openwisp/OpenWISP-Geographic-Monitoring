@@ -21,9 +21,10 @@ en:
   Availability_report: Availability report
   Availability_report_for: Availability report for %{wisp}
   Avg_availability: Average availability
+  Are_you_sure: Are you sure?
   Back: Back
   Cancel: Cancel
-  Category: Category
+  Category: Category (GeoRSS)
   City: City
   Click_and_drag_to_zoom_in: You can click and drag to zoom in
   Click_to_edit: Click to edit
@@ -57,8 +58,10 @@ en:
   Access_point_named: Access point %{hostname}
   Access_points: Access points
   Access_points_for: %{wisp}'s Access points
+  Access_points_for_group: 'Access points of group "%{group}"'
   Access_points_of_every_wisp: Access points of every wisp
   Access_points_map: Access points Map
+  Home: Home
   Info: Info
   Interface_address: Inteface address
   Interface_vendor: Inteface vendor
@@ -100,9 +103,50 @@ en:
   Update: Update
   Username: Username
   Will_be_rendered_in_georss: Will be rendered in GeoRSS
+  Wisp: Wisp
   Wisp_list: Wisps List
+  User: User
+  username: Username
+  email: email
+  change_password: change password
+  Password: password
+  password_confirmation: password confirmation
+  Edit: Edit
+  Create: Create
+  Roles: Roles
+  Edit_user: Edit user
+  New_user: New user
+  Account_updated: User account modified successfully
+  Select: Select
+  Account_registered: New user account registered
+  Delete: Delete
+  Last_login: Last login
+  Actions: Actions
+  Online_users: Online users
+  Group: Group
+  Groups: Groups
+  Group_list: Group management
+  New_group: New Group  
+  Edit_group: Modifica gruppo
+  Total_AP: Total AP
+  Monitor: Monitoring active?
+  No_wisp: No wisp associated
+  Users: Users
+  User_management: User management interface
+  Mac_address: Mac address
+  Cannot_delete_default_group: Cannot delete default group
+  No_AP: There are no access points yet
+  Monitoring_disabled_for_group: Monitoring disabled for this group
+  Manage_groups: Manage groups
+  Group_modified: Group modified successfully
+  Group_list_of_wisp: 'Group list of "%{wisp}"'
+  View_AP: View AP
+  View_all_the_AP: All access points
+  Groups_of_this_wisp: Groups of this wisp
+  Access_points_of_wisp: Access points of this wisp
   
   # Lowercase
+  logged_as: logged in as
   all: all
   back: back
   click_to_edit: click to edit

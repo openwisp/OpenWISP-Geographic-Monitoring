@@ -1,0 +1,27 @@
+admin:
+    id: 1
+    username: 'admin'
+    email: 'admin@admin.it'
+    encrypted_password: '$2a$10$zP76I4at9EDWkb8UnSTXleWpn6uheM4WUOlRz3JStC4veZiuhmhrG'
+    password_salt: '$2a$10$GwtIZLsEH44fCSVuWWUrB.'
+
+sfigato:
+    id: 2
+    username: 'user'
+    email: 'user@user.it'
+    encrypted_password: '$2a$10$zP76I4at9EDWkb8UnSTXleWpn6uheM4WUOlRz3JStC4veZiuhmhrG'
+    password_salt: '$2a$10$GwtIZLsEH44fCSVuWWUrB.'
+
+brescia_admin:
+    id: 3
+    username: 'brescia_admin'
+    email: 'brescia_admin@admin.it'
+    encrypted_password: $2a$10$iyNfi5hZvxnUgXuhQtiVo..FdbAvJmPQrjsNh5do7hoetR2fSwTFi
+    password_salt: ''
+
+mixed_operator:
+    id: 4
+    username: 'mixed_operator'
+    email: 'mixed_operator@admin.it'
+    encrypted_password: '$2a$10$zP76I4at9EDWkb8UnSTXleWpn6uheM4WUOlRz3JStC4veZiuhmhrG'
+    password_salt: '$2a$10$GwtIZLsEH44fCSVuWWUrB.'

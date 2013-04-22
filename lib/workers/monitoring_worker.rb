@@ -30,12 +30,16 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
 
   def create(args = nil)
     # this method is called, when worker is loaded for the first time
-
   end
 
   def access_points_monitoring
     threads = []
     AccessPoint.all.each do |ap|
+      
+      # if access point is in a group which is not being monitored
+      unless ap.properties.group.monitor
+        next
+      end
 
       # spawn a new thread if there is a "slot" for it. Otherwise, wait for an empty slot
       while threads.length >= MAX_THREADS
@@ -61,6 +65,8 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       end)
 
     end
+    # update group statistics
+    Group.update_all_counts()
 
     # collect remaining threads that are finished theirs job
     while threads.length > 0
@@ -209,6 +215,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     time = 6.months.to_i.ago
     ActivityHistory.destroy_all(["created_at < ?", time])
     AssociatedUserCountHistory.destroy_all(["created_at < ?", time])
+    # delete orphan property sets
+    PropertySet.destroy_orphans()
   end
-
 end
