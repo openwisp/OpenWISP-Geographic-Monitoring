@@ -151,6 +151,8 @@ class AccessPoint < ActiveRecord::Base
         with_properties.order("`public` #{direction}")
       when 'site_description' then
         with_properties.order("`site_description` #{direction}")
+      when 'favourite' then
+        with_properties.order("`favourite` #{direction}")
       else
         order("#{attribute} #{direction}")
     end

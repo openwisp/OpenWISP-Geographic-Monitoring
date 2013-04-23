@@ -83,7 +83,7 @@ class AccessPointsController < ApplicationController
     end
   end
 
-  def access_points_with_sort_search_and_paginate(favourite=nil)
+  def access_points_with_sort_search_and_paginate(fav=nil)
     query = params[:q] || nil
     column = params[:column] ? params[:column].downcase : nil
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
@@ -91,7 +91,7 @@ class AccessPointsController < ApplicationController
     access_points = AccessPoint.scoped
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query
-    access_points = access_points.quickfavourite(favourite) if favourite
+    access_points = access_points.quickfavourite(fav) if fav
     per_page = params[:per]
     access_points.page(params[:page]).per(per_page)
   end
@@ -101,6 +101,7 @@ class AccessPointsController < ApplicationController
     i18n_columns[I18n.t(:status, :scope => [:activerecord, :attributes, :access_point])] = 'status'
     i18n_columns[I18n.t(:public, :scope => [:activerecord, :attributes, :access_point])] = 'public'
     i18n_columns[I18n.t(:site_description, :scope => [:activerecord, :attributes, :access_point])] = 'site_description'
+    i18n_columns[I18n.t(:favourite, :scope => [:activerecord, :attributes, :access_point])] = 'favourite'
 
     AccessPoint.column_names.each do |col|
       i18n_columns[I18n.t(col, :scope => [:activerecord, :attributes, :access_point])] = col
