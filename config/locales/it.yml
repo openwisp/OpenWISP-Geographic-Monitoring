@@ -11,6 +11,22 @@ it:
         public: pubblico
         site_description: sito di installazione
         status: stato
+      group:
+        name: nome
+    errors:
+      template:
+        header: "Errore di validazione"
+        body: "L'operazione ha avuto esito negativo, controlla gli errori riportati in seguito e riprova."
+      models:
+        user:
+          attributes:
+            email:
+              taken: 'email già utilizzata da un altro utente'
+        group:
+          attributes:
+            name:
+              blank: 'prova pro'
+
   # Uppercase
   Activation_date: Data di attivazione
   Activity_graph: Grafico attività
@@ -21,9 +37,10 @@ it:
   Availability_report: Report di disponibilità
   Availability_report_for: Report di disponibilità per %{wisp}
   Avg_availability: Disponibilità media
+  Are_you_sure: Sei sicuro?
   Back: Indietro
   Cancel: Annulla
-  Category: Categoria
+  Category: Categoria (GeoRSS)
   City: Città
   Click_and_drag_to_zoom_in: Clicca e trascina per ingrandire una sezione
   Click_to_edit: Clicca per modificare
@@ -55,10 +72,12 @@ it:
   Access_point: Access point
   Access_point_info: "Informazioni veloci:"
   Access_point_named: Access point %{hostname}
-  Access_points: Access point
+  Access_points: Access points
   Access_points_for: Access point di %{wisp}
+  Access_points_for_group: 'Access point del gruppo "%{group}"'
   Access_points_of_every_wisp: Access point di tutti i wisp
   Access_points_map: Mappa degli Access point
+  Home: Inizio
   Info: Informazioni
   Interface_address: Indirizzo apparato
   Interface_vendor: Vendor apparato
@@ -100,9 +119,52 @@ it:
   Update: Aggiorna
   Username: Username
   Will_be_rendered_in_georss: Verrà visualizzato sulla mappa pubblica (GeoRSS)
+  Wisp: Wisp
   Wisp_list: Lista Wisp
+  Manage_users: Gestione utenti
+  User: Utente
+  username: username
+  email: email
+  Password: password
+  Change_password: Cambia password
+  password_confirmation: conferma password
+  Edit: Modifica
+  Create: Crea
+  Roles: Ruoli
+  Edit_user: Modifica utente
+  New_user: Nuovo utente
+  Account_registered: Nuovo account utente registrato con successo
+  Account_updated: Utente modificato con successo
+  Select: Seleziona
+  Delete: Elimina
+  Last_login: Ultimo login
+  Actions: Azioni
+  Online_users: Utenti online
+  Group: Gruppo
+  Groups: Gruppi
+  Group_list: Gestione gruppi
+  New_group: Nuovo gruppo
+  Edit_group: Modifica gruppo  
+  Total_AP: AP Totali
+  Monitor: Monitoraggio attivo?
+  No_wisp: Nessun wisp associato
+  Users: Utenti
+  User_management: Interfaccia gestione utenti
+  Mac_address: Mac address
+  Cannot_delete_default_group: Impossibile eliminare il gruppo di default
+  No_AP: Nessun access point presente
+  Group_named: Gruppo "%{group}"
+  Monitoring_disabled_for_group: Monitoring disattivato per questo gruppo
+  Manage_groups: Gestisci gruppi
+  Group_modified: Gruppo modificato con successo
+  Group_list_of_wisp: 'Lista gruppi di "%{wisp}"'
+  View_AP: Visualizza AP
+  View_all_the_AP: Tutti gli access points
+  Groups_of_this_wisp: Gruppi del wisp
+  Access_points_of_wisp: Access points del wisp
   
   # Lowercase
+  logged_as: autenticato come
   all: tutti
   back: indietro
   click_to_edit: clicca per modificare
@@ -121,6 +183,9 @@ it:
   'true': 'sì'
   unknown: sconosciuto
   up: up
+  description: descrizione
+  name: nome
+  monitor: monitoraggio
 
   # Defaults for rails
   errors:

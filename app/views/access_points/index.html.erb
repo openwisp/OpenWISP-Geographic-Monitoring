@@ -25,38 +25,51 @@
     <%= render 'marker_info_window_templates' %>
 <% end %>
 
-<div class="grid_12">
-  <div class="box">
-    <h2><a id="map_toggle" href="#"<% if not @showmap: %> class="hidden"<% end %>><%=t :Access_points_map %></a></h2>
-    <div id="map_container"<% if not @showmap: %> style="display:none"<% end %>>
-	<br />
-	<div id="access_points_map">
-	  <%= render 'access_points_map' %>
-	</div>
-	<div id="map_loading" class="hidden">
-	  <p><%=t :Loading %> <%=t :markers%> <%= image_tag 'spinner.gif', :size => '22x22' %></p>
-	</div>
-    </div>
-  </div>
+
+  <div class="grid_12">
+		<% if @access_points.length > 0 %>
+		<div class="box">
+			<h2><a id="map_toggle" href="#"<% if not @showmap: %> class="hidden"<% end %>><%=t :Access_points_map %></a></h2>
+			
+			<div id="map_container"<% if not @showmap: %> style="display:none"<% end %>>
+		  <br />
+				<div id="access_points_map">
+					<%= render 'access_points_map' %>
+				</div>
+				<div id="map_loading" class="hidden">
+					<p><%=t :Loading %> <%=t :markers%> <%= image_tag 'spinner.gif', :size => '22x22' %></p>
+				</div>
+		  </div>
+		</div>
+		<% end %>
 
   <div class="clear"></div>
 
   <div class="box">
     <h2>
       <%=t :Access_point %>
+			<% if @access_points.length > 0 %>
       <span class="rfloat">
-	<% if @wisp.present? %>
-	  <%=t :up %>: <%= @wisp.access_points_up.count %>
-          <%=t :down %>: <%= @wisp.access_points_down.count %>
-          <%=t :unknown %>: <%= @wisp.access_points_unknown.count %>
-	<% else %>
-	  <%=t :up %>: <%= AccessPoint.up.count %>
-          <%=t :down %>: <%= AccessPoint.down.count %>
-          <%=t :unknown %>: <%= AccessPoint.unknown.count %>
-	<% end %>
+				<% if @group.present? and @group.monitor %>
+						<%=t :up %>: <%= @group.up %>
+						<%=t :down %>: <%= @group.down%>
+						<%=t :unknown %>: <%= @group.unknown %>
+				<% elsif @group.present? %>
+						<%= t :Monitoring_disabled_for_group %>
+				<% elsif @wisp.present? %>
+						<%=t :up %>: <%= @wisp.access_points_up.count %>
+						<%=t :down %>: <%= @wisp.access_points_down.count %>
+						<%=t :unknown %>: <%= @wisp.access_points_unknown.count %>
+				<% else %>
+						<%=t :up %>: <%= AccessPoint.up.count %>
+						<%=t :down %>: <%= AccessPoint.down.count %>
+						<%=t :unknown %>: <%= AccessPoint.unknown.count %>
+				<% end %>
       </span>
+			<% end %>
     </h2>
 
+		<% if @access_points.length > 0 %>
     <div id="access_points_quicksearch" class="bold">
       <%= render 'access_points_quicksearch' %>
     </div>
@@ -74,18 +87,22 @@
       <%= render @access_points %>
       </tbody>
     </table>
+		
 
     <div id="page_controls">
-	<div id="access_points_paginate">
-	  <%= paginate @access_points, :remote => true %>
-	</div>
-	<div id="combobox">
-	    <select>
-	    <% @access_point_pagination.reverse.each do |item| %>
-		<option value="<%= item['value'] %>"<% if item['default'] %> selected="selected"<% end %>><%= item['value'] %></option>
-	    <% end %>
-	    </select>
-	</div>
+				<div id="access_points_paginate">
+					<%= paginate @access_points, :remote => true %>
+				</div>
+				<div id="combobox">
+						<select>
+						<% @access_point_pagination.reverse.each do |item| %>
+					<option value="<%= item['value'] %>"<% if item['default'] %> selected="selected"<% end %>><%= item['value'] %></option>
+						<% end %>
+						</select>
+				</div>
     </div>
+		<% else %>
+				<p class="empty-page-msg"><%= t :No_AP %></p>
+		<% end %>
   </div>
 </div>

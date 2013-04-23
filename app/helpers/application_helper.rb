@@ -64,4 +64,14 @@ module ApplicationHelper
   def access_points_with_or_without_wisp_path(wisp)
     wisp ? wisp_access_points_path(wisp) : access_points_path
   end
+  
+  def active_link_if(path, exclude1='abcdefgh', exclude2='abcdefghi')
+    if request.fullpath.include?(path) and (!request.fullpath.include?(exclude1) and !request.fullpath.include?(exclude2))
+      return (' class="active"').html_safe
+    end
+  end
+  
+  def slugify(string)
+    return string.downcase.gsub(' ', '-')
+  end
 end

@@ -1,7 +1,14 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+provincia_wifi:
+  id: 1
+  name: 'provinciawifi'
+  notes: 'testing 1'
 
-one:
-  name: MyString
+freewifibrescia:
+  id: 2
+  name: 'freewifi brescia'
+  notes: 'testing 2'
 
-two:
-  name: MyString
+small:
+  id: 3
+  name: 'small wisp'
+  notes: 'testing 3'

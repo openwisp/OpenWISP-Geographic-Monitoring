@@ -25,33 +25,98 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :username, :email, :password, :password_confirmation
+  
+  validates_uniqueness_of :email
 
   ROLES = [
-    :wisps_viewer, :wisp_access_points_viewer,
-    :wisp_activities_viewer, :wisp_activity_histories_viewer,
-    :wisp_associated_user_counts_viewer, :wisp_associated_user_count_histories_viewer
+    :wisps_viewer, # higher role
+    :wisp_access_points_viewer, :wisp_activities_viewer, :wisp_activity_histories_viewer,
+    :wisp_associated_user_counts_viewer, :wisp_associated_user_count_histories_viewer,
   ]
-
-  def roles
-    @rs = []
-    ROLES.each do |r|
-      @rs << r if self.has_role?(r)
+  
+  def roles(force_query=false)
+    # don't query the database multiple times if it is not necessary unless explicitly specified
+    if not force_query and @roles
+      return @roles
     end
-    @rs
+    if self.id
+      @roles = Role.find_by_sql("SELECT * FROM roles LEFT JOIN roles_users ON roles.id = roles_users.role_id WHERE roles_users.user_id = #{self.id}")
+    else
+      @roles = Role.all
+    end
+  end
+  
+  def roles_id
+    roles = self.roles()
+    list = []
+    unless self.id.nil?
+      roles.each do |role|
+        list << role.id
+      end
+    end
+    list
+  end
+  
+  # retrieve roles from the database and loop over them to find a specific one
+  # makes it possible to do several searchs during an iteration with only 1 DB query
+  def roles_include?(name, object_id=nil)
+    name = name.to_s
+    # get roles from DB if not already available
+    @roles = @roles || self.roles()
+    # loop over each role and if the role we are looking for is there return true
+    @roles.each do |role|
+      if role.name == name and (object_id.nil? or role.authorizable_id == object_id)
+        return true
+      end
+    end
+    # if nothing found
+    return false
+  end
+  
+  def roles_search(role_name)
+    # return a list of roles that have the same name (but possibly different authorizable_id)
+    if self.id
+      Role.find_by_sql(["SELECT * FROM roles LEFT JOIN roles_users ON roles.id = roles_users.role_id WHERE roles_users.user_id = ? AND name = ?", self.id, role_name])
+    else
+      []
+    end
   end
 
   def roles=(new_roles)
     to_remove = self.roles - new_roles
-    to_remove.each do |role|
-      self.has_no_role!(role, self.wisp) if self.wisp
-      self.has_no_role!(role)
+    to_remove.each do |role|     
+      remove_role(role)
     end
-
-    new_roles.map!{|role| role.to_sym}
+    
     new_roles.each do |role|
-      if ROLES.include? role
-        self.wisp ? self.has_role!(role, self.wisp) : self.has_role!(role)
-      end
+      assign_role(role.name, role.authorizable_id)
     end
+    
+    @roles = self.roles(force=true)
+  end
+  
+  def assign_role(name, wisp_id=nil)
+    unless wisp_id.nil?
+      self.has_role!(name, Wisp.find(wisp_id))
+    else
+      self.has_role!(name)
+    end    
+  end
+  
+  def remove_role(role)
+    ActiveRecord::Base.connection.execute("DELETE FROM roles_users WHERE roles_users.user_id = #{self.id.to_i} AND roles_users.role_id = #{role.id}")
+  end
+  
+  def display_roles(separator=', ')
+    roles = self.roles()
+    @output = ''
+    roles.each_with_index do |role, i|
+      @output += i < 1 ? '%s' % role : '%s %s' % [separator, role]
+    end
+    @output
+  end
+  
+  def self.available_roles
+    ROLES
   end
 end

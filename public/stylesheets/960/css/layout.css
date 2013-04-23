@@ -7,7 +7,7 @@ body {
 	background: #eee;
 	border-top: 5px solid #000;
 	color: #333;
-	font-size: 11px;
+	font-size: 12px;
 	padding: 0 0 40px;
 }
 
@@ -48,14 +48,18 @@ h1 a {
 /* branding
 ----------------------------------------------- */
 h1#branding {
-	font-weight:normal;
-	font-size:3em;
+	font: normal 3em "Helvetica", sans-serif;
+	letter-spacing: -1px;
 	text-align:left;
-	background:#aaa;
-	padding:.7em 1em;
 	margin-bottom:0;
 }
-
+h1#branding a{
+	display: block;
+	background:#aaa url(../../../images/openwisp-logo.png) no-repeat scroll 40px center;
+	padding:50px 1em 50px 230px;
+}
+#header{ position: relative }
+#lang{ position: absolute; right: 45px; top: 40% }
 
 /* page heading
 ----------------------------------------------- */
@@ -69,6 +73,8 @@ h2#page-heading {
 
 /* boxes
 ----------------------------------------------- */
+#container{ width: 95%; min-width: 960px }
+
 .box {
 	background:#ddd;
 	margin-bottom:20px;
@@ -81,7 +87,8 @@ h2#page-heading {
 	color:#fff;
 	background:#333;
 	margin:-10px -10px 0 -10px;
-	padding:6px 12px;
+	font-size: 14px;
+	padding: 10px 15px;
 }
 .box h2 a,
 .box h2 a.visible {
@@ -240,7 +247,6 @@ ul.section li.current > a.active:hover {
 	cursor:default;
 }
 
-
 /* table
 ----------------------------------------------- */
 table {
@@ -258,7 +264,8 @@ th, td {
 thead th {
 	border-bottom:2px solid #888;
 	background:#bbb;
-	padding:.4em 1em .2em;
+	padding: .6em 0.6em .5em;
+	font-size: 12px;
 }
 thead th.table-head {
 	font-size:1em;
@@ -273,6 +280,9 @@ tbody td {
 	border-top:1px solid #bbb;
 	border-bottom:1px solid #bbb;
 	background:#eee;
+	font-size: 12px;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
 }
 tbody tr.odd th,
 tbody tr.odd td {
@@ -314,20 +324,23 @@ legend {
 	background:#fff;
 	border:1px solid #bbb;
 }
-fieldset.login p {
+fieldset.login p, fieldset.login div.field {
 	margin-bottom:1em;
 	margin-top:0pt;
 }
-fieldset p label {
+fieldset div.field{ margin: 0 0 1em 0 }
+fieldset p label, fieldset div.field label {
 	width:98%;
 }
-fieldset p input {
-	width:98%;
+fieldset p input, fieldset div.field input {
+	width:95%;
 }
-fieldset p select {
+fieldset input[type=text],
+fieldset input[type=password]{ padding: 0.7% 1.5%; font-size: 12px }
+fieldset p select, fieldset div.field select {
 	width:99%;
 }
-fieldset.login p label {
+fieldset.login p label, fieldset.login div.field label {
 	float:left;
 	line-height:2em;
 	margin-right:3%;

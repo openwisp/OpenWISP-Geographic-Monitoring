@@ -76,27 +76,30 @@
 }
 
 #gmap_index {
-    width: 920px;
+    width: 100%;
     height: 500px;
 }
 
 #gmap_show {
-    width: 430px;
-    height: 227px;
+    width: 100%;
+    height: 396px;
 }
+
+#map_container{ position: relative }
 
 #map_loading {
     position: absolute;
-    width: 921px;
+    width: 100%;
     height: 544px;
-    margin-top: -545px;
+    margin-top: -550px;
     background-color: #ddd;
 }
 
 #map_loading p{
     font-size: 30px;
     margin-top: 250px;
-    margin-left: 350px;
+	width: 100%;
+	text-align: center;
 }
 
 #loading {
@@ -109,10 +112,6 @@
 
 #login {
     margin: 0 32%;
-}
-
-#logout {
-    float: right;
 }
 
 #access_points_quicksearch { float: left; width: 400px; margin: 15px 0  }
@@ -159,42 +158,23 @@ th {
     width: 30%;
 }
 
-ul.nav.main{ padding: 0 8px }
-
-ul.nav.main li {
-    color:#fff;
-    background:#666;
-    font-weight:bold;
-    text-decoration:none;
-    display:block;
-    float:left;
-    margin: 0 4px;
-    height:2.4em;
-    line-height:2.5em;
-}
-
-ul.nav li a {
-    text-decoration:underline;
-    padding:0;
-}
-ul.nav li a:hover{ background: #666666; text-decoration: none !important }
-ul.nav li:hover{ background: #666666 }
-
 /* pagination tweaks july 2012 */
 
 .pagination{ float: left; margin: 4px 10px 0 0 }
 
-.pagination a{
+.pagination a, a.button{
     padding: 4px 10px;
     margin: 0 3px 0 0;
     background: #333;
     color: #fff;
     border-radius: 3px;
 }
-.pagination a:hover, .pagination a:focus{ background: #515252 }
-
+a.button{ font-size: 13px }
+.pagination a{ font-size: 13px }
 .pagination .current{ font-weight: bold }
-.pagination .current a{ background: #d3d3d3; color: #333; cursor: default  }
+.pagination a:hover, .pagination a:focus,
+a.button:hover, a.button:focus{ background: #000 !important }
+.pagination .current a{ background: #d3d3d3 !important; color: #333; cursor: default  }
 
 #access_points_paginate{ overflow: hidden; margin-top: 18px; display: inline }
 #access_points_quicksearch #q{ width: 200px; margin: 2px 0 0 5px }
@@ -244,3 +224,167 @@ input.ui-autocomplete-input{ background: #fff none }
 	background:#232323 url(../images/progress.gif) no-repeat scroll center center;
 	border-radius:5px;
 }
+
+.clear{ clear: both }
+
+.message{
+    padding: 10px 15px;
+	margin: 20px 10px 5px;
+    font-size: 14px;
+	font-weight:bold;
+    color: #fff;
+	text-align: center;
+	border-radius: 5px;
+}
+.notice{ background-color: #3b6d08 }
+.alert{ background-color: #ff6666 }
+.message p{ margin: 0; text-align: center }
+.message .close{
+    background-color: #003500 !important;
+    padding: 5px 10px;
+    color: white;
+    margin-left: 13px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.alert .close{ background-color: #980000 !important }
+.message .close:hover{ background-color: #000 !important }
+.alert .close:hover{ background-color: #660000 !important }
+
+#errorExplanation{
+	margin: 10px 5px 20px;
+	padding: 20px 25px 5px 25px;
+	background: #ff6666;
+	color: #fff;
+	font: normal 13px "Arial", sans-serif;
+	border-radius: 3px
+}
+#errorExplanation h2{
+	width: auto; margin: 0; padding: 0; background: transparent; text-transform: none;
+	font-size: 16px; font-weight: bold; margin-bottom: 10px;
+}
+#errorExplanation li{ font-weight: bold }
+.field_with_errors input[type=text]{ border: 1px solid red }
+
+#user_info p.clear{ margin-top: 10px }
+
+#group_list th, #group_list td{ width: auto; vertical-align: middle }
+#group_list .name{ padding-left: 1.2em }
+#group_list td.name{ width: 200px }
+#group_list .wisp{ width: 150px }
+#group_list .up, #group_list .down, #group_list total{ width: 50px }
+#group_list { margin-bottom: 20px }
+
+textarea{ width: 95%; height: 100px; padding: 10px 1.5%; font-size: 12px }
+select{ padding: 10px 0 10px 5px }
+#group_form input[type=checkbox]{ width: auto }
+
+#group_stats{ margin-top: 20px; padding-bottom: 10px; width: 98% }
+#group_stats h2{ margin-bottom: 15px }
+#group_stats p{ padding: 0 15px }
+
+#user_roles .first{ padding-left: 30px }
+#user_roles td.first{ padding-left: 100px }
+#users_table .first{ padding-left: 25px }
+#users_table .last{ padding-right: 25px }
+.monitor img, #clickable_public img{ vertical-align: top }
+
+#select-group{ width: 700px }
+#select-group table{ margin: 0 }
+#select-group .total-ap{ width:100px }
+#scroller{ overflow: auto }
+
+table.selectable td{ cursor: pointer }
+table.selectable td.first{ padding-left: 60px; background: #EEE url(../images/delete.png) no-repeat scroll 40px center }
+table.selectable tr:hover td{ background-color: #FFFFEE }
+table.selectable tr.selected td{ background-color: #fff1ce }
+table.selectable tr.selected td.first{ background-image: url(../images/accept.png) }
+
+input.submit{
+	display: block;
+	width: 40%;
+	margin: 20px auto 10px;
+	padding: 10px 20px;
+    font: normal 15px Helvetica, Arial, Freesans, sans-serif;
+	color: #545454;
+	background: -moz-linear-gradient(top,#ffffff 0%,#cccccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff),to(#cccccc));
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #fafafa;
+	-moz-box-shadow: 0px 1px 2px rgba(000,000,000,0.4),inset 0px 0px 1px rgba(255,255,255,1);
+	-webkit-box-shadow:0px 1px 2px rgba(000,000,000,0.4),inset 0px 0px 1px rgba(255,255,255,1);
+	box-shadow:0px 1px 2px rgba(000,000,000,0.4),inset 0px 0px 1px rgba(255,255,255,1);
+	text-shadow:0px -1px 0px rgba(000,000,000,0.7),0px 1px 0px rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+
+#loading-indicator{
+    display: none;
+    position:fixed;
+    width:60px;
+    height:60px;
+    left:200px;
+    top:200px;
+    background:#333 url(../images/spinner_black.gif) no-repeat scroll center center;
+    z-index:9999;
+    border-radius: 4px;
+}
+
+#mask{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color:#000;
+    z-index:10
+}
+
+.overlay {
+    display:none;
+    position: fixed;
+    left: 10%;
+    top: 10%;
+    width: 650px;
+    z-index:99;
+    background-color:#333;
+    border:1px solid #666;
+    -moz-box-shadow:0 0 90px 5px #000;
+    -webkit-box-shadow: 0 0 90px #000;
+	box-shadow:0 0 90px 5px #000;
+    border-radius: 4px;
+}
+
+.overlay .close {
+    background-image:url(../images/close.png);
+    position:absolute;
+    right:-15px;
+    top:-15px;
+    cursor:pointer;
+    height:35px;
+    width:35px;
+    z-index:100;
+    overflow: hidden;
+    text-indent: -1000px;
+}
+
+#public img{ vertical-align: top }
+#group-info{ padding-left: 25px; background: transparent url(../images/edit.png) no-repeat scroll 0 center }
+.empty-page-msg{ text-align: center; font-size: 14px; font-weight: bold; padding: 30px 0 20px }
+#wisp-list tbody td{ vertical-align: middle }
+
+#wisp-list th.name,
+#wisp-list th.notes{ padding-left: 12px }
+#wisp-list .name{ width: 20% }
+#wisp-list .notes{ width: 35% }
+#wisp-list .groups{ width: 7% }
+#wisp-list .report{ width: 18% }
+#wisp-list .up{ width: 6% }
+#wisp-list .down{ width: 6% }
+#wisp-list .unknown{ width: 6% }

@@ -46,6 +46,8 @@ $(document).ready(function() {
         gmaps.drawGoogleMap();
     }
     owgm.paginator();
+    owgm.initNotice();
+    owgm.initMainMenu();
 });
 
 
@@ -222,9 +224,9 @@ var owgm = {
             data: json_data,
             // if file excel has been generated successfully
             success: function(data){
-                if(data == 'success'){
+                if(data.result == 'success'){
                     // download file
-                    window.location.href = file;
+                    window.location.href = data.url;
                     owgm.toggleProgress();
                 }
             },
@@ -271,7 +273,154 @@ var owgm = {
         else{
             $('#'+id).fadeToggle(250);
         }
+    },
+    
+    initNotice: function(){
+        $('.message .close').click(function(e){
+            e.preventDefault();
+            $(this).parent().fadeToggle(400);
+        });
+    },
+    
+    initToggleMonitor: function(){
+        $('.toggle-monitor').click(function(e){
+            var el = $(this);
+            $.ajax({
+                url: el.attr('data-href'),
+                type: 'POST'
+            }).done(function(result) {
+                el.find('img').attr('src', result.image);
+            }).fail(function(result){
+                alert('ERROR');
+            });
+        }).css('cursor','pointer');
+    },
+    
+    toggleOverlay: function(closeCallback){
+        var mask = $('#mask'),
+            close = $('.close'),
+            overlay = $('.overlay');
+            
+        var closeOverlay = function(){
+            if(close.attr('data-confirm-message') !== undefined && !window.confirm(close.attr('data-confirm-message'))){
+               return false;
+            }
+            overlay.fadeOut();
+            mask.fadeOut();
+            if(closeCallback && typeof(closeCallback) === "function" ){
+                closeCallback();
+            }
+            return true;
+        }
+        
+        if(!overlay.is(':visible')){
+            mask.css('opacity','0').show().fadeTo(250, 0.7);
+            overlay.centerElement().fadeIn(250);
+        }
+        else{
+            closeOverlay();
+        }
+        if($.data(close.get(0), 'events') === undefined){
+            close.click(function(e){
+                closeOverlay();
+            });
+        }
+    },
+    
+    initSelectGroup: function(){
+        owgm.loading_indicator = $('#loading-indicator');
+        $('#group-row').css('cursor','pointer').click(function(e){
+            owgm.loading_indicator.togglePop();
+            // retrieve remote group list
+            $.ajax({
+                'url': owgm.group_select_url,
+            }).done(function(result){
+                // insert HTML and open overlay
+                $('body').append(result);
+                owgm.toggleOverlay(function(){$('#select-group').remove()});
+                owgm.loading_indicator.togglePop();
+                owgm.select_group = $('#select-group');
+                // determine css max-height
+                var max_height = $(window).height()-$(window).height()/4;
+                owgm.select_group.css('max-height', max_height);
+                $('#scroller').css('max-height', max_height);
+                // center overlay in the middle of the screen
+                owgm.select_group.centerElement();
+                // reposition when resizing
+                $(window).resize(function(){
+                    owgm.select_group.centerElement();
+                });
+                $('#select-group table').selectable({
+                    'init': function(){
+                        // mark current group as selected
+                        var group_id = $('#group-info').attr('data-groupid');
+                        $('#group_'+group_id).addClass('selected');
+                    },
+                    'afterSelect': function(){
+                        // query the database, update group name, close overlay and remove HTML
+                        var url = $(this).attr('data-href');
+                        response = $.ajax({
+                            'url': url,
+                            'type': 'POST'
+                        }).done(function(result){
+                            owgm.loading_indicator.togglePop();
+                            owgm.toggleOverlay();
+                            $('#group-info').html(result.name).attr('data-groupid', result.id);
+                            $('#select-group').remove();
+                        }).fail(function(){
+                            alert('ERROR');
+                        });
+                    },
+                    'beforeSelect': function(){
+                        // there can be only one item selected
+                        $(this).parent().find('.selected').removeClass('selected');
+                        owgm.loading_indicator.togglePop();
+                    }
+                });
+            })
+        });    
+    },
+    
+    initMainMenu: function(){
+        $('.second-level').each(function(i, el){
+            width = $(el).width()
+            $(el).find('.third-level').attr('style', 'left: '+width+'px !important');
+        });
     }
 };
 
 /************************/
+
+$.fn.selectable = function(options){
+    var opts = $.extend({
+        'init': null,
+        'beforeSelect': null,
+        'afterSelect': null
+    }, options);
+    var table = $(this);
+    table.addClass('selectable');
+    if(opts.init){ opts.init.apply(table) }
+    table.find('tbody tr').click(function(e){
+        if(opts.beforeSelect){ opts.beforeSelect.apply($(this)) }
+        el = $(this);
+        var checkbox = el.find('input[type=checkbox]');
+        checkbox.attr('checked', !checkbox.attr('checked'))
+        el.toggleClass('selected');
+        if(opts.afterSelect){ opts.afterSelect.apply($(this)) }
+    });
+    return table;
+}
+
+$.fn.centerElement = function(){
+    var el = $(this);
+    el.css('top', ($(window).height() - (el.height() + parseInt(el.css('padding-top')) + parseInt(el.css('padding-bottom'))) ) / 2)
+    .css('left', ($(window).width() - (el.width() + parseInt(el.css('padding-left')) + parseInt(el.css('padding-right'))) ) / 2);
+    return el;
+}
+$.fn.togglePop = function(speed){
+    speed = speed || 150;
+    var el = $(this);
+    el.centerElement();
+    (el.is(':visible')) ? el.fadeOut(speed) : el.fadeIn(speed);
+    return el;
+}
