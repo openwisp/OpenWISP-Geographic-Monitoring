@@ -165,6 +165,15 @@ class AccessPointsControllerTest < ActionController::TestCase
     activemenu_test()
   end
   
+  test "toggle_public" do
+    sign_in users(:admin)
+    ap = access_points(:wherecamp)
+    public_value = ap.properties.public
+    post :toggle_public, { :format => 'json', :wisp_id => ap.wisp.name, :id => ap.id }
+    assert_response :success
+    assert_equal !public_value, AccessPoint.find(ap.id).public
+  end
+  
   private
   
   def activemenu_test

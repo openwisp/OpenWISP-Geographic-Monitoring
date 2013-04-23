@@ -17,6 +17,9 @@ Owgm::Application.routes.draw do
     
     resources :access_points, :only => [:index, :show] do
       resource :property_set, :only => :update
+      member do
+        post 'toggle_public'
+      end
     end
 
     resources :activity_histories, :only => :index

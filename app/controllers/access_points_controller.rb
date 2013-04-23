@@ -18,12 +18,12 @@
 class AccessPointsController < ApplicationController
   before_filter :authenticate_user!, :load_wisp, :wisp_breadcrumb
   
-  skip_before_filter :verify_authenticity_token, :only => [:change_group]
+  skip_before_filter :verify_authenticity_token, :only => [:change_group, :toggle_public]
 
   access_control do
     default :deny
 
-    actions :index, :show, :change_group, :select_group do
+    actions :index, :show, :change_group, :select_group, :toggle_public do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -86,6 +86,25 @@ class AccessPointsController < ApplicationController
     Group.update_all_counts()
     respond_to do |format|
       format.json { render :json => group.attributes }
+    end
+  end
+  
+  def select_group
+    @access_point_id = params[:access_point_id]
+    @groups = Group.all_join_wisp("wisp_id = ? OR wisp_id IS NULL", [@wisp.id])
+    render :layout => false
+  end
+  
+  # toggle published AP in the GeoRSS xml
+  def toggle_public
+    ap = AccessPoint.find(params[:id])
+    ap.public = !ap.public
+    ap.save!
+    respond_to do |format|
+      format.json{
+        image = view_context.image_path(ap.public ? 'accept.png' : 'delete.png')
+        render :json => { 'public' => ap.public, 'image' => image }
+      }
     end
   end
 

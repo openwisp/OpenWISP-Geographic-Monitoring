@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
   def index
     # if admin of a specific wisp only
     wisp_access_points_viewers = current_user.roles_search(:wisp_access_points_viewer)
-    if not current_user.has_role?(:wisps_viewer) and wisp_access_points_viewers.length <= 1
+    if not current_user.has_role?(:wisps_viewer) and wisp_access_points_viewers.length == 1
       # redirect to group view
       @index_redirect = wisp_groups_path(Wisp.find(wisp_access_points_viewers[0].authorizable_id))
       redirect_to @index_redirect
@@ -49,12 +49,10 @@ class ApplicationController < ActionController::Base
   private
 
   def load_menu_wisps
-    cached = Rails.cache.fetch('wisps_menu')
-    if cached
-      @wisps_menu = cached
-    else
+    cache_key = 'wisps_menu_#{current_user.id}'
+    unless @wisps_menu = Rails.cache.fetch(cache_key)
       @wisps_menu = Wisp.all_accessible_to(current_user)
-      Rails.cache.write('wisps_menu', @wisps_menu)
+      Rails.cache.write(cache_key, @wisps_menu)
     end
   end
 
