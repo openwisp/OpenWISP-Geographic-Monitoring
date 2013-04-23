@@ -282,17 +282,25 @@ var owgm = {
         });
     },
     
+    toggleProperty: function(url, completed){
+        var el = $(this);
+        $.ajax({
+            url: url,
+            type: 'POST'
+        }).done(function(result) {
+            if(completed && typeof completed == 'function'){ completed(result) }
+        }).fail(function(result){
+            alert('ERROR');
+        });
+    },
+    
     initToggleMonitor: function(){
         $('.toggle-monitor').click(function(e){
+            e.preventDefault();
             var el = $(this);
-            $.ajax({
-                url: el.attr('data-href'),
-                type: 'POST'
-            }).done(function(result) {
-                el.find('img').attr('src', result.image);
-            }).fail(function(result){
-                alert('ERROR');
-            });
+            owgm.toggleProperty(el.attr('data-href'), function(result){
+                el.find('img').attr('src', result.image)
+            });            
         }).css('cursor','pointer');
     },
     

@@ -81,7 +81,7 @@
   <tr id="clickable_public">
     <td><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
     <td id="public" class="right">
-      <a class="toggle-monitor" data-href="<%= toggle_public_wisp_access_point_path(@wisp, @access_point) %>">
+      <a class="toggle-public" data-href="<%= toggle_public_wisp_access_point_path(@wisp, @access_point) %>">
         <img src="<%= image_path(@access_point.public ? 'accept.png' : 'delete.png') %>" alt="">
       </a>
     </td>
@@ -95,3 +95,12 @@
   </tr>
   </tbody>
 </table>
+
+<script>
+  $('#clickable_public td').click(function(){
+    el = $('#clickable_public .toggle-public');
+    owgm.toggleProperty(el.attr('data-href'), function(result){
+        el.find('img').attr('src', result.image)
+    });    
+  });
+</script>
