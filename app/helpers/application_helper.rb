@@ -22,7 +22,7 @@ module ApplicationHelper
     link_to(image_tag("locale/#{locale}.jpg", :size => "26x26"), request.path+"?locale=#{locale}", html_opts)
   end
 
-  def link_to_sort(text, column = nil)
+  def link_to_sort(text, column = nil, rem = true)
     column ||= text.downcase
 
     order = case params[:order]
@@ -38,7 +38,7 @@ module ApplicationHelper
     end
 
     url = params.merge({:column => column, :order => order})
-    link_to text, {:method => :get, :url => url}, {:href => url_for(url), :remote => true}.merge(dom_class)
+    link_to text, {:method => :get, :url => url}, {:href => url_for(url), :remote => rem}.merge(dom_class)
   end
 
   def link_to_back

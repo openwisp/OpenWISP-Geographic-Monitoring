@@ -28,6 +28,7 @@
         <th><%=t :Notes %></th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
+        <th><%= image_tag ('favourite.png', :size => "15x15") %></th>
         <th class="green"><%=t :Up %></th>
         <th class="red"><%=t :Down %></th>
         <th><%=t :Unknown %></th>
@@ -41,6 +42,7 @@
               <tr class="<%= cycle 'odd', 'even' %>">
                 <td><%= link_to wisp.name, wisp_access_points_path(wisp) %></td>
                 <td colspan="3"><%= wisp.notes %></td>
+                <td class="center"><%= wisp.access_points_favourite.count %></td>
                 <td class="center"><%= wisp.access_points_up.count %></td>
                 <td class="center"><%= wisp.access_points_down.count %></td>
                 <td class="center"><%= wisp.access_points_unknown.count %></td>

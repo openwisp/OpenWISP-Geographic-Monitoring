@@ -46,10 +46,12 @@
       <%=t :Access_point %>
       <span class="rfloat">
 	<% if @wisp.present? %>
+	  <%=t :Favourite %>: <%= @wisp.access_points_favourite.count %>
 	  <%=t :up %>: <%= @wisp.access_points_up.count %>
           <%=t :down %>: <%= @wisp.access_points_down.count %>
           <%=t :unknown %>: <%= @wisp.access_points_unknown.count %>
 	<% else %>
+	  <%=t :favourite %>: <%= AccessPoint.favourite.count %>
 	  <%=t :up %>: <%= AccessPoint.up.count %>
           <%=t :down %>: <%= AccessPoint.down.count %>
           <%=t :unknown %>: <%= AccessPoint.unknown.count %>

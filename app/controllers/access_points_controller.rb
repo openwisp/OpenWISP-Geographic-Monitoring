@@ -36,6 +36,7 @@ class AccessPointsController < ApplicationController
   end
 
     crumb_for_wisp
+    crumb_for_access_point_favourite
   end
 
   def show
@@ -45,14 +46,12 @@ class AccessPointsController < ApplicationController
   end
 
   def favourite
-    #@showmap = CONFIG['showmap']
     @access_point_pagination = CONFIG['access_point_pagination']
-    #ap_favourite=AccessPoint.scoped
-    #ap_favourite=ap_favourite.where(:wisp_id => @wisp.id).quickfavourite('1')
-    #per_page = params[:per]
     respond_to do |format|
       format.any(:html, :js) { @ap_fav=access_points_with_sort_search_and_paginate(1).of_wisp(@wisp) }
     end
+    crumb_for_wisp
+    crumb_for_access_point_favourite
   end
 
   def erase_favourite
@@ -116,6 +115,10 @@ class AccessPointsController < ApplicationController
     rescue
       add_breadcrumb I18n.t(:Access_points_of_every_wisp), access_points_path
     end
+  end
+  
+  def crumb_for_access_point_favourite
+    add_breadcrumb I18n.t(:Accesspoint_favourite), wisp_access_point_favourite_path(@wisp)
   end
 
   def crumb_for_access_point

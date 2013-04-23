@@ -181,6 +181,11 @@ class AccessPoint < ActiveRecord::Base
   def self.unknown
     with_properties.where(:property_sets => {:reachable => nil})
   end
+  
+  def self.favourite
+    with_properties.where(:property_sets => {:favourite => 1})
+  end
+
 
   def self.activated(till=nil)
     where("activation_date <= ?", till)
