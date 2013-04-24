@@ -8,7 +8,7 @@ it:
         address: indirizzo
         city: città
         hostname: hostname
-        public: pubblico
+        public: pubblicato
         site_description: sito di installazione
         status: stato
         favourite: preferito

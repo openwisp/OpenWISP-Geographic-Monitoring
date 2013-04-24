@@ -8,7 +8,7 @@ en:
         address: address
         city: city
         hostname: hostname
-        public: public
+        public: published
         site_description: installation site
         status: status
         favourite: favourite
@@ -83,7 +83,7 @@ en:
   Notes: Additional notes
   Ok: Ok
   Prev: Previous
-  Public: Public
+  Public: Published
   Public_on_Georss: Visible on GeoRSS
   Quick_search: Quick search
   Filter_fav: Filter favourite
