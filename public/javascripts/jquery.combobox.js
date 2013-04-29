@@ -163,7 +163,3 @@
         }
     });
 })(jQuery);
-    
-//$(function() {
-//    $("#combobox select").combobox();
-//});
