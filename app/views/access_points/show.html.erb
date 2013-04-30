@@ -24,6 +24,12 @@
             $('#clickable_category').click(function() { $('#category_select').click() });
             $('#clickable_site_description').click(function() { $('#site_description').click() });
             $('#clickable_notes').click(function() { $('#notes').click() });
+            $('#clickable_public td').click(function(){
+								el = $('#clickable_public .toggle-public');
+								owgm.toggleProperty(el.attr('data-href'), function(result){
+										el.find('img').attr('src', result.image)
+								});
+						});
 
             $('#category_select').live('change', function(){
                 if ($(this).find('select').val() == '!new!') {
@@ -99,9 +105,4 @@
   </div>
 </div>
 
-<div id="mask"></div>
-<div id="loading-indicator"></div>
-<script>
-		owgm.group_select_url = "<%= wisp_access_point_select_group_url(@wisp, @access_point) %>";
-		owgm.initSelectGroup()
-</script>
+<script>owgm.initSelectGroup("<%= wisp_access_point_select_group_url(@wisp, @access_point) %>");</script>

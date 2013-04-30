@@ -144,6 +144,17 @@ en:
   View_all_the_AP: All access points
   Groups_of_this_wisp: Groups of this wisp
   Access_points_of_wisp: Access points of this wisp
+  Select_all: Select all
+  Change_group: Change group
+  No_access_point_selected: "You must select some access points.\n\nTry to select the rows of the table with your mouse."
+  Bad_format_parameters: Bad format parameters
+  Group_not_found: Group not found
+  User_does_not_have_permission_group: User does not have permission to manage wisp of the specified group
+  User_does_not_have_permission_ap_id: "User does not have permission to manage wisp of ap with id %{ap_id}"
+  Moving_access_point_different_wisp_not_allowed: Moving access point of wisp \"%{wisp1}\" in a group of \"%{wisp2}\" is not allowed
+  Access_point_updated: "%{length} access points updated"
+  Select_all_title: Select all (CTRL + A) or deselect all (ESC) the access points
+  Change_group_title: Change group of the selected access points (CTRL + G)
   
   # Lowercase
   logged_as: logged in as

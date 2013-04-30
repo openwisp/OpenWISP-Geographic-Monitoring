@@ -199,6 +199,14 @@ class AccessPoint < ActiveRecord::Base
   def self.quicksearch(name)
     where("`hostname` LIKE ? OR `address` LIKE ? OR `city` LIKE ?", *(["%#{name}%"]*3) )
   end
+  
+  def self.batch_change_group(group_id, id_array)
+    where = ""
+    id_array.each { where << " OR access_point_id = ?" }
+    where = where[4..-1]
+    conditions = [where] + id_array
+    PropertySet.update_all({ :group_id => group_id }, conditions)
+  end
 
   private
 

@@ -60,7 +60,9 @@
     <nav>
       <ul class="nav main" id="main-nav">
         <li class="first">
-          <a href="<%= wisps_path %>" title="<%= t :Wisp_list %>"<%= active_link_if wisps_path, '/access_points', '/groups' %>><%= t :Wisp %><% if @wisps_menu.length > 0 %><span>&#x25BE;</span><% end %></a>
+          <a href="<%= wisps_path %>" title="<%= t :Wisp_list %>"<%= active_link_if wisps_path, '/access_points', '/groups' %>>
+            <%= t :Wisp %><% if @wisps_menu.length > 0 %><span>&#x25BE;</span><% end %>
+          </a>
           <% if @wisps_menu.length > 0 %>
           <ul class="second-level">
           <% @wisps_menu.each do |wisp| %>

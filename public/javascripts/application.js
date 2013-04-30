@@ -56,8 +56,6 @@ $(document).ready(function() {
 var owgm = {
 
     /*** Settings and Variables ***/
-    quickSearchDiv: '#access_points_quicksearch',
-    loadingDiv: '#loading',
     noJsDiv: '.no_js',
 
     /*** Application Specific Functions ***/
@@ -69,13 +67,11 @@ var owgm = {
         return ($(selector).length > 0);
     },
 
-    ajaxQuickSearch: function() {
-        var inputField = $(this.quickSearchDiv).find('input[type=text]');
-        inputField.observe(function() {
-            $(owgm.loadingDiv).fadeIn();
-            inputField.parent('form').submit();
-            $(owgm.loadingDiv).ajaxStop(function(){$(this).fadeOut();});
-        }, 1);
+    ajaxQuickSearch: function() {        
+        $('#q').delayedObserver(0.8, function(value, object) {
+            owgm.toggleLoading('show');
+            object.parent('form').submit();
+        });
     },
 
     path: function(path) {
@@ -150,13 +146,17 @@ var owgm = {
     },
 
     ajaxLoading: function() {
-        $('[data-remote=true]').live('click', function(){
-            $(owgm.loadingDiv).fadeIn();
+        $('#access_points_paginate a[data-remote=true]').live('click', function(){
+            owgm.toggleLoading('show');
             $('body, .container12, .pagination a').css('cursor', 'progress');
-        }).ajaxStop(function(){
-            $(owgm.loadingDiv).fadeOut();
+        })
+        $(document).ajaxStop(function(){
+            owgm.toggleLoading('hide');
             $('body, .container12').css('cursor', 'auto');
             $('.pagination a').css('cursor', 'pointer');
+            $('.select-all-checkbox').each(function(){
+                this.checked = false
+            });
         });
     },
 
@@ -309,6 +309,17 @@ var owgm = {
             close = $('.close'),
             overlay = $('.overlay');
             
+        if(!mask.length){
+            $('body').append('<div id="mask"></div>')
+            mask = $('#mask');
+            // init ESC key to close
+            $(document).keyup(function(e){
+                if(e.keyCode == 27){
+                    closeOverlay();
+                }
+            })
+        }
+            
         var closeOverlay = function(){
             if(close.attr('data-confirm-message') !== undefined && !window.confirm(close.attr('data-confirm-message'))){
                return false;
@@ -335,58 +346,171 @@ var owgm = {
         }
     },
     
-    initSelectGroup: function(){
-        owgm.loading_indicator = $('#loading-indicator');
+    toggleLoading: function(action){
+        var $loading = $('#loading-indicator');
+        if(!$loading.length){
+            $('body').append('<div id="loading-indicator"></div>')
+            $loading = $('#loading-indicator');
+        }
+        $loading.togglePop(action);
+    },
+    
+    initSelectGroup: function(select_group_url){
         $('#group-row').css('cursor','pointer').click(function(e){
-            owgm.loading_indicator.togglePop();
-            // retrieve remote group list
-            $.ajax({
-                'url': owgm.group_select_url,
-            }).done(function(result){
-                // insert HTML and open overlay
-                $('body').append(result);
-                owgm.toggleOverlay(function(){$('#select-group').remove()});
-                owgm.loading_indicator.togglePop();
-                owgm.select_group = $('#select-group');
-                // determine css max-height
-                var max_height = $(window).height()-$(window).height()/4;
-                owgm.select_group.css('max-height', max_height);
-                $('#scroller').css('max-height', max_height);
-                // center overlay in the middle of the screen
-                owgm.select_group.centerElement();
-                // reposition when resizing
-                $(window).resize(function(){
-                    owgm.select_group.centerElement();
-                });
-                $('#select-group table').selectable({
-                    'init': function(){
-                        // mark current group as selected
-                        var group_id = $('#group-info').attr('data-groupid');
-                        $('#group_'+group_id).addClass('selected');
-                    },
+            owgm.openGroupSelection({
+                'url': select_group_url,
+                'init': function(){
+                    // mark current group as selected
+                    var group_id = $('#group-info').attr('data-groupid');
+                    $('#group_'+group_id).addClass('selected');
+                },
+                'afterSelect': function(){
+                    // query the database, update group name, close overlay and remove HTML
+                    var url = $(this).attr('data-href');
+                    response = $.ajax({
+                        'url': url,
+                        'type': 'POST'
+                    }).done(function(result){
+                        owgm.toggleLoading();
+                        owgm.toggleOverlay();
+                        $('#group-info').html(result.name).attr('data-groupid', result.id);
+                        $('#select-group').remove();
+                    }).fail(function(){
+                        alert('ERROR');
+                    });
+                },
+                'beforeSelect': function(){
+                    // there can be only one item selected
+                    $(this).parent().find('.selected').removeClass('selected');
+                    owgm.toggleLoading();
+                }
+            });
+        });   
+    },
+    
+    openGroupSelection: function(options){
+        var opts = $.extend({
+            'url': false,
+            'init': null,
+            'beforeSelect': null,
+            'afterSelect': null
+        }, options);
+        
+        if(opts.url===false){ throw('url parameter must be specified') }
+        
+        owgm.toggleLoading();
+        // retrieve remote group list
+        $.ajax({
+            'url': opts.url,
+        }).done(function(result){
+            // insert HTML and open overlay
+            $('body').append(result);
+            owgm.toggleOverlay(function(){$('#select-group').remove()});
+            owgm.toggleLoading();
+            $select_group = $('#select-group');
+            // determine css max-height
+            var max_height = $(window).height()-$(window).height()/4;
+            $select_group.css('max-height', max_height);
+            $('#scroller').css('max-height', max_height);
+            // center overlay in the middle of the screen
+            $select_group.centerElement();
+            // reposition when resizing
+            $(window).resize(function(){
+                $select_group.centerElement();
+            });
+            $('#select-group table').customSelectable({
+                'init': opts.init,
+                'beforeSelect': opts.beforeSelect,
+                'afterSelect': opts.afterSelect,
+            });
+        })
+    },
+    
+    initBatchGroupSelection: function(post_url){
+        // init jQuery UI selectable widget
+        $("#access_points").selectable({
+            filter: "tr",
+            delay: 80
+        });
+        
+        // select or deselect all
+        $(".select-all").click(function(e){
+            e.preventDefault();
+            var checkbox = $('.select-all-checkbox');
+            checkbox.trigger('click');
+        });
+        $(".select-all-checkbox").change(function(e){
+            if(this.checked){
+                $("#access_points tr").addClass('ui-selected');
+            }
+            else{
+                $("#access_points tr").removeClass('ui-selected');
+            }
+        })
+        
+        var openGroupBatchSelection = function(){
+            // at least one ap must be selected
+            if($("#access_points tr.ui-selected").length < 1){
+                alert($('.batch-change-group').attr('data-fail-message'));
+            }
+            else{
+                owgm.openGroupSelection({
+                    'url': $('.batch-change-group').attr('href'),
                     'afterSelect': function(){
-                        // query the database, update group name, close overlay and remove HTML
-                        var url = $(this).attr('data-href');
-                        response = $.ajax({
-                            'url': url,
-                            'type': 'POST'
-                        }).done(function(result){
-                            owgm.loading_indicator.togglePop();
-                            owgm.toggleOverlay();
-                            $('#group-info').html(result.name).attr('data-groupid', result.id);
+                        owgm.toggleLoading();
+                        // this function changes the group in batch
+                        changeGroupBatch($(this).attr('data-group-id'));
+                        owgm.toggleOverlay(function(){
+                            // close call back of overlay
+                            owgm.toggleLoading();
                             $('#select-group').remove();
-                        }).fail(function(){
-                            alert('ERROR');
                         });
-                    },
-                    'beforeSelect': function(){
-                        // there can be only one item selected
-                        $(this).parent().find('.selected').removeClass('selected');
-                        owgm.loading_indicator.togglePop();
+                        $("#access_points tr.ui-selected").removeClass('ui-selected');
                     }
                 });
-            })
-        });    
+            }
+        }
+        
+        var changeGroupBatch = function(group_id){
+            // make an array of access point id
+            var selected_access_points = []
+            $("#access_points tr.ui-selected").each(function() {
+                var ap_id = $(this).attr('data-ap-id');
+                selected_access_points.push(ap_id)
+            });
+            $.ajax({
+                url: post_url,
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({ "group_id": group_id, "access_points": selected_access_points })
+            }).fail(function(xhr, status, error){
+                // in case of error return error message
+                alert((JSON.parse(xhr.responseText)).details);
+            });
+        }
+        
+        $('.batch-change-group').click(function(e){
+            e.preventDefault();
+            openGroupBatchSelection();
+        });
+        
+        // keyboard shortcuts
+        $(document).keyup(function(e){
+            // ESC: deselect all the access points
+            if(e.keyCode == 27){
+                $("#access_points tr.ui-selected").removeClass('ui-selected');
+            }
+            // CTRL + A: select all the access points
+            else if(e.ctrlKey && e.keyCode == 65){
+                $("#access_points tr").addClass('ui-selected');
+            }
+            // CTRL + G: open group selection
+            else if(e.ctrlKey && e.keyCode == 71){
+                openGroupBatchSelection();
+            }
+        });
+        
     },
     
     initMainMenu: function(){
@@ -399,7 +523,7 @@ var owgm = {
 
 /************************/
 
-$.fn.selectable = function(options){
+$.fn.customSelectable = function(options){
     var opts = $.extend({
         'init': null,
         'beforeSelect': null,
@@ -425,10 +549,19 @@ $.fn.centerElement = function(){
     .css('left', ($(window).width() - (el.width() + parseInt(el.css('padding-left')) + parseInt(el.css('padding-right'))) ) / 2);
     return el;
 }
-$.fn.togglePop = function(speed){
+$.fn.togglePop = function(action, speed){
+    action = action || 'auto'
     speed = speed || 150;
     var el = $(this);
     el.centerElement();
-    (el.is(':visible')) ? el.fadeOut(speed) : el.fadeIn(speed);
+    if(action == 'auto'){
+        el.is(':visible') ? el.fadeOut(speed) : el.fadeIn(speed);
+    }
+    else if(action == 'show'){
+        el.fadeIn(speed);
+    }
+    else if(action == 'hide'){
+        el.fadeOut(speed);
+    }    
     return el;
 }

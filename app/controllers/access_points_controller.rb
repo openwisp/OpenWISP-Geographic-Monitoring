@@ -18,12 +18,12 @@
 class AccessPointsController < ApplicationController
   before_filter :authenticate_user!, :load_wisp, :wisp_breadcrumb
   
-  skip_before_filter :verify_authenticity_token, :only => [:change_group, :toggle_public]
+  skip_before_filter :verify_authenticity_token, :only => [:change_group, :toggle_public, :batch_change_group]
 
   access_control do
     default :deny
 
-    actions :index, :show, :change_group, :select_group, :toggle_public do
+    actions :index, :show, :change_group, :select_group, :toggle_public, :batch_change_group, :batch_select_group do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -89,10 +89,77 @@ class AccessPointsController < ApplicationController
     end
   end
   
-  def select_group
-    @access_point_id = params[:access_point_id]
-    @groups = Group.all_join_wisp("wisp_id = ? OR wisp_id IS NULL", [@wisp.id])
-    render :layout => false
+  def batch_select_group
+    if wisp_loaded?
+      @groups = Group.all_join_wisp("wisp_id = ? OR wisp_id IS NULL", [@wisp.id])
+      # maybe not !
+    else
+      if current_user.has_role?(:wisps_viewer)
+        @groups = Group.all_join_wisp()
+      else
+        @groups = Group.all_accessible_to(current_user)
+      end
+    end    
+    render :template => 'access_points/select_group', :layout => false
+  end
+  
+  def batch_change_group
+    # parameters expected:
+    # * group_id (int)
+    # * access_points (array)
+    group_id = params[:group_id]
+    access_points_id = params[:access_points]
+    
+    # ensure all parameters are sent correctly otherwise return 400 bad request status code
+    if group_id.nil? or group_id == '' or access_points_id.nil? or access_points_id.length < 1# or group_id.class != Fixnum or access_points_id.class != Array
+      render :status => 400, :json => { "details" => I18n.t(:Bad_format_parameters) }
+      return
+    end
+    
+    # ensure Group is correct otherwise return 404
+    begin
+      # ensure group is a general group of specific of this wisp
+      group = Group.select([:id, :name, :wisp_id]).find(group_id)
+    rescue ActiveRecord::RecordNotFound
+      render :status => 404, :json => { "details" => I18n.t(:Group_not_found) }
+      return
+    end
+    
+    authorized_for_wisps = current_user.roles_search(:wisp_access_points_viewer).map { |r| r.authorizable_id }
+    
+    # in this case user is wisps_viewer, because he is not wisp_access_points_viewer for any wisp
+    # but he was able to get here (otherwise he would have been blocked before because the acl rules on top)
+    wisps_viewer = authorized_for_wisps.length < 1 ? true : false
+    
+    # if moving access points to a group of a specific wisp, user must be authorized for that wisp
+    if not group.wisp_id.nil? and not wisps_viewer and not authorized_for_wisps.include?(group.wisp_id)
+      render :status => 403, :json => { "details" => I18n.t(:User_does_not_have_permission) }
+      return
+    end
+    
+    access_points = AccessPoint.find(access_points_id)
+    
+    # check permissions first
+    access_points.each do |ap|
+      # user must be authorized for wisp_id of the access point he wants to edit
+      if not wisps_viewer and not authorized_for_wisps.include?(ap.wisp_id)
+        render :status => 403, :json => { "details" => I18n.t(:User_does_not_have_permission_ap_id, :ap_id => ap.id) }
+        return
+      end
+      
+      # wisp_id of access point must coincide with wisp_id of group (unless wisp_id of group is NULL)
+      if not group.wisp_id.nil? and not ap.wisp_id == group.wisp_id
+        render :status => 403, :json => { "details" => I18n.t(:Moving_access_point_different_wisp_not_allowed, :wisp1 => ap.wisp.name, :wisp2 => group.wisp.name) }
+        return
+      end
+    end
+    
+    AccessPoint.batch_change_group(group.id, access_points)
+    
+    # update group counts
+    Group.update_all_counts()
+    
+    render :status => 200, :json => { "details" => I18n.t(:Access_point_updated, :length => access_points.length) }
   end
   
   # toggle published AP in the GeoRSS xml

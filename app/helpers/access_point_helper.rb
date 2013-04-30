@@ -53,4 +53,18 @@ module AccessPointHelper
   def image_tag_for(marker, opts={})
     image_tag image_path_for(marker), opts
   end
+  
+  def select_group_data_href(wisp, access_point_id, group_id)
+    unless access_point_id.nil?
+      ("data-href=\"%s\"" % [wisp_access_point_change_group_path(wisp, access_point_id, group_id)]).html_safe
+    end
+  end
+  
+  def select_group_url_if_wisp_loaded
+    if wisp_loaded?
+      select_group_wisp_path(@wisp)
+    else
+      select_group_access_points_path
+    end
+  end
 end

@@ -6,11 +6,20 @@ Owgm::Application.routes.draw do
 
   resources :users
 
-  resources :access_points, :only => [:index]
+  resources :access_points, :only => [:index] do
+    collection do
+      post 'change_group' => 'access_points#batch_change_group'
+      get 'select_group' => 'access_points#batch_select_group'
+    end
+  end
 
   resources :configurations, :only => [:edit, :update]
 
   resources :wisps, :only => :index do
+    
+    member do
+      get 'select_group' => 'access_points#batch_select_group'
+    end
     
     match 'groups' => 'groups#list', :as => :groups, :via => [:get]
     match 'groups/:group_id/access_points' => 'access_points#index', :as => :group_access_points, :via => [:get]

@@ -162,6 +162,17 @@ it:
   View_all_the_AP: Tutti gli access points
   Groups_of_this_wisp: Gruppi del wisp
   Access_points_of_wisp: Access points del wisp
+  Select_all: Seleziona tutti
+  Change_group: Cambia gruppo
+  No_access_point_selected: "Devi selezionare prima gli access point.\n\nProva a selezionare le righe della tabella con il mouse."
+  Bad_format_parameters: Formato parametri errati
+  Group_not_found: Gruppo non trovato
+  User_does_not_have_permission_group: "L'utente non ha i permessi per gestire il wisp del gruppo specificato"
+  User_does_not_have_permission_ap_id: "L'utente non ha i permessi per gestire il wisp dell'access point con id %{ap_id}"
+  Moving_access_point_different_wisp_not_allowed: "Non è possibile spostare gli access point del wisp \"%{wisp1}\" in un gruppo del wisp \"%{wisp2}\""
+  Access_point_updated: "%{length} access point aggiornati"
+  Select_all_title: Seleziona tutti (CTRL + A) o deseleziona tutti (ESC) gli access point
+  Change_group_title: Cambia il gruppo agli access point selezionati (CTRL + G)
   
   # Lowercase
   logged_as: autenticato come

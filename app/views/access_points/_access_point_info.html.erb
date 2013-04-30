@@ -95,12 +95,3 @@
   </tr>
   </tbody>
 </table>
-
-<script>
-  $('#clickable_public td').click(function(){
-    el = $('#clickable_public .toggle-public');
-    owgm.toggleProperty(el.attr('data-href'), function(result){
-        el.find('img').attr('src', result.image)
-    });    
-  });
-</script>

@@ -73,36 +73,43 @@
     <div id="access_points_quicksearch" class="bold">
       <%= render 'access_points_quicksearch' %>
     </div>
-
-    <div id="loading" class="hidden">
-      <p><%=t :Loading %> <%= image_tag 'spinner.gif' %></p>
-    </div>
+		
+		<div class="actions">
+				<%= render 'access_points_actions' %>
+		</div>
 
     <table>
-      <thead id="access_points_thead">
-      <%= render 'access_points_thead' %>
-      </thead>
-
-      <tbody id="access_points">
-      <%= render @access_points %>
-      </tbody>
+				<thead id="access_points_thead">
+						<%= render 'access_points_thead' %>
+				</thead>
+				<tbody id="access_points">
+						<%= render @access_points %>
+				</tbody>
     </table>
-		
 
     <div id="page_controls">
 				<div id="access_points_paginate">
-					<%= paginate @access_points, :remote => true %>
+						<%= paginate @access_points, :remote => true %>
 				</div>
 				<div id="combobox">
 						<select>
-						<% @access_point_pagination.reverse.each do |item| %>
-					<option value="<%= item['value'] %>"<% if item['default'] %> selected="selected"<% end %>><%= item['value'] %></option>
-						<% end %>
+								<% @access_point_pagination.reverse.each do |item| %>
+								<option value="<%= item['value'] %>"<% if item['default'] %> selected="selected"<% end %>><%= item['value'] %></option>
+								<% end %>
 						</select>
 				</div>
     </div>
+		
+		<div class="actions bottom">
+				<%= render 'access_points_actions' %>
+		</div>
+		
+		<br style="clear:both">
+		
 		<% else %>
 				<p class="empty-page-msg"><%= t :No_AP %></p>
 		<% end %>
   </div>
 </div>
+
+<script>owgm.initBatchGroupSelection("<%= change_group_access_points_path %>")</script>

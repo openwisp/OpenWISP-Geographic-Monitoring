@@ -443,3 +443,5 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
     width: 200px; /*must have*/
     height: 200px; /*must have*/
 }
+
+.ui-selectable-helper { position: absolute; z-index: 100; border:1px dotted black; }

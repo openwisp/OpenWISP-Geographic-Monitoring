@@ -114,7 +114,8 @@
     margin: 0 32%;
 }
 
-#access_points_quicksearch { float: left; width: 400px; margin: 15px 0  }
+#access_points_quicksearch { float: left; width: 50%; margin: 15px 0 20px; font-size:14px  }
+#access_points_quicksearch form{ margin-left: 10px }
 
 #access_points_quicksearch .spin {
     float: left;
@@ -179,7 +180,7 @@ a.button:hover, a.button:focus{ background: #000 !important }
 #access_points_paginate{ overflow: hidden; margin-top: 18px; display: inline }
 #access_points_quicksearch #q{ width: 200px; margin: 2px 0 0 5px }
 
-#page_controls{ overflow: hidden; margin: 15px 0 }
+#page_controls{ overflow: hidden; margin: 5px 0 15px; width: 72%; float: left }
 #combobox{ float: left }
 #combobox .ui-combobox input{ width: 29px; padding-left: 6px }
 
@@ -388,3 +389,12 @@ input.submit{
 #wisp-list .up{ width: 6% }
 #wisp-list .down{ width: 6% }
 #wisp-list .unknown{ width: 6% }
+
+.actions{
+	float: right; width: auto; min-width: 25%; margin: 20px 0;
+	text-align: right;  font-weight:bold; font-size:14px; line-height: 25px
+}
+.actions.bottom{ margin-top: 7px }
+.batch-change-group{ margin-left: 15px; margin-right: 10px }
+#access_points .ui-selecting td { background: #FFFFEE }
+#access_points .ui-selected td { background: #FFF8CF }

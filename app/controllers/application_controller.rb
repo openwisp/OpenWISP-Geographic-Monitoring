@@ -49,11 +49,15 @@ class ApplicationController < ActionController::Base
   private
 
   def load_menu_wisps
-    cache_key = "/users/#{current_user.id}/wisps_menu"
-    @wisps_menu = Rails.cache.fetch(cache_key)
-    if @wisps_menu.nil?
-      @wisps_menu = Wisp.all_accessible_to(current_user)
-      Rails.cache.write(cache_key, @wisps_menu)
+    if current_user
+      cache_key = "/users/#{current_user.id}/wisps_menu"
+      @wisps_menu = Rails.cache.fetch(cache_key)
+      if @wisps_menu.nil?
+        @wisps_menu = Wisp.all_accessible_to(current_user)
+        Rails.cache.write(cache_key, @wisps_menu)
+      end
+    else
+      @wisps_menu = []
     end
   end
 
