@@ -496,17 +496,19 @@ var owgm = {
         });
         
         // keyboard shortcuts
-        $(document).keyup(function(e){
+        $(document).keydown(function(e){
             // ESC: deselect all the access points
             if(e.keyCode == 27){
                 $("#access_points tr.ui-selected").removeClass('ui-selected');
             }
             // CTRL + A: select all the access points
             else if(e.ctrlKey && e.keyCode == 65){
+                e.preventDefault();
                 $("#access_points tr").addClass('ui-selected');
             }
             // CTRL + G: open group selection
             else if(e.ctrlKey && e.keyCode == 71){
+                e.preventDefault();
                 openGroupBatchSelection();
             }
         });
