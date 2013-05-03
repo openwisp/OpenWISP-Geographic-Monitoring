@@ -23,5 +23,7 @@
   <td class="middle"><%= access_point.address %></td>
   <td class="middle"><%= access_point.city %></td>
   <td class="middle center"><%= image_tag(access_point.public ? 'accept.png' : 'delete.png') %></td>
+  <% if not @group.present? or @group.monitor %>
   <td class="middle right"><%= image_tag_for access_point, :size => "30x35", :class => 'right' %></td>
+  <% end %>
 </tr>

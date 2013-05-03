@@ -23,5 +23,7 @@
 	<th><%= link_to_sort t(:Address) %></th>
 	<th><%= link_to_sort t(:City) %></th>
 	<th><%= link_to_sort t(:Public) %></th>
+	<% if not @group.present? or @group.monitor %>
 	<th><%= link_to_sort t(:Status) %></th>
+	<% end %>
 </tr>
