@@ -7,8 +7,31 @@
             form: '#access_points_quicksearch form',
             // maximum custom value
             max_value: 100,
+            // executed at the beginning of _create method
+            beforeCreate: function(){
+                try {
+                    initial_value = localStorage.getItem('pagination') || false;
+                    if(initial_value){
+                        $('#combobox option:selected').removeAttr('selected');
+                        $('#combobox option[value='+initial_value+']').attr('selected', true);
+                    }
+                } catch(e){}
+                
+            },
+            afterCreate: function(){
+                try {
+                    // load initial value
+                    initial_value = localStorage.getItem('pagination') || false;
+                    if(initial_value){
+                        this.onChange(initial_value, false);
+                    }
+                } catch(e){}   
+            },
             // function that is executed when selected value changes
-            onChange: function(val){
+            onChange: function(val, reload){
+                if(reload === undefined){
+                    reload = true;
+                }
                 // function to update the href or action attributes with correct pagination value
                 // $el: jquery element, attribute: string, value: string
                 var updateUrl = function($el, attribute, value){
@@ -36,9 +59,30 @@
                 // update each pagination link
                 $(this.links).each(function(i, el){
                     updateUrl($(el), 'href', val);
-                    // trigger click
-                    $('#access_points_paginate .page a').eq(0).trigger('click');
                 });
+                // store value for later retrieval
+                try {
+                    localStorage.setItem('pagination', val);
+                } catch(e){}
+                // trigger click
+                var first_link = $('#access_points_paginate .page a').eq(0);
+                if(first_link.length){
+                    first_link.trigger('click');
+                }
+                else{
+                    // if per querystring parameter not present already
+                    if(location.href.indexOf('?per=') < 0){
+                        // just redirect
+                        location.href = location.href + '?per=' + val
+                    }
+                    // rebuild redirect url unless onChange is called with reload as false
+                    else if(reload){
+                        pos = location.href.indexOf('?per=');
+                        url = location.href.substring(0, pos) + '?per=' + val;
+                        location.href = url
+                    }
+                    // otherwise 
+                }
                 // if form is defined
                 if(this.form){
                     // update action
@@ -47,6 +91,7 @@
             }    
         },
         _create: function() {
+            this.options.beforeCreate();
             var input,
             self = this,
             select = this.element.hide(),
@@ -110,6 +155,10 @@
                         }
                         self.options.onChange($(this).val())
                     }
+                },
+                // create
+                create: function(event, ui){
+                    self.options.afterCreate();
                 }
             })
             .addClass("ui-widget ui-widget-content ui-corner-left");
