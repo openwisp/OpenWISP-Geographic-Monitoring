@@ -34,7 +34,7 @@
 	  <%= render 'access_points_map' %>
 	</div>
 	<div id="map_loading" class="hidden">
-	  <p><%=t :Loading %> <%=t :markers%> <%= image_tag 'spinner.gif', :size => '22x22' %></p>
+	  <p><%=t :Loading %> <%=t :Map%> <%= image_tag 'spinner.gif', :size => '22x22' %></p>
 	</div>
     </div>
   </div>
@@ -59,15 +59,22 @@
       </span>
     </h2>
 
-    <div id="access_points_quicksearch" class="bold">
-      <%= render 'access_points_quicksearch' %>
-      <%#= render 'access_points_quickfavourite' %>
-    </div>
-
+    <% if @favourite_page %>
+      <div id="access_points_quicksearch" class="bold">
+        <%= render 'access_points_quickfavourite' %>
+      </div>
+      <div class="erase-favourite">
+	    <a href="<%= wisp_erase_favourite_path(@wisp)%>">Elimina tutti</a>
+	</div>
+    <% else %>
+	<div id="access_points_quicksearch" class="bold">
+        <%= render 'access_points_quicksearch' %>
+      </div>
+    <% end %>
+    
     <div id="loading" class="hidden">
       <p><%=t :Loading %> <%= image_tag 'spinner.gif' %></p>
     </div>
-
 
     <table>
       <thead id="access_points_thead">
@@ -93,4 +100,4 @@
     </div>
   </div>
 </div>
-<script>owgm.initFavourite()</script>
+<script>owgm.initFavourite();</script>

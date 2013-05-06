@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
 
-<%= form_tag access_points_with_or_without_wisp_path(@wisp), :method => :get, :remote => true do %>
-        <%= label_tag :f, t(:Filter_fav) %>
-	<%= text_field_tag :f, nil, :size => 10, :class => 'ui-state-default ui-combobox-input ui-autocomplete-input ui-widget ui-widget-content ui-corner-all' %>
+<%= form_tag wisp_access_point_favourite_path(@wisp), :method => :get, :remote => true do %>
+        <%= label_tag :q, t(:Filter_fav) %>
+	<%= text_field_tag :q, nil, :size => 10, :class => 'ui-state-default ui-combobox-input ui-autocomplete-input ui-widget ui-widget-content ui-corner-all' %>
 <% end %>

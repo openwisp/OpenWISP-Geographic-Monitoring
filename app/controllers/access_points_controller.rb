@@ -33,7 +33,7 @@ class AccessPointsController < ApplicationController
       format.any(:html, :js) { @access_points = access_points_with_sort_search_and_paginate.of_wisp(@wisp) }
       format.json { @access_points = access_points_with_filter.of_wisp(@wisp).draw_map }
       format.rss { @access_points = AccessPoint.of_wisp(@wisp).on_georss }
-  end
+    end
 
     crumb_for_wisp
     crumb_for_access_point_favourite
@@ -46,10 +46,26 @@ class AccessPointsController < ApplicationController
   end
 
   def favourite
+    @showmap = CONFIG['showmap']
     @access_point_pagination = CONFIG['access_point_pagination']
+    
+    @favourite_page = true
+    
     respond_to do |format|
-      format.any(:html, :js) { @ap_fav=access_points_with_sort_search_and_paginate(1).of_wisp(@wisp) }
+      format.any(:html, :js) {
+        @access_points = access_points_with_sort_search_and_paginate(1).of_wisp(@wisp)
+        render :index
+      }
+      format.json {
+        @access_points = access_points_with_filter.of_wisp(@wisp).draw_map
+        render :index
+      }
+      format.rss {
+        @access_points = AccessPoint.of_wisp(@wisp).on_georss
+        render :index
+      }
     end
+    
     crumb_for_wisp
     crumb_for_access_point_favourite
   end
@@ -59,12 +75,14 @@ class AccessPointsController < ApplicationController
     @access_points.each do |ap|
       if ap.favourite?: ap.property_set.update_attributes(:favourite => '0' ); end
     end
-    render :nothing => true
-    #respond_to do |format|
-    #format.json{
-    #    render :json => { 'style' => 'display: none' }
-    #   }
-    #end
+    respond_to do |format|
+      format.html {
+        redirect_to wisp_access_point_favourite_path(@wisp)
+      }
+      format.js {
+        render :nothing => true
+      }
+    end
   end
 
   private

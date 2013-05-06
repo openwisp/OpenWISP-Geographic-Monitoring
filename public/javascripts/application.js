@@ -287,19 +287,20 @@ var owgm = {
         }).css('cursor','pointer');
     },
     
-    eraseAllFavourite: function(){
-        $('.favourite-erase').click(function(e){
-            var el = $(this);
-            $.ajax({
-                url: el.attr('data-href'),
-                type: 'POST'
-            }).done(function(result) {
-               $('.fav-ap').hide();
-            }).fail(function(result){
-                alert('ERROR');
-            });
-        }).css('cursor','pointer');
-    }
+    //initEraseAllFavourite: function(){
+    //    $('.erase-favourite a').live('click', function(e){
+    //        e.preventDefault();
+    //        var el = $(this);
+    //        $.ajax({
+    //            url: el.attr('href'),
+    //            type: 'POST'
+    //        }).done(function(result) {
+    //           $('#access_points').parent().hide();
+    //        }).fail(function(result){
+    //            alert('ERROR');
+    //        });
+    //    });
+    //}
 };
 
 /************************/
