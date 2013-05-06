@@ -61,8 +61,14 @@ module ApplicationHelper
     current_user && current_user.has_role?(role, object)
   end
 
-  def access_points_with_or_without_wisp_path(wisp)
-    wisp ? wisp_access_points_path(wisp) : access_points_path
+  def access_points_with_or_without_wisp_path(wisp, group=nil)
+    if wisp and not group
+      wisp_access_points_path(wisp)
+    elsif wisp and group
+      wisp_group_access_points_path(wisp, group)
+    else
+      access_points_path
+    end
   end
   
   def active_link_if(path, exclude1='abcdefgh', exclude2='abcdefghi')

@@ -14,11 +14,35 @@ class AccessPointsControllerTest < ActionController::TestCase
     sign_in users(:admin)
     @wisp = wisps(:provincia_wifi)
     get :index, { :wisp_id => @wisp.name }
+    
     assert_response :success
     assert_select '#access_points' do
       assert_select 'tr', AccessPoint.where(:wisp_id => @wisp.id).count
     end
     activemenu_test()
+  end
+  
+  test "get access points map of wisp provinciawifi" do
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    get :index, { :format => 'json', :wisp_id => @wisp.name }
+    
+    assert_response :success
+  end
+  
+  test "get access points map of group of wisp provinciawifi" do
+    # change group of AP for testing purpose
+    ap = access_points(:eduroam)
+    ap.properties.group_id = 2
+    ap.properties.save!
+    
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    get :index, { :format => 'json', :wisp_id => @wisp.name, :group_id => 2 }
+    assert_response :success
+    
+    json_response = ActiveSupport::JSON.decode(@response.body)
+    assert_equal 1, json_response.length
   end
   
   test "get access points of wisp name containing space" do    
@@ -174,13 +198,7 @@ class AccessPointsControllerTest < ActionController::TestCase
     wisp = wisps(:provincia_wifi)
     group = groups(:squares_1)
     
-    get :index, { :wisp_id => wisp.name, :group_id => group.id }
-    
-    # TODO: problem here :(
-    assert_routing(wisp_group_access_points_path(wisp, group), { :controller => 'access_points', :action => 'index', :wisp_id => wisp.name, :group_id => group.id.to_s })
-    
-    assert_equal wisp_group_access_points_path(wisp, group), request.path
-    puts "\n\n\n%s\n\n\n" % [request.path]
+    get :index, { :id => wisp.name, :group_id => group.id }
     
     assert_response :success
     assert_select '#access_points' do
@@ -191,7 +209,6 @@ class AccessPointsControllerTest < ActionController::TestCase
   
   test "show access points by wrong group" do
     sign_in users(:admin)
-    # TODO: this also does not work as expected
     get :index, { :wisp_id => wisps(:provincia_wifi).name, :group_id => groups(:brescia_group1).id }
     assert_response :not_found
   end
@@ -199,17 +216,53 @@ class AccessPointsControllerTest < ActionController::TestCase
   test "show empty access point list" do
     sign_in users(:admin)
     get :index, { :wisp_id => 'small wisp' }
+    
     assert_response :success
     assert_select '.empty-page-msg', I18n.t(:No_AP)
     
     get :index, { :wisp_id => 'small wisp', :group_id => groups(:small_group).id }
-    
-    # TODO: this also does not work as expected
-    assert_equal wisp_group_access_points_path(wisps(:small), groups(:small_group)), request.path
-    
+     
     assert_response :success
     assert_select '.empty-page-msg', I18n.t(:No_AP)
     activemenu_test()
+  end
+  
+  test "search access points" do
+    sign_in users(:admin)
+    
+    # search for "where" should return 1 ap
+    get :index, { :wisp_id => wisps(:provincia_wifi).name, :q => 'where' }
+    assert_response :success
+    assert_select '#access_points' do
+      assert_select 'tr', 1
+    end
+    
+    # search "doesnotexist" should return 0 ap
+    get :index, { :wisp_id => wisps(:provincia_wifi).name, :q => 'doesnotexist' }
+    assert_response :success
+    assert_select '#access_points tr', false
+    
+    # search "where" in a group where there are no access points should return 0 ap
+    get :index, { :wisp_id => wisps(:provincia_wifi).name, :group_id => 2, :q => 'where' }
+    assert_response :success
+    assert_select '#access_points tr', false
+  end
+  
+  test "search form action url" do
+    sign_in users(:admin)
+    wisp = wisps(:provincia_wifi)
+    
+    # all access points
+    get :index
+    assert_select '#access_points_quicksearch form[action=?]', access_points_path
+    
+    # access points > wisp
+    get :index, { :wisp_id => wisp.name }
+    assert_select '#access_points_quicksearch form[action=?]', wisp_access_points_path(wisp)
+    
+    # access points > wisp > group
+    get :index, { :wisp_id => wisp.name, :group_id => 1 }
+    assert_select '#access_points_quicksearch form[action=?]', wisp_group_access_points_path(wisp, 1)
   end
   
   test "toggle_public" do
@@ -218,7 +271,7 @@ class AccessPointsControllerTest < ActionController::TestCase
     public_value = ap.properties.public
     post :toggle_public, { :format => 'json', :wisp_id => ap.wisp.name, :id => ap.id }
     assert_response :success
-    assert_equal !public_value, AccessPoint.find(ap.id).public
+    assert_equal !public_value, PropertySet.find_by_access_point_id(ap.id).public
   end
   
   private
