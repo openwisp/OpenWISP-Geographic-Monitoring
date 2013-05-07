@@ -398,3 +398,17 @@ input.submit{
 .batch-change-group{ margin-left: 15px; margin-right: 10px }
 #access_points .ui-selecting td { background: #FFFFEE }
 #access_points .ui-selected td { background: #FFF8CF }
+
+#access_points_list .hostname{ width: 10% }
+#access_points_list .macaddress{ width: 9% }
+#access_points_list .ip{ width: 8% }
+#access_points_list .location{ width: 16% }
+#access_points_list .address{ width: 16% }
+#access_points_list .group{ width: 10% }
+#access_points_list .city{ width: 9% }
+#access_points_list .public{ width: 5%; text-align:center }
+#access_points_list .status{ width: 5%; text-align:center }
+#access_points_list .status img,
+#access_points_list .public img{ vertical-align: top }
+.odd2 td{ background-color: #fcfcfc }
+#access_points_list .toggle-public{ cursor: pointer }

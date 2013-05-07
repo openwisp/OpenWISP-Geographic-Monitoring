@@ -47,7 +47,12 @@
 
   <div class="box">
     <h2>
-      <%=t :Access_point %>
+    <% unless @group.present? %>
+				<%=t :Access_point %>
+		<% else %>
+				<%=t :Access_points_of_group, :group => @group.name %>
+		<% end %>
+				
 			<% if @access_points.length > 0 %>
       <span class="rfloat">
 				<% if @group.present? and @group.monitor %>
@@ -78,7 +83,7 @@
 				<%= render 'access_points_actions' %>
 		</div>
 
-    <table>
+    <table id="access_points_list">
 				<thead id="access_points_thead">
 						<%= render 'access_points_thead' %>
 				</thead>
@@ -86,7 +91,7 @@
 						<%= render @access_points %>
 				</tbody>
     </table>
-
+		
     <div id="page_controls">
 				<div id="access_points_paginate">
 						<%= paginate @access_points, :remote => true %>
@@ -112,4 +117,12 @@
   </div>
 </div>
 
-<script>owgm.initBatchGroupSelection("<%= change_group_access_points_path %>")</script>
+<script>
+		owgm.initBatchGroupSelection("<%= change_group_access_points_path %>");
+		$('#access_points_list a.toggle-public').live('click', function(e){
+				el = $(this);
+				owgm.toggleProperty(el.attr('data-href'), function(result){
+						el.find('img').attr('src', result.image)
+				});
+		});
+</script>

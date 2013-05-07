@@ -32,8 +32,8 @@
   <tr id="group-row">
     <td><strong><%=t :Group %></strong></td>
     <td class="right">
-      <a id="group-info" data-groupid="<%= @properties.group.id %>">
-        <%= @properties.group.name %>
+      <a id="group-info" data-groupid="<%= @access_point.group_id %>">
+        <%= @access_point.group_name %>
       </a>
     </td>
   </tr>
@@ -82,7 +82,7 @@
     <td><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
     <td id="public" class="right">
       <a class="toggle-public" data-href="<%= toggle_public_wisp_access_point_path(@wisp, @access_point) %>">
-        <img src="<%= image_path(@access_point.public ? 'accept.png' : 'delete.png') %>" alt="">
+        <img src="<%= image_path(@access_point.public? ? 'accept.png' : 'delete.png') %>" alt="">
       </a>
     </td>
   </tr>

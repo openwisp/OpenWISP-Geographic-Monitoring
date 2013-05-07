@@ -18,12 +18,15 @@
 #%>
 
 <tr>
-	<th><%= link_to_sort t(:Hostname) %></th>
-    <th><%= link_to_sort t(:Site_description) %></th>
-	<th><%= link_to_sort t(:Address) %></th>
-	<th><%= link_to_sort t(:City) %></th>
-	<th><%= link_to_sort t(:Public) %></th>
+	<th class="hostname"><%= link_to_sort t(:Hostname) %></th>
+  <th class="location"><%= link_to_sort t(:Site_description) %></th>
+	<th class="address"><%= link_to_sort t(:Address) %></th>
+	<th class="city"><%= link_to_sort t(:City) %></th>
+	<th class="macaddress"><%= t(:Mac_address) %></th>
+	<th class="ip"><%= t(:Ip_addr)  %></th>
+	<th class="group"><%= t(:Group) %></th>
+	<th class="public"><%= link_to_sort t(:Public) %></th>
 	<% if not @group.present? or @group.monitor %>
-	<th><%= link_to_sort t(:Status) %></th>
+	<th class="status"><%= link_to_sort t(:Status) %></th>
 	<% end %>
 </tr>

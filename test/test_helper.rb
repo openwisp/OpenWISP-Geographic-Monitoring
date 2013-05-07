@@ -25,5 +25,5 @@ class ActionController::TestCase
   include Devise::TestHelpers
   include WispRolesFormula
   include Rails.application.routes.url_helpers
-  default_url_options[:host] = "localhost"
+  default_url_options[:host] = "test.host"
 end

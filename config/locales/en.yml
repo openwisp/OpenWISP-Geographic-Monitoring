@@ -155,6 +155,7 @@ en:
   Access_point_updated: "%{length} access points updated"
   Select_all_title: Select all (CTRL + A) or deselect all (ESC) the access points
   Change_group_title: Change group of the selected access points (CTRL + G)
+  Access_points_of_group: Access points of group "%{group}"
   
   # Lowercase
   logged_as: logged in as

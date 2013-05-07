@@ -55,7 +55,7 @@ class AccessPointsController < ApplicationController
 
   def show
     @access_point = AccessPoint.with_properties_and_group.find(params[:id])
-    @properties = @access_point.properties
+    @access_point.build_property_set_if_group_name_empty()
 
     crumb_for_wisp
     crumb_for_access_point
@@ -92,8 +92,8 @@ class AccessPointsController < ApplicationController
   def batch_select_group
     if wisp_loaded?
       @groups = Group.all_join_wisp("wisp_id = ? OR wisp_id IS NULL", [@wisp.id])
-      # maybe not !
     else
+      # maybe is too much! - for the moment it works so let's keep it
       if current_user.has_role?(:wisps_viewer)
         @groups = Group.all_join_wisp()
       else
@@ -125,10 +125,11 @@ class AccessPointsController < ApplicationController
       return
     end
     
+    # get an array of id for which the user is authorized
     authorized_for_wisps = current_user.roles_search(:wisp_access_points_viewer).map { |r| r.authorizable_id }
     
-    # in this case user is wisps_viewer, because he is not wisp_access_points_viewer for any wisp
-    # but he was able to get here (otherwise he would have been blocked before because the acl rules on top)
+    # in case user the array is empty, the user is wisps_viewer, because even if he is not wisp_access_points_viewer for any wisp
+    # he was able to get here (otherwise he would have been blocked before because the acl rules on top)
     wisps_viewer = authorized_for_wisps.length < 1 ? true : false
     
     # if moving access points to a group of a specific wisp, user must be authorized for that wisp
@@ -154,7 +155,7 @@ class AccessPointsController < ApplicationController
       end
     end
     
-    AccessPoint.batch_change_group(group.id, access_points)
+    AccessPoint.batch_change_group(access_points, group.id)
     
     # update group counts
     Group.update_all_counts()
@@ -164,7 +165,7 @@ class AccessPointsController < ApplicationController
   
   # toggle published AP in the GeoRSS xml
   def toggle_public
-    ap = AccessPoint.find(params[:id])
+    ap = PropertySet.find_by_access_point_id(params[:id])
     ap.public = !ap.public
     ap.save!
     respond_to do |format|
@@ -178,15 +179,21 @@ class AccessPointsController < ApplicationController
   private
 
   def access_points_with_filter
+    access_points = AccessPoint.with_properties_and_group.scoped
+    
+    if params[:group_id]
+      access_points = access_points.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
+    end
+    
     case params[:filter]
       when 'up'
-        AccessPoint.up
+        access_points.up
       when 'down'
-        AccessPoint.down
+        access_points.down
       when 'unknown'
-        AccessPoint.unknown
+        access_points.unknown
       else
-        AccessPoint
+        access_points
     end
   end
 
@@ -195,9 +202,11 @@ class AccessPointsController < ApplicationController
     column = params[:column] ? params[:column].downcase : nil
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
 
-    access_points = AccessPoint.scoped
+    # model delegation caused too many queries, used a workaround in the specific model method
+    access_points = AccessPoint.with_properties_and_group.scoped
+    
     if params[:group_id]
-      access_points = AccessPoint.select('access_points.*, property_sets.group_id').with_properties.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
+      access_points = access_points.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
     end
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query

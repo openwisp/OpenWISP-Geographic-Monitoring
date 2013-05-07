@@ -4,11 +4,13 @@ wherecamp:
   reachable: true
   access_point_id: 1
   group_id: 1
+  public: true
 
 eduroam:
   reachable: true
   access_point_id: 2
   group_id: 1
+  public: false
 
 
 ## orphans

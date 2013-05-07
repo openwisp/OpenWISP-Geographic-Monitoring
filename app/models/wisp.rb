@@ -44,11 +44,19 @@ class Wisp < ActiveRecord::Base
     new_roles
   end
   
+  # creates are roles if missing
   def self.create_all_roles
     self.all.each do |wisp|
       wisp.create_roles
     end
   end
+  
+  # count up access points of wisp
+  #def up
+  #  AccessPoint.with_properties.of_wisp()
+  #end
+  
+  ### Static methods ###
   
   # creates all roles if it finds a number of roles that is less than expected
   # is run automatically when displaying "edit user" and "new user" pages

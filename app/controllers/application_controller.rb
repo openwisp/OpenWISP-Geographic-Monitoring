@@ -73,10 +73,19 @@ class ApplicationController < ActionController::Base
   def load_wisp
     wisp_id = params[:wisp_id] || params[:id]
     if wisp_id
-      @wisp = Wisp.find_by_name(wisp_id.gsub('-', ' '))
-      raise ActionController::RoutingError.new(I18n.t('errors.messages.not_found')) if @wisp.nil?
+      # when wisp_id is a string
+      if wisp_id.to_i == 0
+        @wisp = Wisp.find_by_name(wisp_id.gsub('-', ' '))
+      # when wisp_id is a number
+      else
+        @wisp = Wisp.find(wisp_id)
+      end
+    # view all access points case
     elsif request.path.include?('/access_points')
       @wisp = nil
+    # 404
+    else
+      raise ActionController::RoutingError.new(I18n.t('errors.messages.not_found'))
     end
   end
 

@@ -22,6 +22,20 @@ class AccessPointsControllerTest < ActionController::TestCase
     activemenu_test()
   end
   
+  test "wisp id should be accepted too" do
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    # both as number and as string
+    get :index, { :wisp_id => @wisp.id }
+    get :index, { :wisp_id => @wisp.id.to_s }
+    
+    assert_response :success
+    assert_select '#access_points' do
+      assert_select 'tr', AccessPoint.where(:wisp_id => @wisp.id).count
+    end
+    activemenu_test()
+  end
+  
   test "get access points map of wisp provinciawifi" do
     sign_in users(:admin)
     @wisp = wisps(:provincia_wifi)
@@ -79,6 +93,15 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_response :success
     assert_select '#group-info', 'no group'
     activemenu_test()
+  end
+  
+  test "show access point correct published icon" do
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
+    assert css_select('.toggle-public img').to_s.include?('accept.png'), 'picture should indicate that the access point is published'
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:eduroam).id }
+    assert css_select('.toggle-public img').to_s.include?('delete.png'), 'picture should indicate that the access point is not published'
   end
   
   test "non wisp_viewer should not get all access points" do
@@ -268,10 +291,26 @@ class AccessPointsControllerTest < ActionController::TestCase
   test "toggle_public" do
     sign_in users(:admin)
     ap = access_points(:wherecamp)
-    public_value = ap.properties.public
+    public_value = ap.properties.public    
     post :toggle_public, { :format => 'json', :wisp_id => ap.wisp.name, :id => ap.id }
     assert_response :success
     assert_equal !public_value, PropertySet.find_by_access_point_id(ap.id).public
+    assert_equal !public_value, ActiveSupport::JSON.decode(@response.body)['public']
+    # repeat the operation
+    post :toggle_public, { :format => 'json', :wisp_id => ap.wisp.name, :id => ap.id }
+    assert_response :success
+    assert_equal public_value, PropertySet.find_by_access_point_id(ap.id).public
+    assert_equal public_value, ActiveSupport::JSON.decode(@response.body)['public']
+    # repeat the operation using an integer for the ID
+    post :toggle_public, { :format => 'json', :wisp_id => ap.wisp.id, :id => ap.id }
+    assert_response :success
+    assert_equal !public_value, PropertySet.find_by_access_point_id(ap.id).public
+    assert_equal !public_value, ActiveSupport::JSON.decode(@response.body)['public']
+    # repeat the operation using an integer for the ID
+    post :toggle_public, { :format => 'json', :wisp_id => ap.wisp.id, :id => ap.id }
+    assert_response :success
+    assert_equal public_value, PropertySet.find_by_access_point_id(ap.id).public
+    assert_equal public_value, ActiveSupport::JSON.decode(@response.body)['public']
   end
   
   private

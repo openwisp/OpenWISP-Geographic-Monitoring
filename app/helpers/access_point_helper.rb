@@ -60,6 +60,14 @@ module AccessPointHelper
     end
   end
   
+  def link_to_group(group_name, wisp, group_id)
+    if not group_id.nil? and not wisp.nil?
+      link_to(group_name, wisp_group_access_points_path(wisp, group_id))
+    elsif wisp.nil?
+      group_name
+    end
+  end
+  
   def select_group_url_if_wisp_loaded
     if wisp_loaded?
       select_group_wisp_path(@wisp)

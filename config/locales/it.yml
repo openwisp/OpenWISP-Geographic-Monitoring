@@ -173,6 +173,7 @@ it:
   Access_point_updated: "%{length} access point aggiornati"
   Select_all_title: Seleziona tutti (CTRL + A) o deseleziona tutti (ESC) gli access point
   Change_group_title: Cambia il gruppo agli access point selezionati (CTRL + G)
+  Access_points_of_group: Access point del gruppo "%{group}"
   
   # Lowercase
   logged_as: autenticato come

@@ -48,6 +48,7 @@ $(document).ready(function() {
     owgm.paginator();
     owgm.initNotice();
     owgm.initMainMenu();
+    owgm.initDynamicColumns();
 });
 
 
@@ -157,6 +158,7 @@ var owgm = {
             $('.select-all-checkbox').each(function(){
                 this.checked = false
             });
+            owgm.showColumnsDependingOnScreenWidth();
         });
     },
 
@@ -520,6 +522,52 @@ var owgm = {
             width = $(el).width()
             $(el).find('.third-level').attr('style', 'left: '+width+'px !important');
         });
+    },
+    
+    initDynamicColumns: function(){
+        if($('#access_points_list').length){
+            $(window).resize(function(e){
+                owgm.showColumnsDependingOnScreenWidth();
+            });
+            owgm.showColumnsDependingOnScreenWidth();
+        }
+    },
+    
+    showColumnsDependingOnScreenWidth: function(){
+        var width = $(window).width();
+        
+        if(width <= 1100){
+            if($('.macaddress', '#access_points_list').eq(0).is(':visible')){
+                $('.macaddress', '#access_points_list').hide();
+            }            
+        }
+        else{
+            if(!$('.macaddress', '#access_points_list').eq(0).is(':visible')){
+                $('.macaddress', '#access_points_list').show();
+            }      
+        }
+        
+        if(width <= 1200){
+            if($('.location', '#access_points_list').eq(0).is(':visible')){
+                $('.location', '#access_points_list').hide();
+            }            
+        }
+        else{
+            if(!$('.location', '#access_points_list').eq(0).is(':visible')){
+                $('.location', '#access_points_list').show();
+            }      
+        }
+        
+        if(width <= 1400){
+            if($('.ip', '#access_points_list').eq(0).is(':visible')){
+                $('.ip', '#access_points_list').hide();
+            }            
+        }
+        else{
+            if(!$('.ip', '#access_points_list').eq(0).is(':visible')){
+                $('.ip', '#access_points_list').show();
+            }      
+        }
     }
 };
 
