@@ -20,14 +20,10 @@
           <td class="name"><%= link_to group.name, wisp_group_access_points_path(@wisp, group) %></td>
           <td class="wisp"><%= group.wisp_name %></td>
           <td class="monitor center">
-            <a class="toggle-monitor" data-href="<%= toggle_monitor_group_path(group.id) %>">
-              <img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
-            </a>
+            <img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
           </td>
           <td class="coount-stats center">
-            <a class="toggle-count-stats" data-href="test">
-              <img src="<%= image_path(group.count_stats ? 'accept.png' : 'delete.png') %>" alt="">
-            </a>
+            <img src="<%= image_path(group.count_stats ? 'accept.png' : 'delete.png') %>" alt="">
           </td>
           <td class="total center"><%= group.total %></td>
           <td class="total_up center"><%= group.up %></td>
