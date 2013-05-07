@@ -411,4 +411,13 @@ input.submit{
 #access_points_list .status img,
 #access_points_list .public img{ vertical-align: top }
 .odd2 td{ background-color: #fcfcfc }
-#access_points_list .toggle-public{ cursor: pointer }
+#access_points_list .toggle-public, .toggle-monitor, .toggle-count-stats{ cursor: pointer }
+
+form .field p{ margin: 0 0 5px }
+form .help{ font-size: 12px; color: #606060 }
+
+h2 span.rfloat span{ margin-left: 12px !important }
+h2 .up{ border-bottom: 1px solid #093 }
+h2 .down{ border-bottom: 1px solid #F33 }
+h2 .unknown{ border-bottom: 1px solid #9f9f9f }
+h2 .total{ border-bottom: 1px solid #fff }

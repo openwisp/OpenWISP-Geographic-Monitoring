@@ -36,7 +36,7 @@ class AccessPointsController < ApplicationController
     # if group view
     if params[:group_id]
       begin
-        @group = Group.select([:id, :name, :monitor, :up, :down, :unknown]).where(['wisp_id IS NULL or wisp_id = ?', @wisp.id]).find(params[:group_id])  
+        @group = Group.select([:id, :name, :monitor, :up, :down, :unknown, :total]).where(['wisp_id IS NULL or wisp_id = ?', @wisp.id]).find(params[:group_id])  
       rescue ActiveRecord::RecordNotFound
         render :file => "#{Rails.root}/public/404.html", :status => 404, :layout => false
         return

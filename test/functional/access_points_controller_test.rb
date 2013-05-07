@@ -115,7 +115,7 @@ class AccessPointsControllerTest < ActionController::TestCase
     get :select_group, { :wisp_id => 'provinciawifi', :access_point_id => 1 }
     assert_response :success
     assert_select "#select-group", 1
-    assert_select "#select-group tbody tr", 4
+    assert_select "#select-group tbody tr", 5
   end
   
   test "change group" do

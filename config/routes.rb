@@ -49,6 +49,7 @@ Owgm::Application.routes.draw do
   resources :groups, :only => [:index, :new, :edit, :create, :update, :destroy] do
     member do
       post 'toggle_monitor'
+      post 'toggle_count_stats'
     end
   end
 

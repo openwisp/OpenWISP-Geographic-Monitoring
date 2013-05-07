@@ -75,4 +75,8 @@ module AccessPointHelper
       select_group_access_points_path
     end
   end
+  
+  def show_stat(action, count)
+    ("<span class='%s'><b>%s:</b> %s</span>" % [action, t(action), count]).html_safe
+  end
 end

@@ -47,28 +47,33 @@
 
   <div class="box">
     <h2>
-    <% unless @group.present? %>
-				<%=t :Access_point %>
+    <% if @wisp.present? and @group.nil? %>
+				<%= t(:Access_points_of_wisp, :wisp => @wisp.name).html_safe %>
+		<% elsif @group.present? %>
+				<%= t(:Access_points_of_wisp_group, :wisp => @wisp.name, :group => @group.name).html_safe %>
 		<% else %>
-				<%=t :Access_points_of_group, :group => @group.name %>
+				<%= t :Access_points_of_every_wisp %>
 		<% end %>
 				
 			<% if @access_points.length > 0 %>
       <span class="rfloat">
 				<% if @group.present? and @group.monitor %>
-						<%=t :up %>: <%= @group.up %>
-						<%=t :down %>: <%= @group.down%>
-						<%=t :unknown %>: <%= @group.unknown %>
+						<%= show_stat(:up, @group.up) %>
+						<%= show_stat(:down, @group.down) %>
+						<%= show_stat(:unknown, @group.unknown) %>
+						<%= show_stat(:total, @group.total) %>
 				<% elsif @group.present? %>
 						<%= t :Monitoring_disabled_for_group %>
 				<% elsif @wisp.present? %>
-						<%=t :up %>: <%= @wisp.access_points_up.count %>
-						<%=t :down %>: <%= @wisp.access_points_down.count %>
-						<%=t :unknown %>: <%= @wisp.access_points_unknown.count %>
+						<%= show_stat(:up, @wisp.count_access_points(:up)) %>
+						<%= show_stat(:down, @wisp.count_access_points(:down)) %>
+						<%= show_stat(:unknown, @wisp.count_access_points(:unknown)) %>
+						<%= show_stat(:total, @wisp.count_access_points(:total)) %>
 				<% else %>
-						<%=t :up %>: <%= AccessPoint.up.count %>
-						<%=t :down %>: <%= AccessPoint.down.count %>
-						<%=t :unknown %>: <%= AccessPoint.unknown.count %>
+						<%= show_stat(:up, AccessPoint.up.count) %>
+						<%= show_stat(:down, AccessPoint.down.count) %>
+						<%= show_stat(:unknown, AccessPoint.unknown.count) %>
+						<%= show_stat(:total, AccessPoint.total.count) %>
 				<% end %>
       </span>
 			<% end %>

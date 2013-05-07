@@ -296,14 +296,14 @@ var owgm = {
         });
     },
     
-    initToggleMonitor: function(){
-        $('.toggle-monitor').click(function(e){
+    initGroupList: function(){
+        $('.toggle-monitor, .toggle-count-stats').click(function(e){
             e.preventDefault();
             var el = $(this);
             owgm.toggleProperty(el.attr('data-href'), function(result){
                 el.find('img').attr('src', result.image)
             });            
-        }).css('cursor','pointer');
+        });
     },
     
     toggleOverlay: function(closeCallback){

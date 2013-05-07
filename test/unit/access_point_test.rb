@@ -19,4 +19,12 @@ class AccessPointTest < ActiveSupport::TestCase
       assert_not_nil ap.group_name
     end
   end
+  
+  test "test count methods" do
+    assert_equal 4, AccessPoint.total.count
+    assert_equal 1, AccessPoint.up.count
+    assert_equal 1, AccessPoint.down.count
+    assert_equal 2, AccessPoint.unknown.count
+    assert_equal 2, AccessPoint.known.count
+  end
 end

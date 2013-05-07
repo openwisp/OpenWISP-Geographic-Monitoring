@@ -147,6 +147,8 @@ it:
   Edit_group: Modifica gruppo  
   Total_AP: AP Totali
   Monitor: Monitoraggio attivo?
+  Monitoring_disabled_for_group: Monitoring disattivato per questo gruppo
+  Monitor_help: Questa impostazione indica al sistema se deve monitorare lo stato degli access point contenuti in questo gruppo o meno
   No_wisp: Nessun wisp associato
   Users: Utenti
   User_management: Interfaccia gestione utenti
@@ -154,14 +156,13 @@ it:
   Cannot_delete_default_group: Impossibile eliminare il gruppo di default
   No_AP: Nessun access point presente
   Group_named: Gruppo "%{group}"
-  Monitoring_disabled_for_group: Monitoring disattivato per questo gruppo
   Manage_groups: Gestisci gruppi
   Group_modified: Gruppo modificato con successo
   Group_list_of_wisp: 'Lista gruppi di "%{wisp}"'
   View_AP: Visualizza AP
   View_all_the_AP: Tutti gli access points
   Groups_of_this_wisp: Gruppi del wisp
-  Access_points_of_wisp: Access points del wisp
+  Access_points_of_this_wisp: Access points del wisp
   Select_all: Seleziona tutti
   Change_group: Cambia gruppo
   No_access_point_selected: "Devi selezionare prima gli access point.\n\nProva a selezionare le righe della tabella con il mouse."
@@ -173,7 +174,10 @@ it:
   Access_point_updated: "%{length} access point aggiornati"
   Select_all_title: Seleziona tutti (CTRL + A) o deseleziona tutti (ESC) gli access point
   Change_group_title: Cambia il gruppo agli access point selezionati (CTRL + G)
-  Access_points_of_group: Access point del gruppo "%{group}"
+  Access_points_of_wisp: Access point del wisp <b>"%{wisp}"</b>
+  Access_points_of_wisp_group: Access point del wisp <b>"%{wisp}"</b> &raquo; gruppo <b>"%{group}"</b>
+  Count_stats: Conteggio statistiche
+  Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando si calcolano le statistiche degli access point (up, down, sconosciuto, totale)
   
   # Lowercase
   logged_as: autenticato come
@@ -192,6 +196,7 @@ it:
     one: 1 giorno fa
     other: "#{count} giorni fa"
   than: del
+  total: totale
   'true': 'sì'
   unknown: sconosciuto
   up: up

@@ -24,7 +24,7 @@ class GroupsControllerTest < ActionController::TestCase
     get :index
     assert_response :success, 'mixed_operator should get group index'
     assert_select "table#group_list tbody" do
-      assert_select "tr", 5, "mixed_operator should only 5 records"
+      assert_select "tr", 6, "mixed_operator should only 6 records"
     end
   end
     
@@ -99,9 +99,25 @@ class GroupsControllerTest < ActionController::TestCase
     get :list, { :wisp_id => wisp.name }
     assert_response :success
     assert_select "table#group_list tbody" do
-      assert_select "tr", 4
+      assert_select "tr", 5
     end
     activemenu_test()
+  end
+  
+  test "toggle count stats" do
+    sign_in users(:admin)
+    group = groups(:archived)
+    count_stats_value = group.count_stats
+    # toggle first time
+    post :toggle_count_stats, { :format => 'json', :id => group.id }
+    assert_response :success
+    assert_equal !count_stats_value, Group.find(group.id).count_stats
+    assert_equal !count_stats_value, ActiveSupport::JSON.decode(@response.body)['count_stats']
+    # toggle second time
+    post :toggle_count_stats, { :format => 'json', :id => group.id }
+    assert_response :success
+    assert_equal count_stats_value, Group.find(group.id).count_stats
+    assert_equal count_stats_value, ActiveSupport::JSON.decode(@response.body)['count_stats']
   end
   
   private

@@ -174,19 +174,23 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def self.up
-    with_properties.where(:property_sets => {:reachable => true})
+    with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1').where(:property_sets => {:reachable => true})
   end
 
   def self.down
-    with_properties.where(:property_sets => {:reachable => false})
+    with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1').where(:property_sets => {:reachable => false})
   end
 
   def self.known
-    with_properties.where(:property_sets => {:reachable => [true, false]})
+    with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1').where(:property_sets => {:reachable => [true, false]})
   end
 
   def self.unknown
-    with_properties.where(:property_sets => {:reachable => nil})
+    with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1').where(:property_sets => {:reachable => nil})
+  end
+  
+  def self.total
+    with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1')
   end
 
   def self.activated(till=nil)
