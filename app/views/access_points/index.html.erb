@@ -29,7 +29,7 @@
   <div class="grid_12">
 		<% if @access_points.length > 0 %>
 		<div class="box">
-			<h2><a id="map_toggle" href="#"<% if not @showmap: %> class="hidden"<% end %>><%=t :Access_points_map %></a></h2>
+			<h2><a id="map_toggle" href="#"<% if not @showmap: %> class="hidden"<% end %>><%=t :Access_points_map %> <span class="arrow" data-show="&#x25BC;" data-hide="&#x25B2;">&#x25BC;</span></a></h2>
 			
 			<div id="map_container"<% if not @showmap: %> style="display:none"<% end %>>
 		  <br />
@@ -64,6 +64,7 @@
 						<%= show_stat(:total, @group.total) %>
 				<% elsif @group.present? %>
 						<%= t :Monitoring_disabled_for_group %>
+						<%= show_stat(:total, @group.total) %>
 				<% elsif @wisp.present? %>
 						<%= show_stat(:up, @wisp.count_access_points(:up)) %>
 						<%= show_stat(:down, @wisp.count_access_points(:down)) %>

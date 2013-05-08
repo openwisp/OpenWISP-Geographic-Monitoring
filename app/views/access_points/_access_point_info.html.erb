@@ -19,7 +19,7 @@
 
 <h2><%=t :Info %></h2>
 <br />
-<table>
+<table id="access_point_detail">
   <tbody class="hover">
   <tr>
     <td><strong><%=t :Hostname %></strong></td>
@@ -49,11 +49,11 @@
     <td><strong><%=t :Status %></strong></td>
     <td class="right">
       <% if @access_point.up? %>
-          <%=t :up %>
+          <span class="up"><%=t :up %></span>
       <% elsif @access_point.down? %>
-          <%=t :down %>
+          <span class="down"><%=t :down %></span>
       <% elsif @access_point.unknown? %>
-          <%=t :unknown %>
+          <span class="unknown"><%=t :unknown %></span>
       <% end %>
       <%= image_tag_for @access_point, :id => 'hs_icon', :class => 'hidden' %>
     </td>
@@ -68,15 +68,15 @@
   </tr>
   <tr>
     <td><strong><%=t :Activation_date %></strong></td>
-    <td class="right"><%=l @access_point.activation_date rescue '-' %></td>
+    <td class="right"><%=l(@access_point.activation_date, :format => :long) rescue '-' %></td>
   </tr>
   <tr>
     <td><strong><%=t :Earliest_seen %></strong></td>
-    <td class="right"><%= l(@access_point.earliest_seen, :format => :short) rescue '-' %></td>
+    <td class="right"><%= l(@access_point.earliest_seen, :format => :long) rescue '-' %></td>
   </tr>
   <tr>
     <td><strong><%=t :Latest_seen %></strong></td>
-    <td class="right"><%= l(@access_point.latest_seen, :format => :short) rescue '-' %></td>
+    <td class="right"><%= l(@access_point.latest_seen, :format => :long) rescue '-' %></td>
   </tr>
   <tr id="clickable_public">
     <td><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>

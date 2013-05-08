@@ -172,12 +172,13 @@ it:
   User_does_not_have_permission_ap_id: "L'utente non ha i permessi per gestire il wisp dell'access point con id %{ap_id}"
   Moving_access_point_different_wisp_not_allowed: "Non è possibile spostare gli access point del wisp \"%{wisp1}\" in un gruppo del wisp \"%{wisp2}\""
   Access_point_updated: "%{length} access point aggiornati"
-  Select_all_title: Seleziona tutti (CTRL + A) o deseleziona tutti (ESC) gli access point
+  Select_all_title: Seleziona tutti (CTRL + A)\no deseleziona tutti (ESC)
   Change_group_title: Cambia il gruppo agli access point selezionati (CTRL + G)
   Access_points_of_wisp: Access point del wisp <b>"%{wisp}"</b>
   Access_points_of_wisp_group: Access point del wisp <b>"%{wisp}"</b> &raquo; gruppo <b>"%{group}"</b>
   Count_stats: Conteggio statistiche
   Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando si calcolano le statistiche degli access point (up, down, sconosciuto, totale)
+  Published_thead_tooltip: Indica se l'access point\nè pubblicato sul GeoRSS
   
   # Lowercase
   logged_as: autenticato come

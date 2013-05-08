@@ -421,3 +421,41 @@ h2 .up{ border-bottom: 1px solid #093 }
 h2 .down{ border-bottom: 1px solid #F33 }
 h2 .unknown{ border-bottom: 1px solid #9f9f9f }
 h2 .total{ border-bottom: 1px solid #fff }
+
+#access_point_detail .up{ color: #093; font-weight: bold }
+#access_point_detail .down{ color: #F33; font-weight: bold }
+#access_point_detail .unknown{ color: #9f9f9f; font-weight: bold }
+#access_point_detail .unknown{ color: #6b6b70 }
+
+
+.tooltip{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 3;
+	display: none;
+	min-width: 100px;
+	max-width: 200px;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 20px;
+	text-align: justify;
+	background: #333;
+    background: rgba(0,0,0,.8);
+	color: #fff;
+    border-radius: 5px;
+	padding: 10px 15px;
+}
+
+.tooltip:before{
+    content: "▾";
+    position: absolute;
+	bottom: -11px;
+	left: 44%;
+    z-index: 9999;
+	color: #333;/*
+    color: rgba(0,0,0,.8); */
+	font-size: 25px;
+}
+
+h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !important; }

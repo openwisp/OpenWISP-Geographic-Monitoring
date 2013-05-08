@@ -25,7 +25,7 @@
 	<th class="macaddress"><%= t(:Mac_address) %></th>
 	<th class="ip"><%= t(:Ip_addr)  %></th>
 	<th class="group"><%= t(:Group) %></th>
-	<th class="public"><%= link_to_sort t(:Public) %></th>
+	<th class="public hastip" title="<%= t :Published_thead_tooltip %>"><%= link_to_sort t(:Public) %></th>
 	<% if not @group.present? or @group.monitor %>
 	<th class="status"><%= link_to_sort t(:Status) %></th>
 	<% end %>

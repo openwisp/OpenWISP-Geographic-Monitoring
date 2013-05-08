@@ -154,12 +154,13 @@ en:
   User_does_not_have_permission_ap_id: "User does not have permission to manage wisp of ap with id %{ap_id}"
   Moving_access_point_different_wisp_not_allowed: 'Moving access point of wisp "%{wisp1}" in a group of "%{wisp2}" is not allowed'
   Access_point_updated: "%{length} access points updated"
-  Select_all_title: "Select all (CTRL + A) or deselect all (ESC) the access points"
+  Select_all_title: "Select all (CTRL + A)\nor deselect all (ESC)"
   Change_group_title: "Change group of the selected access points (CTRL + G)"
   Access_points_of_wisp: Access points of wisp "%{wisp}"
   Access_points_of_wisp_group: Access points of wisp "%{wisp}" &raquo; group "%{group}"
   Count_stats: Count statistics
   Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating statists of the access points (up, down, unknown, total)"
+  Published_thead_tooltip: Indicates whether the access point\nis published in the GeoRSS
   
   # Lowercase
   logged_as: logged in as

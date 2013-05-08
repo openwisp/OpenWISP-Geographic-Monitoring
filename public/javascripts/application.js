@@ -26,29 +26,12 @@ $(document).ready(function() {
     owgm.enableJavascript();
     owgm.ajaxQuickSearch();
     owgm.ajaxLoading();
-    if (typeof(gmaps) !== 'undefined') {
-        // bind click event to the <a> that toggles the map container
-        $(gmaps.mapToggle).click(function(e){
-            // cache some stuff
-            var container = $(gmaps.mapContainer);
-            var is_visible = container.is(':visible');
-            // prevent default link behaviour
-            e.preventDefault();
-            // toggle class hidden
-            $(this).toggleClass('hidden');
-            // toggle container and initialize gmap if necessary
-            container.slideToggle('slow', function(){
-                if(!is_visible && gmaps.map == undefined){
-                    gmaps.drawGoogleMap();    
-                }
-            });
-        });
-        gmaps.drawGoogleMap();
-    }
+    owgm.initGmap();
     owgm.paginator();
     owgm.initNotice();
     owgm.initMainMenu();
     owgm.initDynamicColumns();
+    owgm.initTooltip();
 });
 
 
@@ -86,6 +69,35 @@ var owgm = {
             }
         } else {
             return _curr+'/'+path+_params;
+        }
+    },
+    
+    initGmap: function(){
+        if (typeof(gmaps) !== 'undefined') {
+            // bind click event to the <a> that toggles the map container
+            $(gmaps.mapToggle).click(function(e){
+                // cache some stuff
+                var container = $(gmaps.mapContainer),
+                    is_visible = container.is(':visible'),
+                    arrow = container.parent().find('.arrow');
+                // prevent default link behaviour
+                e.preventDefault();
+                // toggle class hidden
+                $(this).toggleClass('hidden');
+                // toggle container and initialize gmap if necessary
+                container.slideToggle('slow', function(){
+                    if(!is_visible && gmaps.map == undefined){
+                        gmaps.drawGoogleMap();
+                    }
+                });
+                if(!is_visible){
+                    arrow.html(arrow.attr('data-hide'));
+                }
+                else{
+                    arrow.html(arrow.attr('data-show'));
+                }
+            });
+            gmaps.drawGoogleMap();
         }
     },
 
@@ -568,6 +580,29 @@ var owgm = {
                 $('.ip', '#access_points_list').show();
             }      
         }
+    },
+    
+    initTooltip: function(){        
+        $(".hastip").simpletip({
+            fixed: true,
+            boundryCheck: false,
+            position: 'top',
+            showTime: 100,
+            hideTime: 50,
+            onBeforeShow: function(){
+                var a = this.getParent(),
+                    title = a.attr('title');
+                a.attr('data-title', title);
+                a.removeAttr('title');
+                this.update(title.replace(/\\n/g, '<br>'));
+            },
+            onHide: function(){
+                var a = this.getParent(),
+                    title = a.attr('data-title');
+                a.attr('title', title);
+                a.removeAttr('data-title');
+            }
+        });
     }
 };
 
