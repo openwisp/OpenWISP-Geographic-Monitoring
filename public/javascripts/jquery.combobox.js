@@ -78,18 +78,7 @@
                     first_link.trigger('click');
                 }
                 else{
-                    // if per querystring parameter not present already
-                    if(location.href.indexOf('?per=') < 0){
-                        // just redirect
-                        location.href = location.href + '?per=' + val
-                    }
-                    // rebuild redirect url unless onChange is called with reload as false
-                    else if(reload){
-                        pos = location.href.indexOf('?per=');
-                        url = location.href.substring(0, pos) + '?per=' + val;
-                        location.href = url
-                    }
-                    // otherwise 
+                    owgm.refreshPage(val);
                 }
                 // if form is defined
                 if(this.form){

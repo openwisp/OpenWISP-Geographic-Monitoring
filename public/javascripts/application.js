@@ -211,6 +211,31 @@ var owgm = {
         }
     },
     
+    // refreshes current page even if no pagination link exists
+    refreshPage: function(page){
+        var current = $('.current a'),
+            url = $('#access_points_quicksearch form').attr('action'),
+            pos = url.indexOf('?per=');
+            
+        if(page){
+            if(pos){
+                url = url.substring(0, pos) + '?per=' + page;
+            }
+            else{
+                url = url + '?per=' + page;
+            }
+        }
+        
+        if(!page && current.length){
+            current.trigger('click');
+        }
+        else{
+            $('#access_points_paginate').append('<a class="hidden" id="tmp_update" href="'+url+'" data-remote="true"></a>');
+            $('#tmp_update').trigger('click');
+            $('#tmp_update').remove();
+        }    
+    },
+    
     exportReport: function(export_url, file){
         this.toggleProgress();
         // local variables
@@ -444,7 +469,14 @@ var owgm = {
         // init jQuery UI selectable widget
         $("#access_points").selectable({
             filter: "tr",
-            delay: 80
+            delay: 80,
+            start: function(event, ui) {
+                // blur focus from quicksearch otherwise unexpected behaviour might occur when using shortcuts
+                var activeEl = $(document.activeElement);
+                if(activeEl.attr('name') == 'q'){
+                    activeEl.trigger('blur');
+                }
+            }
         });
         
         // select or deselect all
@@ -501,6 +533,8 @@ var owgm = {
             }).fail(function(xhr, status, error){
                 // in case of error return error message
                 alert((JSON.parse(xhr.responseText)).details);
+            }).done(function(){
+                owgm.refreshPage()
             });
         }
         
