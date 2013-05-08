@@ -269,6 +269,18 @@ class AccessPointsControllerTest < ActionController::TestCase
     get :index, { :wisp_id => wisps(:provincia_wifi).name, :group_id => 2, :q => 'where' }
     assert_response :success
     assert_select '#access_points tr', false
+    
+    get :index, { :wisp_id => wisps(:provincia_wifi).name, :q => 'testing-test' }
+    assert_response :success
+    assert_select '#access_points tr', 1
+    
+    get :index, { :wisp_id => wisps(:provincia_wifi).name, :q => '00:27:22:27:42:40' }
+    assert_response :success
+    assert_select '#access_points tr', 1
+    
+    get :index, { :wisp_id => wisps(:provincia_wifi).name, :q => '10.8.1.82' }
+    assert_response :success
+    assert_select '#access_points tr', 1
   end
   
   test "search form action url" do

@@ -214,7 +214,7 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def self.quicksearch(name)
-    where("`hostname` LIKE ? OR `address` LIKE ? OR `city` LIKE ?", *(["%#{name}%"]*3) )
+    where("`hostname` LIKE ? OR `address` LIKE ? OR `city` LIKE ? OR `common_name` LIKE ? OR `mng_ip` LIKE ? OR `site_description` LIKE ?", *(["%#{name}%"]*6) )
   end
   
   # update all property sets specified in id_array and set the specified group_id

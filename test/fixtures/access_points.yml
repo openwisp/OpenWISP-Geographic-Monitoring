@@ -7,6 +7,8 @@ wherecamp:
     city: 'Roma'
     description: 'test'
     wisp_id: 1
+    common_name: "00:27:22:27:42:40"
+    mng_ip: "10.8.1.82"
 
 eduroam:
     id: 2
