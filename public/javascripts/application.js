@@ -532,7 +532,13 @@ var owgm = {
                 data: JSON.stringify({ "group_id": group_id, "access_points": selected_access_points })
             }).fail(function(xhr, status, error){
                 // in case of error return error message
-                alert((JSON.parse(xhr.responseText)).details);
+                try{
+                    alert((JSON.parse(xhr.responseText)).details);
+                }
+                catch(e){
+                    alert('ERROR');
+                }
+                
             }).done(function(){
                 owgm.refreshPage()
             });

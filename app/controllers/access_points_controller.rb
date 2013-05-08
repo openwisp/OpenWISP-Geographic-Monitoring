@@ -27,6 +27,11 @@ class AccessPointsController < ApplicationController
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
+    
+    actions :batch_change_group do
+      allow :wisps_viewer
+      allow :wisp_access_points_viewer
+    end
   end
 
   def index
@@ -138,7 +143,7 @@ class AccessPointsController < ApplicationController
       return
     end
     
-    access_points = AccessPoint.find(access_points_id)
+    access_points = AccessPoint.with_properties.find(access_points_id)
     
     # check permissions first
     access_points.each do |ap|
@@ -152,6 +157,12 @@ class AccessPointsController < ApplicationController
       if not group.wisp_id.nil? and not ap.wisp_id == group.wisp_id
         render :status => 403, :json => { "details" => I18n.t(:Moving_access_point_different_wisp_not_allowed, :wisp1 => ap.wisp.name, :wisp2 => group.wisp.name) }
         return
+      end
+      
+      # ensure ap has property_sets related object
+      if ap.group_id.nil?
+        # create properties!
+        ap.properties.save!
       end
     end
     
