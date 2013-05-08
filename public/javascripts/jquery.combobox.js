@@ -10,10 +10,18 @@
             // executed at the beginning of _create method
             beforeCreate: function(){
                 try {
-                    initial_value = localStorage.getItem('pagination') || false;
-                    if(initial_value){
+                    var initial_value = localStorage.getItem('pagination') || false,
+                        selected_value = $('#combobox option:selected').val();
+                    // if initial value is stored in the browser cache and is different from the default value
+                    if(initial_value && selected_value !== initial_value){
+                        // select the cached value
                         $('#combobox option:selected').removeAttr('selected');
                         $('#combobox option[value='+initial_value+']').attr('selected', true);
+                    }
+                    // else if cached value is the same as the default value
+                    else if(initial_value && selected_value === selected_value){
+                        // remove localstorage item to avoid pointlessly reloading the list of access points
+                        localStorage.removeItem('pagination');
                     }
                 } catch(e){}
                 
