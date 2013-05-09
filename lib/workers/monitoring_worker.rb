@@ -22,8 +22,8 @@ include Net
 class MonitoringWorker < BackgrounDRb::MetaWorker
   set_worker_name :monitoring_worker
 
-  MAX_THREADS = 10
-  PING_TIMEOUT = 5
+  MAX_THREADS = CONFIG['max_threads']
+  PING_TIMEOUT = CONFIG['ping_timeout']
 
   @@monitoring_semaphore = Mutex.new
   @@users_count_semaphore = Mutex.new
@@ -215,7 +215,8 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
   end
 
   def housekeeping
-    time = 6.months.to_i.ago
+    #if it doesen't work should be .to_i
+    time = CONFIG['housekeeping_interval'].months.to_i.ago
     ActivityHistory.destroy_all(["created_at < ?", time])
     AssociatedUserCountHistory.destroy_all(["created_at < ?", time])
     # build missing property sets
