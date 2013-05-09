@@ -80,7 +80,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
   end
 
   def consolidate_access_points_monitoring
-    AccessPoint.all.each do |ap|
+    AccessPoint.with_properties.all.each do |ap|
       begin
         # avoid race conditions with the access_points_monitoring() function
         @@monitoring_semaphore.synchronize {
