@@ -31,7 +31,7 @@ Owgm::Application.routes.draw do
       end
     end
 
-    resources :activity_histories, :only => :index
+  resources :activity_histories, :only => :index
     match 'access_points/:access_point_id/activities' => 'activities#show', :as => :access_point_activities
     match 'access_points/:access_point_id/activity_histories' => 'activity_histories#show', :as => :access_point_activity_histories
     match 'access_points/:access_point_id/associated_user_counts' => 'associated_user_counts#show',

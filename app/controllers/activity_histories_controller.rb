@@ -33,7 +33,7 @@ class ActivityHistoriesController < ApplicationController
     @showstatus=CONFIG['showstatus']
     @from = Date.strptime(params[:from], I18n.t('date.formats.default')) rescue 365.days.ago.to_date
     @to = Date.strptime(params[:to], I18n.t('date.formats.default')) rescue Date.today
-    @access_points = AccessPoint.activated(@to).of_wisp(@wisp)
+    @access_points = AccessPoint.with_properties.activated(@to).of_wisp(@wisp)
 
     crumb_for_report
   end
