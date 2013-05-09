@@ -22,10 +22,18 @@ it:
           attributes:
             email:
               taken: 'email già utilizzata da un altro utente'
+              blank: non può essere lasciato vuoto
+            username:
+              blank: non può essere lasciato vuoto
+            password:
+              blank: non può essere lasciato vuoto
+              confirmation: e conferma password non coincidono
+            password_confirmation:
+              blank: non può essere lasciato vuoto
         group:
           attributes:
             name:
-              blank: 'prova pro'
+              blank: non può essere lasciato vuoto
 
   # Uppercase
   Activation_date: Data di attivazione

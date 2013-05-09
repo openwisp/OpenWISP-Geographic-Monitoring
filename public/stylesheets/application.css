@@ -266,7 +266,7 @@ input.ui-autocomplete-input{ background: #fff none }
 	font-size: 16px; font-weight: bold; margin-bottom: 10px;
 }
 #errorExplanation li{ font-weight: bold }
-.field_with_errors input[type=text]{ border: 1px solid red }
+.field_with_errors input[type=text], .field_with_errors input[type=password]{ border: 1px solid red }
 
 #user_info p.clear{ margin-top: 10px }
 

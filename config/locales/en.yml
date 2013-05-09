@@ -11,6 +11,30 @@ en:
         public: public
         site_description: installation site
         status: status
+      group:
+        name: name
+    errors:
+      template:
+        header: "Validation Error"
+        body: "The operation did not succeed, fix the errors reported below and retry."
+      models:
+        user:
+          attributes:
+            email:
+              taken: 'email already used by another user'
+              blank: can't be empty
+            username:
+              blank: can't be empty
+            password:
+              blank: can't be empty
+              confirmation: and password confirmation mismatch
+            password_confirmation:
+              blank: can't be empty
+        group:
+          attributes:
+            name:
+              blank: can't be empty
+  
   # Uppercase
   Activation_date: Activation date
   Activity_graph: Activity graph
