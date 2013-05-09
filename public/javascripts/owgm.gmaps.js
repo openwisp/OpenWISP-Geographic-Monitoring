@@ -79,9 +79,9 @@ var gmaps = {
             gmaps.map = new google.maps.Map(document.getElementById(map_div_id), $.extend(gmaps.opts, {
                 zoom: 13,
                 center: access_point_coords,
-                draggable: false,
+                draggable: true,
                 navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
-                disableDoubleClickZoom: true,
+                disableDoubleClickZoom: false,
                 keyboardShortcuts: false
             }));
             var _marker = new google.maps.Marker({

@@ -29,7 +29,7 @@
   <div class="grid_12">
 		<% if @access_points.length > 0 %>
 		<div class="box">
-			<h2><a id="map_toggle" href="#"<% if not @showmap: %> class="hidden"<% end %>><%=t :Access_points_map %></a></h2>
+			<h2><a id="map_toggle" href="#"<% if not @showmap: %> class="hidden"<% end %>><%=t :Access_points_map %> <span class="arrow" data-show="&#x25BC;" data-hide="&#x25B2;">&#x25BC;</span></a></h2>
 			
 			<div id="map_container"<% if not @showmap: %> style="display:none"<% end %>>
 		  <br />
@@ -47,23 +47,34 @@
 
   <div class="box">
     <h2>
-      <%=t :Access_point %>
+    <% if @wisp.present? and @group.nil? %>
+				<%= t(:Access_points_of_wisp, :wisp => @wisp.name).html_safe %>
+		<% elsif @group.present? %>
+				<%= t(:Access_points_of_wisp_group, :wisp => @wisp.name, :group => @group.name).html_safe %>
+		<% else %>
+				<%= t :Access_points_of_every_wisp %>
+		<% end %>
+				
 			<% if @access_points.length > 0 %>
       <span class="rfloat">
 				<% if @group.present? and @group.monitor %>
-						<%=t :up %>: <%= @group.up %>
-						<%=t :down %>: <%= @group.down%>
-						<%=t :unknown %>: <%= @group.unknown %>
+						<%= show_stat(:up, @group.up) %>
+						<%= show_stat(:down, @group.down) %>
+						<%= show_stat(:unknown, @group.unknown) %>
+						<%= show_stat(:total, @group.total) %>
 				<% elsif @group.present? %>
 						<%= t :Monitoring_disabled_for_group %>
+						<%= show_stat(:total, @group.total) %>
 				<% elsif @wisp.present? %>
-						<%=t :up %>: <%= @wisp.access_points_up.count %>
-						<%=t :down %>: <%= @wisp.access_points_down.count %>
-						<%=t :unknown %>: <%= @wisp.access_points_unknown.count %>
+						<%= show_stat(:up, @wisp.count_access_points(:up)) %>
+						<%= show_stat(:down, @wisp.count_access_points(:down)) %>
+						<%= show_stat(:unknown, @wisp.count_access_points(:unknown)) %>
+						<%= show_stat(:total, @wisp.count_access_points(:total)) %>
 				<% else %>
-						<%=t :up %>: <%= AccessPoint.up.count %>
-						<%=t :down %>: <%= AccessPoint.down.count %>
-						<%=t :unknown %>: <%= AccessPoint.unknown.count %>
+						<%= show_stat(:up, AccessPoint.up.count) %>
+						<%= show_stat(:down, AccessPoint.down.count) %>
+						<%= show_stat(:unknown, AccessPoint.unknown.count) %>
+						<%= show_stat(:total, AccessPoint.total.count) %>
 				<% end %>
       </span>
 			<% end %>
@@ -73,36 +84,51 @@
     <div id="access_points_quicksearch" class="bold">
       <%= render 'access_points_quicksearch' %>
     </div>
+		
+		<div class="actions">
+				<%= render 'access_points_actions' %>
+		</div>
 
-    <div id="loading" class="hidden">
-      <p><%=t :Loading %> <%= image_tag 'spinner.gif' %></p>
-    </div>
-
-    <table>
-      <thead id="access_points_thead">
-      <%= render 'access_points_thead' %>
-      </thead>
-
-      <tbody id="access_points">
-      <%= render @access_points %>
-      </tbody>
+    <table id="access_points_list">
+				<thead id="access_points_thead">
+						<%= render 'access_points_thead' %>
+				</thead>
+				<tbody id="access_points">
+						<%= render @access_points %>
+				</tbody>
     </table>
 		
-
     <div id="page_controls">
 				<div id="access_points_paginate">
-					<%= paginate @access_points, :remote => true %>
+						<%= paginate @access_points, :remote => true %>
 				</div>
 				<div id="combobox">
 						<select>
-						<% @access_point_pagination.reverse.each do |item| %>
-					<option value="<%= item['value'] %>"<% if item['default'] %> selected="selected"<% end %>><%= item['value'] %></option>
-						<% end %>
+								<% @access_point_pagination.reverse.each do |item| %>
+								<option value="<%= item['value'] %>"<% if item['default'] %> selected="selected"<% end %>><%= item['value'] %></option>
+								<% end %>
 						</select>
 				</div>
     </div>
+		
+		<div class="actions bottom">
+				<%= render 'access_points_actions' %>
+		</div>
+		
+		<br style="clear:both">
+		
 		<% else %>
 				<p class="empty-page-msg"><%= t :No_AP %></p>
 		<% end %>
   </div>
 </div>
+
+<script>
+		owgm.initBatchGroupSelection("<%= change_group_access_points_path %>");
+		$('#access_points_list a.toggle-public').live('click', function(e){
+				el = $(this);
+				owgm.toggleProperty(el.attr('data-href'), function(result){
+						el.find('img').attr('src', result.image)
+				});
+		});
+</script>

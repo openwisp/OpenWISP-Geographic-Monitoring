@@ -44,6 +44,44 @@ class Wisp < ActiveRecord::Base
     new_roles
   end
   
+  # the following method takes in consideration the "count_stats" column of the table group
+  # only access points with following conditions are counted:
+  #   * access points assigned to a group which has "count_stats" == true are counted
+  #   * access points with no property set record associated
+  def count_access_points(action=:total)
+    groups_where = 'groups.count_stats IS NULL OR groups.count_stats = 1'
+    
+    case action.to_sym
+    when :total
+      # all indipendently on the value of reachable
+      property_sets_where = false
+    when :up
+      # only reachable ap
+      property_sets_where = { :property_sets => { :reachable => true } }
+    when :down
+      # only unreachable ap
+      property_sets_where = { :property_sets => { :reachable => false } }
+    when :unknown
+      # only unknown .. it means it has no property set yet
+      property_sets_where = { :property_sets => { :reachable => nil } }
+    else
+      raise ArgumentError, 'unknown action argument "%s", can be only "total", "up", "down" or "unknown"' % action
+    end
+    
+    # scope the query so we can add more restrictions to the lookup if needed
+    query = AccessPoint.with_properties_and_group('groups.count_stats').of_wisp(self).where(groups_where).scoped
+    # in all the cases except total
+    if property_sets_where
+      query = query.where(property_sets_where)
+    end
+    
+    # return count only
+    return query.count()
+  end
+  
+  ### Static methods ###
+  
+  # creates are roles if missing
   def self.create_all_roles
     self.all.each do |wisp|
       wisp.create_roles

@@ -18,14 +18,19 @@
 class AccessPointsController < ApplicationController
   before_filter :authenticate_user!, :load_wisp, :wisp_breadcrumb
   
-  skip_before_filter :verify_authenticity_token, :only => [:change_group]
+  skip_before_filter :verify_authenticity_token, :only => [:change_group, :toggle_public, :batch_change_group]
 
   access_control do
     default :deny
 
-    actions :index, :show, :change_group, :select_group do
+    actions :index, :show, :change_group, :select_group, :toggle_public, :batch_change_group, :batch_select_group do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
+    end
+    
+    actions :batch_change_group do
+      allow :wisps_viewer
+      allow :wisp_access_points_viewer
     end
   end
 
@@ -36,7 +41,7 @@ class AccessPointsController < ApplicationController
     # if group view
     if params[:group_id]
       begin
-        @group = Group.select([:id, :name, :monitor, :up, :down, :unknown]).where(['wisp_id IS NULL or wisp_id = ?', @wisp.id]).find(params[:group_id])  
+        @group = Group.select([:id, :name, :monitor, :up, :down, :unknown, :total]).where(['wisp_id IS NULL or wisp_id = ?', @wisp.id]).find(params[:group_id])  
       rescue ActiveRecord::RecordNotFound
         render :file => "#{Rails.root}/public/404.html", :status => 404, :layout => false
         return
@@ -55,7 +60,7 @@ class AccessPointsController < ApplicationController
 
   def show
     @access_point = AccessPoint.with_properties_and_group.find(params[:id])
-    @properties = @access_point.properties
+    @access_point.build_property_set_if_group_name_empty()
 
     crumb_for_wisp
     crumb_for_access_point
@@ -88,19 +93,118 @@ class AccessPointsController < ApplicationController
       format.json { render :json => group.attributes }
     end
   end
+  
+  def batch_select_group
+    if wisp_loaded?
+      @groups = Group.all_join_wisp("wisp_id = ? OR wisp_id IS NULL", [@wisp.id])
+    else
+      # maybe is too much! - for the moment it works so let's keep it
+      if current_user.has_role?(:wisps_viewer)
+        @groups = Group.all_join_wisp()
+      else
+        @groups = Group.all_accessible_to(current_user)
+      end
+    end    
+    render :template => 'access_points/select_group', :layout => false
+  end
+  
+  def batch_change_group
+    # parameters expected:
+    # * group_id (int)
+    # * access_points (array)
+    group_id = params[:group_id]
+    access_points_id = params[:access_points]
+    
+    # ensure all parameters are sent correctly otherwise return 400 bad request status code
+    if group_id.nil? or group_id == '' or access_points_id.nil? or access_points_id.length < 1# or group_id.class != Fixnum or access_points_id.class != Array
+      render :status => 400, :json => { "details" => I18n.t(:Bad_format_parameters) }
+      return
+    end
+    
+    # ensure Group is correct otherwise return 404
+    begin
+      # ensure group is a general group of specific of this wisp
+      group = Group.select([:id, :name, :wisp_id]).find(group_id)
+    rescue ActiveRecord::RecordNotFound
+      render :status => 404, :json => { "details" => I18n.t(:Group_not_found) }
+      return
+    end
+    
+    # get an array of id for which the user is authorized
+    authorized_for_wisps = current_user.roles_search(:wisp_access_points_viewer).map { |r| r.authorizable_id }
+    
+    # in case user the array is empty, the user is wisps_viewer, because even if he is not wisp_access_points_viewer for any wisp
+    # he was able to get here (otherwise he would have been blocked before because the acl rules on top)
+    wisps_viewer = authorized_for_wisps.length < 1 ? true : false
+    
+    # if moving access points to a group of a specific wisp, user must be authorized for that wisp
+    if not group.wisp_id.nil? and not wisps_viewer and not authorized_for_wisps.include?(group.wisp_id)
+      render :status => 403, :json => { "details" => I18n.t(:User_does_not_have_permission) }
+      return
+    end
+    
+    access_points = AccessPoint.with_properties.find(access_points_id)
+    
+    # check permissions first
+    access_points.each do |ap|
+      # user must be authorized for wisp_id of the access point he wants to edit
+      if not wisps_viewer and not authorized_for_wisps.include?(ap.wisp_id)
+        render :status => 403, :json => { "details" => I18n.t(:User_does_not_have_permission_ap_id, :ap_id => ap.id) }
+        return
+      end
+      
+      # wisp_id of access point must coincide with wisp_id of group (unless wisp_id of group is NULL)
+      if not group.wisp_id.nil? and not ap.wisp_id == group.wisp_id
+        render :status => 403, :json => { "details" => I18n.t(:Moving_access_point_different_wisp_not_allowed, :wisp1 => ap.wisp.name, :wisp2 => group.wisp.name) }
+        return
+      end
+      
+      # ensure ap has property_sets related object
+      if ap.group_id.nil?
+        # create properties!
+        ap.properties.save!
+      end
+    end
+    
+    AccessPoint.batch_change_group(access_points, group.id)
+    
+    # update group counts
+    Group.update_all_counts()
+    
+    render :status => 200, :json => { "details" => I18n.t(:Access_point_updated, :length => access_points.length) }
+  end
+  
+  # toggle published AP in the GeoRSS xml
+  def toggle_public
+    ap = PropertySet.find_by_access_point_id(params[:id])
+    ap.public = !ap.public
+    ap.save!
+    respond_to do |format|
+      format.json{
+        image = view_context.image_path(ap.public ? 'accept.png' : 'delete.png')
+        render :json => { 'public' => ap.public, 'image' => image }
+      }
+    end
+  end
 
   private
 
   def access_points_with_filter
+    access_points = AccessPoint.with_properties_and_group.scoped
+    
+    if params[:group_id]
+      access_points = access_points.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
+    end
+    
     case params[:filter]
       when 'up'
-        AccessPoint.up
+        access_points.up
       when 'down'
-        AccessPoint.down
+        access_points.down
       when 'unknown'
-        AccessPoint.unknown
+        access_points.unknown
       else
-        AccessPoint
+        access_points
     end
   end
 
@@ -109,9 +213,11 @@ class AccessPointsController < ApplicationController
     column = params[:column] ? params[:column].downcase : nil
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
 
-    access_points = AccessPoint.scoped
+    # model delegation caused too many queries, used a workaround in the specific model method
+    access_points = AccessPoint.with_properties_and_group.scoped
+    
     if params[:group_id]
-      access_points = AccessPoint.select('access_points.*, property_sets.group_id').with_properties.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
+      access_points = access_points.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
     end
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query

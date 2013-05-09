@@ -27,6 +27,13 @@ class User < ActiveRecord::Base
   attr_accessible :username, :email, :password, :password_confirmation
   
   validates_uniqueness_of :email
+  validates_presence_of :username, :email, :password, :password_confirmation
+  validates :password, :confirmation => true
+  
+  after_save :invalidate_cache
+  after_destroy :invalidate_cache
+  
+  attr_accessible :password_confirmation
 
   ROLES = [
     :wisps_viewer, # higher role
@@ -118,5 +125,11 @@ class User < ActiveRecord::Base
   
   def self.available_roles
     ROLES
+  end
+  
+  private
+  
+  def invalidate_cache
+    Rails.cache.delete("/users/#{self.id}/wisps_menu")
   end
 end

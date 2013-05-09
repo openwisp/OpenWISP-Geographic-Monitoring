@@ -40,7 +40,9 @@ class UsersControllerTest < ActionController::TestCase
     # simple edit
     post :update, :id => 2, :user => {
       :username => 'user_test',
-      :email => 'test_user@user.it'
+      :email => 'test_user@user.it',
+      :password => 'password',
+      :password_confirmation => 'password'
     }
     user = users(:sfigato)
     assert user.username == 'user_test', 'username has not changed'
@@ -51,7 +53,9 @@ class UsersControllerTest < ActionController::TestCase
     assert user.roles.length < 1, 'user should not have any role'
     post :update, :id => 2, :user => {
       :username => 'user',
-      :email => 'user@user.it'
+      :email => 'user@user.it',
+      :password => 'password',
+      :password_confirmation => 'password'
     }, :roles => [1]
     assert_redirected_to users_path
     
@@ -61,7 +65,9 @@ class UsersControllerTest < ActionController::TestCase
     user_count = User.count
     post :update, :id => 2, :user => {
       :username => 'user_test',
-      :email => 'admin@admin.it'
+      :email => 'admin@admin.it',
+      :password => 'password',
+      :password_confirmation => 'password'
     }
     # response is not a redirect to user list
     assert_response :success
@@ -85,19 +91,25 @@ class UsersControllerTest < ActionController::TestCase
     # crete new user with 6 roles assigned
     post :create, :user => {
       :username => 'new_user',
-      :email => 'new_user@testing.com'
+      :email => 'new_user@testing.com',
+      :password => 'password',
+      :password_confirmation => 'password'
     }, :roles => Role.last(6)
     new_user = User.last
     assert new_user.username == 'new_user', 'username has not been set as expected'
     assert new_user.email == 'new_user@testing.com', 'email has not been set as expected'
     assert_redirected_to users_path, 'should redirect to user list after success'
     assert new_user.roles.length == 6, 'should have 6 roles assigned'
-    
-    # should fail
+  end
+  
+  test "duplicated email should fail" do
+    sign_in users(:admin)
     user_count = User.count
     post :create, :user => {
-      :username => 'new_user2',
-      :email => 'new_user@testing.com'
+      :username => 'tester',
+      :email => 'user@user.it',
+      :password => 'password',
+      :password_confirmation => 'password'
     }, :roles => Role.last(6)
     # response is not a redirect to user list
     assert_response :success
@@ -111,7 +123,9 @@ class UsersControllerTest < ActionController::TestCase
     assert_difference('User.count') do
       post :create, :user => {
         :username => 'new_user3',
-        :email => 'new_user3@testing.com'
+        :email => 'new_user3@testing.com',
+        :password => 'password',
+        :password_confirmation => 'password'
       }, :roles => Role.find_by_name('wisp_viewer')
     end
     assert_redirected_to users_path, 'should redirect to user list after success'
@@ -123,6 +137,49 @@ class UsersControllerTest < ActionController::TestCase
       get :destroy, :id => 2
     end
     assert_redirected_to users_path, 'should redirect to user list after successful delete operation'
+  end
+   
+  test "empty user should fail" do
+    sign_in users(:admin)
+    assert_difference('User.count', 0) do
+      post :create, :user => {
+        :username => '',
+        :email => '',
+        :password => '',
+        :password_confirmation => ''
+      }, :roles => []
+    end
+    # should not redirect but show error
+    assert_response :success
+    assert_select "#errorExplanation", 1
+    
+    # only username missing
+    assert_difference('User.count', 0) do
+      post :create, :user => {
+      :username => '',
+      :email => 'new_user@testing.com',
+      :password => 'password',
+      :password_confirmation => 'wrong_password'
+    }, :roles => []
+    end
+    # should not redirect but show error
+    assert_response :success
+    assert_select "#errorExplanation", 1
+  end
+  
+  test "password confirmation mismatch should fail" do
+    sign_in users(:admin)
+    assert_difference('User.count', 0) do
+      post :create, :user => {
+      :username => 'new_user',
+      :email => 'new_user@testing.com',
+      :password => 'password',
+      :password_confirmation => 'wrong_password'
+    }, :roles => []
+    end
+    # should not redirect but show error
+    assert_response :success
+    assert_select "#errorExplanation", 1
   end
   
   private

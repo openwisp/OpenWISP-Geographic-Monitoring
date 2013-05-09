@@ -110,8 +110,17 @@ ul.second-level li{
 }
 ul.second-level a{ width: auto !important; float: none !important }
 
-ul.second-level a span, #main-nav li > a > span{ float: right; font-weight: bold; font-size: 20px }
-#main-nav li > a > span{ font-size: 18px; margin-left: 8px; margin-right: 3px; position: relative; top: -1px }
+#main-nav li > a > span{
+  float: right; position: relative; top: -1px;
+  margin-left: 8px; margin-right: 3px; 
+  font-weight: bold; font-size: 18px
+}
+ul.second-level a span{
+  position: absolute !important;
+  right: 8px;
+  font-size: 20px;
+  font-weight: bold;
+}
 
 ul.third-level{
   position: absolute !important;

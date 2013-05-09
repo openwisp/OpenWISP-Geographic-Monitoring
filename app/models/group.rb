@@ -18,10 +18,16 @@ class Group < ActiveRecord::Base
     monitor ? self.attributes['unknown'] : 'N/A'
   end
   
-  def toggle_monitor!
+  def monitor!
     self.monitor = !self.monitor
     self.save
     self.monitor
+  end
+  
+  def count_stats!
+    self.count_stats = !self.count_stats
+    self.save
+    self.count_stats
   end
   
   # update group statistics

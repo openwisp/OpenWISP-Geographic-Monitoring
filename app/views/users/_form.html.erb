@@ -23,7 +23,7 @@
       <legend><strong><%=t :User %>:</strong> <%= @user.username %></legend>
       <%= f.error_messages %>
       <div class="field">
-        <strong><%= label_tag t(:username) %>:</strong>
+        <strong><%= label_tag t(:username) %></strong>
         <% if @user.new_record? %>
             <%= f.text_field :username %>
         <% else %>
@@ -37,19 +37,19 @@
       </div>
       
       <div class="field">
-        <strong><%= f.label t(:Password), f.object.new_record? ? nil : t(:Change_password) %>:</strong>
+        <strong><%= f.label t(:Password), f.object.new_record? ? nil : t(:Change_password) %></strong>
         <br />
         <%= f.password_field :password %>
       </div>
       <div class="field">
-        <strong><%= label_tag t(:password_confirmation) %>:</strong>
+        <strong><%= label_tag t(:password_confirmation) %></strong>
         <br />
         <%= f.password_field :password_confirmation %>
       </div>
       
       <br />
       
-      <h2><strong><%= label_tag t(:Roles) %>:</strong></h2>
+      <h2><strong><%= label_tag t(:Roles) %></strong></h2>
       
       <br />
       
@@ -72,7 +72,7 @@
             <% end %>
         </tbody>
       </table>
-      <script>$('#user_roles').selectable();</script>
+      <script>$('#user_roles').customSelectable();</script>
       
       <p>
         <% if @user.new_record? %>
@@ -84,4 +84,3 @@
       
     </fieldset>
 <% end %>
-

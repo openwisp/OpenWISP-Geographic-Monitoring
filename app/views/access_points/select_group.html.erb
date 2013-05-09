@@ -12,7 +12,7 @@
 					</thead>
 					<tbody>
 					<% @groups.each do |group| %>
-						<tr class="<%= cycle 'odd', 'even' %>" id="group_<%= group.id %>" data-href="<%= wisp_access_point_change_group_path(@wisp.name, @access_point_id, group.id) %>">
+						<tr class="<%= cycle 'odd', 'even' %>" id="group_<%= group.id %>" data-group-id="<%= group.id %>" <%= select_group_data_href(@wisp, @access_point_id, group.id) %>>
 							<td class="name"><strong><%= group.name %></strong></td>
 							<td class="wisp"><%= group.wisp_name %></td>
 							<td class="total center"><%= group.total %></td>

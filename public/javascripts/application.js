@@ -26,28 +26,12 @@ $(document).ready(function() {
     owgm.enableJavascript();
     owgm.ajaxQuickSearch();
     owgm.ajaxLoading();
-    if (typeof(gmaps) !== 'undefined') {
-        // bind click event to the <a> that toggles the map container
-        $(gmaps.mapToggle).click(function(e){
-            // cache some stuff
-            var container = $(gmaps.mapContainer);
-            var is_visible = container.is(':visible');
-            // prevent default link behaviour
-            e.preventDefault();
-            // toggle class hidden
-            $(this).toggleClass('hidden');
-            // toggle container and initialize gmap if necessary
-            container.slideToggle('slow', function(){
-                if(!is_visible && gmaps.map == undefined){
-                    gmaps.drawGoogleMap();    
-                }
-            });
-        });
-        gmaps.drawGoogleMap();
-    }
+    owgm.initGmap();
     owgm.paginator();
     owgm.initNotice();
     owgm.initMainMenu();
+    owgm.initDynamicColumns();
+    owgm.initTooltip();
 });
 
 
@@ -56,8 +40,6 @@ $(document).ready(function() {
 var owgm = {
 
     /*** Settings and Variables ***/
-    quickSearchDiv: '#access_points_quicksearch',
-    loadingDiv: '#loading',
     noJsDiv: '.no_js',
 
     /*** Application Specific Functions ***/
@@ -69,13 +51,11 @@ var owgm = {
         return ($(selector).length > 0);
     },
 
-    ajaxQuickSearch: function() {
-        var inputField = $(this.quickSearchDiv).find('input[type=text]');
-        inputField.observe(function() {
-            $(owgm.loadingDiv).fadeIn();
-            inputField.parent('form').submit();
-            $(owgm.loadingDiv).ajaxStop(function(){$(this).fadeOut();});
-        }, 1);
+    ajaxQuickSearch: function() {        
+        $('#q').delayedObserver(0.8, function(value, object) {
+            owgm.toggleLoading('show');
+            object.parent('form').submit();
+        });
     },
 
     path: function(path) {
@@ -89,6 +69,35 @@ var owgm = {
             }
         } else {
             return _curr+'/'+path+_params;
+        }
+    },
+    
+    initGmap: function(){
+        if (typeof(gmaps) !== 'undefined') {
+            // bind click event to the <a> that toggles the map container
+            $(gmaps.mapToggle).click(function(e){
+                // cache some stuff
+                var container = $(gmaps.mapContainer),
+                    is_visible = container.is(':visible'),
+                    arrow = container.parent().find('.arrow');
+                // prevent default link behaviour
+                e.preventDefault();
+                // toggle class hidden
+                $(this).toggleClass('hidden');
+                // toggle container and initialize gmap if necessary
+                container.slideToggle('slow', function(){
+                    if(!is_visible && gmaps.map == undefined){
+                        gmaps.drawGoogleMap();
+                    }
+                });
+                if(!is_visible){
+                    arrow.html(arrow.attr('data-hide'));
+                }
+                else{
+                    arrow.html(arrow.attr('data-show'));
+                }
+            });
+            gmaps.drawGoogleMap();
         }
     },
 
@@ -150,13 +159,18 @@ var owgm = {
     },
 
     ajaxLoading: function() {
-        $('[data-remote=true]').live('click', function(){
-            $(owgm.loadingDiv).fadeIn();
+        $('#access_points_paginate a[data-remote=true]').live('click', function(){
+            owgm.toggleLoading('show');
             $('body, .container12, .pagination a').css('cursor', 'progress');
-        }).ajaxStop(function(){
-            $(owgm.loadingDiv).fadeOut();
+        })
+        $(document).ajaxStop(function(){
+            owgm.toggleLoading('hide');
             $('body, .container12').css('cursor', 'auto');
             $('.pagination a').css('cursor', 'pointer');
+            $('.select-all-checkbox').each(function(){
+                this.checked = false
+            });
+            owgm.showColumnsDependingOnScreenWidth();
         });
     },
 
@@ -195,6 +209,31 @@ var owgm = {
         if($('#access_points_paginate').length > 0){
             $("#combobox select").combobox();    
         }
+    },
+    
+    // refreshes current page even if no pagination link exists
+    refreshPage: function(page){
+        var current = $('.current a'),
+            url = $('#access_points_quicksearch form').attr('action'),
+            pos = url.indexOf('?per=');
+            
+        if(page){
+            if(pos){
+                url = url.substring(0, pos) + '?per=' + page;
+            }
+            else{
+                url = url + '?per=' + page;
+            }
+        }
+        
+        if(!page && current.length){
+            current.trigger('click');
+        }
+        else{
+            $('#access_points_paginate').append('<a class="hidden" id="tmp_update" href="'+url+'" data-remote="true"></a>');
+            $('#tmp_update').trigger('click');
+            $('#tmp_update').remove();
+        }    
     },
     
     exportReport: function(export_url, file){
@@ -282,24 +321,43 @@ var owgm = {
         });
     },
     
-    initToggleMonitor: function(){
-        $('.toggle-monitor').click(function(e){
+    toggleProperty: function(url, completed){
+        var el = $(this);
+        $.ajax({
+            url: url,
+            type: 'POST'
+        }).done(function(result) {
+            if(completed && typeof completed == 'function'){ completed(result) }
+        }).fail(function(result){
+            alert('ERROR');
+        });
+    },
+    
+    initGroupList: function(){
+        $('.toggle-monitor, .toggle-count-stats').click(function(e){
+            e.preventDefault();
             var el = $(this);
-            $.ajax({
-                url: el.attr('data-href'),
-                type: 'POST'
-            }).done(function(result) {
-                el.find('img').attr('src', result.image);
-            }).fail(function(result){
-                alert('ERROR');
-            });
-        }).css('cursor','pointer');
+            owgm.toggleProperty(el.attr('data-href'), function(result){
+                el.find('img').attr('src', result.image)
+            });            
+        });
     },
     
     toggleOverlay: function(closeCallback){
         var mask = $('#mask'),
             close = $('.close'),
             overlay = $('.overlay');
+            
+        if(!mask.length){
+            $('body').append('<div id="mask"></div>')
+            mask = $('#mask');
+            // init ESC key to close
+            $(document).keyup(function(e){
+                if(e.keyCode == 27){
+                    closeOverlay();
+                }
+            })
+        }
             
         var closeOverlay = function(){
             if(close.attr('data-confirm-message') !== undefined && !window.confirm(close.attr('data-confirm-message'))){
@@ -327,58 +385,188 @@ var owgm = {
         }
     },
     
-    initSelectGroup: function(){
-        owgm.loading_indicator = $('#loading-indicator');
+    toggleLoading: function(action){
+        var $loading = $('#loading-indicator');
+        if(!$loading.length){
+            $('body').append('<div id="loading-indicator"></div>')
+            $loading = $('#loading-indicator');
+        }
+        $loading.togglePop(action);
+    },
+    
+    initSelectGroup: function(select_group_url){
         $('#group-row').css('cursor','pointer').click(function(e){
-            owgm.loading_indicator.togglePop();
-            // retrieve remote group list
-            $.ajax({
-                'url': owgm.group_select_url,
-            }).done(function(result){
-                // insert HTML and open overlay
-                $('body').append(result);
-                owgm.toggleOverlay(function(){$('#select-group').remove()});
-                owgm.loading_indicator.togglePop();
-                owgm.select_group = $('#select-group');
-                // determine css max-height
-                var max_height = $(window).height()-$(window).height()/4;
-                owgm.select_group.css('max-height', max_height);
-                $('#scroller').css('max-height', max_height);
-                // center overlay in the middle of the screen
-                owgm.select_group.centerElement();
-                // reposition when resizing
-                $(window).resize(function(){
-                    owgm.select_group.centerElement();
-                });
-                $('#select-group table').selectable({
-                    'init': function(){
-                        // mark current group as selected
-                        var group_id = $('#group-info').attr('data-groupid');
-                        $('#group_'+group_id).addClass('selected');
-                    },
+            owgm.openGroupSelection({
+                'url': select_group_url,
+                'init': function(){
+                    // mark current group as selected
+                    var group_id = $('#group-info').attr('data-groupid');
+                    $('#group_'+group_id).addClass('selected');
+                },
+                'afterSelect': function(){
+                    // query the database, update group name, close overlay and remove HTML
+                    var url = $(this).attr('data-href');
+                    response = $.ajax({
+                        'url': url,
+                        'type': 'POST'
+                    }).done(function(result){
+                        owgm.toggleLoading();
+                        owgm.toggleOverlay();
+                        $('#group-info').html(result.name).attr('data-groupid', result.id);
+                        $('#select-group').remove();
+                    }).fail(function(){
+                        alert('ERROR');
+                    });
+                },
+                'beforeSelect': function(){
+                    // there can be only one item selected
+                    $(this).parent().find('.selected').removeClass('selected');
+                    owgm.toggleLoading();
+                }
+            });
+        });   
+    },
+    
+    openGroupSelection: function(options){
+        var opts = $.extend({
+            'url': false,
+            'init': null,
+            'beforeSelect': null,
+            'afterSelect': null
+        }, options);
+        
+        if(opts.url===false){ throw('url parameter must be specified') }
+        
+        owgm.toggleLoading();
+        // retrieve remote group list
+        $.ajax({
+            'url': opts.url,
+        }).done(function(result){
+            // insert HTML and open overlay
+            $('body').append(result);
+            owgm.toggleOverlay(function(){$('#select-group').remove()});
+            owgm.toggleLoading();
+            $select_group = $('#select-group');
+            // determine css max-height
+            var max_height = $(window).height()-$(window).height()/4;
+            $select_group.css('max-height', max_height);
+            $('#scroller').css('max-height', max_height);
+            // center overlay in the middle of the screen
+            $select_group.centerElement();
+            // reposition when resizing
+            $(window).resize(function(){
+                $select_group.centerElement();
+            });
+            $('#select-group table').customSelectable({
+                'init': opts.init,
+                'beforeSelect': opts.beforeSelect,
+                'afterSelect': opts.afterSelect,
+            });
+        })
+    },
+    
+    initBatchGroupSelection: function(post_url){
+        // init jQuery UI selectable widget
+        $("#access_points").selectable({
+            filter: "tr",
+            delay: 80,
+            start: function(event, ui) {
+                // blur focus from quicksearch otherwise unexpected behaviour might occur when using shortcuts
+                var activeEl = $(document.activeElement);
+                if(activeEl.attr('name') == 'q'){
+                    activeEl.trigger('blur');
+                }
+            }
+        });
+        
+        // select or deselect all
+        $(".select-all").click(function(e){
+            e.preventDefault();
+            var checkbox = $('.select-all-checkbox');
+            checkbox.trigger('click');
+        });
+        $(".select-all-checkbox").change(function(e){
+            if(this.checked){
+                $("#access_points tr").addClass('ui-selected');
+            }
+            else{
+                $("#access_points tr").removeClass('ui-selected');
+            }
+        })
+        
+        var openGroupBatchSelection = function(){
+            // at least one ap must be selected
+            if($("#access_points tr.ui-selected").length < 1){
+                alert($('.batch-change-group').attr('data-fail-message'));
+            }
+            else{
+                owgm.openGroupSelection({
+                    'url': $('.batch-change-group').attr('href'),
                     'afterSelect': function(){
-                        // query the database, update group name, close overlay and remove HTML
-                        var url = $(this).attr('data-href');
-                        response = $.ajax({
-                            'url': url,
-                            'type': 'POST'
-                        }).done(function(result){
-                            owgm.loading_indicator.togglePop();
-                            owgm.toggleOverlay();
-                            $('#group-info').html(result.name).attr('data-groupid', result.id);
+                        owgm.toggleLoading();
+                        // this function changes the group in batch
+                        changeGroupBatch($(this).attr('data-group-id'));
+                        owgm.toggleOverlay(function(){
+                            // close call back of overlay
+                            owgm.toggleLoading();
                             $('#select-group').remove();
-                        }).fail(function(){
-                            alert('ERROR');
                         });
-                    },
-                    'beforeSelect': function(){
-                        // there can be only one item selected
-                        $(this).parent().find('.selected').removeClass('selected');
-                        owgm.loading_indicator.togglePop();
+                        $("#access_points tr.ui-selected").removeClass('ui-selected');
                     }
                 });
-            })
-        });    
+            }
+        }
+        
+        var changeGroupBatch = function(group_id){
+            // make an array of access point id
+            var selected_access_points = []
+            $("#access_points tr.ui-selected").each(function() {
+                var ap_id = $(this).attr('data-ap-id');
+                selected_access_points.push(ap_id)
+            });
+            $.ajax({
+                url: post_url,
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({ "group_id": group_id, "access_points": selected_access_points })
+            }).fail(function(xhr, status, error){
+                // in case of error return error message
+                try{
+                    alert((JSON.parse(xhr.responseText)).details);
+                }
+                catch(e){
+                    alert('ERROR');
+                }
+                
+            }).done(function(){
+                owgm.refreshPage()
+            });
+        }
+        
+        $('.batch-change-group').click(function(e){
+            e.preventDefault();
+            openGroupBatchSelection();
+        });
+        
+        // keyboard shortcuts
+        $(document).keydown(function(e){
+            // ESC: deselect all the access points
+            if(e.keyCode == 27){
+                $("#access_points tr.ui-selected").removeClass('ui-selected');
+            }
+            // CTRL + A: select all the access points
+            else if(e.ctrlKey && e.keyCode == 65){
+                e.preventDefault();
+                $("#access_points tr").addClass('ui-selected');
+            }
+            // CTRL + G: open group selection
+            else if(e.ctrlKey && e.keyCode == 71){
+                e.preventDefault();
+                openGroupBatchSelection();
+            }
+        });
+        
     },
     
     initMainMenu: function(){
@@ -386,12 +574,81 @@ var owgm = {
             width = $(el).width()
             $(el).find('.third-level').attr('style', 'left: '+width+'px !important');
         });
+    },
+    
+    initDynamicColumns: function(){
+        if($('#access_points_list').length){
+            $(window).resize(function(e){
+                owgm.showColumnsDependingOnScreenWidth();
+            });
+            owgm.showColumnsDependingOnScreenWidth();
+        }
+    },
+    
+    showColumnsDependingOnScreenWidth: function(){
+        var width = $(window).width();
+        
+        if(width <= 1100){
+            if($('.macaddress', '#access_points_list').eq(0).is(':visible')){
+                $('.macaddress', '#access_points_list').hide();
+            }            
+        }
+        else{
+            if(!$('.macaddress', '#access_points_list').eq(0).is(':visible')){
+                $('.macaddress', '#access_points_list').show();
+            }      
+        }
+        
+        if(width <= 1200){
+            if($('.location', '#access_points_list').eq(0).is(':visible')){
+                $('.location', '#access_points_list').hide();
+            }            
+        }
+        else{
+            if(!$('.location', '#access_points_list').eq(0).is(':visible')){
+                $('.location', '#access_points_list').show();
+            }      
+        }
+        
+        if(width <= 1400){
+            if($('.ip', '#access_points_list').eq(0).is(':visible')){
+                $('.ip', '#access_points_list').hide();
+            }            
+        }
+        else{
+            if(!$('.ip', '#access_points_list').eq(0).is(':visible')){
+                $('.ip', '#access_points_list').show();
+            }      
+        }
+    },
+    
+    initTooltip: function(){        
+        $(".hastip").simpletip({
+            fixed: true,
+            boundryCheck: false,
+            position: 'top',
+            showTime: 100,
+            hideTime: 50,
+            onBeforeShow: function(){
+                var a = this.getParent(),
+                    title = a.attr('title');
+                a.attr('data-title', title);
+                a.removeAttr('title');
+                this.update(title.replace(/\\n/g, '<br>'));
+            },
+            onHide: function(){
+                var a = this.getParent(),
+                    title = a.attr('data-title');
+                a.attr('title', title);
+                a.removeAttr('data-title');
+            }
+        });
     }
 };
 
 /************************/
 
-$.fn.selectable = function(options){
+$.fn.customSelectable = function(options){
     var opts = $.extend({
         'init': null,
         'beforeSelect': null,
@@ -417,10 +674,19 @@ $.fn.centerElement = function(){
     .css('left', ($(window).width() - (el.width() + parseInt(el.css('padding-left')) + parseInt(el.css('padding-right'))) ) / 2);
     return el;
 }
-$.fn.togglePop = function(speed){
+$.fn.togglePop = function(action, speed){
+    action = action || 'auto'
     speed = speed || 150;
     var el = $(this);
     el.centerElement();
-    (el.is(':visible')) ? el.fadeOut(speed) : el.fadeIn(speed);
+    if(action == 'auto'){
+        el.is(':visible') ? el.fadeOut(speed) : el.fadeIn(speed);
+    }
+    else if(action == 'show'){
+        el.fadeIn(speed);
+    }
+    else if(action == 'hide'){
+        el.fadeOut(speed);
+    }    
     return el;
 }

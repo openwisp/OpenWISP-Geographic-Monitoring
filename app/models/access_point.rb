@@ -32,11 +32,11 @@ class AccessPoint < ActiveRecord::Base
   has_many :associated_user_counts
   has_many :associated_user_count_histories
 
-  delegate :reachable, :to => :property_set, :allow_nil => true
-  delegate :category, :category=, :to => :property_set, :allow_nil => true
-  delegate :notes, :notes=, :site_description, :site_description=,
-           :public, :public=,
-           :to => :property_set, :allow_nil => true
+  #delegate :reachable, :to => :property_set, :allow_nil => true
+  #delegate :category, :category=, :to => :property_set, :allow_nil => true
+  #delegate :notes, :notes=, :site_description, :site_description=,
+  #         :public, :public=,
+  #         :to => :property_set, :allow_nil => true
 
   def coords
     [lat, lng]
@@ -52,19 +52,23 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def up?
-    reachable == true
+    self.reachable == true or self.reachable == '1'
   end
 
   def down?
-    reachable == false
+    self.reachable == false or self.reachable == '0'
   end
 
   def unknown?
-    reachable.nil?
+    self.reachable.nil?
   end
 
   def known?
     !unknown?
+  end
+  
+  def public?
+    self.public == true or self.public == '1'
   end
 
   def status
@@ -115,6 +119,15 @@ class AccessPoint < ActiveRecord::Base
   def properties
     property_set.nil? ? build_property_set : property_set
   end
+  
+  # this must be called only after fetching from db by using with_properties_and_group method
+  def build_property_set_if_group_name_empty
+    if self.group_name.nil?
+      properties = self.properties
+      properties.save!
+      self.group_name = properties.group.name
+    end
+  end
 
   ##### Static methods #####
 
@@ -161,19 +174,23 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def self.up
-    with_properties.where(:property_sets => {:reachable => true})
+    with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1').where(:property_sets => {:reachable => true})
   end
 
   def self.down
-    with_properties.where(:property_sets => {:reachable => false})
+    with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1').where(:property_sets => {:reachable => false})
   end
 
   def self.known
-    with_properties.where(:property_sets => {:reachable => [true, false]})
+    with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1').where(:property_sets => {:reachable => [true, false]})
   end
 
   def self.unknown
-    with_properties.where(:property_sets => {:reachable => nil})
+    with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1').where(:property_sets => {:reachable => nil})
+  end
+  
+  def self.total
+    with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1')
   end
 
   def self.activated(till=nil)
@@ -197,17 +214,53 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def self.quicksearch(name)
-    where("`hostname` LIKE ? OR `address` LIKE ? OR `city` LIKE ?", *(["%#{name}%"]*3) )
+    where("`hostname` LIKE ? OR `address` LIKE ? OR `city` LIKE ? OR `common_name` LIKE ? OR `mng_ip` LIKE ? OR `site_description` LIKE ?", *(["%#{name}%"]*6) )
+  end
+  
+  # update all property sets specified in id_array and set the specified group_id
+  def self.batch_change_group(id_array, group_id)
+    where = ""
+    # build where clause
+    id_array.each { where << " OR access_point_id = ?" }
+    # remove first 4 characters " OR "
+    where = where[4..-1]
+    conditions = [where] + id_array
+    PropertySet.update_all({ :group_id => group_id }, conditions)
+  end
+  
+  def self.build_all_properties
+    with_properties_and_group.each do |ap|
+      ap.build_property_set_if_group_name_empty
+    end
   end
 
   private
 
-  def self.with_properties
-    joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`")
+  # select access_points left join property_sets
+  def self.with_properties(select_fields=nil)
+    # select almost all the attributes by default
+    # exclude property_sets.id and property_sets.access_point_id because of rare use
+    if select_fields.nil?
+      select_fields = "access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
+      property_sets.category, property_sets.group_id, property_sets.notes"
+    end
+    select(select_fields).joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`")
   end
   
-   def self.with_properties_and_group
-    joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`
+  # select access_points left join property_sets and groups
+  def self.with_properties_and_group(additional_fields=nil)
+    # select almost all the attributes by default
+    # exclude property_sets.id and property_sets.access_point_id because of rare use
+    
+    # the default behaviour with the group table is to include only group_name
+    select_fields = "access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
+      property_sets.category, property_sets.group_id, property_sets.notes, groups.name AS group_name"
+    
+    unless additional_fields.nil?
+      select_fields = "#{select_fields}, #{additional_fields}"
+    end
+    
+    select(select_fields).joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`
           LEFT JOIN `groups` ON `property_sets`.`group_id` = `groups`.`id`")
   end
 

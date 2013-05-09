@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
   def index
     # if admin of a specific wisp only
     wisp_access_points_viewers = current_user.roles_search(:wisp_access_points_viewer)
-    if not current_user.has_role?(:wisps_viewer) and wisp_access_points_viewers.length <= 1
+    if not current_user.has_role?(:wisps_viewer) and wisp_access_points_viewers.length == 1
       # redirect to group view
       @index_redirect = wisp_groups_path(Wisp.find(wisp_access_points_viewers[0].authorizable_id))
       redirect_to @index_redirect
@@ -49,12 +49,15 @@ class ApplicationController < ActionController::Base
   private
 
   def load_menu_wisps
-    cached = Rails.cache.fetch('wisps_menu')
-    if cached
-      @wisps_menu = cached
+    if current_user
+      cache_key = "/users/#{current_user.id}/wisps_menu"
+      @wisps_menu = Rails.cache.fetch(cache_key)
+      if @wisps_menu.nil?
+        @wisps_menu = Wisp.all_accessible_to(current_user)
+        Rails.cache.write(cache_key, @wisps_menu)
+      end
     else
-      @wisps_menu = Wisp.all_accessible_to(current_user)
-      Rails.cache.write('wisps_menu', @wisps_menu)
+      @wisps_menu = []
     end
   end
 
@@ -70,10 +73,19 @@ class ApplicationController < ActionController::Base
   def load_wisp
     wisp_id = params[:wisp_id] || params[:id]
     if wisp_id
-      @wisp = Wisp.find_by_name(wisp_id.gsub('-', ' '))
-      raise ActionController::RoutingError.new(I18n.t('errors.messages.not_found')) if @wisp.nil?
+      # when wisp_id is a string
+      if wisp_id.to_i == 0
+        @wisp = Wisp.find_by_name(wisp_id.gsub('-', ' '))
+      # when wisp_id is a number
+      else
+        @wisp = Wisp.find(wisp_id)
+      end
+    # view all access points case
     elsif request.path.include?('/access_points')
       @wisp = nil
+    # 404
+    else
+      raise ActionController::RoutingError.new(I18n.t('errors.messages.not_found'))
     end
   end
 

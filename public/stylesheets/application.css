@@ -114,7 +114,8 @@
     margin: 0 32%;
 }
 
-#access_points_quicksearch { float: left; width: 400px; margin: 15px 0  }
+#access_points_quicksearch { float: left; width: 50%; margin: 15px 0 20px; font-size:14px  }
+#access_points_quicksearch form{ margin-left: 10px }
 
 #access_points_quicksearch .spin {
     float: left;
@@ -179,7 +180,7 @@ a.button:hover, a.button:focus{ background: #000 !important }
 #access_points_paginate{ overflow: hidden; margin-top: 18px; display: inline }
 #access_points_quicksearch #q{ width: 200px; margin: 2px 0 0 5px }
 
-#page_controls{ overflow: hidden; margin: 15px 0 }
+#page_controls{ overflow: hidden; margin: 5px 0 15px; width: 72%; float: left }
 #combobox{ float: left }
 #combobox .ui-combobox input{ width: 29px; padding-left: 6px }
 
@@ -265,7 +266,7 @@ input.ui-autocomplete-input{ background: #fff none }
 	font-size: 16px; font-weight: bold; margin-bottom: 10px;
 }
 #errorExplanation li{ font-weight: bold }
-.field_with_errors input[type=text]{ border: 1px solid red }
+.field_with_errors input[type=text], .field_with_errors input[type=password]{ border: 1px solid red }
 
 #user_info p.clear{ margin-top: 10px }
 
@@ -388,3 +389,73 @@ input.submit{
 #wisp-list .up{ width: 6% }
 #wisp-list .down{ width: 6% }
 #wisp-list .unknown{ width: 6% }
+
+.actions{
+	float: right; width: auto; min-width: 25%; margin: 20px 0;
+	text-align: right;  font-weight:bold; font-size:14px; line-height: 25px
+}
+.actions.bottom{ margin-top: 7px }
+.batch-change-group{ margin-left: 15px; margin-right: 10px }
+#access_points .ui-selecting td { background: #FFFFEE }
+#access_points .ui-selected td { background: #FFF8CF }
+
+#access_points_list .hostname{ width: 10% }
+#access_points_list .macaddress{ width: 9% }
+#access_points_list .ip{ width: 8% }
+#access_points_list .location{ width: 16% }
+#access_points_list .address{ width: 16% }
+#access_points_list .group{ width: 10% }
+#access_points_list .city{ width: 9% }
+#access_points_list .public{ width: 5%; text-align:center }
+#access_points_list .status{ width: 5%; text-align:center }
+#access_points_list .status img,
+#access_points_list .public img{ vertical-align: top }
+.odd2 td{ background-color: #fcfcfc }
+#access_points_list .toggle-public, .toggle-monitor, .toggle-count-stats{ cursor: pointer }
+
+form .field p{ margin: 0 0 5px }
+form .help{ font-size: 12px; color: #606060 }
+
+h2 span.rfloat span{ margin-left: 12px !important }
+h2 .up{ border-bottom: 1px solid #093 }
+h2 .down{ border-bottom: 1px solid #F33 }
+h2 .unknown{ border-bottom: 1px solid #9f9f9f }
+h2 .total{ border-bottom: 1px solid #fff }
+
+#access_point_detail .up{ color: #093; font-weight: bold }
+#access_point_detail .down{ color: #F33; font-weight: bold }
+#access_point_detail .unknown{ color: #9f9f9f; font-weight: bold }
+#access_point_detail .unknown{ color: #6b6b70 }
+
+
+.tooltip{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 3;
+	display: none;
+	min-width: 100px;
+	max-width: 200px;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 20px;
+	text-align: justify;
+	background: #333;
+    background: rgba(0,0,0,.8);
+	color: #fff;
+    border-radius: 5px;
+	padding: 10px 15px;
+}
+
+.tooltip:before{
+    content: "▾";
+    position: absolute;
+	bottom: -11px;
+	left: 44%;
+    z-index: 9999;
+	color: #333;/*
+    color: rgba(0,0,0,.8); */
+	font-size: 25px;
+}
+
+h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !important; }

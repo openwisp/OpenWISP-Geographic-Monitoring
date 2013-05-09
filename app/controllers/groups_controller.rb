@@ -2,7 +2,7 @@ class GroupsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :load_wisp, :wisp_breadcrumb, :only => [:list]
   
-  skip_before_filter :verify_authenticity_token, :only => [:toggle_monitor]
+  skip_before_filter :verify_authenticity_token, :only => [:toggle_monitor, :toggle_count_stats]
   
   access_control do
     default :deny
@@ -12,7 +12,7 @@ class GroupsController < ApplicationController
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
     
-    actions :index, :new, :create, :update, :edit, :destroy, :toggle_monitor do
+    actions :index, :new, :create, :update, :edit, :destroy, :toggle_monitor, :toggle_count_stats do
       allow :wisp_access_points_viewer
     end
   end
@@ -73,11 +73,22 @@ class GroupsController < ApplicationController
   
   def toggle_monitor
     group = Group.find(params[:id])
-    group.toggle_monitor!
+    group.monitor!
     respond_to do |format|
       format.json{
         image = view_context.image_path(group.monitor ? 'accept.png' : 'delete.png')
         render :json => { 'monitor' => group.monitor, 'image' => image }
+      }
+    end
+  end
+  
+  def toggle_count_stats
+    group = Group.find(params[:id])
+    group.count_stats!
+    respond_to do |format|
+      format.json{
+        image = view_context.image_path(group.count_stats ? 'accept.png' : 'delete.png')
+        render :json => { 'count_stats' => group.count_stats, 'image' => image }
       }
     end
   end

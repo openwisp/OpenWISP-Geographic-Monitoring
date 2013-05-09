@@ -1,5 +1,5 @@
 owmw_enabled:
-    key: owmw_enabled
+    key: 'owmw_enabled'
     value: 'false'
     value_format: 'boolean'
     
