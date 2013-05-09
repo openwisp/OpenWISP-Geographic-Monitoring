@@ -21,6 +21,10 @@ CONFIG['access_point_pagination'].each do |item|
         break
     end
 end
+# default values if not defined
+CONFIG['max_threads'] = CONFIG['max_threads'] || 10
+CONFIG['ping_timeout'] = CONFIG['ping_timeout'] || 5
+CONFIG['housekeeping_interval'] = CONFIG['housekeeping_interval'] || 5
 
 # Specify where to look for the wisps and access_points table
 # data. Only one value can be enable at a time.

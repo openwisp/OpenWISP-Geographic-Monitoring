@@ -17,7 +17,13 @@
         </div>
         
         <div class="field">
-            <strong><%= label_tag :group_monitor, t(:Monitor) %>:</strong> <%= f.check_box :monitor %>
+            <p><strong><%= label_tag :group_monitor, t(:Monitor) %>:</strong> <%= f.check_box :monitor %></p>
+            <p><span class="help"><%= t :Monitor_help %>.</span></p>
+        </div>
+        
+        <div class="field">
+            <p><strong><%= label_tag :count_stats, t(:Count_stats) %>:</strong> <%= f.check_box :count_stats %></p>
+            <p><span class="help"><%= t :Count_stats_help %>.</span></p>
         </div>
         
         <% unless @group.new_record? %>

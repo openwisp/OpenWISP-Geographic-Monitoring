@@ -22,10 +22,18 @@ it:
           attributes:
             email:
               taken: 'email già utilizzata da un altro utente'
+              blank: non può essere lasciato vuoto
+            username:
+              blank: non può essere lasciato vuoto
+            password:
+              blank: non può essere lasciato vuoto
+              confirmation: e conferma password non coincidono
+            password_confirmation:
+              blank: non può essere lasciato vuoto
         group:
           attributes:
             name:
-              blank: 'prova pro'
+              blank: non può essere lasciato vuoto
 
   # Uppercase
   Activation_date: Data di attivazione
@@ -147,6 +155,8 @@ it:
   Edit_group: Modifica gruppo  
   Total_AP: AP Totali
   Monitor: Monitoraggio attivo?
+  Monitoring_disabled_for_group: Monitoring disattivato per questo gruppo
+  Monitor_help: Questa impostazione indica al sistema se deve monitorare lo stato degli access point contenuti in questo gruppo o meno
   No_wisp: Nessun wisp associato
   Users: Utenti
   User_management: Interfaccia gestione utenti
@@ -154,14 +164,29 @@ it:
   Cannot_delete_default_group: Impossibile eliminare il gruppo di default
   No_AP: Nessun access point presente
   Group_named: Gruppo "%{group}"
-  Monitoring_disabled_for_group: Monitoring disattivato per questo gruppo
   Manage_groups: Gestisci gruppi
   Group_modified: Gruppo modificato con successo
   Group_list_of_wisp: 'Lista gruppi di "%{wisp}"'
   View_AP: Visualizza AP
   View_all_the_AP: Tutti gli access points
   Groups_of_this_wisp: Gruppi del wisp
-  Access_points_of_wisp: Access points del wisp
+  Access_points_of_this_wisp: Access points del wisp
+  Select_all: Seleziona tutti
+  Change_group: Cambia gruppo
+  No_access_point_selected: "Devi selezionare prima gli access point.\n\nProva a selezionare le righe della tabella con il mouse."
+  Bad_format_parameters: Formato parametri errati
+  Group_not_found: Gruppo non trovato
+  User_does_not_have_permission_group: "L'utente non ha i permessi per gestire il wisp del gruppo specificato"
+  User_does_not_have_permission_ap_id: "L'utente non ha i permessi per gestire il wisp dell'access point con id %{ap_id}"
+  Moving_access_point_different_wisp_not_allowed: "Non è possibile spostare gli access point del wisp \"%{wisp1}\" in un gruppo del wisp \"%{wisp2}\""
+  Access_point_updated: "%{length} access point aggiornati"
+  Select_all_title: Seleziona tutti (CTRL + A)\no deseleziona tutti (ESC)
+  Change_group_title: Cambia il gruppo agli access point selezionati (CTRL + G)
+  Access_points_of_wisp: Access point del wisp <b>"%{wisp}"</b>
+  Access_points_of_wisp_group: Access point del wisp <b>"%{wisp}"</b> &raquo; gruppo <b>"%{group}"</b>
+  Count_stats: Conteggio statistiche
+  Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando si calcolano le statistiche degli access point (up, down, sconosciuto, totale)
+  Published_thead_tooltip: Indica se l'access point\nè pubblicato sul GeoRSS
   
   # Lowercase
   logged_as: autenticato come
@@ -180,6 +205,7 @@ it:
     one: 1 giorno fa
     other: "#{count} giorni fa"
   than: del
+  total: totale
   'true': 'sì'
   unknown: sconosciuto
   up: up

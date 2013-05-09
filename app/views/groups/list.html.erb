@@ -7,6 +7,7 @@
           <th class="name"><%=t :Name %></th>
           <th><%=t :Wisp %></th>
           <th class="center"><%=t :Monitor %></th>
+          <th class="center"><%=t :Count_stats %></th>
           <th class="center"><%=t :Total_AP %></th>
           <th class="green center"><%=t :Up %></th>
           <th class="red center"><%=t :Down %></th>
@@ -19,9 +20,10 @@
           <td class="name"><%= link_to group.name, wisp_group_access_points_path(@wisp, group) %></td>
           <td class="wisp"><%= group.wisp_name %></td>
           <td class="monitor center">
-            <a class="toggle-monitor" data-href="<%= toggle_monitor_group_path(group.id) %>">
-              <img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
-            </a>
+            <img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
+          </td>
+          <td class="coount-stats center">
+            <img src="<%= image_path(group.count_stats ? 'accept.png' : 'delete.png') %>" alt="">
           </td>
           <td class="total center"><%= group.total %></td>
           <td class="total_up center"><%= group.up %></td>

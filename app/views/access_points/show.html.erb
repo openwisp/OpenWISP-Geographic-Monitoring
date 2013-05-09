@@ -21,11 +21,15 @@
     <%= javascript_include_tag 'https://maps.google.com/maps/api/js?sensor=false&v=3.9', 'gmaps.markermanager', 'owgm.gmaps', 'jquery.jeditable' %>
 
     <%= javascript_tag "$(function(){
-
-            $('#clickable_public td').click(function() { $('#clickable_public .toggle-monitor').click() });
             $('#clickable_category').click(function() { $('#category_select').click() });
             $('#clickable_site_description').click(function() { $('#site_description').click() });
             $('#clickable_notes').click(function() { $('#notes').click() });
+            $('#clickable_public td').click(function(){
+								el = $('#clickable_public .toggle-public');
+								owgm.toggleProperty(el.attr('data-href'), function(result){
+										el.find('img').attr('src', result.image)
+								});
+						});
 
             $('#category_select').live('change', function(){
                 if ($(this).find('select').val() == '!new!') {
@@ -67,7 +71,6 @@
                     $('#category_select').show();
                 }
             });
-            owgm.initToggleMonitor();
     });" %>
 <% end %>
 
@@ -102,9 +105,4 @@
   </div>
 </div>
 
-<div id="mask"></div>
-<div id="loading-indicator"></div>
-<script>
-		owgm.group_select_url = "<%= wisp_access_point_select_group_url(@wisp, @access_point) %>";
-		owgm.initSelectGroup()
-</script>
+<script>owgm.initSelectGroup("<%= wisp_access_point_select_group_url(@wisp, @access_point) %>");</script>

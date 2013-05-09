@@ -11,6 +11,30 @@ en:
         public: public
         site_description: installation site
         status: status
+      group:
+        name: name
+    errors:
+      template:
+        header: "Validation Error"
+        body: "The operation did not succeed, fix the errors reported below and retry."
+      models:
+        user:
+          attributes:
+            email:
+              taken: 'email already used by another user'
+              blank: can't be empty
+            username:
+              blank: can't be empty
+            password:
+              blank: can't be empty
+              confirmation: and password confirmation mismatch
+            password_confirmation:
+              blank: can't be empty
+        group:
+          attributes:
+            name:
+              blank: can't be empty
+  
   # Uppercase
   Activation_date: Activation date
   Activity_graph: Activity graph
@@ -73,7 +97,7 @@ en:
   Latest_seen: Latest seen on
   Loading: Loading
   Map: Map
-  More_info: Altre informazioni
+  More_info: More information
   Name: Name
   Next: Next
   No_data_to_display: Access point unknown, there is no data to display.
@@ -127,23 +151,40 @@ en:
   Groups: Groups
   Group_list: Group management
   New_group: New Group  
-  Edit_group: Modifica gruppo
+  Edit_group: Edit group
   Total_AP: Total AP
   Monitor: Monitoring active?
+  Monitoring_disabled_for_group: Monitoring disabled for this group
+  Monitor_help: "This flag indicates wheter the system should monitor the status of the access points contained in this group"
   No_wisp: No wisp associated
   Users: Users
   User_management: User management interface
   Mac_address: Mac address
   Cannot_delete_default_group: Cannot delete default group
-  No_AP: There are no access points yet
-  Monitoring_disabled_for_group: Monitoring disabled for this group
+  No_AP: There are no access points yet  
   Manage_groups: Manage groups
   Group_modified: Group modified successfully
   Group_list_of_wisp: 'Group list of "%{wisp}"'
   View_AP: View AP
   View_all_the_AP: All access points
   Groups_of_this_wisp: Groups of this wisp
-  Access_points_of_wisp: Access points of this wisp
+  Access_points_of_this_wisp: Access points of this wisp
+  Select_all: Select all
+  Change_group: Change group
+  No_access_point_selected: "You must select some access points.\n\nTry to select the rows of the table with your mouse."
+  Bad_format_parameters: Bad format parameters
+  Group_not_found: Group not found
+  User_does_not_have_permission_group: User does not have permission to manage wisp of the specified group
+  User_does_not_have_permission_ap_id: "User does not have permission to manage wisp of ap with id %{ap_id}"
+  Moving_access_point_different_wisp_not_allowed: 'Moving access point of wisp "%{wisp1}" in a group of "%{wisp2}" is not allowed'
+  Access_point_updated: "%{length} access points updated"
+  Select_all_title: "Select all (CTRL + A)\nor deselect all (ESC)"
+  Change_group_title: "Change group of the selected access points (CTRL + G)"
+  Access_points_of_wisp: Access points of wisp "%{wisp}"
+  Access_points_of_wisp_group: Access points of wisp "%{wisp}" &raquo; group "%{group}"
+  Count_stats: Count statistics
+  Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating statists of the access points (up, down, unknown, total)"
+  Published_thead_tooltip: Indicates whether the access point\nis published in the GeoRSS
   
   # Lowercase
   logged_as: logged in as
@@ -162,9 +203,13 @@ en:
     one: 1 day ago
     other: "#{count} days ago"
   than: than
+  total: total
   'true': 'yes'
   unknown: unknown
   up: up
+  description: description
+  name: name
+  monitor: monitoring
   
   # Defaults for rails
   errors:

@@ -7,8 +7,39 @@
             form: '#access_points_quicksearch form',
             // maximum custom value
             max_value: 100,
+            // executed at the beginning of _create method
+            beforeCreate: function(){
+                try {
+                    var initial_value = localStorage.getItem('pagination') || false,
+                        selected_value = $('#combobox option:selected').val();
+                    // if initial value is stored in the browser cache and is different from the default value
+                    if(initial_value && selected_value !== initial_value){
+                        // select the cached value
+                        $('#combobox option:selected').removeAttr('selected');
+                        $('#combobox option[value='+initial_value+']').attr('selected', true);
+                    }
+                    // else if cached value is the same as the default value
+                    else if(initial_value && selected_value === selected_value){
+                        // remove localstorage item to avoid pointlessly reloading the list of access points
+                        localStorage.removeItem('pagination');
+                    }
+                } catch(e){}
+                
+            },
+            afterCreate: function(){
+                try {
+                    // load initial value
+                    initial_value = localStorage.getItem('pagination') || false;
+                    if(initial_value){
+                        this.onChange(initial_value, false);
+                    }
+                } catch(e){}   
+            },
             // function that is executed when selected value changes
-            onChange: function(val){
+            onChange: function(val, reload){
+                if(reload === undefined){
+                    reload = true;
+                }
                 // function to update the href or action attributes with correct pagination value
                 // $el: jquery element, attribute: string, value: string
                 var updateUrl = function($el, attribute, value){
@@ -36,9 +67,19 @@
                 // update each pagination link
                 $(this.links).each(function(i, el){
                     updateUrl($(el), 'href', val);
-                    // trigger click
-                    $('#access_points_paginate .page a').eq(0).trigger('click');
                 });
+                // store value for later retrieval
+                try {
+                    localStorage.setItem('pagination', val);
+                } catch(e){}
+                // trigger click
+                var first_link = $('#access_points_paginate .page a').eq(0);
+                if(first_link.length){
+                    first_link.trigger('click');
+                }
+                else{
+                    owgm.refreshPage(val);
+                }
                 // if form is defined
                 if(this.form){
                     // update action
@@ -47,6 +88,7 @@
             }    
         },
         _create: function() {
+            this.options.beforeCreate();
             var input,
             self = this,
             select = this.element.hide(),
@@ -110,6 +152,10 @@
                         }
                         self.options.onChange($(this).val())
                     }
+                },
+                // create
+                create: function(event, ui){
+                    self.options.afterCreate();
                 }
             })
             .addClass("ui-widget ui-widget-content ui-corner-left");
@@ -163,7 +209,3 @@
         }
     });
 })(jQuery);
-    
-//$(function() {
-//    $("#combobox select").combobox();
-//});

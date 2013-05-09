@@ -6,20 +6,32 @@ Owgm::Application.routes.draw do
 
   resources :users
 
-  resources :access_points, :only => [:index]
+  resources :access_points, :only => [:index] do
+    collection do
+      post 'change_group' => 'access_points#batch_change_group'
+      get 'select_group' => 'access_points#batch_select_group'
+    end
+  end
 
   resources :configurations, :only => [:edit, :update]
 
   resources :wisps, :only => :index do
+    
+    member do
+      get 'select_group' => 'access_points#batch_select_group'
+    end
     
     match 'groups' => 'groups#list', :as => :groups, :via => [:get]
     match 'groups/:group_id/access_points' => 'access_points#index', :as => :group_access_points, :via => [:get]
     
     resources :access_points, :only => [:index, :show] do
       resource :property_set, :only => :update
+      member do
+        post 'toggle_public'
+      end
     end
 
-    resources :activity_histories, :only => :index
+  resources :activity_histories, :only => :index
     match 'access_points/:access_point_id/activities' => 'activities#show', :as => :access_point_activities
     match 'access_points/:access_point_id/activity_histories' => 'activity_histories#show', :as => :access_point_activity_histories
     match 'access_points/:access_point_id/associated_user_counts' => 'associated_user_counts#show',
@@ -37,6 +49,7 @@ Owgm::Application.routes.draw do
   resources :groups, :only => [:index, :new, :edit, :create, :update, :destroy] do
     member do
       post 'toggle_monitor'
+      post 'toggle_count_stats'
     end
   end
 

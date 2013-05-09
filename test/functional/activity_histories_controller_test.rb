@@ -9,10 +9,17 @@ class ActivityHistoriesControllerTest < ActionController::TestCase
   test "should get index if wisp_viewer" do
     sign_in users(:admin)
     wisp = wisps(:provincia_wifi)
-    get :index, :wisp_id => wisp.name
+    get :index, { :wisp_id => wisp.name }
     assert_response :success
     assert_select "#main-nav a.active", 1
     assert_select "#main-nav a.active", "%s&#x25BE;" % [I18n.t(:Wisp)]
+  end
+  
+  test "should get show" do
+    sign_in users(:admin)
+    wisp = wisps(:provincia_wifi)
+    get :show, { :format => 'json', :wisp_id => wisp.name, :access_point_id => 1 }
+    assert_response :success
   end
   
   test "should write file in tmp folder" do
