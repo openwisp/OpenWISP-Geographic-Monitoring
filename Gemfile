@@ -33,7 +33,3 @@ gem "dynamic_form", "~> 1.1.4"
 group :development do
   gem "rack-mini-profiler"
 end
-
-group :test do
-  gem "sqlite3"
-end
