@@ -18,12 +18,12 @@
 class AccessPointsController < ApplicationController
   before_filter :authenticate_user!, :load_wisp, :wisp_breadcrumb
   
-  skip_before_filter :verify_authenticity_token, :only => [:change_group, :toggle_public, :batch_change_group]
+  skip_before_filter :verify_authenticity_token, :only => [:change_group, :toggle_public, :batch_change_group, :erase_favourite]
 
   access_control do
     default :deny
 
-    actions :index, :show, :change_group, :select_group, :toggle_public, :batch_change_group, :batch_select_group do
+    actions :index, :show, :change_group, :select_group, :toggle_public, :batch_change_group, :batch_select_group, :favourite, :erase_favourite do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -56,6 +56,7 @@ class AccessPointsController < ApplicationController
 
     crumb_for_group
     crumb_for_wisp
+    crumb_for_access_point_favourite
   end
 
   def show
@@ -187,6 +188,50 @@ class AccessPointsController < ApplicationController
     end
   end
 
+  def favourite
+    @showmap = CONFIG['showmap']
+    @access_point_pagination = CONFIG['access_point_pagination']
+    
+    @favourite_page = true
+    
+    respond_to do |format|
+      format.any(:html, :js) {
+        @access_points = access_points_with_sort_search_and_paginate(true).of_wisp(@wisp)
+        render :index
+      }
+      format.json {
+        @access_points = access_points_with_filter.of_wisp(@wisp).draw_map
+        render :index
+      }
+      format.rss {
+        @access_points = AccessPoint.with_properties.of_wisp(@wisp).on_georss
+        render :index
+      }
+    end
+    
+    crumb_for_wisp
+    crumb_for_access_point_favourite
+  end
+
+  def erase_favourite
+    @access_points = AccessPoint.with_properties.where(:wisp_id => @wisp.id)
+    
+    @access_points.each do |ap|
+      if ap.favourite?
+        ap.property_set.update_attributes(:favourite => '0' )
+      end
+    end
+    
+    respond_to do |format|
+      format.html {
+        redirect_to wisp_access_point_favourite_path(@wisp)
+      }
+      format.js {
+        render :nothing => true
+      }
+    end
+  end
+
   private
 
   def access_points_with_filter
@@ -208,7 +253,7 @@ class AccessPointsController < ApplicationController
     end
   end
 
-  def access_points_with_sort_search_and_paginate
+  def access_points_with_sort_search_and_paginate(fav=nil)
     query = params[:q] || nil
     column = params[:column] ? params[:column].downcase : nil
     direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
@@ -221,7 +266,7 @@ class AccessPointsController < ApplicationController
     end
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query
-
+    access_points = access_points.quickfavourite(fav) if fav
     per_page = params[:per]
     access_points.page(params[:page]).per(per_page)
   end
@@ -231,6 +276,7 @@ class AccessPointsController < ApplicationController
     i18n_columns[I18n.t(:status, :scope => [:activerecord, :attributes, :access_point])] = 'status'
     i18n_columns[I18n.t(:public, :scope => [:activerecord, :attributes, :access_point])] = 'public'
     i18n_columns[I18n.t(:site_description, :scope => [:activerecord, :attributes, :access_point])] = 'site_description'
+    i18n_columns[I18n.t(:favourite, :scope => [:activerecord, :attributes, :access_point])] = 'favourite'
 
     AccessPoint.column_names.each do |col|
       i18n_columns[I18n.t(col, :scope => [:activerecord, :attributes, :access_point])] = col
@@ -249,6 +295,10 @@ class AccessPointsController < ApplicationController
     rescue
       add_breadcrumb I18n.t(:Access_points_of_every_wisp), access_points_path
     end
+  end
+  
+  def crumb_for_access_point_favourite
+    #add_breadcrumb I18n.t(:Accesspoint_favourite), wisp_access_point_favourite_path(@wisp)
   end
 
   def crumb_for_access_point

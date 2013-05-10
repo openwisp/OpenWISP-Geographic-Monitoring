@@ -8,9 +8,10 @@ en:
         address: address
         city: city
         hostname: hostname
-        public: public
+        public: published
         site_description: installation site
         status: status
+        favourite: favourite
       group:
         name: name
     errors:
@@ -109,9 +110,10 @@ en:
   Notes: Additional notes
   Ok: Ok
   Prev: Previous
-  Public: Public
+  Public: Published
   Public_on_Georss: Visible on GeoRSS
   Quick_search: Quick search
+  Filter_fav: Filter favourite
   Remember_me: Remember me
   Reset_highlighting: Reset highlighting
   Reset_highlighting_fallback_message: There are no records highlighted at the moment
@@ -185,7 +187,9 @@ en:
   Count_stats: Count statistics
   Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating statists of the access points (up, down, unknown, total)"
   Published_thead_tooltip: Indicates whether the access point\nis published in the GeoRSS
-  
+  Accesspoint_favourite: Favourite Access Point
+  Favourite: Favourite
+
   # Lowercase
   logged_as: logged in as
   all: all

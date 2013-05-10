@@ -15,6 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  $('#clickable_favourite').click(function() { $('#favourite').click() });
 #%>
 
 <% content_for :after_defaults do %>
@@ -71,7 +72,20 @@
                     $('#category_select').show();
                 }
             });
-    });" %>
+    }); 
+   
+   $('#favourite').click(function() { 
+            $.ajax({
+                url: 'http://www.repubblica.it',
+                method: 'get',
+                success: function (result) {
+                  alert('Your bookmark has been saved');
+                }
+            });  
+
+    });"
+
+%>
 <% end %>
 
 <div class="grid_12">
@@ -105,4 +119,7 @@
   </div>
 </div>
 
-<script>owgm.initSelectGroup("<%= wisp_access_point_select_group_url(@wisp, @access_point) %>");</script>
+<script>
+		owgm.initSelectGroup("<%= wisp_access_point_select_group_url(@wisp, @access_point) %>");
+		owgm.initFavourite();
+</script>

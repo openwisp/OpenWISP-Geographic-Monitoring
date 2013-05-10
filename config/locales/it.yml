@@ -8,9 +8,10 @@ it:
         address: indirizzo
         city: città
         hostname: hostname
-        public: pubblico
+        public: pubblicato
         site_description: sito di installazione
         status: stato
+        favourite: preferito
       group:
         name: nome
     errors:
@@ -112,6 +113,7 @@ it:
   Public: Pubblicato
   Public_on_Georss: Pubblicato sulla mappa (GeoRSS)
   Quick_search: Ricerca rapida
+  Filter_fav: Filtra preferiti
   Remember_me: Ricordami
   Reset_highlighting: Resetta evidenziazione
   Reset_highlighting_fallback_message: Nessuna riga è evidenziata al momento
@@ -187,6 +189,8 @@ it:
   Count_stats: Conteggio statistiche
   Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando si calcolano le statistiche degli access point (up, down, sconosciuto, totale)
   Published_thead_tooltip: Indica se l'access point\nè pubblicato sul GeoRSS
+  Accesspoint_favourite: Access Point Preferiti
+  Favourite: Preferito
   
   # Lowercase
   logged_as: autenticato come

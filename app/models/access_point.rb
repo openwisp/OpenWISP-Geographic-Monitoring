@@ -32,12 +32,6 @@ class AccessPoint < ActiveRecord::Base
   has_many :associated_user_counts
   has_many :associated_user_count_histories
 
-  #delegate :reachable, :to => :property_set, :allow_nil => true
-  #delegate :category, :category=, :to => :property_set, :allow_nil => true
-  #delegate :notes, :notes=, :site_description, :site_description=,
-  #         :public, :public=,
-  #         :to => :property_set, :allow_nil => true
-
   def coords
     [lat, lng]
   end
@@ -49,6 +43,10 @@ class AccessPoint < ActiveRecord::Base
 
   def ip
     mng_ip.nil? ? nil : IPAddr.new(read_attribute(:mng_ip), Socket::AF_INET).to_s
+  end
+
+  def favourite?
+    favourite == true or favourite == '1'
   end
 
   def up?
@@ -160,6 +158,8 @@ class AccessPoint < ActiveRecord::Base
         with_properties.order("`public` #{direction}")
       when 'site_description' then
         with_properties.order("`site_description` #{direction}")
+      when 'favourite' then
+        with_properties.order("`favourite` #{direction}")
       else
         order("#{attribute} #{direction}")
     end
@@ -192,6 +192,11 @@ class AccessPoint < ActiveRecord::Base
   def self.total
     with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1')
   end
+  
+  def self.favourite
+    with_properties.where(:property_sets => {:favourite => 1})
+  end
+
 
   def self.activated(till=nil)
     where("activation_date <= ?", till)
@@ -234,6 +239,10 @@ class AccessPoint < ActiveRecord::Base
     end
   end
 
+  def self.quickfavourite(condition)
+    where(:property_sets => {:favourite => condition})
+  end
+
   private
 
   # select access_points left join property_sets
@@ -242,7 +251,7 @@ class AccessPoint < ActiveRecord::Base
     # exclude property_sets.id and property_sets.access_point_id because of rare use
     if select_fields.nil?
       select_fields = "access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
-      property_sets.category, property_sets.group_id, property_sets.notes"
+      property_sets.category, property_sets.group_id, property_sets.favourite, property_sets.notes"
     end
     select(select_fields).joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`")
   end
@@ -254,7 +263,7 @@ class AccessPoint < ActiveRecord::Base
     
     # the default behaviour with the group table is to include only group_name
     select_fields = "access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
-      property_sets.category, property_sets.group_id, property_sets.notes, groups.name AS group_name"
+      property_sets.category, property_sets.group_id, property_sets.favourite, property_sets.notes, groups.name AS group_name"
     
     unless additional_fields.nil?
       select_fields = "#{select_fields}, #{additional_fields}"
@@ -263,6 +272,7 @@ class AccessPoint < ActiveRecord::Base
     select(select_fields).joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`
           LEFT JOIN `groups` ON `property_sets`.`group_id` = `groups`.`id`")
   end
+
 
   def set_reachable_to(boolean)
     property_set.update_attribute(:reachable, boolean) rescue PropertySet.create(:reachable => boolean, :access_point => self)

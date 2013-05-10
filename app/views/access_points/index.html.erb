@@ -19,12 +19,11 @@
 
 <% content_for :after_defaults do %>
     <%= stylesheet_link_tag 'jquery-ui/styles' %>
-    <%= javascript_include_tag 'jquery-ui', 'jquery.combobox' %>
+    <%= javascript_include_tag 'jquery-ui', 'jquery.combobox'%>
 <% end %>
 <% content_for :js_templates do %>
     <%= render 'marker_info_window_templates' %>
 <% end %>
-
 
   <div class="grid_12">
 		<% if @access_points.length > 0 %>
@@ -69,11 +68,13 @@
 						<%= show_stat(:up, @wisp.count_access_points(:up)) %>
 						<%= show_stat(:down, @wisp.count_access_points(:down)) %>
 						<%= show_stat(:unknown, @wisp.count_access_points(:unknown)) %>
+						<%=t :Favourite %>: <%= @wisp.access_points_favourite.count %>
 						<%= show_stat(:total, @wisp.count_access_points(:total)) %>
 				<% else %>
 						<%= show_stat(:up, AccessPoint.up.count) %>
 						<%= show_stat(:down, AccessPoint.down.count) %>
 						<%= show_stat(:unknown, AccessPoint.unknown.count) %>
+						<%=t :favourite %>: <%= AccessPoint.favourite.count %>
 						<%= show_stat(:total, AccessPoint.total.count) %>
 				<% end %>
       </span>
@@ -88,6 +89,12 @@
 		<div class="actions">
 				<%= render 'access_points_actions' %>
 		</div>
+		
+		<% if @favourite_page %>
+		<div class="erase-favourite">
+				<a href="<%= wisp_erase_favourite_path(@wisp)%>">Elimina tutti</a>
+		</div>
+		<% end %>
 
     <table id="access_points_list">
 				<thead id="access_points_thead">
@@ -131,4 +138,5 @@
 						el.find('img').attr('src', result.image)
 				});
 		});
+		owgm.initFavourite();
 </script>

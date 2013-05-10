@@ -128,7 +128,7 @@
     padding-left: 1px;
     margin-top: 1px;
 }
-#clickable_notes, #clickable_site_description, #clickable_public, #clickable_category{
+#clickable_notes, #clickable_site_description, #clickable_public, #clickable_category, #clickable_favourite{
     cursor: pointer;
 }
 #category_text {
@@ -453,9 +453,12 @@ h2 .total{ border-bottom: 1px solid #fff }
 	bottom: -11px;
 	left: 44%;
     z-index: 9999;
-	color: #333;/*
-    color: rgba(0,0,0,.8); */
+	color: #333;
 	font-size: 25px;
 }
 
 h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !important; }
+
+.favourite-update{
+    cursor: pointer;
+}

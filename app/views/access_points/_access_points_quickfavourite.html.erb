@@ -17,17 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
 
-<tr>
-	<th class="hostname"><%= link_to_sort t(:Hostname) %></th>
-  <th class="location"><%= link_to_sort t(:Site_description) %></th>
-	<th class="address"><%= link_to_sort t(:Address) %></th>
-	<th class="city"><%= link_to_sort t(:City) %></th>
-	<th class="macaddress"><%= t(:Mac_address) %></th>
-	<th class="ip"><%= t(:Ip_addr)  %></th>
-	<th class="group"><%= t(:Group) %></th>
-	<th class="public hastip" title="<%= t :Published_thead_tooltip %>"><%= link_to_sort t(:Public) %></th>
-	<th><%= link_to_sort t(:Favourite) %></th>
-	<% if not @group.present? or @group.monitor %>
-	<th class="status"><%= link_to_sort t(:Status) %></th>
-	<% end %>
-</tr>
+<%= form_tag wisp_access_point_favourite_path(@wisp), :method => :get, :remote => true do %>
+        <%= label_tag :q, t(:Filter_fav) %>
+	<%= text_field_tag :q, nil, :size => 10, :class => 'ui-state-default ui-combobox-input ui-autocomplete-input ui-widget ui-widget-content ui-corner-all' %>
+<% end %>

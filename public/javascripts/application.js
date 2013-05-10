@@ -643,6 +643,20 @@ var owgm = {
                 a.removeAttr('data-title');
             }
         });
+    },
+    
+    initFavourite: function(){
+        $('.favourite-update').live('click',function(e){
+            var el = $(this);
+            $.ajax({
+                url: el.attr('data-href'),
+                type: 'POST'
+            }).done(function(result) {
+                el.find('img').attr('src', result.image);
+            }).fail(function(result){
+                alert('ERROR');
+            });
+        }).css('cursor','pointer');
     }
 };
 

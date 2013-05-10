@@ -31,4 +31,6 @@ class WispsController < ApplicationController
     @wisps = Wisp.all
     wisp_breadcrumb(force=true)
   end
+
+  
 end
