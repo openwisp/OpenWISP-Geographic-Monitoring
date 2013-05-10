@@ -29,6 +29,7 @@ class WispTest < ActiveSupport::TestCase
     assert_raise ArgumentError do
       wisp.count_access_points(:wrong_parameter)
     end
+    assert_equal 0, wisp.count_access_points(:favourite)
     
     wisp = wisps(:freewifibrescia)
     assert_equal 0, wisp.count_access_points(:up)

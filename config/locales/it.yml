@@ -190,7 +190,9 @@ it:
   Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando si calcolano le statistiche degli access point (up, down, sconosciuto, totale)
   Published_thead_tooltip: Indica se l'access point\nè pubblicato sul GeoRSS
   Accesspoint_favourite: Access Point Preferiti
+  Total: Totale
   Favourite: Preferito
+  Favourites: Preferiti
   
   # Lowercase
   logged_as: autenticato come
@@ -216,6 +218,7 @@ it:
   description: descrizione
   name: nome
   monitor: monitoraggio
+  favourites: preferiti
 
   # Defaults for rails
   errors:

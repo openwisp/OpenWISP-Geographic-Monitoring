@@ -30,9 +30,9 @@
       <%= image_tag(access_point.public? ? 'accept.png' : 'delete.png') %>
     </a>
   </td>
-  <td class="middle">
+  <td class="middle favourite">
     <a class="favourite-update" data-href="<%= wisp_access_point_property_set_favourite_path(access_point.wisp, :access_point_id => access_point.id) %>">
-     <%= access_point.favourite ? image_tag('favourite.png', :size => "25x25") : image_tag('not_favourite.png', :size => "25x25") %>
+      <%= image_tag(access_point.favourite? ? 'star.png' : 'star-off.png') %>
     </a>
   </td>
   <% if not @group.present? or @group.monitor %>

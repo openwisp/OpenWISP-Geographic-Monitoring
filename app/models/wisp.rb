@@ -64,8 +64,11 @@ class Wisp < ActiveRecord::Base
     when :unknown
       # only unknown .. it means it has no property set yet
       property_sets_where = { :property_sets => { :reachable => nil } }
+    when :favourite
+      # favourites of this wisp
+      property_sets_where = { :property_sets => { :favourite => true } }
     else
-      raise ArgumentError, 'unknown action argument "%s", can be only "total", "up", "down" or "unknown"' % action
+      raise ArgumentError, 'unknown action argument "%s", can be only "total", "up", "down", "unknown" or "favourite"' % action
     end
     
     # scope the query so we can add more restrictions to the lookup if needed

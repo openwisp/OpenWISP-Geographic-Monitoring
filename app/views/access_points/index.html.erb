@@ -64,17 +64,19 @@
 				<% elsif @group.present? %>
 						<%= t :Monitoring_disabled_for_group %>
 						<%= show_stat(:total, @group.total) %>
-				<% elsif @wisp.present? %>
+				<% elsif @wisp.present? and not @favourite_page %>
 						<%= show_stat(:up, @wisp.count_access_points(:up)) %>
 						<%= show_stat(:down, @wisp.count_access_points(:down)) %>
 						<%= show_stat(:unknown, @wisp.count_access_points(:unknown)) %>
-						<%=t :Favourite %>: <%= @wisp.access_points_favourite.count %>
+						<%= show_stat(:favourites, @wisp.count_access_points(:favourite)) %>
 						<%= show_stat(:total, @wisp.count_access_points(:total)) %>
-				<% else %>
+				<% elsif @wisp.present? and @favourite_page %>
+						<%= show_stat(:favourites, @wisp.count_access_points(:favourite)) %>
+				<% elsif not @favourite_page %>
 						<%= show_stat(:up, AccessPoint.up.count) %>
 						<%= show_stat(:down, AccessPoint.down.count) %>
 						<%= show_stat(:unknown, AccessPoint.unknown.count) %>
-						<%=t :favourite %>: <%= AccessPoint.favourite.count %>
+						<%= show_stat(:favourites, AccessPoint.favourite.count) %>
 						<%= show_stat(:total, AccessPoint.total.count) %>
 				<% end %>
       </span>

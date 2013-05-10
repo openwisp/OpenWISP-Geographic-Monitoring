@@ -188,7 +188,9 @@ en:
   Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating statists of the access points (up, down, unknown, total)"
   Published_thead_tooltip: Indicates whether the access point\nis published in the GeoRSS
   Accesspoint_favourite: Favourite Access Point
+  Total: Total
   Favourite: Favourite
+  Favourites: Favourites
 
   # Lowercase
   logged_as: logged in as
@@ -214,6 +216,7 @@ en:
   description: description
   name: name
   monitor: monitoring
+  favourites: favourites
   
   # Defaults for rails
   errors:

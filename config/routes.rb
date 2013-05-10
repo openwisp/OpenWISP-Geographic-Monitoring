@@ -18,7 +18,7 @@ Owgm::Application.routes.draw do
     
     # TODO: check here
     match 'erase_favourite' => 'access_points#erase_favourite', :as => :erase_favourite
-    match 'access_points_favourite' => 'access_points#favourite', :as => :access_point_favourite
+    match 'access_points_favourite' => 'access_points#favourite', :as => :access_points_favourite
     
     member do
       get 'select_group' => 'access_points#batch_select_group'

@@ -264,9 +264,12 @@ class AccessPointsController < ApplicationController
     if params[:group_id]
       access_points = access_points.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
     end
+    
     access_points = access_points.sort_with(t_column(column), direction) if column
     access_points = access_points.quicksearch(query) if query
+    
     access_points = access_points.quickfavourite(fav) if fav
+   
     per_page = params[:per]
     access_points.page(params[:page]).per(per_page)
   end
