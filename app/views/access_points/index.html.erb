@@ -64,15 +64,15 @@
 				<% elsif @group.present? %>
 						<%= t :Monitoring_disabled_for_group %>
 						<%= show_stat(:total, @group.total) %>
-				<% elsif @wisp.present? and not @favourite_page %>
+				<% elsif @wisp.present? and not @favourite %>
 						<%= show_stat(:up, @wisp.count_access_points(:up)) %>
 						<%= show_stat(:down, @wisp.count_access_points(:down)) %>
 						<%= show_stat(:unknown, @wisp.count_access_points(:unknown)) %>
 						<%= show_stat(:favourites, @wisp.count_access_points(:favourite)) %>
 						<%= show_stat(:total, @wisp.count_access_points(:total)) %>
-				<% elsif @wisp.present? and @favourite_page %>
+				<% elsif @wisp.present? and @favourite %>
 						<%= show_stat(:favourites, @wisp.count_access_points(:favourite)) %>
-				<% elsif not @favourite_page %>
+				<% elsif not @favourite %>
 						<%= show_stat(:up, AccessPoint.up.count) %>
 						<%= show_stat(:down, AccessPoint.down.count) %>
 						<%= show_stat(:unknown, AccessPoint.unknown.count) %>
@@ -83,7 +83,7 @@
 			<% end %>
     </h2>
 
-		<% if @access_points.length > 0 %>
+<% if @access_points.length > 0 %>
     <div id="access_points_quicksearch" class="bold">
       <%= render 'access_points_quicksearch' %>
     </div>
@@ -92,7 +92,7 @@
 				<%= render 'access_points_actions' %>
 		</div>
 		
-		<% if @favourite_page %>
+		<% if @favourite %>
 		<div class="erase-favourite">
 				<a href="<%= wisp_erase_favourite_path(@wisp)%>">Elimina tutti</a>
 		</div>
@@ -126,9 +126,9 @@
 		
 		<br style="clear:both">
 		
-		<% else %>
-				<p class="empty-page-msg"><%= t :No_AP %></p>
-		<% end %>
+<% else %>
+		<p class="empty-page-msg"><%= t :No_AP %></p>
+<% end %>
   </div>
 </div>
 

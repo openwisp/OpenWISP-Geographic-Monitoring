@@ -43,17 +43,6 @@ class PropertySetsController < ApplicationController
       render :nothing => true, :status => :not_acceptable
     end
   end
-
-  def update_favourite
-    @property_set = @access_point.properties
-    
-    favourite = !@access_point.favourite?
-    @property_set.update_attributes(:favourite => favourite )
-    
-    respond_to do |format|
-       format.json{ render :json => { 'image' => view_context.image_path(favourite ? 'star.png' : 'star-off.png') } }
-    end
-  end
     
   private
 

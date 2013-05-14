@@ -3,9 +3,9 @@
 wherecamp:
   access_point_id: 1
   group_id: 1
-  public: true
   reachable: true
   site_description: "testing-test"
+  favourite: true
 
 eduroam:
   access_point_id: 2

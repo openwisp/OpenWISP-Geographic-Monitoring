@@ -59,6 +59,16 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_equal 1, json_response.length
   end
   
+  test "get access points map of provinciawifi favourites" do
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    get :index, { :format => 'json', :wisp_id => @wisp.name, :filter => 'favourite' }
+    assert_response :success
+    
+    json_response = ActiveSupport::JSON.decode(@response.body)
+    assert_equal 1, json_response.length
+  end
+  
   test "get access points of wisp name containing space" do    
     def do_space_test
       @wisp = wisps(:freewifibrescia)
@@ -98,8 +108,15 @@ class AccessPointsControllerTest < ActionController::TestCase
   test "show access point correct published icon" do
     sign_in users(:admin)
     @wisp = wisps(:provincia_wifi)
+    
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
+    assert css_select('.toggle-public img').to_s.include?('delete.png'), 'picture should indicate that the access point is not published'
+    
+    access_points(:wherecamp).properties.public = true
+    access_points(:wherecamp).properties.save!
     get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
     assert css_select('.toggle-public img').to_s.include?('accept.png'), 'picture should indicate that the access point is published'
+    
     get :show, { :wisp_id => @wisp.name, :id => access_points(:eduroam).id }
     assert css_select('.toggle-public img').to_s.include?('delete.png'), 'picture should indicate that the access point is not published'
   end
@@ -304,6 +321,11 @@ class AccessPointsControllerTest < ActionController::TestCase
     get :index, { :wisp_id => wisp.name }
     assert_select '#access_points_quicksearch form[action=?]', wisp_access_points_path(wisp)
     
+    # access points > wisp favourite
+    get :index, { :wisp_id => wisp.name, :filter => 'favourite' }
+    assert_response :success
+    assert_select "#access_points_quicksearch form[action=?]", wisp_access_points_favourite_path(wisp)
+    
     # access points > wisp > group
     get :index, { :wisp_id => wisp.name, :group_id => 1 }
     assert_select '#access_points_quicksearch form[action=?]', wisp_group_access_points_path(wisp, 1)
@@ -312,7 +334,7 @@ class AccessPointsControllerTest < ActionController::TestCase
   test "toggle_public" do
     sign_in users(:admin)
     ap = access_points(:wherecamp)
-    public_value = ap.properties.public    
+    public_value = ap.properties.public?
     post :toggle_public, { :format => 'json', :wisp_id => ap.wisp.name, :id => ap.id }
     assert_response :success
     assert_equal !public_value, PropertySet.find_by_access_point_id(ap.id).public
@@ -332,6 +354,106 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal public_value, PropertySet.find_by_access_point_id(ap.id).public
     assert_equal public_value, ActiveSupport::JSON.decode(@response.body)['public']
+  end
+  
+  test "toggle_favourite" do
+    sign_in users(:admin)
+    ap = access_points(:wherecamp)
+    favourite_value = ap.properties.favourite?
+    post :toggle_favourite, { :format => 'json', :wisp_id => ap.wisp.name, :id => ap.id }
+    assert_response :success
+    assert_equal !favourite_value, PropertySet.find_by_access_point_id(ap.id).favourite
+    assert_equal !favourite_value, ActiveSupport::JSON.decode(@response.body)['favourite']
+    # repeat the operation
+    post :toggle_favourite, { :format => 'json', :wisp_id => ap.wisp.name, :id => ap.id }
+    assert_response :success
+    assert_equal favourite_value, PropertySet.find_by_access_point_id(ap.id).favourite
+    assert_equal favourite_value, ActiveSupport::JSON.decode(@response.body)['favourite']
+    # repeat the operation using an integer for the ID
+    post :toggle_favourite, { :format => 'json', :wisp_id => ap.wisp.id, :id => ap.id }
+    assert_response :success
+    assert_equal !favourite_value, PropertySet.find_by_access_point_id(ap.id).favourite
+    assert_equal !favourite_value, ActiveSupport::JSON.decode(@response.body)['favourite']
+    # repeat the operation using an integer for the ID
+    post :toggle_favourite, { :format => 'json', :wisp_id => ap.wisp.id, :id => ap.id }
+    assert_response :success
+    assert_equal favourite_value, PropertySet.find_by_access_point_id(ap.id).favourite
+    assert_equal favourite_value, ActiveSupport::JSON.decode(@response.body)['favourite']
+    
+    # make 1 ap favourite from nil
+    ap.properties.favourite = nil
+    ap.properties.save!
+    post :toggle_favourite, { :format => 'json', :wisp_id => ap.wisp.id, :id => ap.id }
+    assert_response :success
+    assert_equal true, PropertySet.find_by_access_point_id(ap.id).favourite
+    assert_equal true, ActiveSupport::JSON.decode(@response.body)['favourite']
+  end
+  
+  test "toggle_favourite url" do
+    sign_in users(:admin)
+    wisp = wisps(:provincia_wifi)
+    access_point = access_points(:wherecamp)
+    
+    # detail ap
+    get :show, { :wisp_id => wisp.id, :id => access_point.id }
+    assert_response :success
+    assert_select ".toggle-favourite[data-href=?]", toggle_favourite_wisp_access_point_path(wisp.id, access_point.id)
+    
+    # list ap
+    get :index, { :wisp_id => wisp.name }
+    assert_response :success
+    found = false
+    css_select(".toggle-favourite").each do |tag|
+      if tag.to_s.include?(toggle_favourite_wisp_access_point_path(wisp.id, 6).to_s)
+        found = true
+        break
+      end
+    end
+    assert found
+  end
+  
+  test "favourite ap list and search" do
+    sign_in users(:mixed_operator)
+    wisp = wisps(:provincia_wifi)
+    access_point = access_points(:wherecamp)
+    
+    # 1 favourite ap
+    get :index, { :wisp_id => wisp.id, :filter => 'favourite' }
+    assert_response :success
+    assert_equal 1, css_select("tbody#access_points tr").length
+    
+    get :index, { :wisp_id => wisp.id, :filter => 'favourite', :q => 'eduroam' }
+    assert_equal 0, css_select("tbody#access_points tr").length
+    
+    get :index, { :wisp_id => wisp.id, :filter => 'favourite', :q => 'wherecamp' }
+    assert_equal 1, css_select("tbody#access_points tr").length
+    
+    # make 1 ap favourite from nil
+    access_point.properties.favourite = nil
+    access_point.properties.save!
+    # now should find 1 in the list
+    get :index, { :wisp_id => wisp.id, :filter => 'favourite' }
+    assert_response :success
+    assert_equal 0, css_select("tbody#access_points tr").length
+  end
+  
+  test "georss" do
+    sign_in users(:admin)
+    wisp = wisps(:provincia_wifi)
+    
+    access_points = AccessPoint.where(:wisp_id => wisp.id)
+    access_points.each do |ap|
+      ap.properties.public = true
+      ap.properties.save!
+    end
+    
+    get :index, { :format => 'rss', :wisp_id => wisp.id }
+    assert_response :success
+    assert_select 'item', access_points.length
+    
+    get :index, { :format => 'rss', :wisp_id => wisp.id, :details => true }
+    assert_response :success
+    assert_select 'category', access_points.length
   end
   
   private

@@ -59,15 +59,6 @@
     </td>
   </tr>
   <tr>
-    <td><strong><%=t :Favourite %></strong></td>
-    <td id="favourite" class="right">
-      <a class="favourite-update" data-href="<%= wisp_access_point_property_set_favourite_path(@access_point.wisp, :access_point_id => @access_point.id) %>">
-        <%= @access_point.favourite? ? image_tag('favourite.png', :size => "25x25") : image_tag('not_favourite.png', :size => "25x25") %>
-      </a>  
-    </td>
-    
-  </tr>
-  <tr>
     <td><strong><%=t :Ip_addr %></strong></td>
     <td class="right"><%= @access_point.ip %></td>
   </tr>

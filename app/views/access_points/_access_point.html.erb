@@ -31,7 +31,7 @@
     </a>
   </td>
   <td class="middle favourite">
-    <a class="favourite-update" data-href="<%= wisp_access_point_property_set_favourite_path(access_point.wisp, :access_point_id => access_point.id) %>">
+    <a class="toggle-favourite" data-href="<%= toggle_favourite_wisp_access_point_path(access_point.wisp_id, access_point) %>">
       <%= image_tag(access_point.favourite? ? 'star.png' : 'star-off.png') %>
     </a>
   </td>

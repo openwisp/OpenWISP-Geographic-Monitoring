@@ -18,7 +18,7 @@ Owgm::Application.routes.draw do
     
     # TODO: check here
     match 'erase_favourite' => 'access_points#erase_favourite', :as => :erase_favourite
-    match 'access_points_favourite' => 'access_points#favourite', :as => :access_points_favourite
+    match 'access_points_favourite' => 'access_points#index', :as => :access_points_favourite, :defaults => { :filter => 'favourite' }
     
     member do
       get 'select_group' => 'access_points#batch_select_group'
@@ -33,10 +33,8 @@ Owgm::Application.routes.draw do
       
       member do
         post 'toggle_public'
+        post 'toggle_favourite'
       end
-      
-      # TODO: check here
-      match 'property_set_favourite' => 'property_sets#update_favourite', :as => :property_set_favourite
     end
 
     resources :activity_histories, :only => :index

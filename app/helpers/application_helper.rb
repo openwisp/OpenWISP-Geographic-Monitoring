@@ -61,9 +61,11 @@ module ApplicationHelper
     current_user && current_user.has_role?(role, object)
   end
 
-  def access_points_with_or_without_wisp_path(wisp, group=nil)
-    if wisp and not group
+  def quick_search_action_path(wisp, group=nil, favourite=nil)
+    if wisp and not group and not favourite
       wisp_access_points_path(wisp)
+    elsif wisp and not group and favourite
+       wisp_access_points_favourite_path(wisp)
     elsif wisp and group
       wisp_group_access_points_path(wisp, group)
     else

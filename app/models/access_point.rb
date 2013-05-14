@@ -239,7 +239,7 @@ class AccessPoint < ActiveRecord::Base
     end
   end
 
-  def self.quickfavourite(condition)
+  def self.filter_favourites(condition)
     where(:property_sets => {:favourite => condition})
   end
 
