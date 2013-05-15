@@ -22,14 +22,15 @@ module ApplicationHelper
     link_to(image_tag("locale/#{locale}.jpg", :size => "26x26"), request.path+"?locale=#{locale}", html_opts)
   end
 
-  def link_to_sort(text, column = nil, rem = true)
+  def link_to_sort(text, column=nil, rem=true)
     column ||= text.downcase
-
-    order = case params[:order]
-              when 'asc' then 'desc'
-              when 'desc' then 'asc'
-              else 'desc'
-            end
+    
+    # default order is ASCENDING
+    order = 'asc'
+    # when clicking on the same column reverse the ordering
+    if column == params[:column]
+      order = params[:order] == 'asc' ? 'desc' : 'asc'
+    end
 
     if column == params[:column]
       dom_class = {:class => 'ordered_'+order}

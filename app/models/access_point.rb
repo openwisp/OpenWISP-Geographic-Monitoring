@@ -150,16 +150,26 @@ class AccessPoint < ActiveRecord::Base
     wisp ? where(:wisp_id => wisp.id) : scoped
   end
 
-  def self.sort_with(attribute, direction)
+  def self.sort_with(attribute='id', direction='asc')
+    attribute = attribute.nil? ? 'id' : attribute
+    direction = direction.nil? ? 'asc' : direction
     case attribute
       when 'status' then
-        with_properties.order("`reachable` #{direction}")
+        order("`reachable` #{direction}")
       when 'public' then
-        with_properties.order("`public` #{direction}")
+        order("`public` #{direction}")
       when 'site_description' then
-        with_properties.order("`site_description` #{direction}")
+        order("`site_description` #{direction}")
       when 'favourite' then
-        with_properties.order("`favourite` #{direction}")
+        # invert
+        direction = direction == 'asc' ? 'desc' : 'asc'
+        order("`favourite` #{direction}")
+      when 'mac_address' then
+        order("`common_name` #{direction}")
+      when 'ip_address' then
+        order("`mng_ip` #{direction}")
+      when 'group' then
+        order("`group_name` #{direction}")
       else
         order("#{attribute} #{direction}")
     end

@@ -67,31 +67,6 @@ class AccessPointsController < ApplicationController
     crumb_for_wisp
     crumb_for_access_point_favourite
   end
-  
-  #def favourite
-  #  @showmap = CONFIG['showmap']
-  #  @access_point_pagination = CONFIG['access_point_pagination']
-  #  
-  #  @favourite_page = true
-  #  
-  #  respond_to do |format|
-  #    format.any(:html, :js) {
-  #      @access_points = access_points_with_sort_search_and_paginate(true).of_wisp(@wisp)
-  #      render :index
-  #    }
-  #    format.json {
-  #      @access_points = access_points_with_filter.of_wisp(@wisp).draw_map
-  #      render :index
-  #    }
-  #    format.rss {
-  #      @access_points = AccessPoint.with_properties.of_wisp(@wisp).on_georss
-  #      render :index
-  #    }
-  #  end
-  #  
-  #  crumb_for_wisp
-  #  crumb_for_access_point_favourite
-  #end
 
   def show
     @access_point = AccessPoint.with_properties_and_group.find(params[:id])
@@ -275,19 +250,27 @@ class AccessPointsController < ApplicationController
 
   def access_points_with_sort_search_and_paginate
     query = params[:q] || nil
-    column = params[:column] ? params[:column].downcase : nil
-    direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
+    
+    # determine ordering
+    column = params[:column] ? t_column(params[:column].downcase) : nil
+    direction = nil
+    if column
+      direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
+    end
 
     # model delegation caused too many queries, used a workaround in the specific model method
     access_points = AccessPoint.with_properties_and_group.scoped
     
+    # determine group
     if params[:group_id]
       access_points = access_points.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
     end
     
     access_points = access_points.filter_favourites(@favourite) if @favourite
-    access_points = access_points.sort_with(t_column(column), direction) if column
-    access_points = access_points.quicksearch(query) if query    
+    access_points = access_points.quicksearch(query) if query
+    # default ordering is ID asc
+    access_points = access_points.sort_with(column, direction)
+    
    
     per_page = params[:per]
     access_points.page(params[:page]).per(per_page)
@@ -295,10 +278,17 @@ class AccessPointsController < ApplicationController
 
   def t_column(column)
     i18n_columns = {}
-    i18n_columns[I18n.t(:status, :scope => [:activerecord, :attributes, :access_point])] = 'status'
-    i18n_columns[I18n.t(:public, :scope => [:activerecord, :attributes, :access_point])] = 'public'
     i18n_columns[I18n.t(:site_description, :scope => [:activerecord, :attributes, :access_point])] = 'site_description'
+    i18n_columns[I18n.t(:address, :scope => [:activerecord, :attributes, :access_point])] = 'address'
+    i18n_columns[I18n.t(:city, :scope => [:activerecord, :attributes, :access_point])] = 'city'
+    i18n_columns[I18n.t(:Mac_address).downcase] = 'mac_address'
+    i18n_columns[I18n.t(:Ip_addr).downcase] = 'ip_address'
+    i18n_columns[I18n.t(:Activation_date).downcase] = 'activation_date'
+    i18n_columns[I18n.t(:Group).downcase] = 'group_name'
     i18n_columns[I18n.t(:favourite, :scope => [:activerecord, :attributes, :access_point])] = 'favourite'
+    i18n_columns[I18n.t(:public, :scope => [:activerecord, :attributes, :access_point])] = 'public'
+    i18n_columns[I18n.t(:status, :scope => [:activerecord, :attributes, :access_point])] = 'status'
+    
 
     AccessPoint.column_names.each do |col|
       i18n_columns[I18n.t(col, :scope => [:activerecord, :attributes, :access_point])] = col

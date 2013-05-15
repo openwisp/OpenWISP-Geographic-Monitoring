@@ -19,11 +19,12 @@
 
 <tr data-ap-id="<%= access_point.id %>" class="<%= cycle('odd2', 'even') %>">
   <td class="middle hostname"><%= link_to access_point.hostname, wisp_access_point_path(access_point.wisp, access_point) %></td>
-  <td class="middle location"><%= access_point.site_description.truncate(40) rescue '' %></td>
+  <td class="middle site_description"><%= access_point.site_description.truncate(40) rescue '' %></td>
   <td class="middle address"><%= access_point.address %></td>
   <td class="middle city"><%= access_point.city %></td>
-  <td class="middle macaddress"><%= access_point.common_name %></td>
-  <td class="middle ip"><%= access_point.ip %></td>
+  <td class="middle mac_address"><%= access_point.common_name %></td>
+  <td class="middle ip_address"><%= access_point.ip %></td>
+  <td class="middle activation_date"><% unless access_point.activation_date.nil? %><%= l(access_point.activation_date, :format => :long) %><% end %></td>
   <td class="middle group"><%= link_to_group(access_point.group_name, @wisp, access_point.group_id) %></td>
   <td class="middle center public">
     <a class="toggle-public" data-href="<%= toggle_public_wisp_access_point_path(access_point.wisp_id, access_point) %>">

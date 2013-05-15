@@ -598,35 +598,46 @@ var owgm = {
         var width = $(window).width();
         
         if(width <= 1100){
-            if($('.macaddress', '#access_points_list').eq(0).is(':visible')){
-                $('.macaddress', '#access_points_list').hide();
+            if($('.mac_address', '#access_points_list').eq(0).is(':visible')){
+                $('.mac_address', '#access_points_list').hide();
             }            
         }
         else{
-            if(!$('.macaddress', '#access_points_list').eq(0).is(':visible')){
-                $('.macaddress', '#access_points_list').show();
+            if(!$('.mac_address', '#access_points_list').eq(0).is(':visible')){
+                $('.mac_address', '#access_points_list').show();
             }      
         }
         
         if(width <= 1200){
-            if($('.location', '#access_points_list').eq(0).is(':visible')){
-                $('.location', '#access_points_list').hide();
+            if($('.site_description', '#access_points_list').eq(0).is(':visible')){
+                $('.site_description', '#access_points_list').hide();
             }            
         }
         else{
-            if(!$('.location', '#access_points_list').eq(0).is(':visible')){
-                $('.location', '#access_points_list').show();
+            if(!$('.site_description', '#access_points_list').eq(0).is(':visible')){
+                $('.site_description', '#access_points_list').show();
             }      
         }
         
-        if(width <= 1400){
-            if($('.ip', '#access_points_list').eq(0).is(':visible')){
-                $('.ip', '#access_points_list').hide();
+        if(width <= 1300){
+            if($('.ip_address', '#access_points_list').eq(0).is(':visible')){
+                $('.ip_address', '#access_points_list').hide();
             }            
         }
         else{
-            if(!$('.ip', '#access_points_list').eq(0).is(':visible')){
-                $('.ip', '#access_points_list').show();
+            if(!$('.ip_address', '#access_points_list').eq(0).is(':visible')){
+                $('.ip_address', '#access_points_list').show();
+            }      
+        }
+        
+        if(width <= 1500){
+            if($('.activation_date', '#access_points_list').eq(0).is(':visible')){
+                $('.activation_date', '#access_points_list').hide();
+            }            
+        }
+        else{
+            if(!$('.activation_date', '#access_points_list').eq(0).is(':visible')){
+                $('.activation_date', '#access_points_list').show();
             }      
         }
     },

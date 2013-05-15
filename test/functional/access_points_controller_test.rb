@@ -456,6 +456,117 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_select 'category', access_points.length
   end
   
+  test "list ordering" do
+    sign_in users(:admin)
+    
+    # DRY (don't repeat yourself) method
+    def test_html_ordering(wisp=nil, attr='id', direction='asc')
+      # set locale
+      I18n.locale = 'en'
+      # retrieve ap
+      access_points = AccessPoint.with_properties_and_group.sort_with(attr, direction).scoped
+      
+      # filter wisp and retrieve HTML
+      unless wisp.nil?
+        access_points = access_points.of_wisp(wisp)
+        if attr != 'id'
+          get :index, { :wisp_id => wisp.name, :column => attr, :order => direction }
+        else
+          get :index, { :wisp_id => wisp.name }
+        end
+      else
+        if attr != 'id'
+          get :index, { :column => attr, :order => direction }
+        else
+          get :index
+        end
+      end
+      
+      # ensure ordering is correct
+      assert_select "#access_points tr" do |elements|
+        elements.each_with_index do |element, i|
+          # if checking id we check the data-ap-id HTML attribute
+          case attr
+          when 'id'
+            assert element.to_s.include?('data-ap-id="%s"' % access_points[i].id)
+          when 'hostname'
+            assert_select element, "td.#{attr} a", access_points[i][attr]
+          when 'group'
+            unless wisp.nil?
+              assert_select element, "td.#{attr} a", access_points[i].group_name
+            else
+              assert_select element, "td.#{attr}", access_points[i].group_name
+            end
+          when 'public'
+            # ensure is right image
+            assert css_select(element, "td.#{attr}").to_s.include?(access_points[i].public? ? 'accept' : 'delete')
+          when 'favourite'
+            # ensure is right image
+            assert css_select(element, "td.#{attr}").to_s.include?(access_points[i].favourite? ? 'star.png' : 'star-off.png')
+          else
+            assert_select element, "td.#{attr}", access_points[i][attr]
+          end
+        end
+      end
+    end
+    
+    test_html_ordering()
+    test_html_ordering(nil, 'hostname', 'asc')
+    test_html_ordering(nil, 'hostname', 'desc')
+    test_html_ordering(nil, 'site_description', 'asc')
+    test_html_ordering(nil, 'site_description', 'desc')
+    test_html_ordering(nil, 'city', 'asc')
+    test_html_ordering(nil, 'city', 'desc')
+    test_html_ordering(nil, 'mac_address', 'asc')
+    test_html_ordering(nil, 'mac_address', 'desc')
+    test_html_ordering(nil, 'ip_address', 'asc')
+    test_html_ordering(nil, 'ip_address', 'desc')
+    test_html_ordering(nil, 'activation_date', 'asc')
+    test_html_ordering(nil, 'activation_date', 'desc')
+    test_html_ordering(nil, 'group', 'asc')
+    test_html_ordering(nil, 'group', 'desc')
+    test_html_ordering(nil, 'public', 'asc')
+    test_html_ordering(nil, 'public', 'desc')
+    test_html_ordering(nil, 'favourite', 'asc')
+    test_html_ordering(nil, 'favourite', 'desc')
+    
+    provincia = wisps(:provincia_wifi)
+    test_html_ordering(provincia)
+    test_html_ordering(provincia, 'hostname', 'asc')
+    test_html_ordering(provincia, 'hostname', 'desc')
+    test_html_ordering(provincia, 'site_description', 'asc')
+    test_html_ordering(provincia, 'site_description', 'desc')
+    test_html_ordering(provincia, 'city', 'asc')
+    test_html_ordering(provincia, 'city', 'desc')
+    test_html_ordering(provincia, 'mac_address', 'asc')
+    test_html_ordering(provincia, 'mac_address', 'desc')
+    test_html_ordering(provincia, 'ip_address', 'asc')
+    test_html_ordering(provincia, 'ip_address', 'desc')
+    test_html_ordering(provincia, 'activation_date', 'asc')
+    test_html_ordering(provincia, 'activation_date', 'desc')
+    test_html_ordering(provincia, 'group', 'asc')
+    test_html_ordering(provincia, 'group', 'desc')
+    test_html_ordering(provincia, 'public', 'asc')
+    test_html_ordering(provincia, 'public', 'desc')
+    test_html_ordering(provincia, 'favourite', 'asc')
+    test_html_ordering(provincia, 'favourite', 'desc')
+  end
+  
+  test "t_column" do
+    c = AccessPointsController.new
+    assert_equal "hostname", c.instance_eval{ t_column(I18n.t(:Hostname).downcase) }
+    assert_equal "site_description", c.instance_eval{ t_column(I18n.t(:Site_description).downcase) }
+    assert_equal "address", c.instance_eval{ t_column(I18n.t(:Address).downcase) }
+    assert_equal "city", c.instance_eval{ t_column(I18n.t(:City).downcase) }
+    assert_equal "mac_address", c.instance_eval{ t_column(I18n.t(:Mac_address).downcase) }
+    assert_equal "ip_address", c.instance_eval{ t_column(I18n.t(:Ip_addr).downcase) }
+    assert_equal "activation_date", c.instance_eval{ t_column(I18n.t(:Activation_date).downcase) }
+    assert_equal "group_name", c.instance_eval{ t_column(I18n.t(:Group).downcase) }
+    assert_equal "public", c.instance_eval{ t_column(I18n.t(:Public).downcase) }
+    assert_equal "favourite", c.instance_eval{ t_column(I18n.t(:Favourite).downcase) }
+    assert_equal "status", c.instance_eval{ t_column(I18n.t(:Status).downcase) }
+  end
+  
   private
   
   def activemenu_test

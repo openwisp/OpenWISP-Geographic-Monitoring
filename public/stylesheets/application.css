@@ -401,15 +401,16 @@ input.submit{
 #access_points .ui-selected td { background: #FFF8CF }
 
 #access_points_list .hostname{ width: 10% }
-#access_points_list .macaddress{ width: 9% }
-#access_points_list .ip{ width: 8% }
-#access_points_list .location{ width: 16% }
+#access_points_list .mac_address{ width: 9% }
+#access_points_list .activation_date{ width: 10% }
+#access_points_list .ip_address{ width: 10% }
+#access_points_list .site_description{ width: 17% }
 #access_points_list .address{ width: 16% }
-#access_points_list .group{ width: 10% }
-#access_points_list .city{ width: 9% }
+#access_points_list .group{ width: 11% }
+#access_points_list .city{ width: 7% }
 #access_points_list .public,
 #access_points_list .favourite,
-#access_points_list .status{ width: 5%; text-align:center }
+#access_points_list .status{ width: 2%; text-align:center }
 #access_points_list .status img,
 #access_points_list .public img,
 #access_points_list .favourite img{ vertical-align: top }
@@ -430,7 +431,6 @@ h2 .total{ border-bottom: 1px solid #fff }
 #access_point_detail .down{ color: #F33; font-weight: bold }
 #access_point_detail .unknown{ color: #9f9f9f; font-weight: bold }
 #access_point_detail .unknown{ color: #6b6b70 }
-
 
 .tooltip{
 	position: absolute;
