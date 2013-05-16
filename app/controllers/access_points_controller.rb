@@ -30,7 +30,7 @@ class AccessPointsController < ApplicationController
     default :deny
 
     actions :index,:show, :change_group, :select_group, :toggle_public, :toggle_favourite,
-            :batch_change_group, :batch_select_group, :favourite, :erase_favourite do
+            :batch_change_group, :batch_select_group, :favourite, :reset_favourites do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -50,7 +50,7 @@ class AccessPointsController < ApplicationController
     # if group view
     if params[:group_id]
       begin
-        @group = Group.select([:id, :name, :monitor, :up, :down, :unknown, :total]).where(['wisp_id IS NULL or wisp_id = ?', @wisp.id]).find(params[:group_id])  
+        @group = Group.select([:id, :wisp_id, :name, :monitor, :up, :down, :unknown, :total]).where(['wisp_id IS NULL or wisp_id = ?', @wisp.id]).find(params[:group_id])  
       rescue ActiveRecord::RecordNotFound
         render :file => "#{Rails.root}/public/404.html", :status => 404, :layout => false
         return
@@ -130,7 +130,7 @@ class AccessPointsController < ApplicationController
     end
   end
 
-  def erase_favourite
+  def reset_favourites
     @access_points = AccessPoint.with_properties.where(:wisp_id => @wisp.id)
     
     @access_points.each do |ap|
@@ -140,8 +140,7 @@ class AccessPointsController < ApplicationController
     end
     
     respond_to do |format|
-      format.html { redirect_to wisp_access_point_favourite_path(@wisp) }
-      format.js { render :nothing => true }
+      format.html { redirect_to wisp_access_points_favourite_path(@wisp) }
     end
   end
   

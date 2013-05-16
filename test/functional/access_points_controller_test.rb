@@ -437,6 +437,21 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_equal 0, css_select("tbody#access_points tr").length
   end
   
+  test "reset all favourites" do
+    sign_in users(:admin)
+    wisp = wisps(:provincia_wifi)
+    
+    AccessPoint.where(:wisp_id => wisp.id).each do |ap|
+      ap.properties.favourite = true
+      ap.properties.save!
+    end
+    
+    get :reset_favourites, { :wisp_id => wisp.id }
+    assert_redirected_to wisp_access_points_favourite_path(wisp)
+    
+    assert_equal 0, AccessPoint.with_properties.where(['wisp_id = ? AND favourite = 1', wisp.id]).count
+  end
+  
   test "georss" do
     sign_in users(:admin)
     wisp = wisps(:provincia_wifi)

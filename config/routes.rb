@@ -17,7 +17,7 @@ Owgm::Application.routes.draw do
   resources :wisps, :only => :index do
     
     # TODO: check here
-    match 'erase_favourite' => 'access_points#erase_favourite', :as => :erase_favourite
+    match 'reset_favourites' => 'access_points#reset_favourites', :as => :reset_favourites
     match 'access_points_favourite' => 'access_points#index', :as => :access_points_favourite, :defaults => { :filter => 'favourite' }
     
     member do

@@ -170,7 +170,7 @@ var owgm = {
             $('.select-all-checkbox').each(function(){
                 this.checked = false
             });
-            owgm.showColumnsDependingOnScreenWidth();
+            owgm.accessPointsDynamicColumns();
         });
     },
 
@@ -588,13 +588,19 @@ var owgm = {
     initDynamicColumns: function(){
         if($('#access_points_list').length){
             $(window).resize(function(e){
-                owgm.showColumnsDependingOnScreenWidth();
+                owgm.accessPointsDynamicColumns();
             });
-            owgm.showColumnsDependingOnScreenWidth();
+            owgm.accessPointsDynamicColumns();
+        }
+        if($('#group_list').length){
+            $(window).resize(function(e){
+                owgm.groupsDynamicColumns();
+            });
+            owgm.groupsDynamicColumns();
         }
     },
     
-    showColumnsDependingOnScreenWidth: function(){
+    accessPointsDynamicColumns: function(){
         var width = $(window).width();
         
         if(width <= 1100){
@@ -638,6 +644,32 @@ var owgm = {
         else{
             if(!$('.activation_date', '#access_points_list').eq(0).is(':visible')){
                 $('.activation_date', '#access_points_list').show();
+            }      
+        }
+    },
+    
+    groupsDynamicColumns: function(){
+        var width = $(window).width();
+        
+        if(width <= 1100){
+            if($('.favourite', '#group_list').eq(0).is(':visible')){
+                $('.favourite', '#group_list').hide();
+            }            
+        }
+        else{
+            if(!$('.favourite', '#group_list').eq(0).is(':visible')){
+                $('.favourite', '#group_list').show();
+            }      
+        }
+        
+        if(width <= 1230){
+            if($('.wisp', '#group_list').eq(0).is(':visible')){
+                $('.wisp', '#group_list').hide();
+            }            
+        }
+        else{
+            if(!$('.wisp', '#group_list').eq(0).is(':visible')){
+                $('.wisp', '#group_list').show();
             }      
         }
     },

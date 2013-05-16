@@ -60,9 +60,11 @@
 						<%= show_stat(:up, @group.up) %>
 						<%= show_stat(:down, @group.down) %>
 						<%= show_stat(:unknown, @group.unknown) %>
+						<%= show_stat(:favourites, @group.favourite) %>
 						<%= show_stat(:total, @group.total) %>
 				<% elsif @group.present? %>
 						<%= t :Monitoring_disabled_for_group %>
+						<%= show_stat(:favourites, @group.favourite) %>
 						<%= show_stat(:total, @group.total) %>
 				<% elsif @wisp.present? and not @favourite %>
 						<%= show_stat(:up, @wisp.count_access_points(:up)) %>
@@ -71,6 +73,9 @@
 						<%= show_stat(:favourites, @wisp.count_access_points(:favourite)) %>
 						<%= show_stat(:total, @wisp.count_access_points(:total)) %>
 				<% elsif @wisp.present? and @favourite %>
+						<%= show_stat(:up, AccessPoint.favourite(:up, @wisp).count) %>
+						<%= show_stat(:down, AccessPoint.favourite(:down, @wisp).count) %>
+						<%= show_stat(:unknown, AccessPoint.favourite(:unknown, @wisp).count) %>
 						<%= show_stat(:favourites, @wisp.count_access_points(:favourite)) %>
 				<% elsif not @favourite %>
 						<%= show_stat(:up, AccessPoint.up.count) %>

@@ -203,8 +203,37 @@ class AccessPoint < ActiveRecord::Base
     with_properties_and_group.where('groups.count_stats IS NULL OR groups.count_stats = 1')
   end
   
-  def self.favourite
-    with_properties.where(:property_sets => {:favourite => 1})
+  def self.favourite(action=:total, wisp=nil, group=nil)
+    where_condition = { :property_sets => { :favourite => 1 } }
+    
+    case action
+    when :up
+      where_condition[:property_sets][:reachable] = true
+    when :down
+      where_condition[:property_sets][:reachable] = false
+    when :known
+      where_condition[:property_sets][:reachable] = [true, false]
+    when :unknown
+      where_condition[:property_sets][:reachable] = nil
+    when :total
+      # pass
+    else
+      raise ArgumentError, 'unknown action argument "%s", can be only "total", "up", "down", "unknown" or "known"' % action
+    end
+    
+    unless wisp.nil?
+      # if it's wisp instance call instance.id
+      where_condition[:wisp_id] = wisp.class == Wisp ? wisp.id : wisp
+    end
+    
+    unless group.nil?
+      # if it's group instance call instance.id
+      where_condition[:property_sets][:group_id] = group.class == Group ? group.id : group
+      
+      return with_properties_and_group.where(where_condition)
+    else
+      return with_properties.where(where_condition)
+    end
   end
 
 

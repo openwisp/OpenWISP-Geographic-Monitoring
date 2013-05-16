@@ -1,6 +1,6 @@
 <% if @favourite %>
 <span class="reset-favourites">
-    <a href="<%= wisp_erase_favourite_path(@wisp)%>" class="hastip" title="<%= t :Remove_all_from_favourites %>"><%= t :Reset_all %></a>
+    <a href="<%= wisp_reset_favourites_path(@wisp)%>" class="hastip" title="<%= t :Remove_all_from_favourites %>"><%= t :Reset_all %></a>
 </span>
 <% end %>
 <span class="hastip" title="<%= t :Select_all_title %>">

@@ -156,7 +156,7 @@ en:
   Edit_group: Edit group
   Total_AP: Total AP
   Monitor: Monitoring active?
-  Monitoring_disabled_for_group: Monitoring disabled for this group
+  Monitoring_disabled_for_group: Monitoring disabled
   Monitor_help: "This flag indicates wheter the system should monitor the status of the access points contained in this group"
   No_wisp: No wisp associated
   Users: Users
@@ -182,8 +182,8 @@ en:
   Access_point_updated: "%{length} access points updated"
   Select_all_title: "Select all (CTRL + A)\nor deselect all (ESC)"
   Change_group_title: "Change group of the selected access points (CTRL + G)"
-  Access_points_of_wisp: Access points of wisp "%{wisp}"
-  Access_points_of_wisp_group: Access points of wisp "%{wisp}" &raquo; group "%{group}"
+  Access_points_of_wisp: Wisp <b>"%{wisp}"</b>
+  Access_points_of_wisp_group: Wisp <b>"%{wisp}"</b> &raquo; <b>"%{group}"</b>
   Count_stats: Count statistics
   Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating statists of the access points (up, down, unknown, total)"
   Published_thead_tooltip: Indicates whether the access point\nis published in the GeoRSS

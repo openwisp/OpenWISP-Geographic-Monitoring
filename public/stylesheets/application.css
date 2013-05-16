@@ -269,8 +269,8 @@ input.ui-autocomplete-input{ background: #fff none }
 
 #group_list th, #group_list td{ width: auto; vertical-align: middle }
 #group_list .name{ padding-left: 1.2em }
-#group_list td.name{ width: 200px }
-#group_list .wisp{ width: 150px }
+#group_list td.name{ width: 190px }
+#group_list .wisp{ width: 120px }
 #group_list .up, #group_list .down, #group_list total{ width: 50px }
 #group_list { margin-bottom: 20px }
 
@@ -288,9 +288,14 @@ select{ padding: 10px 0 10px 5px }
 #users_table .last{ padding-right: 25px }
 .monitor img, #clickable_public img{ vertical-align: top }
 
-#select-group{ width: 700px }
+#select-group{ width: 800px }
 #select-group table{ margin: 0 }
-#select-group .total-ap{ width:100px }
+#select-group .name{ width: 20% }
+#select-group .wisp{ width: 20% }
+#select-group .total-ap,
+#select-group .monitor,
+#select-group .stats{ min-width:100px; width: 10% }
+#select-group .stats{ min-width: 120px }
 #scroller{ overflow: auto }
 
 table.selectable td{ cursor: pointer }
@@ -388,10 +393,10 @@ input.submit{
 #wisp-list .down,
 #wisp-list .unknown,
 #wisp-list .total{ width: 6% }
-#wisp-list .favourite{ width: 7%; min-width: 60px }
+td.favourite, th.favourite{ width: 7%; min-width: 60px }
 #wisp-list th.total{ color: #000 }
-#wisp-list th.favourite{ color: #000 }
-#wisp-list th.favourite img{ vertical-align: top;width: 15px; margin-right: 6px }
+th.favourite{ color: #000 }
+th.favourite img{ vertical-align: top; width: 15px; margin-right: 6px }
 #wisp-list .groups a, #wisp-list .favourite a{ padding: 2px 7px; text-decoration: underline }
 #wisp-list a:hover{ text-decoration: none }
 

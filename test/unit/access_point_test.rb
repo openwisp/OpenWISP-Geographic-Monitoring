@@ -20,6 +20,33 @@ class AccessPointTest < ActiveSupport::TestCase
     end
   end
   
+  test "self_favourite" do
+    # all wisps
+    assert_equal 1, AccessPoint.favourite.count
+    assert_equal 1, AccessPoint.favourite(:up).count
+    assert_equal 0, AccessPoint.favourite(:down).count
+    assert_equal 1, AccessPoint.favourite(:known).count
+    assert_equal 0, AccessPoint.favourite(:unknown).count
+    
+    # wisp 1
+    assert_equal 1, AccessPoint.favourite(:total, 1).count
+    assert_equal 1, AccessPoint.favourite(:up, 1).count
+    assert_equal 0, AccessPoint.favourite(:down, 1).count
+    assert_equal 1, AccessPoint.favourite(:known, 1).count
+    assert_equal 0, AccessPoint.favourite(:unknown, 1).count
+    
+    # wisp 2
+    assert_equal 0, AccessPoint.favourite(:total, 2).count
+    assert_equal 0, AccessPoint.favourite(:up, 2).count
+    assert_equal 0, AccessPoint.favourite(:down, 2).count
+    assert_equal 0, AccessPoint.favourite(:known, 2).count
+    assert_equal 0, AccessPoint.favourite(:unknown, 2).count
+    
+    assert_raise ArgumentError do
+      AccessPoint.favourite(:wrong_parameter)
+    end
+  end
+  
   test "test count methods" do
     assert_equal 4, AccessPoint.total.count
     assert_equal 1, AccessPoint.up.count
