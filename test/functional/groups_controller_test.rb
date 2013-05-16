@@ -66,7 +66,12 @@ class GroupsControllerTest < ActionController::TestCase
     get :edit, { :id => 1 }
     assert_response :success
     assert_select "#group_form", 1
+    assert_select "#group_wisp_id option", Wisp.all_accessible_to(users(:admin)).count
     
+    sign_out users(:admin)
+    sign_in users(:brescia_admin)
+    get :edit, { :id => 1 }
+    assert_select "#group_wisp_id option", Wisp.all_accessible_to(users(:brescia_admin)).count
   end
   
   test "should destroy group" do
