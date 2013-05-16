@@ -15,67 +15,85 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  $('#clickable_favourite').click(function() { $('#favourite').click() });
 #%>
 
 <% content_for :after_defaults do %>
     <%= javascript_include_tag 'https://maps.google.com/maps/api/js?sensor=false&v=3.9', 'gmaps.markermanager', 'owgm.gmaps', 'jquery.jeditable' %>
 
     <%= javascript_tag "$(function(){
-            $('#clickable_category').click(function() { $('#category_select').click() });
-            $('#clickable_site_description').click(function() { $('#site_description').click() });
-            $('#clickable_notes').click(function() { $('#notes').click() });
-            $('#clickable_public td').click(function(){
-								el = $('#clickable_public .toggle-public');
-								owgm.toggleProperty(el.attr('data-href'), function(result){
-										el.find('img').attr('src', result.image)
-								});
+				$('#clickable_category').click(function() { $('#category_select').click() });
+				$('#clickable_site_description').click(function() { $('#site_description').click() });
+				$('#clickable_notes').click(function() { $('#notes').click() });
+				$('#clickable_public td').click(function(){
+						el = $('#clickable_public .toggle-public');
+						owgm.toggleProperty(el.attr('data-href'), function(result){
+								el.find('img').attr('src', result.image)
 						});
+				});
 
-            $('#category_select').live('change', function(){
-                if ($(this).find('select').val() == '!new!') {
-                    $(this).hide();
-                    $('#category_text').click();
-                    $('#category_text').show();
-                }
-            });
-            $('#notes').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
-                submitdata: {authenticity_token:'#{form_authenticity_token}'},
-                name: 'property_set[notes]', method: 'PUT',
-                type: 'textarea', rows: 10,
-                submit: '#{t :Ok}', cancel: '#{t :Cancel}',
-                tooltip: '#{t :Click_to_edit}',
-                placeholder: '#{t :No_notes_available}'
-            });
-            $('#site_description').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
-                submitdata: {authenticity_token:'#{form_authenticity_token}'},
-                name: 'property_set[site_description]', method: 'PUT',
-                submit: '#{t :Ok}', cancel: '#{t :Cancel}',
-                tooltip: '#{t :Click_to_edit}',
-                placeholder: '#{t :No_notes_available}'
-            });
-            $('#category_select').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
-                submitdata: {authenticity_token:'#{form_authenticity_token}'},
-                name: 'property_set[category]', method: 'PUT',
-		        type: 'select', data: #{categories_select_data(@wisp, @access_point)},
-                callback: function(value, settings) { location.reload(); },
-                placeholder: '#{t :None}',
-                submit: '#{t :Ok}', cancel: '#{t :Cancel}'
-            });
-            $('#category_text').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
-                submitdata: {authenticity_token:'#{form_authenticity_token}'},
-                name: 'property_set[category]', method: 'PUT',
-                submit: '#{t :Ok}', cancel: '#{t :Cancel}', width: 60,
-                callback: function(value, settings) { location.reload(); },
-                onreset: function() {
-                    $('#category_text').hide();
-                    $('#category_select').show();
-                }
-            });
-    });" %>
+				$('#category_select').live('change', function(){
+						if ($(this).find('select').val() == '!new!') {
+								$(this).hide();
+								$('#category_text').click();
+								$('#category_text').show();
+						}
+				});
+				$('#notes').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
+						submitdata: {authenticity_token:'#{form_authenticity_token}'},
+						name: 'property_set[notes]', method: 'PUT',
+						type: 'textarea', rows: 10,
+						submit: '#{t :Ok}', cancel: '#{t :Cancel}',
+						tooltip: '#{t :Click_to_edit}',
+						placeholder: '#{t :No_notes_available}'
+				});
+				$('#site_description').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
+						submitdata: {authenticity_token:'#{form_authenticity_token}'},
+						name: 'property_set[site_description]', method: 'PUT',
+						submit: '#{t :Ok}', cancel: '#{t :Cancel}',
+						tooltip: '#{t :Click_to_edit}',
+						placeholder: '#{t :No_notes_available}'
+				});
+				$('#category_select').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
+						submitdata: {authenticity_token:'#{form_authenticity_token}'},
+						name: 'property_set[category]', method: 'PUT',
+				type: 'select', data: #{categories_select_data(@wisp, @access_point)},
+						callback: function(value, settings) { location.reload(); },
+						placeholder: '#{t :None}',
+						submit: '#{t :Ok}', cancel: '#{t :Cancel}'
+				});
+				$('#category_text').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
+						submitdata: {authenticity_token:'#{form_authenticity_token}'},
+						name: 'property_set[category]', method: 'PUT',
+						submit: '#{t :Ok}', cancel: '#{t :Cancel}', width: 60,
+						callback: function(value, settings) { location.reload(); },
+						onreset: function() {
+								$('#category_text').hide();
+								$('#category_select').show();
+						}
+				});
+    }); 
+   
+   $('#favourite').click(function() { 
+				$.ajax({
+						url: 'http://www.repubblica.it',
+						method: 'get',
+						success: function (result) {
+							alert('Your bookmark has been saved');
+						}
+				});
+    });"
+
+%>
 <% end %>
 
 <div class="grid_12">
-  <h1 class="mainheading"><%=t :Access_point %> “<%= @access_point.hostname %>”</h1>
+  <h1 class="mainheading">
+		<%=t :Access_point %> “<%= @access_point.hostname %>”
+		<a class="toggle-favourite hastip" data-href="<%= toggle_favourite_wisp_access_point_path(@wisp.id, @access_point) %>" title="<%= t(@access_point.favourite? ? :Remove_from_favourites : :Add_to_favourites) %>" data-add="<%= t :Add_to_favourites %>"  data-remove="<%= t :Remove_from_favourites %>">
+				<%= image_tag(@access_point.favourite? ? 'star.png' : 'star-off.png') %>
+		</a>
+	</h1>
 
   <div class="grid_6">
     <div class="box">
@@ -105,4 +123,7 @@
   </div>
 </div>
 
-<script>owgm.initSelectGroup("<%= wisp_access_point_select_group_url(@wisp, @access_point) %>");</script>
+<script>
+		owgm.initSelectGroup("<%= wisp_access_point_select_group_url(@wisp, @access_point) %>");
+		owgm.initFavourite();
+</script>

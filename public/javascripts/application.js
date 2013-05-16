@@ -170,7 +170,7 @@ var owgm = {
             $('.select-all-checkbox').each(function(){
                 this.checked = false
             });
-            owgm.showColumnsDependingOnScreenWidth();
+            owgm.accessPointsDynamicColumns();
         });
     },
 
@@ -339,7 +339,7 @@ var owgm = {
             var el = $(this);
             owgm.toggleProperty(el.attr('data-href'), function(result){
                 el.find('img').attr('src', result.image)
-            });            
+            });
         });
     },
     
@@ -471,7 +471,7 @@ var owgm = {
             filter: "tr",
             delay: 80,
             start: function(event, ui) {
-                // blur focus from quicksearch otherwise unexpected behaviour might occur when using shortcuts
+                // blur focus from quicksearch otherwise unexpected behaviour might occur when using keyboard shortcuts
                 var activeEl = $(document.activeElement);
                 if(activeEl.attr('name') == 'q'){
                     activeEl.trigger('blur');
@@ -511,36 +511,45 @@ var owgm = {
                             owgm.toggleLoading();
                             $('#select-group').remove();
                         });
-                        $("#access_points tr.ui-selected").removeClass('ui-selected');
                     }
                 });
             }
         }
         
         var changeGroupBatch = function(group_id){
-            // make an array of access point id
-            var selected_access_points = []
-            $("#access_points tr.ui-selected").each(function() {
+            var selected_access_points_id = [],
+                selected_access_points = $("#access_points tr.ui-selected");
+            // fill ap id list
+            selected_access_points.each(function() {
                 var ap_id = $(this).attr('data-ap-id');
-                selected_access_points.push(ap_id)
+                selected_access_points_id.push(ap_id)
             });
+            // ajax request to change group
             $.ajax({
                 url: post_url,
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: 'json',
-                data: JSON.stringify({ "group_id": group_id, "access_points": selected_access_points })
+                data: JSON.stringify({ "group_id": group_id, "access_points": selected_access_points_id })
             }).fail(function(xhr, status, error){
-                // in case of error return error message
+                // in case of error return error message;
+                // might happen if there is an internal server error and its not possible to parse the response as json
+                // in case no error is show it will be hard to find the bug
                 try{
                     alert((JSON.parse(xhr.responseText)).details);
                 }
                 catch(e){
                     alert('ERROR');
-                }
-                
+                }                
             }).done(function(){
-                owgm.refreshPage()
+                // update UI
+                owgm.refreshPage();
+                // reselect after refresh
+                $(document).ajaxStop(function(){
+                    selected_access_points.each(function(i, e){
+                        $('#access_points tr[data-ap-id='+$(e).attr('data-ap-id')+']').addClass('ui-selected');
+                    });
+                });
             });
         }
         
@@ -579,45 +588,88 @@ var owgm = {
     initDynamicColumns: function(){
         if($('#access_points_list').length){
             $(window).resize(function(e){
-                owgm.showColumnsDependingOnScreenWidth();
+                owgm.accessPointsDynamicColumns();
             });
-            owgm.showColumnsDependingOnScreenWidth();
+            owgm.accessPointsDynamicColumns();
+        }
+        if($('#group_list').length){
+            $(window).resize(function(e){
+                owgm.groupsDynamicColumns();
+            });
+            owgm.groupsDynamicColumns();
         }
     },
     
-    showColumnsDependingOnScreenWidth: function(){
+    accessPointsDynamicColumns: function(){
         var width = $(window).width();
         
         if(width <= 1100){
-            if($('.macaddress', '#access_points_list').eq(0).is(':visible')){
-                $('.macaddress', '#access_points_list').hide();
+            if($('.mac_address', '#access_points_list').eq(0).is(':visible')){
+                $('.mac_address', '#access_points_list').hide();
             }            
         }
         else{
-            if(!$('.macaddress', '#access_points_list').eq(0).is(':visible')){
-                $('.macaddress', '#access_points_list').show();
+            if(!$('.mac_address', '#access_points_list').eq(0).is(':visible')){
+                $('.mac_address', '#access_points_list').show();
             }      
         }
         
         if(width <= 1200){
-            if($('.location', '#access_points_list').eq(0).is(':visible')){
-                $('.location', '#access_points_list').hide();
+            if($('.site_description', '#access_points_list').eq(0).is(':visible')){
+                $('.site_description', '#access_points_list').hide();
             }            
         }
         else{
-            if(!$('.location', '#access_points_list').eq(0).is(':visible')){
-                $('.location', '#access_points_list').show();
+            if(!$('.site_description', '#access_points_list').eq(0).is(':visible')){
+                $('.site_description', '#access_points_list').show();
             }      
         }
         
-        if(width <= 1400){
-            if($('.ip', '#access_points_list').eq(0).is(':visible')){
-                $('.ip', '#access_points_list').hide();
+        if(width <= 1300){
+            if($('.ip_address', '#access_points_list').eq(0).is(':visible')){
+                $('.ip_address', '#access_points_list').hide();
             }            
         }
         else{
-            if(!$('.ip', '#access_points_list').eq(0).is(':visible')){
-                $('.ip', '#access_points_list').show();
+            if(!$('.ip_address', '#access_points_list').eq(0).is(':visible')){
+                $('.ip_address', '#access_points_list').show();
+            }      
+        }
+        
+        if(width <= 1500){
+            if($('.activation_date', '#access_points_list').eq(0).is(':visible')){
+                $('.activation_date', '#access_points_list').hide();
+            }            
+        }
+        else{
+            if(!$('.activation_date', '#access_points_list').eq(0).is(':visible')){
+                $('.activation_date', '#access_points_list').show();
+            }      
+        }
+    },
+    
+    groupsDynamicColumns: function(){
+        var width = $(window).width();
+        
+        if(width <= 1100){
+            if($('.favourite', '#group_list').eq(0).is(':visible')){
+                $('.favourite', '#group_list').hide();
+            }            
+        }
+        else{
+            if(!$('.favourite', '#group_list').eq(0).is(':visible')){
+                $('.favourite', '#group_list').show();
+            }      
+        }
+        
+        if(width <= 1230){
+            if($('.wisp', '#group_list').eq(0).is(':visible')){
+                $('.wisp', '#group_list').hide();
+            }            
+        }
+        else{
+            if(!$('.wisp', '#group_list').eq(0).is(':visible')){
+                $('.wisp', '#group_list').show();
             }      
         }
     },
@@ -643,6 +695,22 @@ var owgm = {
                 a.removeAttr('data-title');
             }
         });
+    },
+    
+    initFavourite: function(){
+        $('.toggle-favourite').live('click',function(e){
+            e.preventDefault();
+            var el = $(this);
+            owgm.toggleProperty(el.attr('data-href'), function(result){
+                el.find('img').attr('src', result.image)
+                if(el.attr('data-add')){
+                    var new_title = result.favourite === true ? el.attr('data-remove') : el.attr('data-add');
+                    el.attr('data-title', new_title);
+                    el.attr('title', new_title);
+                    $('.tooltip').text(new_title);
+                }
+            });
+        })
     }
 };
 

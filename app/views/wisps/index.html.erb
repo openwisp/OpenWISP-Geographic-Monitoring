@@ -23,15 +23,17 @@
 
     <table id="wisp-list">
       <thead>
-      <tr>
-        <th class="name"><%=t :Name %></th>
-        <th class="notes"><%=t :Notes %></th>
-        <th class="up green center"><%=t :Up %></th>
-        <th class="down red center"><%=t :Down %></th>
-        <th class="unknown center"><%=t :Unknown %></th>
-        <th class="groups center">&nbsp;</th>
-        <th class="report">&nbsp;</th>
-      </tr>
+        <tr>
+          <th class="name"><%=t :Name %></th>
+          <th class="notes"><%=t :Notes %></th>
+          <th class="up green center"><%=t :Up %></th>
+          <th class="down red center"><%=t :Down %></th>
+          <th class="unknown center"><%=t :Unknown %></th>
+          <th class="total center"><%=t :Total %></th>
+          <th class="favourite center"><%= image_tag('star.png', :alt => 'favourite') %><span><%=t :Favourites %></span></th>
+          <th class="groups center"><%=t :Groups %></th>
+          <th class="report">&nbsp;</th>
+        </tr>
       </thead>
 
       <tbody>
@@ -40,10 +42,21 @@
               <tr class="<%= cycle 'odd', 'even' %>">
                 <td class="name"><%= link_to wisp.name, wisp_access_points_path(wisp) %></td>
                 <td class="notes"><%= wisp.notes %></td>
-                <td class="up center"><%= wisp.access_points_up.count %></td>
-                <td class="down center"><%= wisp.access_points_down.count %></td>
-                <td class="unknown center"><%= wisp.access_points_unknown.count %></td>
-                <td class="groups center"><%= link_to t(:Groups), wisp_groups_path(wisp) %></td>
+                <td class="up center"><%= wisp.count_access_points(:up) %></td>
+                <td class="down center"><%= wisp.count_access_points(:down) %></td>
+                <td class="unknown center"><%= wisp.count_access_points(:unknown) %></td>
+                <td class="total center"><%= wisp.count_access_points(:total) %></td>
+                <td class="favourite center">
+                  <%= link_to wisp.count_access_points(:favourite), wisp_access_points_favourite_path(wisp),
+                    :class => 'hastip',
+                    :title => t(:View_favourite_of_wisp, :wisp => wisp.name)
+                  %>
+                </td>
+                <td class="groups center">
+                  <%= link_to wisp.count_groups, wisp_groups_path(wisp),
+                    :class => 'hastip',
+                    :title => t(:View_groups_of_wisp, :wisp => wisp.name) %>
+                </td>
                 <td class="report center"><%= link_to t(:Availability_report), wisp_availability_report_path(wisp) %></td>
               </tr>
           <% end %>
@@ -51,14 +64,5 @@
       </tbody>
     </table>
 
-    <!--<% if auth? :wisps_viewer %>
-      <h6>
-        <% if @wisps.count > 1 %>
-          <%= link_to t(:Show_all_access_points), access_points_path %> -
-        <% end %>
-        <%= link_to t(:Configure_owmw), edit_configuration_path('owmw') %> -
-        <%= link_to t(:Manage_users), users_path() %>
-      </h6>
-    <% end %>-->
   </div>
 </div>

@@ -19,12 +19,11 @@
 
 <% content_for :after_defaults do %>
     <%= stylesheet_link_tag 'jquery-ui/styles' %>
-    <%= javascript_include_tag 'jquery-ui', 'jquery.combobox' %>
+    <%= javascript_include_tag 'jquery-ui', 'jquery.combobox'%>
 <% end %>
 <% content_for :js_templates do %>
     <%= render 'marker_info_window_templates' %>
 <% end %>
-
 
   <div class="grid_12">
 		<% if @access_points.length > 0 %>
@@ -61,26 +60,35 @@
 						<%= show_stat(:up, @group.up) %>
 						<%= show_stat(:down, @group.down) %>
 						<%= show_stat(:unknown, @group.unknown) %>
+						<%= show_stat(:favourites, @group.favourite) %>
 						<%= show_stat(:total, @group.total) %>
 				<% elsif @group.present? %>
 						<%= t :Monitoring_disabled_for_group %>
+						<%= show_stat(:favourites, @group.favourite) %>
 						<%= show_stat(:total, @group.total) %>
-				<% elsif @wisp.present? %>
+				<% elsif @wisp.present? and not @favourite %>
 						<%= show_stat(:up, @wisp.count_access_points(:up)) %>
 						<%= show_stat(:down, @wisp.count_access_points(:down)) %>
 						<%= show_stat(:unknown, @wisp.count_access_points(:unknown)) %>
+						<%= show_stat(:favourites, @wisp.count_access_points(:favourite)) %>
 						<%= show_stat(:total, @wisp.count_access_points(:total)) %>
-				<% else %>
+				<% elsif @wisp.present? and @favourite %>
+						<%= show_stat(:up, AccessPoint.favourite(:up, @wisp).count) %>
+						<%= show_stat(:down, AccessPoint.favourite(:down, @wisp).count) %>
+						<%= show_stat(:unknown, AccessPoint.favourite(:unknown, @wisp).count) %>
+						<%= show_stat(:favourites, @wisp.count_access_points(:favourite)) %>
+				<% elsif not @favourite %>
 						<%= show_stat(:up, AccessPoint.up.count) %>
 						<%= show_stat(:down, AccessPoint.down.count) %>
 						<%= show_stat(:unknown, AccessPoint.unknown.count) %>
+						<%= show_stat(:favourites, AccessPoint.favourite.count) %>
 						<%= show_stat(:total, AccessPoint.total.count) %>
 				<% end %>
       </span>
 			<% end %>
     </h2>
 
-		<% if @access_points.length > 0 %>
+<% if @access_points.length > 0 %>
     <div id="access_points_quicksearch" class="bold">
       <%= render 'access_points_quicksearch' %>
     </div>
@@ -117,9 +125,9 @@
 		
 		<br style="clear:both">
 		
-		<% else %>
-				<p class="empty-page-msg"><%= t :No_AP %></p>
-		<% end %>
+<% else %>
+		<p class="empty-page-msg"><%= t :No_AP %></p>
+<% end %>
   </div>
 </div>
 
@@ -131,4 +139,5 @@
 						el.find('img').attr('src', result.image)
 				});
 		});
+		owgm.initFavourite();
 </script>

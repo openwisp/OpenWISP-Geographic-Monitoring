@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   test "uniqueness of email" do
-    user = User.new({ :username => 'test1', :email => 'user@user.it', :password => 'tester03' })
+    user = User.new({ :username => 'test1', :email => 'user@user.it', :password => 'tester03', :password_confirmation => 'tester03' })
     assert !user.save, 'should not save'
     assert user.errors.keys.include?(:email), 'erros has should contain email key'
     user.email = 'not_taken@user.it'

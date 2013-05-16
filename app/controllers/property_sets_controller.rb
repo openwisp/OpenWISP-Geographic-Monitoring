@@ -17,11 +17,13 @@
 
 class PropertySetsController < ApplicationController
   before_filter :authenticate_user!, :load_wisp, :load_access_point
-
+  
+  skip_before_filter :verify_authenticity_token, :only => [:update_favourite]
+  
   access_control do
     default :deny
 
-    actions :update do
+    actions :update, :update_favourite, :erase_favourite do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -41,10 +43,10 @@ class PropertySetsController < ApplicationController
       render :nothing => true, :status => :not_acceptable
     end
   end
-
+    
   private
 
   def load_access_point
-    @access_point = @wisp.access_points.find params[:access_point_id]
+    @access_point = AccessPoint.with_properties.where(:wisp_id => @wisp.id, :property_sets => { :access_point_id => params[:access_point_id] })[0]
   end
 end

@@ -5,9 +5,10 @@
 					<thead>
 						<tr>
 							<th class="name"><%=t :Name %></th>
-							<th><%=t :Wisp %></th>
+							<th class="wisp"><%=t :Wisp %></th>
 							<th class="center total-ap"><%=t :Total_AP %></th>
-							<th class="center"><%=t :Monitor %></th>
+							<th class="center monitor"><%=t :Monitor %></th>
+							<th class="center stats"><%=t :Count_stats %></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -18,6 +19,9 @@
 							<td class="total center"><%= group.total %></td>
 							<td class="monitor center">
 									<img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
+							</td>
+							<td class="coount-stats center">
+								<img src="<%= image_path(group.count_stats ? 'accept.png' : 'delete.png') %>" alt="">
 							</td>
 						</tr>
 					<% end %>

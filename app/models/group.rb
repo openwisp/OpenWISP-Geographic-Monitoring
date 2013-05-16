@@ -18,6 +18,10 @@ class Group < ActiveRecord::Base
     monitor ? self.attributes['unknown'] : 'N/A'
   end
   
+  def favourite
+    AccessPoint.favourite(:total, self.wisp_id, self.id).count
+  end
+  
   def monitor!
     self.monitor = !self.monitor
     self.save

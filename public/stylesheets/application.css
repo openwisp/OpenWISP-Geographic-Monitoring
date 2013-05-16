@@ -128,7 +128,7 @@
     padding-left: 1px;
     margin-top: 1px;
 }
-#clickable_notes, #clickable_site_description, #clickable_public, #clickable_category{
+#clickable_notes, #clickable_site_description, #clickable_public, #clickable_category, #clickable_favourite{
     cursor: pointer;
 }
 #category_text {
@@ -203,9 +203,6 @@ input.ui-autocomplete-input{ background: #fff none }
     bottom: 0;
     margin-left: -1px;
     padding: 0;
-    /* adjust styles for IE 6/7 */
-    *height: 1.7em;
-    *top: 0.1em;
 }
 .ui-combobox-input {
     margin: 0;
@@ -272,8 +269,8 @@ input.ui-autocomplete-input{ background: #fff none }
 
 #group_list th, #group_list td{ width: auto; vertical-align: middle }
 #group_list .name{ padding-left: 1.2em }
-#group_list td.name{ width: 200px }
-#group_list .wisp{ width: 150px }
+#group_list td.name{ width: 190px }
+#group_list .wisp{ width: 120px }
 #group_list .up, #group_list .down, #group_list total{ width: 50px }
 #group_list { margin-bottom: 20px }
 
@@ -291,9 +288,14 @@ select{ padding: 10px 0 10px 5px }
 #users_table .last{ padding-right: 25px }
 .monitor img, #clickable_public img{ vertical-align: top }
 
-#select-group{ width: 700px }
+#select-group{ width: 800px }
 #select-group table{ margin: 0 }
-#select-group .total-ap{ width:100px }
+#select-group .name{ width: 20% }
+#select-group .wisp{ width: 20% }
+#select-group .total-ap,
+#select-group .monitor,
+#select-group .stats{ min-width:100px; width: 10% }
+#select-group .stats{ min-width: 120px }
 #scroller{ overflow: auto }
 
 table.selectable td{ cursor: pointer }
@@ -380,38 +382,52 @@ input.submit{
 .empty-page-msg{ text-align: center; font-size: 14px; font-weight: bold; padding: 30px 0 20px }
 #wisp-list tbody td{ vertical-align: middle }
 
+#wisp-list td, #wisp-list th{ font-size: 13px }
 #wisp-list th.name,
 #wisp-list th.notes{ padding-left: 12px }
-#wisp-list .name{ width: 20% }
-#wisp-list .notes{ width: 35% }
+#wisp-list .name{ width: 18% }
+#wisp-list .notes{ width: 20% }
 #wisp-list .groups{ width: 7% }
 #wisp-list .report{ width: 18% }
-#wisp-list .up{ width: 6% }
-#wisp-list .down{ width: 6% }
-#wisp-list .unknown{ width: 6% }
+#wisp-list .up,
+#wisp-list .down,
+#wisp-list .unknown,
+#wisp-list .total{ width: 6% }
+td.favourite, th.favourite{ width: 7%; min-width: 60px }
+#wisp-list th.total{ color: #000 }
+th.favourite{ color: #000 }
+th.favourite img{ vertical-align: top; width: 15px; margin-right: 6px }
+#wisp-list .groups a, #wisp-list .favourite a{ padding: 2px 7px; text-decoration: underline }
+#wisp-list a:hover{ text-decoration: none }
 
 .actions{
 	float: right; width: auto; min-width: 25%; margin: 20px 0;
 	text-align: right;  font-weight:bold; font-size:14px; line-height: 25px
 }
+.actions .reset-favourites{ margin-right: 10px }
+.actions .reset-favourites a{ text-decoration: underline }
 .actions.bottom{ margin-top: 7px }
 .batch-change-group{ margin-left: 15px; margin-right: 10px }
 #access_points .ui-selecting td { background: #FFFFEE }
 #access_points .ui-selected td { background: #FFF8CF }
 
 #access_points_list .hostname{ width: 10% }
-#access_points_list .macaddress{ width: 9% }
-#access_points_list .ip{ width: 8% }
-#access_points_list .location{ width: 16% }
+#access_points_list .mac_address{ width: 9% }
+#access_points_list .activation_date{ width: 10% }
+#access_points_list .ip_address{ width: 10% }
+#access_points_list .site_description{ width: 17% }
 #access_points_list .address{ width: 16% }
-#access_points_list .group{ width: 10% }
-#access_points_list .city{ width: 9% }
-#access_points_list .public{ width: 5%; text-align:center }
-#access_points_list .status{ width: 5%; text-align:center }
+#access_points_list .group{ width: 11% }
+#access_points_list .city{ width: 7% }
+#access_points_list .public,
+#access_points_list .favourite,
+#access_points_list .status{ width: 2%; text-align:center }
 #access_points_list .status img,
-#access_points_list .public img{ vertical-align: top }
+#access_points_list .public img,
+#access_points_list .favourite img{ vertical-align: top }
 .odd2 td{ background-color: #fcfcfc }
-#access_points_list .toggle-public, .toggle-monitor, .toggle-count-stats{ cursor: pointer }
+#access_points_list .toggle-public, .toggle-monitor,
+.toggle-count-stats, .toggle-favourite{ cursor: pointer }
 
 form .field p{ margin: 0 0 5px }
 form .help{ font-size: 12px; color: #606060 }
@@ -420,13 +436,13 @@ h2 span.rfloat span{ margin-left: 12px !important }
 h2 .up{ border-bottom: 1px solid #093 }
 h2 .down{ border-bottom: 1px solid #F33 }
 h2 .unknown{ border-bottom: 1px solid #9f9f9f }
+h2 .favourites{ border-bottom: 1px solid #ffe793 }
 h2 .total{ border-bottom: 1px solid #fff }
 
 #access_point_detail .up{ color: #093; font-weight: bold }
 #access_point_detail .down{ color: #F33; font-weight: bold }
 #access_point_detail .unknown{ color: #9f9f9f; font-weight: bold }
 #access_point_detail .unknown{ color: #6b6b70 }
-
 
 .tooltip{
 	position: absolute;
@@ -451,10 +467,9 @@ h2 .total{ border-bottom: 1px solid #fff }
     content: "▾";
     position: absolute;
 	bottom: -11px;
-	left: 44%;
+	left: 46%;
     z-index: 9999;
-	color: #333;/*
-    color: rgba(0,0,0,.8); */
+	color: #333;
 	font-size: 25px;
 }
 

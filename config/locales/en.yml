@@ -8,9 +8,10 @@ en:
         address: address
         city: city
         hostname: hostname
-        public: public
+        public: published
         site_description: installation site
         status: status
+        favourite: favourite
       group:
         name: name
     errors:
@@ -109,9 +110,10 @@ en:
   Notes: Additional notes
   Ok: Ok
   Prev: Previous
-  Public: Public
+  Public: Published
   Public_on_Georss: Visible on GeoRSS
   Quick_search: Quick search
+  Filter_fav: Filter favourite
   Remember_me: Remember me
   Reset_highlighting: Reset highlighting
   Reset_highlighting_fallback_message: There are no records highlighted at the moment
@@ -150,11 +152,12 @@ en:
   Group: Group
   Groups: Groups
   Group_list: Group management
+  Group_statistics: Group statistics
   New_group: New Group  
   Edit_group: Edit group
   Total_AP: Total AP
   Monitor: Monitoring active?
-  Monitoring_disabled_for_group: Monitoring disabled for this group
+  Monitoring_disabled_for_group: Monitoring disabled
   Monitor_help: "This flag indicates wheter the system should monitor the status of the access points contained in this group"
   No_wisp: No wisp associated
   Users: Users
@@ -180,12 +183,22 @@ en:
   Access_point_updated: "%{length} access points updated"
   Select_all_title: "Select all (CTRL + A)\nor deselect all (ESC)"
   Change_group_title: "Change group of the selected access points (CTRL + G)"
-  Access_points_of_wisp: Access points of wisp "%{wisp}"
-  Access_points_of_wisp_group: Access points of wisp "%{wisp}" &raquo; group "%{group}"
+  Access_points_of_wisp: Wisp <b>"%{wisp}"</b>
+  Access_points_of_wisp_group: Wisp <b>"%{wisp}"</b> &raquo; <b>"%{group}"</b>
   Count_stats: Count statistics
   Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating statists of the access points (up, down, unknown, total)"
   Published_thead_tooltip: Indicates whether the access point\nis published in the GeoRSS
-  
+  Favourite_acccess_points: Favourite Access Points
+  Total: Total
+  Favourite: Favourite
+  Favourites: Favourites
+  Add_to_favourites: Add to favourites
+  Remove_from_favourites: Remove from favourites
+  Reset_all: Reset all
+  Remove_all_from_favourites: Remove all from favourites
+  View_favourite_of_wisp: View favourite of %{wisp}
+  View_groups_of_wisp: View groups of %{wisp}
+
   # Lowercase
   logged_as: logged in as
   all: all
@@ -210,6 +223,7 @@ en:
   description: description
   name: name
   monitor: monitoring
+  favourites: favourites
   
   # Defaults for rails
   errors:
