@@ -22,14 +22,15 @@ module ApplicationHelper
     link_to(image_tag("locale/#{locale}.jpg", :size => "26x26"), request.path+"?locale=#{locale}", html_opts)
   end
 
-  def link_to_sort(text, column = nil)
+  def link_to_sort(text, column=nil, rem=true)
     column ||= text.downcase
-
-    order = case params[:order]
-              when 'asc' then 'desc'
-              when 'desc' then 'asc'
-              else 'desc'
-            end
+    
+    # default order is ASCENDING
+    order = 'asc'
+    # when clicking on the same column reverse the ordering
+    if column == params[:column]
+      order = params[:order] == 'asc' ? 'desc' : 'asc'
+    end
 
     if column == params[:column]
       dom_class = {:class => 'ordered_'+order}
@@ -38,7 +39,7 @@ module ApplicationHelper
     end
 
     url = params.merge({:column => column, :order => order})
-    link_to text, {:method => :get, :url => url}, {:href => url_for(url), :remote => true}.merge(dom_class)
+    link_to text, {:method => :get, :url => url}, {:href => url_for(url), :remote => rem}.merge(dom_class)
   end
 
   def link_to_back
@@ -61,9 +62,11 @@ module ApplicationHelper
     current_user && current_user.has_role?(role, object)
   end
 
-  def access_points_with_or_without_wisp_path(wisp, group=nil)
-    if wisp and not group
+  def quick_search_action_path(wisp, group=nil, favourite=nil)
+    if wisp and not group and not favourite
       wisp_access_points_path(wisp)
+    elsif wisp and not group and favourite
+       wisp_access_points_favourite_path(wisp)
     elsif wisp and group
       wisp_group_access_points_path(wisp, group)
     else

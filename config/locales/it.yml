@@ -8,9 +8,10 @@ it:
         address: indirizzo
         city: città
         hostname: hostname
-        public: pubblico
+        public: pubblicato
         site_description: sito di installazione
         status: stato
+        favourite: preferito
       group:
         name: nome
     errors:
@@ -112,6 +113,7 @@ it:
   Public: Pubblicato
   Public_on_Georss: Pubblicato sulla mappa (GeoRSS)
   Quick_search: Ricerca rapida
+  Filter_fav: Filtra preferiti
   Remember_me: Ricordami
   Reset_highlighting: Resetta evidenziazione
   Reset_highlighting_fallback_message: Nessuna riga è evidenziata al momento
@@ -151,11 +153,12 @@ it:
   Group: Gruppo
   Groups: Gruppi
   Group_list: Gestione gruppi
+  Group_statistics: Statistiche gruppi
   New_group: Nuovo gruppo
   Edit_group: Modifica gruppo  
   Total_AP: AP Totali
   Monitor: Monitoraggio attivo?
-  Monitoring_disabled_for_group: Monitoring disattivato per questo gruppo
+  Monitoring_disabled_for_group: Monitoring disattivato
   Monitor_help: Questa impostazione indica al sistema se deve monitorare lo stato degli access point contenuti in questo gruppo o meno
   No_wisp: Nessun wisp associato
   Users: Utenti
@@ -182,11 +185,21 @@ it:
   Access_point_updated: "%{length} access point aggiornati"
   Select_all_title: Seleziona tutti (CTRL + A)\no deseleziona tutti (ESC)
   Change_group_title: Cambia il gruppo agli access point selezionati (CTRL + G)
-  Access_points_of_wisp: Access point del wisp <b>"%{wisp}"</b>
-  Access_points_of_wisp_group: Access point del wisp <b>"%{wisp}"</b> &raquo; gruppo <b>"%{group}"</b>
+  Access_points_of_wisp: Wisp <b>"%{wisp}"</b>
+  Access_points_of_wisp_group: Wisp <b>"%{wisp}"</b> &raquo; <b>"%{group}"</b>
   Count_stats: Conteggio statistiche
   Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando si calcolano le statistiche degli access point (up, down, sconosciuto, totale)
   Published_thead_tooltip: Indica se l'access point\nè pubblicato sul GeoRSS
+  Favourite_acccess_points: Access Point Preferiti
+  Total: Totale
+  Favourite: Preferito
+  Favourites: Preferiti
+  Add_to_favourites: Aggiungi ai preferiti
+  Remove_from_favourites: Rimuovi dai preferiti
+  Reset_all: Resetta tutti
+  Remove_all_from_favourites: Rimuovi tutti dai preferiti
+  View_favourite_of_wisp: Visualizza preferiti di %{wisp}
+  View_groups_of_wisp: Visualizza gruppi di %{wisp}
   
   # Lowercase
   logged_as: autenticato come
@@ -212,6 +225,7 @@ it:
   description: descrizione
   name: nome
   monitor: monitoraggio
+  favourites: preferiti
 
   # Defaults for rails
   errors:

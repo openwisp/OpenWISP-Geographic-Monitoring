@@ -19,4 +19,5 @@ class PropertySetTest < ActiveSupport::TestCase
     orphans = PropertySet.find_orphans()
     assert_equal 0, orphans.length
   end
+    
 end

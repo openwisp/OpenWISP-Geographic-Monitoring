@@ -5,7 +5,6 @@ Grey Box Method - Layout CSS
 
 body {
 	background: #eee;
-	border-top: 5px solid #000;
 	color: #333;
 	font-size: 12px;
 	padding: 0 0 40px;
@@ -55,10 +54,11 @@ h1#branding {
 }
 h1#branding a{
 	display: block;
-	background:#aaa url(../../../images/openwisp-logo.png) no-repeat scroll 40px center;
+	width: 400px;
+	background: transparent url(../../../images/openwisp-logo.png) no-repeat scroll 40px center;
 	padding:50px 1em 50px 230px;
 }
-#header{ position: relative }
+#header{ position: relative; background: #CCC }
 #lang{ position: absolute; right: 45px; top: 40% }
 
 /* page heading

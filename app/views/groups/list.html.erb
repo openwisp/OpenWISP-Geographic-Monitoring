@@ -5,13 +5,14 @@
       <thead>
         <tr>
           <th class="name"><%=t :Name %></th>
-          <th><%=t :Wisp %></th>
+          <th class="wisp"><%=t :Wisp %></th>
           <th class="center"><%=t :Monitor %></th>
           <th class="center"><%=t :Count_stats %></th>
           <th class="center"><%=t :Total_AP %></th>
           <th class="green center"><%=t :Up %></th>
           <th class="red center"><%=t :Down %></th>
           <th class="center"><%=t :Unknown %></th>
+          <th class="center favourite"><%= image_tag('star.png', :alt => 'favourite') %><span><%=t :Favourites %></span></th>
         </tr>
       </thead>
       <tbody>
@@ -29,6 +30,7 @@
           <td class="total_up center"><%= group.up %></td>
           <td class="total_down center"><%= group.down %></td>
           <td class="total_unkown center"><%= group.unknown %></td>
+          <td class="favourite center"><%= group.favourite %></td>
         </tr>
       <% end %>
       </tbody>

@@ -18,12 +18,19 @@
 class AccessPointsController < ApplicationController
   before_filter :authenticate_user!, :load_wisp, :wisp_breadcrumb
   
-  skip_before_filter :verify_authenticity_token, :only => [:change_group, :toggle_public, :batch_change_group]
+  skip_before_filter :verify_authenticity_token, :only => [
+    :change_group,
+    :toggle_public,
+    :toggle_favourite,
+    :batch_change_group,
+    :erase_favourite
+  ]
 
   access_control do
     default :deny
 
-    actions :index, :show, :change_group, :select_group, :toggle_public, :batch_change_group, :batch_select_group do
+    actions :index,:show, :change_group, :select_group, :toggle_public, :toggle_favourite,
+            :batch_change_group, :batch_select_group, :favourite, :reset_favourites do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -38,10 +45,12 @@ class AccessPointsController < ApplicationController
     @showmap = CONFIG['showmap']
     @access_point_pagination = CONFIG['access_point_pagination']
     
+    @favourite = params[:filter] == 'favourite' ? true : false
+    
     # if group view
     if params[:group_id]
       begin
-        @group = Group.select([:id, :name, :monitor, :up, :down, :unknown, :total]).where(['wisp_id IS NULL or wisp_id = ?', @wisp.id]).find(params[:group_id])  
+        @group = Group.select([:id, :wisp_id, :name, :monitor, :up, :down, :unknown, :total]).where(['wisp_id IS NULL or wisp_id = ?', @wisp.id]).find(params[:group_id])  
       rescue ActiveRecord::RecordNotFound
         render :file => "#{Rails.root}/public/404.html", :status => 404, :layout => false
         return
@@ -56,6 +65,7 @@ class AccessPointsController < ApplicationController
 
     crumb_for_group
     crumb_for_wisp
+    crumb_for_access_point_favourite
   end
 
   def show
@@ -91,6 +101,46 @@ class AccessPointsController < ApplicationController
     Group.update_all_counts()
     respond_to do |format|
       format.json { render :json => group.attributes }
+    end
+  end
+  
+  # toggle published AP in the GeoRSS xml
+  def toggle_public
+    ap = PropertySet.find_by_access_point_id(params[:id])
+    ap.public = !ap.public?
+    ap.save!
+    respond_to do |format|
+      format.json{
+        image = view_context.image_path(ap.public ? 'accept.png' : 'delete.png')
+        render :json => { 'public' => ap.public, 'image' => image }
+      }
+    end
+  end
+  
+  # toggle favourite property
+  def toggle_favourite
+    ap = PropertySet.find_by_access_point_id(params[:id])
+    ap.favourite = !ap.favourite?
+    ap.save!
+    respond_to do |format|
+      format.json{
+        image = view_context.image_path(ap.favourite ? 'star.png' : 'star-off.png')
+        render :json => { 'favourite' => ap.favourite, 'image' => image }
+      }
+    end
+  end
+
+  def reset_favourites
+    @access_points = AccessPoint.with_properties.where(:wisp_id => @wisp.id)
+    
+    @access_points.each do |ap|
+      if ap.favourite?
+        ap.property_set.update_attributes(:favourite => '0' )
+      end
+    end
+    
+    respond_to do |format|
+      format.html { redirect_to wisp_access_points_favourite_path(@wisp) }
     end
   end
   
@@ -173,24 +223,13 @@ class AccessPointsController < ApplicationController
     
     render :status => 200, :json => { "details" => I18n.t(:Access_point_updated, :length => access_points.length) }
   end
-  
-  # toggle published AP in the GeoRSS xml
-  def toggle_public
-    ap = PropertySet.find_by_access_point_id(params[:id])
-    ap.public = !ap.public
-    ap.save!
-    respond_to do |format|
-      format.json{
-        image = view_context.image_path(ap.public ? 'accept.png' : 'delete.png')
-        render :json => { 'public' => ap.public, 'image' => image }
-      }
-    end
-  end
 
   private
 
   def access_points_with_filter
     access_points = AccessPoint.with_properties_and_group.scoped
+    
+    access_points = access_points.filter_favourites(@favourite) if @favourite
     
     if params[:group_id]
       access_points = access_points.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
@@ -210,27 +249,45 @@ class AccessPointsController < ApplicationController
 
   def access_points_with_sort_search_and_paginate
     query = params[:q] || nil
-    column = params[:column] ? params[:column].downcase : nil
-    direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
+    
+    # determine ordering
+    column = params[:column] ? t_column(params[:column].downcase) : nil
+    direction = nil
+    if column
+      direction = %w{asc desc}.include?(params[:order]) ? params[:order] : 'asc'
+    end
 
     # model delegation caused too many queries, used a workaround in the specific model method
     access_points = AccessPoint.with_properties_and_group.scoped
     
+    # determine group
     if params[:group_id]
       access_points = access_points.where(:wisp_id => @wisp.id, 'property_sets.group_id' => params[:group_id])
     end
-    access_points = access_points.sort_with(t_column(column), direction) if column
+    
+    access_points = access_points.filter_favourites(@favourite) if @favourite
     access_points = access_points.quicksearch(query) if query
-
+    # default ordering is ID asc
+    access_points = access_points.sort_with(column, direction)
+    
+   
     per_page = params[:per]
     access_points.page(params[:page]).per(per_page)
   end
 
   def t_column(column)
     i18n_columns = {}
-    i18n_columns[I18n.t(:status, :scope => [:activerecord, :attributes, :access_point])] = 'status'
-    i18n_columns[I18n.t(:public, :scope => [:activerecord, :attributes, :access_point])] = 'public'
     i18n_columns[I18n.t(:site_description, :scope => [:activerecord, :attributes, :access_point])] = 'site_description'
+    i18n_columns[I18n.t(:address, :scope => [:activerecord, :attributes, :access_point])] = 'address'
+    i18n_columns[I18n.t(:city, :scope => [:activerecord, :attributes, :access_point])] = 'city'
+    i18n_columns[I18n.t(:Mac_address).downcase] = 'mac_address'
+    i18n_columns[I18n.t(:Ip_addr).downcase] = 'ip_address'
+    i18n_columns[I18n.t(:Activation_date).downcase] = 'activation_date'
+    i18n_columns[I18n.t(:Group).downcase] = 'group_name'
+    i18n_columns[I18n.t(:favourite, :scope => [:activerecord, :attributes, :access_point])] = 'favourite'
+    i18n_columns[I18n.t(:public, :scope => [:activerecord, :attributes, :access_point])] = 'public'
+    i18n_columns[I18n.t(:status, :scope => [:activerecord, :attributes, :access_point])] = 'status'
+    
 
     AccessPoint.column_names.each do |col|
       i18n_columns[I18n.t(col, :scope => [:activerecord, :attributes, :access_point])] = col
@@ -248,6 +305,12 @@ class AccessPointsController < ApplicationController
       end
     rescue
       add_breadcrumb I18n.t(:Access_points_of_every_wisp), access_points_path
+    end
+  end
+  
+  def crumb_for_access_point_favourite
+    if @favourite
+      add_breadcrumb I18n.t(:Favourite_acccess_points), wisp_access_points_favourite_path(@wisp)
     end
   end
 

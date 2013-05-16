@@ -21,7 +21,7 @@ class Wisp < ActiveRecord::Base
   has_many :access_points
   has_many :groups, :dependent => :destroy
 
-  delegate :up, :down, :known, :unknown, :to => :access_points, :prefix => true
+  delegate :up, :down, :known, :unknown, :favourite, :to => :access_points, :prefix => true
 
   def to_param
     "#{name.downcase.gsub(/[^a-z0-9]+/i, '-')}"
@@ -64,8 +64,11 @@ class Wisp < ActiveRecord::Base
     when :unknown
       # only unknown .. it means it has no property set yet
       property_sets_where = { :property_sets => { :reachable => nil } }
+    when :favourite
+      # favourites of this wisp
+      property_sets_where = { :property_sets => { :favourite => true } }
     else
-      raise ArgumentError, 'unknown action argument "%s", can be only "total", "up", "down" or "unknown"' % action
+      raise ArgumentError, 'unknown action argument "%s", can be only "total", "up", "down", "unknown" or "favourite"' % action
     end
     
     # scope the query so we can add more restrictions to the lookup if needed
@@ -77,6 +80,11 @@ class Wisp < ActiveRecord::Base
     
     # return count only
     return query.count()
+  end
+  
+  # count groups of wisp
+  def count_groups
+    return Group.where(['wisp_id = ? OR wisp_id IS NULL', self.id]).count()
   end
   
   ### Static methods ###
@@ -99,8 +107,7 @@ class Wisp < ActiveRecord::Base
   end
   
   def self.collection(user)
-    collection = [[I18n.t('No_wisp'), nil]]
-    #roles = user.roles 
+    collection = []
     is_wisp_viewer = user.roles_include?(:wisps_viewer)
     Wisp.select([:id, :name]).all.each do |wisp|
       collection << [wisp.name, wisp.id] if is_wisp_viewer or user.roles_include?(:wisp_access_points_viewer, wisp.id)

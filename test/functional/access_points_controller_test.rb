@@ -59,6 +59,16 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_equal 1, json_response.length
   end
   
+  test "get access points map of provinciawifi favourites" do
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    get :index, { :format => 'json', :wisp_id => @wisp.name, :filter => 'favourite' }
+    assert_response :success
+    
+    json_response = ActiveSupport::JSON.decode(@response.body)
+    assert_equal 1, json_response.length
+  end
+  
   test "get access points of wisp name containing space" do    
     def do_space_test
       @wisp = wisps(:freewifibrescia)
@@ -98,8 +108,15 @@ class AccessPointsControllerTest < ActionController::TestCase
   test "show access point correct published icon" do
     sign_in users(:admin)
     @wisp = wisps(:provincia_wifi)
+    
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
+    assert css_select('.toggle-public img').to_s.include?('delete.png'), 'picture should indicate that the access point is not published'
+    
+    access_points(:wherecamp).properties.public = true
+    access_points(:wherecamp).properties.save!
     get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
     assert css_select('.toggle-public img').to_s.include?('accept.png'), 'picture should indicate that the access point is published'
+    
     get :show, { :wisp_id => @wisp.name, :id => access_points(:eduroam).id }
     assert css_select('.toggle-public img').to_s.include?('delete.png'), 'picture should indicate that the access point is not published'
   end
@@ -304,6 +321,11 @@ class AccessPointsControllerTest < ActionController::TestCase
     get :index, { :wisp_id => wisp.name }
     assert_select '#access_points_quicksearch form[action=?]', wisp_access_points_path(wisp)
     
+    # access points > wisp favourite
+    get :index, { :wisp_id => wisp.name, :filter => 'favourite' }
+    assert_response :success
+    assert_select "#access_points_quicksearch form[action=?]", wisp_access_points_favourite_path(wisp)
+    
     # access points > wisp > group
     get :index, { :wisp_id => wisp.name, :group_id => 1 }
     assert_select '#access_points_quicksearch form[action=?]', wisp_group_access_points_path(wisp, 1)
@@ -312,7 +334,7 @@ class AccessPointsControllerTest < ActionController::TestCase
   test "toggle_public" do
     sign_in users(:admin)
     ap = access_points(:wherecamp)
-    public_value = ap.properties.public    
+    public_value = ap.properties.public?
     post :toggle_public, { :format => 'json', :wisp_id => ap.wisp.name, :id => ap.id }
     assert_response :success
     assert_equal !public_value, PropertySet.find_by_access_point_id(ap.id).public
@@ -332,6 +354,232 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal public_value, PropertySet.find_by_access_point_id(ap.id).public
     assert_equal public_value, ActiveSupport::JSON.decode(@response.body)['public']
+  end
+  
+  test "toggle_favourite" do
+    sign_in users(:admin)
+    ap = access_points(:wherecamp)
+    favourite_value = ap.properties.favourite?
+    post :toggle_favourite, { :format => 'json', :wisp_id => ap.wisp.name, :id => ap.id }
+    assert_response :success
+    assert_equal !favourite_value, PropertySet.find_by_access_point_id(ap.id).favourite
+    assert_equal !favourite_value, ActiveSupport::JSON.decode(@response.body)['favourite']
+    # repeat the operation
+    post :toggle_favourite, { :format => 'json', :wisp_id => ap.wisp.name, :id => ap.id }
+    assert_response :success
+    assert_equal favourite_value, PropertySet.find_by_access_point_id(ap.id).favourite
+    assert_equal favourite_value, ActiveSupport::JSON.decode(@response.body)['favourite']
+    # repeat the operation using an integer for the ID
+    post :toggle_favourite, { :format => 'json', :wisp_id => ap.wisp.id, :id => ap.id }
+    assert_response :success
+    assert_equal !favourite_value, PropertySet.find_by_access_point_id(ap.id).favourite
+    assert_equal !favourite_value, ActiveSupport::JSON.decode(@response.body)['favourite']
+    # repeat the operation using an integer for the ID
+    post :toggle_favourite, { :format => 'json', :wisp_id => ap.wisp.id, :id => ap.id }
+    assert_response :success
+    assert_equal favourite_value, PropertySet.find_by_access_point_id(ap.id).favourite
+    assert_equal favourite_value, ActiveSupport::JSON.decode(@response.body)['favourite']
+    
+    # make 1 ap favourite from nil
+    ap.properties.favourite = nil
+    ap.properties.save!
+    post :toggle_favourite, { :format => 'json', :wisp_id => ap.wisp.id, :id => ap.id }
+    assert_response :success
+    assert_equal true, PropertySet.find_by_access_point_id(ap.id).favourite
+    assert_equal true, ActiveSupport::JSON.decode(@response.body)['favourite']
+  end
+  
+  test "toggle_favourite url" do
+    sign_in users(:admin)
+    wisp = wisps(:provincia_wifi)
+    access_point = access_points(:wherecamp)
+    
+    # detail ap
+    get :show, { :wisp_id => wisp.id, :id => access_point.id }
+    assert_response :success
+    assert_select ".toggle-favourite[data-href=?]", toggle_favourite_wisp_access_point_path(wisp.id, access_point.id)
+    
+    # list ap
+    get :index, { :wisp_id => wisp.name }
+    assert_response :success
+    found = false
+    css_select(".toggle-favourite").each do |tag|
+      if tag.to_s.include?(toggle_favourite_wisp_access_point_path(wisp.id, 6).to_s)
+        found = true
+        break
+      end
+    end
+    assert found
+  end
+  
+  test "favourite ap list and search" do
+    sign_in users(:mixed_operator)
+    wisp = wisps(:provincia_wifi)
+    access_point = access_points(:wherecamp)
+    
+    # 1 favourite ap
+    get :index, { :wisp_id => wisp.id, :filter => 'favourite' }
+    assert_response :success
+    assert_equal 1, css_select("tbody#access_points tr").length
+    
+    get :index, { :wisp_id => wisp.id, :filter => 'favourite', :q => 'eduroam' }
+    assert_equal 0, css_select("tbody#access_points tr").length
+    
+    get :index, { :wisp_id => wisp.id, :filter => 'favourite', :q => 'wherecamp' }
+    assert_equal 1, css_select("tbody#access_points tr").length
+    
+    # make 1 ap favourite from nil
+    access_point.properties.favourite = nil
+    access_point.properties.save!
+    # now should find 1 in the list
+    get :index, { :wisp_id => wisp.id, :filter => 'favourite' }
+    assert_response :success
+    assert_equal 0, css_select("tbody#access_points tr").length
+  end
+  
+  test "reset all favourites" do
+    sign_in users(:admin)
+    wisp = wisps(:provincia_wifi)
+    
+    AccessPoint.where(:wisp_id => wisp.id).each do |ap|
+      ap.properties.favourite = true
+      ap.properties.save!
+    end
+    
+    get :reset_favourites, { :wisp_id => wisp.id }
+    assert_redirected_to wisp_access_points_favourite_path(wisp)
+    
+    assert_equal 0, AccessPoint.with_properties.where(['wisp_id = ? AND favourite = 1', wisp.id]).count
+  end
+  
+  test "georss" do
+    sign_in users(:admin)
+    wisp = wisps(:provincia_wifi)
+    
+    access_points = AccessPoint.where(:wisp_id => wisp.id)
+    access_points.each do |ap|
+      ap.properties.public = true
+      ap.properties.save!
+    end
+    
+    get :index, { :format => 'rss', :wisp_id => wisp.id }
+    assert_response :success
+    assert_select 'item', access_points.length
+    
+    get :index, { :format => 'rss', :wisp_id => wisp.id, :details => true }
+    assert_response :success
+    assert_select 'category', access_points.length
+  end
+  
+  test "list ordering" do
+    sign_in users(:admin)
+    
+    # DRY (don't repeat yourself) method
+    def test_html_ordering(wisp=nil, attr='id', direction='asc')
+      # set locale
+      I18n.locale = 'en'
+      # retrieve ap
+      access_points = AccessPoint.with_properties_and_group.sort_with(attr, direction).scoped
+      
+      # filter wisp and retrieve HTML
+      unless wisp.nil?
+        access_points = access_points.of_wisp(wisp)
+        if attr != 'id'
+          get :index, { :wisp_id => wisp.name, :column => attr, :order => direction }
+        else
+          get :index, { :wisp_id => wisp.name }
+        end
+      else
+        if attr != 'id'
+          get :index, { :column => attr, :order => direction }
+        else
+          get :index
+        end
+      end
+      
+      # ensure ordering is correct
+      assert_select "#access_points tr" do |elements|
+        elements.each_with_index do |element, i|
+          # if checking id we check the data-ap-id HTML attribute
+          case attr
+          when 'id'
+            assert element.to_s.include?('data-ap-id="%s"' % access_points[i].id)
+          when 'hostname'
+            assert_select element, "td.#{attr} a", access_points[i][attr]
+          when 'group'
+            unless wisp.nil?
+              assert_select element, "td.#{attr} a", access_points[i].group_name
+            else
+              assert_select element, "td.#{attr}", access_points[i].group_name
+            end
+          when 'public'
+            # ensure is right image
+            assert css_select(element, "td.#{attr}").to_s.include?(access_points[i].public? ? 'accept' : 'delete')
+          when 'favourite'
+            # ensure is right image
+            assert css_select(element, "td.#{attr}").to_s.include?(access_points[i].favourite? ? 'star.png' : 'star-off.png')
+          else
+            assert_select element, "td.#{attr}", access_points[i][attr]
+          end
+        end
+      end
+    end
+    
+    test_html_ordering()
+    test_html_ordering(nil, 'hostname', 'asc')
+    test_html_ordering(nil, 'hostname', 'desc')
+    test_html_ordering(nil, 'site_description', 'asc')
+    test_html_ordering(nil, 'site_description', 'desc')
+    test_html_ordering(nil, 'city', 'asc')
+    test_html_ordering(nil, 'city', 'desc')
+    test_html_ordering(nil, 'mac_address', 'asc')
+    test_html_ordering(nil, 'mac_address', 'desc')
+    test_html_ordering(nil, 'ip_address', 'asc')
+    test_html_ordering(nil, 'ip_address', 'desc')
+    test_html_ordering(nil, 'activation_date', 'asc')
+    test_html_ordering(nil, 'activation_date', 'desc')
+    test_html_ordering(nil, 'group', 'asc')
+    test_html_ordering(nil, 'group', 'desc')
+    test_html_ordering(nil, 'public', 'asc')
+    test_html_ordering(nil, 'public', 'desc')
+    test_html_ordering(nil, 'favourite', 'asc')
+    test_html_ordering(nil, 'favourite', 'desc')
+    
+    provincia = wisps(:provincia_wifi)
+    test_html_ordering(provincia)
+    test_html_ordering(provincia, 'hostname', 'asc')
+    test_html_ordering(provincia, 'hostname', 'desc')
+    test_html_ordering(provincia, 'site_description', 'asc')
+    test_html_ordering(provincia, 'site_description', 'desc')
+    test_html_ordering(provincia, 'city', 'asc')
+    test_html_ordering(provincia, 'city', 'desc')
+    test_html_ordering(provincia, 'mac_address', 'asc')
+    test_html_ordering(provincia, 'mac_address', 'desc')
+    test_html_ordering(provincia, 'ip_address', 'asc')
+    test_html_ordering(provincia, 'ip_address', 'desc')
+    test_html_ordering(provincia, 'activation_date', 'asc')
+    test_html_ordering(provincia, 'activation_date', 'desc')
+    test_html_ordering(provincia, 'group', 'asc')
+    test_html_ordering(provincia, 'group', 'desc')
+    test_html_ordering(provincia, 'public', 'asc')
+    test_html_ordering(provincia, 'public', 'desc')
+    test_html_ordering(provincia, 'favourite', 'asc')
+    test_html_ordering(provincia, 'favourite', 'desc')
+  end
+  
+  test "t_column" do
+    c = AccessPointsController.new
+    assert_equal "hostname", c.instance_eval{ t_column(I18n.t(:Hostname).downcase) }
+    assert_equal "site_description", c.instance_eval{ t_column(I18n.t(:Site_description).downcase) }
+    assert_equal "address", c.instance_eval{ t_column(I18n.t(:Address).downcase) }
+    assert_equal "city", c.instance_eval{ t_column(I18n.t(:City).downcase) }
+    assert_equal "mac_address", c.instance_eval{ t_column(I18n.t(:Mac_address).downcase) }
+    assert_equal "ip_address", c.instance_eval{ t_column(I18n.t(:Ip_addr).downcase) }
+    assert_equal "activation_date", c.instance_eval{ t_column(I18n.t(:Activation_date).downcase) }
+    assert_equal "group_name", c.instance_eval{ t_column(I18n.t(:Group).downcase) }
+    assert_equal "public", c.instance_eval{ t_column(I18n.t(:Public).downcase) }
+    assert_equal "favourite", c.instance_eval{ t_column(I18n.t(:Favourite).downcase) }
+    assert_equal "status", c.instance_eval{ t_column(I18n.t(:Status).downcase) }
   end
   
   private
