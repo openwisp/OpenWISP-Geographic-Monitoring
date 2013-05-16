@@ -193,6 +193,10 @@ en:
   Favourites: Favourites
   Add_to_favourites: Add to favourites
   Remove_from_favourites: Remove from favourites
+  Reset_all: Reset all
+  Remove_all_from_favourites: Remove all from favourites
+  View_favourite_of_wisp: View favourite of %{wisp}
+  View_groups_of_wisp: View groups of %{wisp}
 
   # Lowercase
   logged_as: logged in as

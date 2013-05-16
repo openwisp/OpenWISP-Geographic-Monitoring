@@ -195,6 +195,10 @@ it:
   Favourites: Preferiti
   Add_to_favourites: Aggiungi ai preferiti
   Remove_from_favourites: Rimuovi dai preferiti
+  Reset_all: Resetta tutti
+  Remove_all_from_favourites: Rimuovi tutti dai preferiti
+  View_favourite_of_wisp: Visualizza preferiti di %{wisp}
+  View_groups_of_wisp: Visualizza gruppi di %{wisp}
   
   # Lowercase
   logged_as: autenticato come

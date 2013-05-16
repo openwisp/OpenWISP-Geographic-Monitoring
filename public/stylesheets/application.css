@@ -377,24 +377,30 @@ input.submit{
 .empty-page-msg{ text-align: center; font-size: 14px; font-weight: bold; padding: 30px 0 20px }
 #wisp-list tbody td{ vertical-align: middle }
 
+#wisp-list td, #wisp-list th{ font-size: 13px }
 #wisp-list th.name,
 #wisp-list th.notes{ padding-left: 12px }
-#wisp-list .name{ width: 20% }
-#wisp-list .notes{ width: 35% }
+#wisp-list .name{ width: 18% }
+#wisp-list .notes{ width: 20% }
 #wisp-list .groups{ width: 7% }
 #wisp-list .report{ width: 18% }
 #wisp-list .up,
 #wisp-list .down,
 #wisp-list .unknown,
-#wisp-list .total,
-#wisp-list .favourite{ width: 6% }
+#wisp-list .total{ width: 6% }
+#wisp-list .favourite{ width: 7%; min-width: 60px }
 #wisp-list th.total{ color: #000 }
-#wisp-list th.favourite{ color: #ffdf2b }
+#wisp-list th.favourite{ color: #000 }
+#wisp-list th.favourite img{ vertical-align: top;width: 15px; margin-right: 6px }
+#wisp-list .groups a, #wisp-list .favourite a{ padding: 2px 7px; text-decoration: underline }
+#wisp-list a:hover{ text-decoration: none }
 
 .actions{
 	float: right; width: auto; min-width: 25%; margin: 20px 0;
 	text-align: right;  font-weight:bold; font-size:14px; line-height: 25px
 }
+.actions .reset-favourites{ margin-right: 10px }
+.actions .reset-favourites a{ text-decoration: underline }
 .actions.bottom{ margin-top: 7px }
 .batch-change-group{ margin-left: 15px; margin-right: 10px }
 #access_points .ui-selecting td { background: #FFFFEE }
@@ -415,7 +421,8 @@ input.submit{
 #access_points_list .public img,
 #access_points_list .favourite img{ vertical-align: top }
 .odd2 td{ background-color: #fcfcfc }
-#access_points_list .toggle-public, .toggle-monitor, .toggle-count-stats, .toggle-favourite{ cursor: pointer }
+#access_points_list .toggle-public, .toggle-monitor,
+.toggle-count-stats, .toggle-favourite{ cursor: pointer }
 
 form .field p{ margin: 0 0 5px }
 form .help{ font-size: 12px; color: #606060 }
@@ -455,7 +462,7 @@ h2 .total{ border-bottom: 1px solid #fff }
     content: "▾";
     position: absolute;
 	bottom: -11px;
-	left: 44%;
+	left: 46%;
     z-index: 9999;
 	color: #333;
 	font-size: 25px;

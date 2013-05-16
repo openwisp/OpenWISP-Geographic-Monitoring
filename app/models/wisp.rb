@@ -82,6 +82,11 @@ class Wisp < ActiveRecord::Base
     return query.count()
   end
   
+  # count groups of wisp
+  def count_groups
+    return Group.where(['wisp_id = ? OR wisp_id IS NULL', self.id]).count()
+  end
+  
   ### Static methods ###
   
   # creates are roles if missing

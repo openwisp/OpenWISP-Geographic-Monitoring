@@ -30,8 +30,8 @@
           <th class="down red center"><%=t :Down %></th>
           <th class="unknown center"><%=t :Unknown %></th>
           <th class="total center"><%=t :Total %></th>
-          <th class="favourite center"><%=t :Favourites %></th>
-          <th class="groups center">&nbsp;</th>
+          <th class="favourite center"><%= image_tag('star.png', :alt => 'favourite') %><span><%=t :Favourites %></span></th>
+          <th class="groups center"><%=t :Groups %></th>
           <th class="report">&nbsp;</th>
         </tr>
       </thead>
@@ -46,8 +46,17 @@
                 <td class="down center"><%= wisp.count_access_points(:down) %></td>
                 <td class="unknown center"><%= wisp.count_access_points(:unknown) %></td>
                 <td class="total center"><%= wisp.count_access_points(:total) %></td>
-                <td class="favourite center"><%= wisp.count_access_points(:favourite) %></td>
-                <td class="groups center"><%= link_to t(:Groups), wisp_groups_path(wisp) %></td>
+                <td class="favourite center">
+                  <%= link_to wisp.count_access_points(:favourite), wisp_access_points_favourite_path(wisp),
+                    :class => 'hastip',
+                    :title => t(:View_favourite_of_wisp, :wisp => wisp.name)
+                  %>
+                </td>
+                <td class="groups center">
+                  <%= link_to wisp.count_groups, wisp_groups_path(wisp),
+                    :class => 'hastip',
+                    :title => t(:View_groups_of_wisp, :wisp => wisp.name) %>
+                </td>
                 <td class="report center"><%= link_to t(:Availability_report), wisp_availability_report_path(wisp) %></td>
               </tr>
           <% end %>
