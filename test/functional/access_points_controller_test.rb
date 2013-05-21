@@ -177,60 +177,89 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_response :not_found
   end
   
-  test "batch change group" do    
+  test "batch change property" do    
     sign_in users(:brescia_admin)
     # ensure property sets do not exist
     properties = PropertySet.find_by_access_point_id([3, 4])
     assert_nil properties
     # change group of ap with no property set
-    post :batch_change_group, { :format => 'json', :group_id => 5, :access_points => [3, 4] }
+    post :batch_change_property, { :format => 'json', :property_name => 'group_id', :property_value => 5, :access_points => [3, 4] }
     assert_response :success
     ap = AccessPoint.find([3, 4])
     assert ap[0].properties.group_id == 5
     assert ap[1].properties.group_id == 5
     # 403: moving ap to group of another wisp for which user doesn't have authorization
-    post :batch_change_group, { :format => 'json', :group_id => 3, :access_points => [1, 2] }
+    post :batch_change_property, { :format => 'json', :property_name => 'group_id', :property_value => 3, :access_points => [1, 2] }
     assert_response :forbidden
     # 403: moving ap of another wisp for which user doesn't have authorization to a group to which user controls
-    post :batch_change_group, { :format => 'json', :group_id => 5, :access_points => [1, 2] }
+    post :batch_change_property, { :format => 'json', :property_name => 'group_id', :property_value => 5, :access_points => [1, 2] }
     assert_response :forbidden
     sign_out users(:brescia_admin)
     
     sign_in users(:sfigato)
-    post :batch_change_group, { :format => 'json', :group_id => 3, :access_points => [1, 2, 3] }
+    post :batch_change_property, { :format => 'json', :property_name => 'group_id', :property_value => 3, :access_points => [1, 2, 3] }
     assert_response :forbidden
     sign_out users(:sfigato)
     
     sign_in users(:admin)
     # 400: missing or bad parameter format
-    post :batch_change_group, { :format => 'json' }
+    post :batch_change_property, { :format => 'json' }
     assert_response :bad_request
-    post :batch_change_group, { :format => 'json', :group_id => 3 }
+    post :batch_change_property, { :format => 'json', :property_name => 'group_id', :property_value => 3 }
     assert_response :bad_request
-    post :batch_change_group, { :format => 'json', :access_points => [1, 2, 3] }
+    post :batch_change_property, { :format => 'json', :access_points => [1, 2, 3] }
     assert_response :bad_request
-    post :batch_change_group, { :format => 'json', :group_id => '', :access_points => [1, 2, 3] }
+    post :batch_change_property, { :format => 'json', :property_name => 'group_id', :property_value => '', :access_points => [1, 2, 3] }
     assert_response :bad_request
-    post :batch_change_group, { :format => 'json', :group_id => 3, :access_points => [] }
+    post :batch_change_property, { :format => 'json', :property_name => 'group_id', :property_value => 3, :access_points => [] }
+    assert_response :bad_request
+    post :batch_change_property, { :format => 'json', :property_name => 'unknown', :property_value => 3, :access_points => [1, 2, 3] }
     assert_response :bad_request
     
     # 404: not found
-    post :batch_change_group, { :format => 'json', :group_id => 10, :access_points => [1, 2, 3] }
+    post :batch_change_property, { :format => 'json', :property_name => 'group_id', :property_value => 10, :access_points => [1, 2, 3] }
     assert_response :not_found
     
     # 403: user is authorized but is trying to move ap in a group of another wisp 
-    post :batch_change_group, { :format => 'json', :group_id => 3, :access_points => [3, 4] }
+    post :batch_change_property, { :format => 'json', :property_name => 'group_id', :property_value => 3, :access_points => [3, 4] }
     assert_response :forbidden
     
     # ensure ap group changes
     ap = AccessPoint.find([1, 2])
     assert ap[0].properties.group_id != 3
     assert ap[1].properties.group_id != 3
-    post :batch_change_group, { :format => 'json', :group_id => 3, :access_points => [1, 2] }
+    post :batch_change_property, { :format => 'json', :property_name => 'group_id', :property_value => 3, :access_points => [1, 2] }
     assert_response :success
     ap = AccessPoint.find([1, 2])
     assert_equal 3, ap[0].properties.group_id
     assert_equal 3, ap[1].properties.group_id
+    
+    # ensure public value changes
+    post :batch_change_property, { :format => 'json', :property_name => 'public', :property_value => true, :access_points => [1, 2, 3] }
+    assert_response :success
+    ap = AccessPoint.find([1, 2, 3])
+    assert ap[0].properties.public
+    assert ap[1].properties.public
+    assert ap[2].properties.public
+    post :batch_change_property, { :format => 'json', :property_name => 'public', :property_value => false, :access_points => [1, 2, 3] }
+    assert_response :success
+    ap = AccessPoint.find([1, 2, 3])
+    assert !ap[0].properties.public
+    assert !ap[1].properties.public
+    assert !ap[2].properties.public
+    
+    post :batch_change_property, { :format => 'json', :property_name => 'favourite', :property_value => true, :access_points => [1, 2, 3] }
+    assert_response :success
+    ap = AccessPoint.find([1, 2, 3])
+    assert ap[0].properties.favourite
+    assert ap[1].properties.favourite
+    assert ap[2].properties.favourite
+    post :batch_change_property, { :format => 'json', :property_name => 'favourite', :property_value => false, :access_points => [1, 2, 3] }
+    assert_response :success
+    ap = AccessPoint.find([1, 2, 3])
+    assert !ap[0].properties.favourite
+    assert !ap[1].properties.favourite
+    assert !ap[2].properties.favourite
   end
   
   test "show access points by group" do
@@ -437,6 +466,7 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_equal 0, css_select("tbody#access_points tr").length
   end
   
+  # TODO: this might be removed
   test "reset all favourites" do
     sign_in users(:admin)
     wisp = wisps(:provincia_wifi)

@@ -7,7 +7,7 @@ Owgm::Application.routes.draw do
 
   resources :access_points, :only => [:index] do
     collection do
-      post 'change_group' => 'access_points#batch_change_group'
+      post 'change_property' => 'access_points#batch_change_property'
       get 'select_group' => 'access_points#batch_select_group'
     end
   end

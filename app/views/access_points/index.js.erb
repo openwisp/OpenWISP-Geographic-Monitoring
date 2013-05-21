@@ -26,5 +26,5 @@ $('#access_points').html(
 );
 
 $('#access_points_paginate').html(
-    '<%= escape_javascript(paginate(@access_points, :remote => true).to_s) %>'
+    '<%= escape_javascript(paginate(@access_points, :window => 2, :remote => true).to_s) %>'
 );

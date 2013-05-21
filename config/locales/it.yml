@@ -200,6 +200,16 @@ it:
   Remove_all_from_favourites: Rimuovi tutti dai preferiti
   View_favourite_of_wisp: Visualizza preferiti di %{wisp}
   View_groups_of_wisp: Visualizza gruppi di %{wisp}
+  Unrecognized_property_name: Parametro property_name non riconosciuto
+  Exec_batch_action: Esegui un azione sugli access point selezionati
+  Select_action: Seleziona un azione
+  Change_group_action: Cambia gruppo (CTRL + G)
+  Add_to_favourite_action: Aggiungi ai preferiti (CTRL+F)
+  Remove_from_favourite_action: Rimuovi dai preferiti (ALT+F)
+  Publish_action: Pubblica (CTRL+P)
+  Unpublish_action: Rimuovi pubblicazione (ALT+P)
+  next_page_tooltip: "(SHIFT + DESTRA)"
+  prev_page_tooltip: "(SHIFT + SINISTRA)"
   
   # Lowercase
   logged_as: autenticato come
@@ -271,8 +281,8 @@ it:
     pagination:
       first: "&laquo; Inizio"
       last: "Fine &raquo;"
-      previous: "&laquo; Precedente"
-      next: "Successivo &raquo;"
+      previous: "&laquo;&nbsp;Prec."
+      next: "Succ.&nbsp;&raquo;"
       truncate: "..."
 
   date:

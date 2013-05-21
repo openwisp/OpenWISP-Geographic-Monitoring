@@ -198,6 +198,16 @@ en:
   Remove_all_from_favourites: Remove all from favourites
   View_favourite_of_wisp: View favourite of %{wisp}
   View_groups_of_wisp: View groups of %{wisp}
+  Unrecognized_property_name: Unrecognized property_name parameter
+  Exec_batch_action: Execute batch action
+  Select_action: Select action
+  Change_group_action: Change group (CTRL + G)
+  Add_to_favourite_action: Add to favourite (CTRL+D)
+  Remove_from_favourite_action: Remove from favourite (ALT+D)
+  Publish_action: Publish (CTRL+P)
+  Unpublish_action: Unpublish (ALT+P)
+  next_page_tooltip: "(SHIFT + RIGHT)"
+  prev_page_tooltip: "(SHIFT + LEFT)"
 
   # Lowercase
   logged_as: logged in as

@@ -1,8 +1,12 @@
 require 'test_helper'
 
-class AccessPointTest < ActiveSupport::TestCase
-  test "batch_change_group" do
-    AccessPoint.batch_change_group([1, 2], 3)
+class AccessPointTest < ActiveSupport::TestCase 
+  test "batch_change_property" do
+    # test group
+    assert_not_equal 3, AccessPoint.find(1).properties.group_id
+    assert_not_equal 3, AccessPoint.find(2).properties.group_id
+    
+    AccessPoint.batch_change_property([1, 2], 'group_id', 3)
     
     assert_equal 3, AccessPoint.find(1).properties.group_id
     assert_equal 3, AccessPoint.find(2).properties.group_id
@@ -10,6 +14,36 @@ class AccessPointTest < ActiveSupport::TestCase
     AccessPoint.find(3, 4).each do |ap|
       assert_not_equal 3, ap.properties.group_id
     end
+    
+    # test for public
+    assert !AccessPoint.find(2).properties.public
+    assert !AccessPoint.find(5).properties.public
+    assert !AccessPoint.find(6).properties.public
+    
+    AccessPoint.batch_change_property([2, 5, 6], 'public', true)
+    assert AccessPoint.find(2).properties.public
+    assert AccessPoint.find(5).properties.public
+    assert AccessPoint.find(6).properties.public
+    
+    AccessPoint.batch_change_property([2, 5, 6], 'public', false)
+    assert !AccessPoint.find(2).properties.public
+    assert !AccessPoint.find(5).properties.public
+    assert !AccessPoint.find(6).properties.public
+    
+    # test for favourite
+    assert !AccessPoint.find(2).properties.favourite?
+    assert !AccessPoint.find(5).properties.favourite?
+    assert !AccessPoint.find(6).properties.favourite?
+    
+    AccessPoint.batch_change_property([2, 5, 6], 'favourite', true)
+    assert AccessPoint.find(2).properties.favourite
+    assert AccessPoint.find(5).properties.favourite
+    assert AccessPoint.find(6).properties.favourite
+    
+    AccessPoint.batch_change_property([2, 5, 6], 'favourite', false)
+    assert !AccessPoint.find(2).properties.favourite
+    assert !AccessPoint.find(5).properties.favourite
+    assert !AccessPoint.find(6).properties.favourite
   end
   
   test "build_all_properties" do

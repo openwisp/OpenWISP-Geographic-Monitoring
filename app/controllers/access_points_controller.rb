@@ -22,7 +22,7 @@ class AccessPointsController < ApplicationController
     :change_group,
     :toggle_public,
     :toggle_favourite,
-    :batch_change_group,
+    :batch_change_property,
     :erase_favourite
   ]
 
@@ -30,12 +30,12 @@ class AccessPointsController < ApplicationController
     default :deny
 
     actions :index,:show, :change_group, :select_group, :toggle_public, :toggle_favourite,
-            :batch_change_group, :batch_select_group, :favourite, :reset_favourites do
+            :batch_select_group, :favourite, :reset_favourites do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
     
-    actions :batch_change_group do
+    actions :batch_change_property do
       allow :wisps_viewer
       allow :wisp_access_points_viewer
     end
@@ -158,25 +158,18 @@ class AccessPointsController < ApplicationController
     render :template => 'access_points/select_group', :layout => false
   end
   
-  def batch_change_group
+  def batch_change_property
     # parameters expected:
-    # * group_id (int)
-    # * access_points (array)
-    group_id = params[:group_id]
-    access_points_id = params[:access_points]
+    # * access_points (array of IDs)
+    # * property_name (string)
+    # * property_value (string)
+    access_points_ids = params[:access_points]
+    property_name = params[:property_name]
+    property_value = params[:property_value]
     
     # ensure all parameters are sent correctly otherwise return 400 bad request status code
-    if group_id.nil? or group_id == '' or access_points_id.nil? or access_points_id.length < 1# or group_id.class != Fixnum or access_points_id.class != Array
+    if property_name.nil? or property_name == '' or property_value.nil? or property_value == '' or access_points_ids.nil? or access_points_ids.length < 1
       render :status => 400, :json => { "details" => I18n.t(:Bad_format_parameters) }
-      return
-    end
-    
-    # ensure Group is correct otherwise return 404
-    begin
-      # ensure group is a general group of specific of this wisp
-      group = Group.select([:id, :name, :wisp_id]).find(group_id)
-    rescue ActiveRecord::RecordNotFound
-      render :status => 404, :json => { "details" => I18n.t(:Group_not_found) }
       return
     end
     
@@ -187,15 +180,33 @@ class AccessPointsController < ApplicationController
     # he was able to get here (otherwise he would have been blocked before because the acl rules on top)
     wisps_viewer = authorized_for_wisps.length < 1 ? true : false
     
-    # if moving access points to a group of a specific wisp, user must be authorized for that wisp
-    if not group.wisp_id.nil? and not wisps_viewer and not authorized_for_wisps.include?(group.wisp_id)
-      render :status => 403, :json => { "details" => I18n.t(:User_does_not_have_permission) }
+    access_points = AccessPoint.with_properties.find(access_points_ids)
+    
+    case property_name
+    when 'group_id'
+      # ensure Group is correct otherwise return 404
+      begin
+        # ensure group is a general group of specific of this wisp
+        group = Group.select([:id, :name, :wisp_id]).find(property_value)
+        
+        # if moving access points to a group of a specific wisp, user must be authorized for that wisp
+        if not group.wisp_id.nil? and not wisps_viewer and not authorized_for_wisps.include?(group.wisp_id)
+          render :status => 403, :json => { "details" => I18n.t(:User_does_not_have_permission) }
+          return
+        end
+      rescue ActiveRecord::RecordNotFound
+        render :status => 404, :json => { "details" => I18n.t(:Group_not_found) }
+        return
+      end
+    when 'public'
+    when 'favourite'
+    # otherwise if supplying an unrecognized parameter for "property_name"
+    else
+      render :status => 400, :json => { "details" => I18n.t(:Unrecognized_property_name) }
       return
     end
     
-    access_points = AccessPoint.with_properties.find(access_points_id)
-    
-    # check permissions first
+    # perform checks first
     access_points.each do |ap|
       # user must be authorized for wisp_id of the access point he wants to edit
       if not wisps_viewer and not authorized_for_wisps.include?(ap.wisp_id)
@@ -204,23 +215,25 @@ class AccessPointsController < ApplicationController
       end
       
       # wisp_id of access point must coincide with wisp_id of group (unless wisp_id of group is NULL)
-      if not group.wisp_id.nil? and not ap.wisp_id == group.wisp_id
+      if property_name == 'group_id' and not group.wisp_id.nil? and not ap.wisp_id == group.wisp_id
         render :status => 403, :json => { "details" => I18n.t(:Moving_access_point_different_wisp_not_allowed, :wisp1 => ap.wisp.name, :wisp2 => group.wisp.name) }
         return
       end
       
       # ensure ap has property_sets related object
-      if ap.group_id.nil?
+      if ap.attributes[property_name].nil?
         # create properties!
         ap.properties.save!
       end
     end
     
-    AccessPoint.batch_change_group(access_points, group.id)
+    AccessPoint.batch_change_property(access_points, property_name, property_value)
     
-    # update group counts
-    Group.update_all_counts()
-    
+    if property_name == 'group_id' or property_name == 'favourite'
+      # update group counts
+      Group.update_all_counts()
+    end
+     
     render :status => 200, :json => { "details" => I18n.t(:Access_point_updated, :length => access_points.length) }
   end
 

@@ -263,13 +263,25 @@ class AccessPoint < ActiveRecord::Base
   
   # update all property sets specified in id_array and set the specified group_id
   def self.batch_change_group(id_array, group_id)
-    where = ""
+    where = "access_point_id IN ("
     # build where clause
-    id_array.each { where << " OR access_point_id = ?" }
-    # remove first 4 characters " OR "
-    where = where[4..-1]
+    id_array.each { where << "?, " }
+    # remove last two characters ", " and add the last parenthesis
+    where = "%s)" % where[0, where.length-2]
     conditions = [where] + id_array
     PropertySet.update_all({ :group_id => group_id }, conditions)
+  end
+  
+  # update all property sets specified in id_array and
+  # set the specified property "name" to the specified "value"
+  def self.batch_change_property(id_array, name, value)
+    where = "access_point_id IN ("
+    # build where clause
+    id_array.each { where << "?, " }
+    # remove last two characters ", " and add the last parenthesis
+    where = "%s)" % where[0, where.length-2]
+    conditions = [where] + id_array
+    PropertySet.update_all({ name.to_sym => value }, conditions)
   end
   
   def self.build_all_properties
