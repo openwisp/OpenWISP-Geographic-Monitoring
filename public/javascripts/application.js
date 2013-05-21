@@ -27,8 +27,8 @@ $(document).ready(function() {
     owgm.ajaxQuickSearch();
     owgm.ajaxLoading();
     owgm.initGmap();
-    owgm.paginator();
     owgm.initNotice();
+    owgm.initAccessPointList();
     owgm.initMainMenu();
     owgm.initDynamicColumns();
     owgm.initTooltip();
@@ -98,6 +98,16 @@ var owgm = {
                 }
             });
             gmaps.drawGoogleMap();
+        }
+    },
+    
+    initAccessPointList: function(){
+        if($('#access_points_list').length){
+            owgm.initBatchSelection();
+            owgm.initBatchActions();
+            owgm.initFavourite();
+            owgm.initPublic();
+            owgm.paginator();
         }
     },
 
@@ -207,7 +217,106 @@ var owgm = {
     
     paginator: function(){
         if($('#access_points_paginate').length > 0){
-            $("#combobox select").combobox();    
+            $("#combobox select").combobox({
+                position: 'bottom',
+                // links to edit per_page querystring value
+                links: '#access_points_paginate .pagination a',
+                form: '#access_points_quicksearch form',
+                // maximum custom value
+                max_value: 100,
+                // executed at the beginning of _create method
+                beforeCreate: function(){
+                    try {
+                        var initial_value = localStorage.getItem('pagination') || false,
+                            selected_value = $('#combobox option:selected').val();
+                        // if initial value is stored in the browser cache and is different from the default value
+                        if(initial_value && selected_value !== initial_value){
+                            // select the cached value
+                            $('#combobox option:selected').removeAttr('selected');
+                            $('#combobox option[value='+initial_value+']').attr('selected', true);
+                        }
+                        // else if cached value is the same as the default value
+                        else if(initial_value && selected_value === selected_value){
+                            // remove localstorage item to avoid pointlessly reloading the list of access points
+                            localStorage.removeItem('pagination');
+                        }
+                    } catch(e){}
+                    
+                },
+                afterCreate: function(){
+                    try {
+                        // load initial value
+                        initial_value = localStorage.getItem('pagination') || false;
+                        if(initial_value){
+                            this.onChange(initial_value, 'afterCreate', false);
+                        }
+                    } catch(e){ }   
+                },
+                // function that is executed when selected value changes
+                onChange: function(ui, event, reload){
+                    if(reload === undefined){
+                        reload = true;
+                    }
+                    
+                    var val;
+                    if(typeof ui === 'object'){
+                        val = $(ui.item.option).val();
+                    }
+                    else if(typeof ui === 'string' && typeof parseInt(ui) === 'number'){
+                        val = ui;
+                    }
+                    else{
+                        // this might yeld unexpected results.. check!
+                        return;
+                    }
+                    
+                    // function to update the href or action attributes with correct pagination value
+                    // $el: jquery element, attribute: string, value: string
+                    var updateUrl = function($el, attribute, value){
+                        // cache attribute value
+                        var attr_value = $el.attr(attribute),
+                        // and querystring value for pagination
+                            key = 'per=';
+                        // if querystring doesn't contains key just append the key at the end
+                        if(attr_value.indexOf(key) < 0){
+                            // if no querystring at all add the ?
+                            key = (attr_value.indexOf('?') < 0) ? key = '?'+key : '&'+key;
+                            // change the attribute
+                            $el.attr(attribute, attr_value + key + value);
+                        }
+                        // otherwise use regular expression to change the value
+                        else{
+                            attr_value = attr_value.replace(
+                                new RegExp(
+                                    "(per=)(\\d+)"
+                               ), "$1" + value
+                            )
+                            $el.attr(attribute, attr_value);
+                        }
+                    }
+                    // update each pagination link
+                    $(this.links).each(function(i, el){
+                        updateUrl($(el), 'href', val);
+                    });
+                    // store value for later retrieval
+                    try {
+                        localStorage.setItem('pagination', val);
+                    } catch(e){}
+                    // trigger click
+                    var first_link = $('#access_points_paginate .page a').eq(0);
+                    if(first_link.length){
+                        first_link.trigger('click');
+                    }
+                    else{
+                        owgm.refreshPage(val);
+                    }
+                    // if form is defined
+                    if(this.form){
+                        // update action
+                        updateUrl($(this.form), 'action', val);
+                    }
+                }
+            });
         }
     },
     
@@ -465,7 +574,7 @@ var owgm = {
         })
     },
     
-    initBatchGroupSelection: function(post_url){
+    initBatchSelection: function(){
         // init jQuery UI selectable widget
         $("#access_points").selectable({
             filter: "tr",
@@ -493,89 +602,192 @@ var owgm = {
                 $("#access_points tr").removeClass('ui-selected');
             }
         })
-        
-        var openGroupBatchSelection = function(){
-            // at least one ap must be selected
-            if($("#access_points tr.ui-selected").length < 1){
-                alert($('.batch-change-group').attr('data-fail-message'));
-            }
-            else{
-                owgm.openGroupSelection({
-                    'url': $('.batch-change-group').attr('href'),
-                    'afterSelect': function(){
+    },
+    
+    openGroupBatchSelection: function(){
+        var post_url = $('.batch-actions select').attr('data-change-property-href');
+        // at least one ap must be selected
+        if($("#access_points tr.ui-selected").length < 1){
+            alert($('.batch-actions select').attr('data-fail-message'));
+        }
+        else{
+            owgm.openGroupSelection({
+                'url': $('.batch-actions select').attr('data-select-group-href'),
+                'afterSelect': function(){
+                    owgm.toggleLoading();
+                    // this function changes the group in batch
+                    owgm.batchChangeProperty(post_url, 'group_id', $(this).attr('data-group-id'));
+                    owgm.toggleOverlay(function(){
+                        // close call back of overlay
                         owgm.toggleLoading();
-                        // this function changes the group in batch
-                        changeGroupBatch($(this).attr('data-group-id'));
-                        owgm.toggleOverlay(function(){
-                            // close call back of overlay
-                            owgm.toggleLoading();
-                            $('#select-group').remove();
-                        });
-                    }
-                });
-            }
-        }
-        
-        var changeGroupBatch = function(group_id){
-            var selected_access_points_id = [],
-                selected_access_points = $("#access_points tr.ui-selected");
-            // fill ap id list
-            selected_access_points.each(function() {
-                var ap_id = $(this).attr('data-ap-id');
-                selected_access_points_id.push(ap_id)
-            });
-            // ajax request to change group
-            $.ajax({
-                url: post_url,
-                type: 'POST',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({ "group_id": group_id, "access_points": selected_access_points_id })
-            }).fail(function(xhr, status, error){
-                // in case of error return error message;
-                // might happen if there is an internal server error and its not possible to parse the response as json
-                // in case no error is show it will be hard to find the bug
-                try{
-                    alert((JSON.parse(xhr.responseText)).details);
-                }
-                catch(e){
-                    alert('ERROR');
-                }                
-            }).done(function(){
-                // update UI
-                owgm.refreshPage();
-                // reselect after refresh
-                $(document).ajaxStop(function(){
-                    selected_access_points.each(function(i, e){
-                        $('#access_points tr[data-ap-id='+$(e).attr('data-ap-id')+']').addClass('ui-selected');
+                        $('#select-group').remove();
                     });
-                });
+                }
             });
         }
+    },
+    
+    batchChangeProperty: function(post_url, property_name, property_value){
+        var selected_access_points_id = [],
+            selected_access_points = $("#access_points tr.ui-selected");
         
-        $('.batch-change-group').click(function(e){
-            e.preventDefault();
-            openGroupBatchSelection();
+        // ensure some access points are selected
+        if(selected_access_points.length < 1){
+            alert($('.batch-actions select').attr('data-fail-message'));
+            return false;
+        }
+        
+        // fill ap id list
+        selected_access_points.each(function() {
+            var ap_id = $(this).attr('data-ap-id');
+            selected_access_points_id.push(ap_id)
+        });
+        // ajax request to change group
+        $.ajax({
+            url: post_url,
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({ "property_name": property_name, "property_value": property_value, "access_points": selected_access_points_id })
+        }).fail(function(xhr, status, error){
+            // in case of error return error message;
+            // might happen if there is an internal server error and its not possible to parse the response as json
+            // in case no error is show it will be hard to find the bug
+            try{
+                alert((JSON.parse(xhr.responseText)).details);
+            }
+            catch(e){
+                alert('ERROR');
+            }                
+        }).done(function(){
+            // update UI
+            owgm.refreshPage();
+            // reselect after refresh
+            $(document).ajaxStop(function(){
+                selected_access_points.each(function(i, e){
+                    $('#access_points tr[data-ap-id='+$(e).attr('data-ap-id')+']').addClass('ui-selectee ui-selected');
+                });
+                selected_access_points = $();
+            });
+        });
+    },
+    
+    initBatchActions: function(){
+        // url to POST
+        var post_url = $('.batch-actions select').attr('data-change-property-href');
+        // action select
+        $(".batch-actions select").each(function(i, el){
+            // determine position of autocomplete menu
+            var position = i === 0 ? 'top' : 'bottom';
+            // init combobox widget
+            $(el).combobox({
+                position: position,
+                // function that is executed when selected value changes
+                onChange: function(ui, autocomplete){
+                    var select = $(ui.item.option).parent(),
+                        option = $(ui.item.option).val();
+                    
+                    function resetSelection(){
+                        // reset selection .. yeah cumbersome..
+                        setTimeout(function(){
+                            $(".batch-actions .ui-combobox-input").autocomplete('widget').find('li a').eq(0).trigger('click');
+                        }, 50);
+                    }
+                    
+                    // if no action just return here
+                    if(option == '0'){ return false }
+                    
+                    // otherwise ensure some access points are selected
+                    if($("#access_points tr.ui-selected").length < 1){
+                        alert(select.attr('data-fail-message'));
+                        resetSelection()
+                        return false;
+                    }
+                    
+                    var property_name,
+                        property_value;
+                    
+                    if(option == 'group'){
+                        owgm.openGroupBatchSelection(post_url);
+                    }
+                    else if(option == 'favourite_0'){
+                        property_name = 'favourite';
+                        property_value = false;
+                    }
+                    else if(option == 'favourite_1'){
+                        property_name = 'favourite';
+                        property_value = true;
+                    }
+                    else if(option == 'public_0'){
+                        property_name = 'public';
+                        property_value = false;
+                    }
+                    else if(option == 'public_1'){
+                        property_name = 'public';
+                        property_value = true;
+                    }
+                    if(option != 'group'){
+                        owgm.batchChangeProperty(post_url, property_name, property_value);
+                    }
+                    resetSelection();						
+                },
+                afterCreate: function(){
+                    var container = $(el).parent();
+                    container.find('.ui-combobox input').click(function(e){
+                        e.preventDefault(); container.find('.ui-combobox a').trigger('click')
+                    });
+                }
+            });
         });
         
         // keyboard shortcuts
         $(document).keydown(function(e){
+            console.log(e.keyCode);
             // ESC: deselect all the access points
             if(e.keyCode == 27){
-                $("#access_points tr.ui-selected").removeClass('ui-selected');
+                $("#access_points tr.ui-selected").removeClass('ui-selectee').removeClass('ui-selected');
             }
             // CTRL + A: select all the access points
             else if(e.ctrlKey && e.keyCode == 65){
                 e.preventDefault();
-                $("#access_points tr").addClass('ui-selected');
+                $("#access_points tr").addClass('ui-selectee ui-selected');
+            }
+            // CTRL + D: add to favourite
+            else if(e.ctrlKey && e.keyCode == 68){
+                e.preventDefault();
+                owgm.batchChangeProperty(post_url, 'favourite', true);
+            }
+            // SHIFT + D: remove from favourite
+            else if(e.shiftKey && e.keyCode == 68){
+                e.preventDefault();
+                owgm.batchChangeProperty(post_url, 'favourite', false);
             }
             // CTRL + G: open group selection
             else if(e.ctrlKey && e.keyCode == 71){
                 e.preventDefault();
-                openGroupBatchSelection();
+                owgm.openGroupBatchSelection();
+            }
+            // CTRL + P: publish (will overwrite print shortcut on some systems)
+            else if(e.ctrlKey && e.keyCode == 80){
+                e.preventDefault();
+                owgm.batchChangeProperty(post_url, 'public', true);
+            }
+            // SHIFT + P: remove from favourite
+            else if(e.shiftKey && e.keyCode == 80){
+                e.preventDefault();
+                owgm.batchChangeProperty(post_url, 'public', false);
+            }
+            // SHIFT + RIGHT-ARROW: next page
+            else if(e.shiftKey && e.keyCode == 39){
+                e.preventDefault();
+                $('.next a').trigger('click');
+            }
+            // SHIFT + LEFT-ARROW: prev page
+            else if(e.shiftKey && e.keyCode == 37){
+                e.preventDefault();
+                $('.prev a').trigger('click');
             }
         });
-        
     },
     
     initMainMenu: function(){
@@ -698,7 +910,7 @@ var owgm = {
     },
     
     initFavourite: function(){
-        $('.toggle-favourite').live('click',function(e){
+        $('a.toggle-favourite').live('click',function(e){
             e.preventDefault();
             var el = $(this);
             owgm.toggleProperty(el.attr('data-href'), function(result){
@@ -711,6 +923,16 @@ var owgm = {
                 }
             });
         })
+    },
+    
+    initPublic: function(){
+        $('#access_points_list a.toggle-public').live('click', function(e){
+            e.preventDefault();
+            var el = $(this);
+            owgm.toggleProperty(el.attr('data-href'), function(result){
+                el.find('img').attr('src', result.image)
+            });
+        });
     }
 };
 

@@ -108,7 +108,7 @@
 		
     <div id="page_controls">
 				<div id="access_points_paginate">
-						<%= paginate @access_points, :remote => true %>
+						<%= paginate @access_points, :left => 1, :right => 7, :remote => true %>
 				</div>
 				<div id="combobox">
 						<select>
@@ -130,14 +130,3 @@
 <% end %>
   </div>
 </div>
-
-<script>
-		owgm.initBatchGroupSelection("<%= change_group_access_points_path %>");
-		$('#access_points_list a.toggle-public').live('click', function(e){
-				el = $(this);
-				owgm.toggleProperty(el.attr('data-href'), function(result){
-						el.find('img').attr('src', result.image)
-				});
-		});
-		owgm.initFavourite();
-</script>
