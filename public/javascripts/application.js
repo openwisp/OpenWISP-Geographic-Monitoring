@@ -742,7 +742,6 @@ var owgm = {
         
         // keyboard shortcuts
         $(document).keydown(function(e){
-            console.log(e.keyCode);
             // ESC: deselect all the access points
             if(e.keyCode == 27){
                 $("#access_points tr.ui-selected").removeClass('ui-selectee').removeClass('ui-selected');
