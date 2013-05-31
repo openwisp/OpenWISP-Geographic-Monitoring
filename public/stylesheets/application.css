@@ -294,8 +294,8 @@ select{ padding: 10px 0 10px 5px }
 #select-group .wisp{ width: 20% }
 #select-group .total-ap,
 #select-group .monitor,
-#select-group .stats{ min-width:100px; width: 10% }
-#select-group .stats{ min-width: 120px }
+#select-group .stats{ min-width:120px; width: 10% }
+#select-group .stats{ min-width: 140px }
 #scroller{ overflow: auto }
 
 table.selectable td{ cursor: pointer }
@@ -484,4 +484,8 @@ h2 .total{ border-bottom: 1px solid #fff }
 	font-size: 25px;
 }
 
-h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !important; }
+h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !important }
+#category_select select{ padding: 0 }
+#notes textarea{ margin-bottom: 10px }
+
+#_d, #_l{ position: fixed !important }
