@@ -487,3 +487,5 @@ h2 .total{ border-bottom: 1px solid #fff }
 h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !important }
 #category_select select{ padding: 0 }
 #notes textarea{ margin-bottom: 10px }
+
+#_d, #_l{ position: fixed !important }
