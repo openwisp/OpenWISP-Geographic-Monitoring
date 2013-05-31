@@ -131,5 +131,10 @@
   <%= yield %>
   <div class="clear"></div>
 </div>
+
+<!--[if lte IE 8]>
+  <%= javascript_include_tag 'ie8/warning.js' %>
+  <script>$(window).load(function(){e("<%= javascript_path("ie8").sub('.js', '/') %>")})</script>
+<![endif]-->
 </body>
 </html>
