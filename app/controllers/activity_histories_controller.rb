@@ -19,6 +19,7 @@ require 'spreadsheet'
 
 class ActivityHistoriesController < ApplicationController
   before_filter :authenticate_user!, :load_wisp, :wisp_breadcrumb
+  skip_before_filter :verify_authenticity_token, :only => [:export]
 
   access_control do
     default :deny
@@ -30,7 +31,7 @@ class ActivityHistoriesController < ApplicationController
   end
 
   def index
-    @showstatus=CONFIG['showstatus']
+    @showstatus = CONFIG['showstatus']
     @from = Date.strptime(params[:from], I18n.t('date.formats.default')) rescue 365.days.ago.to_date
     @to = Date.strptime(params[:to], I18n.t('date.formats.default')) rescue Date.today
     @access_points = AccessPoint.with_properties.activated(@to).of_wisp(@wisp)
@@ -49,7 +50,7 @@ class ActivityHistoriesController < ApplicationController
   # accepts only POST
   def export
     
-    @showstatus=CONFIG['showstatus']
+    @showstatus = CONFIG['showstatus']
     # prepare header row
     header = [
       I18n.t('Name'),
