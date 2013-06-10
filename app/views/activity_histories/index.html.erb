@@ -59,7 +59,8 @@
         <span><%=t :than %></span>
         <%= select 'percent', 'value', ['',0,10,20,30,40,50,60,70,80,90,100].map{|percent| ["#{percent}%", percent]} %>
         <p id="export-controls">
-            <a href="javascript:owgm.resetHighlighting('<%= t :Reset_highlighting_fallback_message %>')" id="reset_link"><%= t :Reset_highlighting %></a> <a id="export_link" href="<%= appendToQuerystring(url_for(:action => 'export', :only_path => false), { 'authenticity_token' => form_authenticity_token }) %>"><%= t :Export_data %></a>
+            <a href="javascript:owgm.resetHighlighting('<%= t :Reset_highlighting_fallback_message %>')" id="reset_link"><%= t :Reset_highlighting %></a>
+            <a id="export_link" href="<%= appendToQuerystring(url_for(:action => 'export', :only_path => false), { 'authenticity_token' => form_authenticity_token }) %>"><%= t :Export_data %></a>
         </p>
       </div>
     </div>
