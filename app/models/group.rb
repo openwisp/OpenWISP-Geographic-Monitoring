@@ -7,15 +7,15 @@ class Group < ActiveRecord::Base
   before_destroy :is_default_group?
   
   def up
-    monitor ? self.attributes['up'] : 'N/A'
+    count_stats ? self.attributes['up'] : 'N/A'
   end
   
   def down
-    monitor ? self.attributes['down'] : 'N/A'
+    count_stats ? self.attributes['down'] : 'N/A'
   end
   
   def unknown
-    monitor ? self.attributes['unknown'] : 'N/A'
+    count_stats ? self.attributes['unknown'] : 'N/A'
   end
   
   def favourite
