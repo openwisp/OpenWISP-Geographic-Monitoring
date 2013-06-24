@@ -32,6 +32,7 @@ $(document).ready(function() {
     owgm.initMainMenu();
     owgm.initDynamicColumns();
     owgm.initTooltip();
+    owgm.initToggleLatestOnlineUsers();
 });
 
 
@@ -809,6 +810,12 @@ var owgm = {
             });
             owgm.groupsDynamicColumns();
         }
+        if('#latest-online-users'){
+            $(window).resize(function(e){
+                owgm.latestOnlineUsersDynamicColumns();
+            });
+            owgm.latestOnlineUsersDynamicColumns();
+        }
     },
     
     accessPointsDynamicColumns: function(){
@@ -885,6 +892,34 @@ var owgm = {
         }
     },
     
+    latestOnlineUsersDynamicColumns: function(){
+        var width = $(window).width(),
+            $ip_column = $('#latest-online-users .ip'),
+            $association_date_column = $('#latest-online-users .association-date');
+        
+        if(width <= 1170){
+            if($ip_column.eq(0).is(':visible')){
+                $ip_column.hide();
+            }            
+        }
+        else{
+            if(!$ip_column.eq(0).is(':visible')){
+                $ip_column.show();
+            }      
+        }
+        
+        if(width <= 1050){
+            if($association_date_column.eq(0).is(':visible')){
+                $association_date_column.hide();
+            }            
+        }
+        else{
+            if(!$association_date_column.eq(0).is(':visible')){
+                $association_date_column.show();
+            }      
+        }
+    },
+    
     initTooltip: function(){        
         $(".hastip").simpletip({
             fixed: true,
@@ -931,6 +966,29 @@ var owgm = {
             owgm.toggleProperty(el.attr('data-href'), function(result){
                 el.find('img').attr('src', result.image)
             });
+        });
+    },
+    
+    initToggleLatestOnlineUsers: function(){
+        $('#latest-online-users a.toggle').click(function(e){
+            // cache some stuff
+            var container = $('#latest-online-users .container'),
+                is_visible = container.is(':visible'),
+                arrow = container.parent().find('.arrow');
+            // prevent default link behaviour
+            e.preventDefault();
+            // toggle class hidden
+            $(this).toggleClass('hidden');
+            // toggle container and initialize gmap if necessary
+            container.slideToggle('slow', function(){
+                // on animation complete;
+            });
+            if(!is_visible){
+                arrow.html(arrow.attr('data-hide'));
+            }
+            else{
+                arrow.html(arrow.attr('data-show'));
+            }
         });
     }
 };

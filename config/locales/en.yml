@@ -208,6 +208,7 @@ en:
   Unpublish_action: Unpublish (ALT+P)
   next_page_tooltip: "(SHIFT + RIGHT)"
   prev_page_tooltip: "(SHIFT + LEFT)"
+  Latest_10_online_users: "Latest 10 online users"
 
   # Lowercase
   logged_as: logged in as

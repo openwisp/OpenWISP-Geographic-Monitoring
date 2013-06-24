@@ -105,6 +105,21 @@ class AccessPointsControllerTest < ActionController::TestCase
     activemenu_test()
   end
   
+  test "latest online users" do
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    
+    CONFIG['latest_online_users'] = false
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
+    assert_response :success
+    assert_select '#latest-online-users', 0
+    
+    CONFIG['latest_online_users'] = true
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
+    assert_response :success
+    assert_select '#latest-online-users', 1
+  end
+  
   test "show access point correct published icon" do
     sign_in users(:admin)
     @wisp = wisps(:provincia_wifi)
