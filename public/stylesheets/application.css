@@ -76,27 +76,30 @@
 }
 
 #gmap_index {
-    width: 920px;
+    width: 100%;
     height: 500px;
 }
 
 #gmap_show {
-    width: 430px;
-    height: 227px;
+    width: 100%;
+    height: 396px;
 }
+
+#map_container{ position: relative }
 
 #map_loading {
     position: absolute;
-    width: 921px;
+    width: 100%;
     height: 544px;
-    margin-top: -545px;
+    margin-top: -550px;
     background-color: #ddd;
 }
 
 #map_loading p{
     font-size: 30px;
     margin-top: 250px;
-    margin-left: 350px;
+	width: 100%;
+	text-align: center;
 }
 
 #loading {
@@ -111,11 +114,8 @@
     margin: 0 32%;
 }
 
-#logout {
-    float: right;
-}
-
-#access_points_quicksearch { float: left; width: 400px; margin: 15px 0  }
+#access_points_quicksearch { float: left; width: 50%; margin: 15px 0 20px; font-size:14px  }
+#access_points_quicksearch form{ margin-left: 10px }
 
 #access_points_quicksearch .spin {
     float: left;
@@ -128,7 +128,7 @@
     padding-left: 1px;
     margin-top: 1px;
 }
-#clickable_notes, #clickable_site_description, #clickable_public, #clickable_category{
+#clickable_notes, #clickable_site_description, #clickable_public, #clickable_category, #clickable_favourite{
     cursor: pointer;
 }
 #category_text {
@@ -159,55 +159,36 @@ th {
     width: 30%;
 }
 
-ul.nav.main{ padding: 0 8px }
-
-ul.nav.main li {
-    color:#fff;
-    background:#666;
-    font-weight:bold;
-    text-decoration:none;
-    display:block;
-    float:left;
-    margin: 0 4px;
-    height:2.4em;
-    line-height:2.5em;
-}
-
-ul.nav li a {
-    text-decoration:underline;
-    padding:0;
-}
-ul.nav li a:hover{ background: #666666; text-decoration: none !important }
-ul.nav li:hover{ background: #666666 }
-
 /* pagination tweaks july 2012 */
 
 .pagination{ float: left; margin: 4px 10px 0 0 }
 
-.pagination a{
+.pagination a, a.button{
     padding: 4px 10px;
     margin: 0 3px 0 0;
     background: #333;
     color: #fff;
     border-radius: 3px;
 }
-.pagination a:hover, .pagination a:focus{ background: #515252 }
-
+a.button{ font-size: 13px }
+.pagination a{ font-size: 13px }
 .pagination .current{ font-weight: bold }
-.pagination .current a{ background: #d3d3d3; color: #333; cursor: default  }
+.pagination a:hover, .pagination a:focus,
+a.button:hover, a.button:focus{ background: #000 !important }
+.pagination .current a{ background: #d3d3d3 !important; color: #333; cursor: default  }
 
 #access_points_paginate{ overflow: hidden; margin-top: 18px; display: inline }
 #access_points_quicksearch #q{ width: 200px; margin: 2px 0 0 5px }
 
-#page_controls{ overflow: hidden; margin: 15px 0 }
+#page_controls{ overflow: hidden; margin: 5px 0 15px; width: 56%; float: left }
 #combobox{ float: left }
-#combobox .ui-combobox input{ width: 29px; padding-left: 6px }
+#combobox .ui-combobox input{ width: 29px; padding-left: 6px; padding-bottom: 4px; padding-top: 3px }
 
 input.ui-autocomplete-input{ background: #fff none }
 .ui-menu .ui-menu-item a{ padding: 1px 0 1px 4px !important }
-.ui-combobox {
+#combobox .ui-combobox {
     float: left;
-    width: 200px;
+    width: 80px;
     position: relative;
 }
 .ui-combobox a{
@@ -222,9 +203,6 @@ input.ui-autocomplete-input{ background: #fff none }
     bottom: 0;
     margin-left: -1px;
     padding: 0;
-    /* adjust styles for IE 6/7 */
-    *height: 1.7em;
-    *top: 0.1em;
 }
 .ui-combobox-input {
     margin: 0;
@@ -244,3 +222,270 @@ input.ui-autocomplete-input{ background: #fff none }
 	background:#232323 url(../images/progress.gif) no-repeat scroll center center;
 	border-radius:5px;
 }
+
+.clear{ clear: both }
+
+.message{
+    padding: 10px 15px;
+	margin: 20px 10px 5px;
+    font-size: 14px;
+	font-weight:bold;
+    color: #fff;
+	text-align: center;
+	border-radius: 5px;
+}
+.notice{ background-color: #3b6d08 }
+.alert{ background-color: #ff6666 }
+.message p{ margin: 0; text-align: center }
+.message .close{
+    background-color: #003500 !important;
+    padding: 5px 10px;
+    color: white;
+    margin-left: 13px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.alert .close{ background-color: #980000 !important }
+.message .close:hover{ background-color: #000 !important }
+.alert .close:hover{ background-color: #660000 !important }
+
+#errorExplanation{
+	margin: 10px 5px 20px;
+	padding: 20px 25px 5px 25px;
+	background: #ff6666;
+	color: #fff;
+	font: normal 13px "Arial", sans-serif;
+	border-radius: 3px
+}
+#errorExplanation h2{
+	width: auto; margin: 0; padding: 0; background: transparent; text-transform: none;
+	font-size: 16px; font-weight: bold; margin-bottom: 10px;
+}
+#errorExplanation li{ font-weight: bold }
+.field_with_errors input[type=text], .field_with_errors input[type=password]{ border: 1px solid red }
+
+#user_info p.clear{ margin-top: 10px }
+
+#group_list th, #group_list td{ width: auto; vertical-align: middle }
+#group_list .name{ padding-left: 1.2em }
+#group_list td.name{ width: 190px }
+#group_list .wisp{ width: 120px }
+#group_list .up, #group_list .down, #group_list total{ width: 50px }
+#group_list { margin-bottom: 20px }
+
+textarea{ width: 95%; height: 100px; padding: 10px 1.5%; font-size: 12px }
+select{ padding: 10px 0 10px 5px }
+#group_form input[type=checkbox]{ width: auto }
+
+#group_stats{ margin-top: 20px; padding-bottom: 10px; width: 98% }
+#group_stats h2{ margin-bottom: 15px }
+#group_stats p{ padding: 0 15px }
+
+#user_roles .first{ padding-left: 30px }
+#user_roles td.first{ padding-left: 100px }
+#users_table .first{ padding-left: 25px }
+#users_table .last{ padding-right: 25px }
+.monitor img, #clickable_public img{ vertical-align: top }
+
+#select-group{ width: 800px }
+#select-group table{ margin: 0 }
+#select-group .name{ width: 20% }
+#select-group .wisp{ width: 20% }
+#select-group .total-ap,
+#select-group .monitor,
+#select-group .stats{ min-width:120px; width: 10% }
+#select-group .stats{ min-width: 140px }
+#scroller{ overflow: auto }
+
+table.selectable td{ cursor: pointer }
+table.selectable td.first{ padding-left: 60px; background: #EEE url(../images/delete.png) no-repeat scroll 40px center }
+table.selectable tr:hover td{ background-color: #FFFFEE }
+table.selectable tr.selected td{ background-color: #fff1ce }
+table.selectable tr.selected td.first{ background-image: url(../images/accept.png) }
+
+input.submit{
+	display: block;
+	width: 40%;
+	margin: 20px auto 10px;
+	padding: 10px 20px;
+    font: normal 15px Helvetica, Arial, Freesans, sans-serif;
+	color: #545454;
+	background: -moz-linear-gradient(top,#ffffff 0%,#cccccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff),to(#cccccc));
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #fafafa;
+	-moz-box-shadow: 0px 1px 2px rgba(000,000,000,0.4),inset 0px 0px 1px rgba(255,255,255,1);
+	-webkit-box-shadow:0px 1px 2px rgba(000,000,000,0.4),inset 0px 0px 1px rgba(255,255,255,1);
+	box-shadow:0px 1px 2px rgba(000,000,000,0.4),inset 0px 0px 1px rgba(255,255,255,1);
+	text-shadow:0px -1px 0px rgba(000,000,000,0.7),0px 1px 0px rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+
+#loading-indicator{
+    display: none;
+    position:fixed;
+    width:60px;
+    height:60px;
+    left:200px;
+    top:200px;
+    background:#333 url(../images/spinner_black.gif) no-repeat scroll center center;
+    z-index:9999;
+    border-radius: 4px;
+}
+
+#mask{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color:#000;
+    z-index:10
+}
+
+.overlay {
+    display:none;
+    position: fixed;
+    left: 10%;
+    top: 10%;
+    width: 650px;
+    z-index:99;
+    background-color:#333;
+    border:1px solid #666;
+    -moz-box-shadow:0 0 90px 5px #000;
+    -webkit-box-shadow: 0 0 90px #000;
+	box-shadow:0 0 90px 5px #000;
+    border-radius: 4px;
+}
+
+.overlay .close {
+    background-image:url(../images/close.png);
+    position:absolute;
+    right:-15px;
+    top:-15px;
+    cursor:pointer;
+    height:35px;
+    width:35px;
+    z-index:100;
+    overflow: hidden;
+    text-indent: -1000px;
+}
+
+#public img{ vertical-align: top }
+#group-info{ padding-left: 25px; background: transparent url(../images/edit.png) no-repeat scroll 0 center }
+.empty-page-msg{ text-align: center; font-size: 14px; font-weight: bold; padding: 30px 0 20px }
+#wisp-list tbody td{ vertical-align: middle }
+
+#wisp-list td, #wisp-list th{ font-size: 13px }
+#wisp-list th.name,
+#wisp-list th.notes{ padding-left: 12px }
+#wisp-list .name{ width: 18% }
+#wisp-list .notes{ width: 20% }
+#wisp-list .groups{ width: 7% }
+#wisp-list .report{ width: 18% }
+#wisp-list .up,
+#wisp-list .down,
+#wisp-list .unknown,
+#wisp-list .total{ width: 6% }
+td.favourite, th.favourite{ width: 7%; min-width: 60px }
+#wisp-list th.total{ color: #000 }
+th.favourite{ color: #000 }
+th.favourite img{ vertical-align: top; width: 15px; margin-right: 6px }
+#wisp-list .groups a, #wisp-list .favourite a{ padding: 2px 7px; text-decoration: underline }
+#wisp-list a:hover{ text-decoration: none }
+
+.actions{
+	float: right; width: auto; min-width: 25%; margin: 20px 0;
+	text-align: right;  font-weight:bold; font-size:14px; line-height: 25px;
+}
+.actions .reset-favourites{ margin-right: 10px }
+.actions .reset-favourites a{ text-decoration: underline }
+.actions.bottom{ margin-top: 7px }
+.actions label.hastip{
+	float: left; width: 130px; height: 35px; line-height: 35px; margin-top: -5px;
+	cursor: pointer !important;
+}
+.actions label.hastip input{ cursor: pointer !important }
+
+.select-actions-container{ float: right; margin-left: 20px; position: relative; top: -1px }
+.batch-actions .ui-combobox{ width: 250px; font-size: 12px }
+.batch-actions .ui-combobox input{ width: 200px; padding-left: 8px; cursor: default }
+.ui-autocomplete a{ font-size: 12px; font-weight: normal }
+.ui-autocomplete a:hover{ padding: 0 }
+
+#access_points .ui-selecting td { background: #FFFFEE }
+#access_points .ui-selected td { background: #FFF8CF }
+
+#access_points_list .hostname{ width: 10% }
+#access_points_list .mac_address{ width: 9% }
+#access_points_list .activation_date{ width: 10% }
+#access_points_list .ip_address{ width: 10% }
+#access_points_list .site_description{ width: 17% }
+#access_points_list .address{ width: 16% }
+#access_points_list .group{ width: 11% }
+#access_points_list .city{ width: 7% }
+#access_points_list .public,
+#access_points_list .favourite,
+#access_points_list .status{ width: 2%; text-align:center }
+#access_points_list .status img,
+#access_points_list .public img,
+#access_points_list .favourite img{ vertical-align: top }
+.odd2 td{ background-color: #fcfcfc }
+#access_points_list .toggle-public, .toggle-monitor,
+.toggle-count-stats, .toggle-favourite{ cursor: pointer }
+
+form .field p{ margin: 0 0 5px }
+form .help{ font-size: 12px; color: #606060 }
+
+h2 span.rfloat span{ margin-left: 12px !important }
+h2 .up{ border-bottom: 1px solid #093 }
+h2 .down{ border-bottom: 1px solid #F33 }
+h2 .unknown{ border-bottom: 1px solid #9f9f9f }
+h2 .favourites{ border-bottom: 1px solid #ffe793 }
+h2 .total{ border-bottom: 1px solid #fff }
+
+#access_point_detail .up{ color: #093; font-weight: bold }
+#access_point_detail .down{ color: #F33; font-weight: bold }
+#access_point_detail .unknown{ color: #9f9f9f; font-weight: bold }
+#access_point_detail .unknown{ color: #6b6b70 }
+
+.tooltip{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 3;
+	display: none;
+	min-width: 100px;
+	max-width: 200px;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 20px;
+	text-align: justify;
+	background: #333;
+    background: rgba(0,0,0,.8);
+	color: #fff;
+    border-radius: 5px;
+	padding: 10px 15px;
+}
+
+.tooltip:before{
+    content: "▾";
+    position: absolute;
+	bottom: -11px;
+	left: 46%;
+    z-index: 9999;
+	color: #333;
+	font-size: 25px;
+}
+
+h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !important }
+#category_select select{ padding: 0 }
+#notes textarea{ margin-bottom: 10px }
+
+#_d, #_l{ position: fixed !important }

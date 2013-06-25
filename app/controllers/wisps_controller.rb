@@ -29,5 +29,8 @@ class WispsController < ApplicationController
 
   def index
     @wisps = Wisp.all
+    wisp_breadcrumb(force=true)
   end
+
+  
 end

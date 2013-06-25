@@ -37,11 +37,9 @@
   <p id="site_description"><%= @access_point.site_description.blank? ? t(:No_site_description_available) : @access_point.site_description %></p>
 </div>
 
-
 <div class="box with_border">
   <h4><%=t :Notes %></h4>
   <p><span id="clickable_notes"><strong>(<%=t :Click_to_edit %>)</strong></span></p>
 
-  <p id="notes"><%= @access_point.notes.blank? ? t(:No_notes_available) : @access_point.notes %></p>
+  <p id="notes"><%= @access_point.notes.blank? ? t(:No_notes_available) : simple_format(@access_point.notes) %></p>
 </div>
-

@@ -1,0 +1,49 @@
+<%= form_for @group do |f| %>
+    <fieldset id="group_form">
+        <legend><strong><%= @group.new_record? ? t(:New_group) : t(:Edit_group) %></strong></legend>
+        <p><%= f.error_messages %></p>
+        <div class="field">
+            <strong><%= label_tag :wisp, t(:Wisp) %>:</strong>
+            <%= f.select(:wisp_id, Wisp.collection(@current_user)) %>
+        </div>
+        <div class="field">
+            <strong><%= label_tag :group_name, t(:Name) %>:</strong>
+            <%= f.text_field :name %>
+        </div>
+        
+        <div class="field">
+            <strong><%= label_tag :group_description, t(:Description) %>:</strong><br />
+            <%= f.text_area :description %>
+        </div>
+        
+        <div class="field">
+            <p><strong><%= label_tag :group_monitor, t(:Monitor) %>:</strong> <%= f.check_box :monitor %></p>
+            <p><span class="help"><%= t :Monitor_help %>.</span></p>
+        </div>
+        
+        <div class="field">
+            <p><strong><%= label_tag :count_stats, t(:Count_stats) %>:</strong> <%= f.check_box :count_stats %></p>
+            <p><span class="help"><%= t :Count_stats_help %>.</span></p>
+        </div>
+        
+        <% unless @group.new_record? %>
+        <div class="box" id="group_stats">
+            <h2><%= t :Group_statistics %></h2>
+            <p><strong><%= t(:Total_AP) %>:</strong> <%= @group.total %></p>
+            <p><strong><%= t(:Total_AP_up) %>:</strong> <%= @group.up %></p>
+            <p><strong><%= t(:Total_AP_down) %>:</strong> <%= @group.down %></p>
+            <p><strong><%= t(:Created_at) %>:</strong> <%= @group.created_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></p>
+            <p><strong><%= t(:Updated_at) %>:</strong> <%= @group.updated_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></p>
+        </div>
+        <% end %>
+        
+        <p>
+        <% if @group.new_record? %>
+            <%= f.submit t(:Create), :class => 'submit' %>
+        <% else %>
+            <%= f.submit t(:Edit), :class => 'submit' %>
+        <% end %>
+        </p>
+    </fieldset>
+<% end %>
+

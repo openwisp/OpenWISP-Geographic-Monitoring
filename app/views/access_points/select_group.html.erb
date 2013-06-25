@@ -1,0 +1,31 @@
+<div id="select-group" class="overlay">
+		<div class="close">x</div>
+		<div id="scroller">
+				<table>
+					<thead>
+						<tr>
+							<th class="name"><%=t :Name %></th>
+							<th class="wisp"><%=t :Wisp %></th>
+							<th class="center total-ap"><%=t :Total_AP %></th>
+							<th class="center monitor"><%=t :Monitor %></th>
+							<th class="center stats"><%=t :Count_stats %></th>
+						</tr>
+					</thead>
+					<tbody>
+					<% @groups.each do |group| %>
+						<tr class="<%= cycle 'odd', 'even' %>" id="group_<%= group.id %>" data-group-id="<%= group.id %>" <%= select_group_data_href(@wisp, @access_point_id, group.id) %>>
+							<td class="name"><strong><%= group.name %></strong></td>
+							<td class="wisp"><%= group.wisp_name %></td>
+							<td class="total center"><%= group.total %></td>
+							<td class="monitor center">
+									<img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
+							</td>
+							<td class="coount-stats center">
+								<img src="<%= image_path(group.count_stats ? 'accept.png' : 'delete.png') %>" alt="">
+							</td>
+						</tr>
+					<% end %>
+					</tbody>
+				</table>
+		</div>
+</div>

@@ -17,11 +17,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
 
-<tr>
-  <td class="middle"><%= link_to access_point.hostname, wisp_access_point_path(access_point.wisp, access_point) %></td>
-  <td class="middle"><%= access_point.site_description.truncate(40) rescue '' %></td>
-  <td class="middle"><%= access_point.address %></td>
-  <td class="middle"><%= access_point.city %></td>
-  <td class="middle"><%=t access_point.public ? :true : :false %></td>
-  <td class="middle right"><%= image_tag_for access_point, :size => "30x35", :class => 'right' %></td>
+<tr data-ap-id="<%= access_point.id %>" class="<%= cycle('odd2', 'even') %>">
+  <td class="middle hostname"><%= link_to access_point.hostname, wisp_access_point_path(access_point.wisp, access_point) %></td>
+  <td class="middle site_description"><%= access_point.site_description.truncate(40) rescue '' %></td>
+  <td class="middle address"><%= access_point.address %></td>
+  <td class="middle city"><%= access_point.city %></td>
+  <td class="middle mac_address"><%= access_point.common_name %></td>
+  <td class="middle ip_address"><%= access_point.ip %></td>
+  <td class="middle activation_date"><% unless access_point.activation_date.nil? %><%= l(access_point.activation_date, :format => :long) %><% end %></td>
+  <td class="middle group"><%= link_to_group(access_point.group_name, @wisp, access_point.group_id) %></td>
+  <td class="middle center public">
+    <a class="toggle-public" data-href="<%= toggle_public_wisp_access_point_path(access_point.wisp_id, access_point) %>">
+      <%= image_tag(access_point.public? ? 'accept.png' : 'delete.png') %>
+    </a>
+  </td>
+  <td class="middle favourite">
+    <a class="toggle-favourite" data-href="<%= toggle_favourite_wisp_access_point_path(access_point.wisp_id, access_point) %>">
+      <%= image_tag(access_point.favourite? ? 'star.png' : 'star-off.png') %>
+    </a>
+  </td>
+  <% if not @group.present? or @group.monitor %>
+  <td class="middle right status"><%= image_tag_for access_point, :size => "25x29" %></td>
+  <% end %>
 </tr>

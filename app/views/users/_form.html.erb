@@ -1,0 +1,86 @@
+<%#
+# This file is part of the OpenWISP User Management System
+#
+# Copyright (C) 2012 OpenWISP.org
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#%>
+
+<%= form_for @user do |f| %>
+
+    <fieldset>
+      <legend><strong><%=t :User %>:</strong> <%= @user.username %></legend>
+      <%= f.error_messages %>
+      <div class="field">
+        <strong><%= label_tag t(:username) %></strong>
+        <% if @user.new_record? %>
+            <%= f.text_field :username %>
+        <% else %>
+            <%= f.text_field :username, :disabled => true %>
+        <% end %>
+      </div>
+      
+      <div class="field">
+        <strong><%= label_tag t(:email) %>:</strong>
+        <%= f.text_field :email %>
+      </div>
+      
+      <div class="field">
+        <strong><%= f.label t(:Password), f.object.new_record? ? nil : t(:Change_password) %></strong>
+        <br />
+        <%= f.password_field :password %>
+      </div>
+      <div class="field">
+        <strong><%= label_tag t(:password_confirmation) %></strong>
+        <br />
+        <%= f.password_field :password_confirmation %>
+      </div>
+      
+      <br />
+      
+      <h2><strong><%= label_tag t(:Roles) %></strong></h2>
+      
+      <br />
+      
+      <table id="user_roles" class="selectable">
+        <thead>
+        <tr>
+          <th class="first"><%=t :Name %></th>
+          <th><%=t :Wisp %></th>
+        </tr>
+        </thead>
+        <tbody>
+            <% @roles.each do |role| %>
+            <tr id="row_role_<%= role.id %>"<% if @user.roles_id.include?(role.id) %> class="selected"<% end %>>
+                <td class="first">
+                    <strong><%= role.name %></strong>
+                    <span class="hidden"><%= check_box_tag("roles[]", role.id, @user.roles_id.include?(role.id), :id => "role_#{role.id}") %></span>
+                </td>
+                <td><%= role.wisp_name %></td>
+            </tr>
+            <% end %>
+        </tbody>
+      </table>
+      <script>$('#user_roles').customSelectable();</script>
+      
+      <p>
+        <% if @user.new_record? %>
+            <%= f.submit t(:Create), :class => 'submit' %>
+        <% else %>
+            <%= f.submit t(:Edit), :class => 'submit' %>
+        <% end %>
+      </p>
+      
+    </fieldset>
+<% end %>

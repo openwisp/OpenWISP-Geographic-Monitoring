@@ -8,9 +8,34 @@ it:
         address: indirizzo
         city: città
         hostname: hostname
-        public: pubblico
+        public: pubblicato
         site_description: sito di installazione
         status: stato
+        favourite: preferito
+      group:
+        name: nome
+    errors:
+      template:
+        header: "Errore di validazione"
+        body: "L'operazione ha avuto esito negativo, controlla gli errori riportati in seguito e riprova."
+      models:
+        user:
+          attributes:
+            email:
+              taken: 'email già utilizzata da un altro utente'
+              blank: non può essere lasciato vuoto
+            username:
+              blank: non può essere lasciato vuoto
+            password:
+              blank: non può essere lasciato vuoto
+              confirmation: e conferma password non coincidono
+            password_confirmation:
+              blank: non può essere lasciato vuoto
+        group:
+          attributes:
+            name:
+              blank: non può essere lasciato vuoto
+
   # Uppercase
   Activation_date: Data di attivazione
   Activity_graph: Grafico attività
@@ -21,9 +46,10 @@ it:
   Availability_report: Report di disponibilità
   Availability_report_for: Report di disponibilità per %{wisp}
   Avg_availability: Disponibilità media
+  Are_you_sure: Sei sicuro?
   Back: Indietro
   Cancel: Annulla
-  Category: Categoria
+  Category: Categoria (GeoRSS)
   City: Città
   Click_and_drag_to_zoom_in: Clicca e trascina per ingrandire una sezione
   Click_to_edit: Clicca per modificare
@@ -55,10 +81,12 @@ it:
   Access_point: Access point
   Access_point_info: "Informazioni veloci:"
   Access_point_named: Access point %{hostname}
-  Access_points: Access point
+  Access_points: Access points
   Access_points_for: Access point di %{wisp}
+  Access_points_for_group: 'Access point del gruppo "%{group}"'
   Access_points_of_every_wisp: Access point di tutti i wisp
   Access_points_map: Mappa degli Access point
+  Home: Inizio
   Info: Informazioni
   Interface_address: Indirizzo apparato
   Interface_vendor: Vendor apparato
@@ -85,6 +113,7 @@ it:
   Public: Pubblicato
   Public_on_Georss: Pubblicato sulla mappa (GeoRSS)
   Quick_search: Ricerca rapida
+  Filter_fav: Filtra preferiti
   Remember_me: Ricordami
   Reset_highlighting: Resetta evidenziazione
   Reset_highlighting_fallback_message: Nessuna riga è evidenziata al momento
@@ -100,9 +129,90 @@ it:
   Update: Aggiorna
   Username: Username
   Will_be_rendered_in_georss: Verrà visualizzato sulla mappa pubblica (GeoRSS)
+  Wisp: Wisp
   Wisp_list: Lista Wisp
+  Manage_users: Gestione utenti
+  User: Utente
+  username: username
+  email: email
+  Password: password
+  Change_password: Cambia password
+  password_confirmation: conferma password
+  Edit: Modifica
+  Create: Crea
+  Roles: Ruoli
+  Edit_user: Modifica utente
+  New_user: Nuovo utente
+  Account_registered: Nuovo account utente registrato con successo
+  Account_updated: Utente modificato con successo
+  Select: Seleziona
+  Delete: Elimina
+  Last_login: Ultimo login
+  Actions: Azioni
+  Online_users: Utenti online
+  Group: Gruppo
+  Groups: Gruppi
+  Group_list: Gestione gruppi
+  Group_statistics: Statistiche gruppi
+  New_group: Nuovo gruppo
+  Edit_group: Modifica gruppo  
+  Total_AP: AP Totali
+  Monitor: Monitoraggio attivo?
+  Monitoring_disabled_for_group: Monitoring disattivato
+  Monitor_help: Questa impostazione indica al sistema se deve monitorare lo stato degli access point contenuti in questo gruppo o meno
+  No_wisp: Nessun wisp associato
+  Users: Utenti
+  User_management: Interfaccia gestione utenti
+  Mac_address: Mac address
+  Cannot_delete_default_group: Impossibile eliminare il gruppo di default
+  No_AP: Nessun access point presente
+  Group_named: Gruppo "%{group}"
+  Manage_groups: Gestisci gruppi
+  Group_modified: Gruppo modificato con successo
+  Group_list_of_wisp: 'Lista gruppi di "%{wisp}"'
+  View_AP: Visualizza AP
+  View_all_the_AP: Tutti gli access points
+  Groups_of_this_wisp: Gruppi del wisp
+  Access_points_of_this_wisp: Access points del wisp
+  Select_all: Seleziona tutti
+  Change_group: Cambia gruppo
+  No_access_point_selected: "Devi selezionare prima gli access point.\n\nProva a selezionare le righe della tabella con il mouse."
+  Bad_format_parameters: Formato parametri errati
+  Group_not_found: Gruppo non trovato
+  User_does_not_have_permission_group: "L'utente non ha i permessi per gestire il wisp del gruppo specificato"
+  User_does_not_have_permission_ap_id: "L'utente non ha i permessi per gestire il wisp dell'access point con id %{ap_id}"
+  Moving_access_point_different_wisp_not_allowed: "Non è possibile spostare gli access point del wisp \"%{wisp1}\" in un gruppo del wisp \"%{wisp2}\""
+  Access_point_updated: "%{length} access point aggiornati"
+  Select_all_title: Seleziona tutti (CTRL + A)\no deseleziona tutti (ESC)
+  Change_group_title: Cambia il gruppo agli access point selezionati (CTRL + G)
+  Access_points_of_wisp: Wisp <b>"%{wisp}"</b>
+  Access_points_of_wisp_group: Wisp <b>"%{wisp}"</b> &raquo; <b>"%{group}"</b>
+  Count_stats: Conteggio statistiche
+  Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando si calcolano le statistiche degli access point (up, down, sconosciuto, totale)
+  Published_thead_tooltip: Indica se l'access point\nè pubblicato sul GeoRSS
+  Favourite_acccess_points: Access Point Preferiti
+  Total: Totale
+  Favourite: Preferito
+  Favourites: Preferiti
+  Add_to_favourites: Aggiungi ai preferiti
+  Remove_from_favourites: Rimuovi dai preferiti
+  Reset_all: Resetta tutti
+  Remove_all_from_favourites: Rimuovi tutti dai preferiti
+  View_favourite_of_wisp: Visualizza preferiti di %{wisp}
+  View_groups_of_wisp: Visualizza gruppi di %{wisp}
+  Unrecognized_property_name: Parametro property_name non riconosciuto
+  Exec_batch_action: Esegui un azione sugli access point selezionati
+  Select_action: Seleziona un azione
+  Change_group_action: Cambia gruppo (CTRL + G)
+  Add_to_favourite_action: Aggiungi ai preferiti (CTRL+F)
+  Remove_from_favourite_action: Rimuovi dai preferiti (ALT+F)
+  Publish_action: Pubblica (CTRL+P)
+  Unpublish_action: Rimuovi pubblicazione (ALT+P)
+  next_page_tooltip: "(SHIFT + DESTRA)"
+  prev_page_tooltip: "(SHIFT + SINISTRA)"
   
   # Lowercase
+  logged_as: autenticato come
   all: tutti
   back: indietro
   click_to_edit: clicca per modificare
@@ -118,9 +228,14 @@ it:
     one: 1 giorno fa
     other: "#{count} giorni fa"
   than: del
+  total: totale
   'true': 'sì'
   unknown: sconosciuto
   up: up
+  description: descrizione
+  name: nome
+  monitor: monitoraggio
+  favourites: preferiti
 
   # Defaults for rails
   errors:
@@ -166,8 +281,8 @@ it:
     pagination:
       first: "&laquo; Inizio"
       last: "Fine &raquo;"
-      previous: "&laquo; Precedente"
-      next: "Successivo &raquo;"
+      previous: "&laquo;&nbsp;Prec."
+      next: "Succ.&nbsp;&raquo;"
       truncate: "..."
 
   date:

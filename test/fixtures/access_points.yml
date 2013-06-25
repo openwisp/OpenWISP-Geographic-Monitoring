@@ -1,0 +1,61 @@
+wherecamp:
+    id: 1
+    hostname: wherecamp
+    lat: 45.6431
+    lng: 13.8313
+    address: 'via test'
+    city: 'Roma'
+    description: 'test'
+    wisp_id: 1
+    common_name: "00:27:22:27:42:40"
+    mng_ip: "10.8.1.82"
+
+eduroam:
+    id: 2
+    hostname: eduroam
+    lat: 46.6431
+    lng: 12.8313
+    address: 'via test'
+    city: 'Roma'
+    description: 'test'
+    wisp_id: 1
+
+brescia1:
+    id: 3
+    hostname: brescia_ap1
+    lat: 46.7431
+    lng: 12.1313
+    address: 'via test'
+    city: 'Brescia'
+    description: 'test'
+    wisp_id: 2
+
+brescia2:
+    id: 4
+    hostname: brescia_ap2
+    lat: 46.7441
+    lng: 12.1323
+    address: 'via test 2'
+    city: 'Brescia'
+    description: 'test 2'
+    wisp_id: 2
+
+archived1:
+    id: 5
+    hostname: archived1
+    lat: 45.5431
+    lng: 13.9313
+    address: 'via test'
+    city: 'Roma'
+    description: 'test'
+    wisp_id: 1
+
+archived2:
+    id: 6
+    hostname: archived2
+    lat: 46.8431
+    lng: 12.2413
+    address: 'via test'
+    city: 'Roma'
+    description: 'test'
+    wisp_id: 1

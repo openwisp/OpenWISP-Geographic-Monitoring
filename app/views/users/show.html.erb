@@ -1,0 +1,78 @@
+<%#
+# This file is part of the OpenWISP User Management System
+#
+# Copyright (C) 2012 OpenWISP.org
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#%>
+
+<div class="grid_8">
+  <div id="user_info" class="box">
+    <h2><%=t :User %> <%= @user.username %></h2>
+    <br />
+    <table>
+      <tbody>
+      <tr>
+        <td><strong><%=t :Username %></strong></td>
+        <td><%=@user.username %></td>
+      </tr>
+      <tr>
+        <td><strong><%=t :Email %></strong></td>
+        <td><%=@user.email %></td>
+      </tr>
+      <tr>
+        <td><strong><%=t :Sign_in_count %></strong></td>
+        <td><%=@user.sign_in_count %></td>
+      </tr>
+      <tr>
+        <td><strong><%=t :Current_sign_in_at %></strong></td>
+        <td><%=@user.current_sign_in_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></td>
+      </tr>
+      <tr>
+        <td><strong><%=t :Last_sign_in_at %></strong></td>
+        <td><%=@user.last_sign_in_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></td>
+      </tr>
+      <tr>
+        <td><strong><%=t :Current_sign_in_ip %></strong></td>
+        <td><%=@user.current_sign_in_ip %></td>
+      </tr>
+      <tr>
+        <td><strong><%=t :Last_sign_in_ip %></strong></td>
+        <td><%=@user.last_sign_in_ip %></td>
+      </tr>
+      <tr>
+        <td><strong><%=t :Created_at %></strong></td>
+        <td><%=@user.created_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></td>
+      </tr>
+      <tr>
+        <td><strong><%=t :Updated_at %></strong></td>
+        <td><%=@user.updated_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></td>
+      </tr>
+      </tbody>
+    </table>
+    <p class="clear"><%= link_to t(:Edit), edit_user_path(@user), :class => 'button' %></p>
+  </div>
+</div>
+
+<div class="grid_4">
+  <div id="user_roles" class="box">
+    <h2><%=t :Roles %></h2>
+    <br />
+    <ul>
+      <% @user.roles.each do |role| %>
+          <li><%= role %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

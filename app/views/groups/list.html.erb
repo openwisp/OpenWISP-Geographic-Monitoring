@@ -1,0 +1,43 @@
+<div class="grid_12">
+  <div class="box">
+    <h1><%=t :Group_list_of_wisp, :wisp => @wisp.name %></h1>
+    <table id="group_list">
+      <thead>
+        <tr>
+          <th class="name"><%=t :Name %></th>
+          <th class="wisp"><%=t :Wisp %></th>
+          <th class="center"><%=t :Monitor %></th>
+          <th class="center"><%=t :Count_stats %></th>
+          <th class="center"><%=t :Total_AP %></th>
+          <th class="green center"><%=t :Up %></th>
+          <th class="red center"><%=t :Down %></th>
+          <th class="center"><%=t :Unknown %></th>
+          <th class="center favourite"><%= image_tag('star.png', :alt => 'favourite') %><span><%=t :Favourites %></span></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @groups.each do |group| %>
+        <tr class="<%= cycle 'odd', 'even' %>">
+          <td class="name"><%= link_to group.name, wisp_group_access_points_path(@wisp, group) %></td>
+          <td class="wisp"><%= group.wisp_name %></td>
+          <td class="monitor center">
+            <img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
+          </td>
+          <td class="coount-stats center">
+            <img src="<%= image_path(group.count_stats ? 'accept.png' : 'delete.png') %>" alt="">
+          </td>
+          <td class="total center"><%= group.total %></td>
+          <td class="total_up center"><%= group.up %></td>
+          <td class="total_down center"><%= group.down %></td>
+          <td class="total_unkown center"><%= group.unknown %></td>
+          <td class="favourite center"><%= group.favourite %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <p>
+      <%= link_to t(:View_all_the_AP), wisp_access_points_path(@wisp), :class => 'button' %> &nbsp;
+      <%= link_to t(:Manage_groups), groups_path, :class => 'button' %>
+    </p>
+  </div>
+</div>

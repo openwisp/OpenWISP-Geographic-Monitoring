@@ -1,0 +1,55 @@
+default:
+  id: 1
+  wisp_id: 
+  name: "no group"
+  description: "default group"
+  monitor: true
+  count_stats: true
+
+squares_1:
+  id: 2
+  wisp_id: 1 
+  name: "public squares"
+  description: "access points installed in public squares"
+  monitor: true
+  count_stats: true
+
+libraries_1:
+  id: 3
+  wisp_id: 1 
+  name: "libraries"
+  description: "access points installed in libraries"
+  monitor: true
+  count_stats: true
+
+archived:
+  id: 4
+  wisp_id: 
+  name: "archived"
+  description: "archived access points"
+  monitor: false
+  count_stats: false
+
+brescia_group1:
+  id: 5
+  wisp_id: 2 
+  name: "brescia_group1"
+  description: "brescia_group1"
+  monitor: true
+  count_stats: true
+
+small_group:
+  id: 6
+  wisp_id: 3 
+  name: "small group"
+  description: "group of small wisp"
+  monitor: true
+  count_stats: true
+
+provinciawifi_dismessi:
+  id: 7
+  wisp_id: 1 
+  name: "archiviati dismessi"
+  description: "dismessi"
+  monitor: false
+  count_stats: false
