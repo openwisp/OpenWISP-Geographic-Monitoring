@@ -1,0 +1,48 @@
+<%#
+# This file is part of the OpenWISP Geographic Monitoring
+#
+# Copyright (C) 2012 OpenWISP.org
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#%>
+
+<div class="grid_12">
+  <div class="box">
+    <h2><%=t :Users %></h2>
+		<br />
+
+    <table id="users_table">
+      <thead>
+				<tr>
+					<th class="first"><%=t :Username %></th>
+					<th><%=t :Email %></th>
+					<th><%=t :Last_login %></th>
+					<th colspan="2" class="center last"><%=t :Actions %></th>
+				</tr>
+      </thead>
+      <tbody>
+				<% @users.each do |user| %>
+						<tr class="<%= cycle 'odd', 'even' %>">
+							<td class="middle first"><%= link_to(user.username, user) %></td>
+							<td class="middle"><%= user.email %></td>
+							<td class="middle"><%= user.last_sign_in_at.to_time.strftime('%e %B %Y - %l:%M %p') rescue nil %></td>
+							<td class="middle"><%= link_to t(:Edit), edit_user_path(user) %></td>
+							<td class="middle last"><%= link_to t(:Delete), user_path(user), :method => :delete, :confirm => t(:Are_you_sure) %></td>
+						</tr>
+				<% end %>
+      </tbody>
+    </table>
+		<p><%= link_to t(:New_user), new_user_path(), :class => 'button' %></p>
+  </div>
+</div>

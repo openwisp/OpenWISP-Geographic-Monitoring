@@ -1,0 +1,27 @@
+ap1_1:
+    id: 1
+    status: 1
+    access_point_id: 1
+    start_time: '2012-12-03 23:00:00'
+    last_time: '2012-12-04 00:00:00'
+
+ap2_1:
+    id: 2
+    status: 1
+    access_point_id: 2
+    start_time: '2012-12-03 23:00:00'
+    last_time: '2012-12-04 00:00:00'
+
+ap1_2:
+    id: 3
+    status: 1
+    access_point_id: 1
+    start_time: '2012-12-04 23:00:00'
+    last_time: '2012-12-05 00:00:00'
+
+ap2_2:
+    id: 4
+    status: 1
+    access_point_id: 2
+    start_time: '2012-12-04 23:00:00'
+    last_time: '2012-12-05 00:00:00'

@@ -1,0 +1,57 @@
+<div class="grid_12">
+  <div class="box">
+    <h1><%=t :Group_list %></h1>
+    <table id="group_list">
+      <thead>
+        <tr>
+          <th class="name"><%=t :Name %></th>
+          <th class="wisp"><%=t :Wisp %></th>
+          <th class="center"><%=t :Monitor %></th>
+          <th class="center"><%=t :Count_stats %></th>
+          <th class="center"><%=t :Total_AP %></th>
+          <th class="green center"><%=t :Up %></th>
+          <th class="red center"><%=t :Down %></th>
+          <th class="center"><%=t :Unknown %></th>
+          <th class="center favourite"><%= image_tag('star.png', :alt => 'favourite') %><span><%=t :Favourites %></span></th>
+          <th class="center"><%=t :View_AP %></th>
+          <th class="center"><%=t :Actions %></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @groups.each do |group| %>
+        <tr class="<%= cycle 'odd', 'even' %>">
+          <td class="name"><%= link_to group.name, edit_group_url(group.id) %></td>
+          <td class="wisp"><%= group.wisp_name %></td>
+          <td class="monitor center">
+            <a class="toggle-monitor" data-href="<%= toggle_monitor_group_path(group.id) %>">
+              <img src="<%= image_path(group.monitor ? 'accept.png' : 'delete.png') %>" alt="">
+            </a>
+          </td>
+          <td class="count-stats center">
+            <a class="toggle-count-stats" data-href="<%= toggle_count_stats_group_path(group.id) %>">
+              <img src="<%= image_path(group.count_stats ? 'accept.png' : 'delete.png') %>" alt="">
+            </a>
+          </td>
+          <td class="total center"><%= group.total %></td>
+          <td class="total_up center"><%= group.up %></td>
+          <td class="total_down center"><%= group.down %></td>
+          <td class="total_unkown center"><%= group.unknown %></td>
+          <td class="favourite center"><%= group.favourite %></td>
+          <td class="view_ap center">
+            <% if group.wisp_id %>
+              <%= link_to t(:Access_points), wisp_group_access_points_path(slugify(group.wisp_name), group) %>
+            <% end %>
+          </td>
+          <td class="center">
+            <% if group.id != 1 %>
+              <%= link_to t(:Delete), group_path(group), :method => :delete, :confirm => t(:Are_you_sure) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <p><%= link_to t(:New_group), new_group_url, :class => 'button' %></p>    
+  </div>
+</div>
+<script>owgm.initGroupList()</script>

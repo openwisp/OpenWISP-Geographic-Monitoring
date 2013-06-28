@@ -17,6 +17,11 @@
 
 class ConfigurationsController < ApplicationController
 	before_filter :authenticate_user!
+
+	access_control do
+    default :deny
+    allow :wisps_viewer
+  end
 	
 	def edit
 		to_configure = params[:id]
@@ -25,6 +30,8 @@ class ConfigurationsController < ApplicationController
 		when 'owmw'
 			@configurations = Configuration.owmw
 		end
+		
+		add_breadcrumb(I18n.t(:Configure_owmw), edit_configuration_path('owmw'))
 	end
 
 	def update

@@ -15,23 +15,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+require 'spreadsheet'
+
 class ActivityHistoriesController < ApplicationController
-  before_filter :authenticate_user!, :load_wisp
+  before_filter :authenticate_user!, :load_wisp, :wisp_breadcrumb
+  skip_before_filter :verify_authenticity_token, :only => [:export]
 
   access_control do
     default :deny
 
-    actions :index, :show, :export do
+    actions :index, :show, :export, :send_report do
       allow :wisps_viewer
       allow :wisp_activity_histories_viewer, :of => :wisp, :if => :wisp_loaded?
     end
   end
 
   def index
-    @showstatus=CONFIG['showstatus']
+    @showstatus = CONFIG['showstatus']
     @from = Date.strptime(params[:from], I18n.t('date.formats.default')) rescue 365.days.ago.to_date
     @to = Date.strptime(params[:to], I18n.t('date.formats.default')) rescue Date.today
-    @access_points = AccessPoint.activated(@to).of_wisp(@wisp)
+    @access_points = AccessPoint.with_properties.activated(@to).of_wisp(@wisp)
 
     crumb_for_report
   end
@@ -47,7 +50,7 @@ class ActivityHistoriesController < ApplicationController
   # accepts only POST
   def export
     
-    @showstatus=CONFIG['showstatus']
+    @showstatus = CONFIG['showstatus']
     # prepare header row
     header = [
       I18n.t('Name'),
@@ -68,13 +71,11 @@ class ActivityHistoriesController < ApplicationController
     @access_points = ActiveSupport::JSON.decode(request.body.read)
     
     # load spreadsheet gem and Date
-    require 'spreadsheet'
-    require 'date'
+    
     # prepare file
     book = Spreadsheet::Workbook.new
     sheet1 = book.create_worksheet
-    today = Date.today()
-    today = today.strftime('%d-%m-%Y')
+    today = Date.today().strftime('%d-%m-%Y')
     sheet1.name = 'Report %s' % [today]
     header.each_with_index do |cell, i|      
       sheet1.row(0).push cell
@@ -115,17 +116,27 @@ class ActivityHistoriesController < ApplicationController
         row.set_format(i+6, centered_cells)
       }
     end
-    # directory where we'll write the file
-    directory = '%s/excel' % [Rails.public_path]
-    # if the directory doesn't exist create it
-    unless File.directory?(directory)
-      Dir.mkdir(directory, 0755)
-    end
-    # write excel in public folder
-    book.write '%s/report.xls' % directory
+
+    # write excel in tmp folder
+    book.write '%s/tmp/availability-report.xls' % [Rails.root]
     
-    # render without layout
-    render :layout => false
+    respond_to do |format|
+      format.json { render :json => { :result => 'success', 'url' => wisp_send_report_path } }
+    end
+  end
+  
+  def send_report
+    today = Date.today().strftime('%d-%m-%Y')
+    file = '%s/tmp/availability-report.xls' % [Rails.root]
+    begin
+      # send file and trigger download
+      send_file file, :filename => "report-#{today}.xls", :type =>  "application/vnd.ms-excel"
+      # delete file
+      File.delete(file)
+    rescue Errno::ENOENT
+      # returns 410 http status code if file has been already deleted
+      head :gone
+    end
   end
 
   private

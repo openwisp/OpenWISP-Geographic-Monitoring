@@ -1,0 +1,9 @@
+1:
+    id: 1
+    status: 1
+    access_point_id: 1
+
+2:
+    id: 2
+    status: 1
+    access_point_id: 2

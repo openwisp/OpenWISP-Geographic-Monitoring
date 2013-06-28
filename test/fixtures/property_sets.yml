@@ -1,9 +1,44 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  reachable: false
-  access_point:
+wherecamp:
+  access_point_id: 1
+  group_id: 1
+  reachable: true
+  site_description: "testing-test"
+  favourite: true
 
-two:
+eduroam:
+  access_point_id: 2
+  group_id: 1
+  public: false
   reachable: false
-  access_point:
+
+archived1:
+  access_point_id: 5
+  group_id: 7
+  public: false
+  reachable: true
+
+archived2:
+  access_point_id: 6
+  group_id: 7
+  public: false
+  reachable: true
+
+
+## orphans
+
+orphan1:
+  reachable: false
+  access_point_id: 97
+  group_id: 1
+
+orphan2:
+  reachable: false
+  access_point_id: 98
+  group_id: 1
+
+orphan3:
+  reachable: false
+  access_point_id: 99
+  group_id: 1

@@ -18,10 +18,17 @@
 #%>
 
 <tr>
-	<th><%= link_to_sort t(:Hostname) %></th>
-    <th><%= link_to_sort t(:Site_description) %></th>
-	<th><%= link_to_sort t(:Address) %></th>
-	<th><%= link_to_sort t(:City) %></th>
-	<th><%= link_to_sort t(:Public) %></th>
-	<th class="right"><%= link_to_sort t(:Status) %></th>
+	<th class="hostname"><%= link_to_sort t(:Hostname) %></th>
+  <th class="site_description"><%= link_to_sort t(:Site_description) %></th>
+	<th class="address"><%= link_to_sort t(:Address) %></th>
+	<th class="city"><%= link_to_sort t(:City) %></th>
+	<th class="mac_address"><%= link_to_sort t(:Mac_address) %></th>
+	<th class="ip_address"><%= link_to_sort t(:Ip_addr)  %></th>
+	<th class="activation_date"><%= link_to_sort t(:Activation_date)  %></th>
+	<th class="group"><%= link_to_sort t(:Group) %></th>
+	<th class="public hastip" title="<%= t :Published_thead_tooltip %>"><%= link_to_sort t(:Public) %></th>
+	<th class="favourite"><%= link_to_sort t(:Favourite) %></th>
+	<% if not @group.present? or @group.monitor %>
+	<th class="status"><%= link_to_sort t(:Status) %></th>
+	<% end %>
 </tr>

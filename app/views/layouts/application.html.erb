@@ -22,7 +22,7 @@
 <head>
   <title>OWGM</title>
 
-  <link rel="shortcut icon" href="<%= image_path 'openwisp.ico' %>" />
+  <link rel="shortcut icon" href="<%= image_path 'favicon.png' %>" />
 
   <%= stylesheet_link_tag '960/css/reset',
                           '960/css/text',
@@ -41,7 +41,7 @@
       <%= stylesheet_link_tag '960/css/ie' %>
   <% end %>
 
-  <%= javascript_include_tag :defaults, 'jquery.observe' %>
+  <%= javascript_include_tag :defaults, 'jquery.observe', 'jquery.simpletip.min.js' %>
 
   <%= content_for :after_defaults %>
 
@@ -50,26 +50,79 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
-<div class="container_12">
+<div class="container_12" id="container">
   <div class="grid_12">
-    <h1 id="branding">
-      OpenWISP Geographic Monitoring
-      <br />
-      <%= link_to_locale 'it' %> <%= link_to_locale 'en' %>
-    </h1>
-
-    <ul class="nav main">
-      <% if user_signed_in? %>
-          <%= render_breadcrumbs :tag => :li, :separator => '<li class="spacer">&raquo</li>' %>
-          <li id="logout"><%= link_to t(:Sign_out), destroy_user_session_path %></li>
-      <% end %>
+    <div id="header">
+      <h1 id="branding"><a href="<%= root_path %>">Geographic Monitoring</a></h1>
+      <div id="lang"><%= link_to_locale 'it' %> <%= link_to_locale 'en' %></div>
+    </div>
+    <% if user_signed_in? %>
+    <nav>
+      <ul class="nav main" id="main-nav">
+        <li class="first">
+          <a href="<%= wisps_path %>" title="<%= t :Wisp_list %>"<%= active_link_if wisps_path, '/access_points', '/groups' %>>
+            <%= t :Wisp %><% if @wisps_menu.length > 0 %><span>&#x25BE;</span><% end %>
+          </a>
+          <% if @wisps_menu.length > 0 %>
+          <ul class="second-level">
+          <% @wisps_menu.each do |wisp| %>
+            <li>
+              <a href="<%= wisp_access_points_url(wisp) %>"><%= wisp.name %><span>&raquo;</span></a>
+              <ul class="third-level">
+                <li><a href="<%= wisp_availability_report_path(wisp) %>"><%= t :Availability_report %></a></li>
+              </ul>
+            </li>
+          <% end %>
+          </ul>
+          <% end %>
+        </li>
+        <% if @wisps_menu.length > 0 %>
+        <li>
+          <a <% if auth?(:wisps_viewer) %>href="<%= access_points_url %>" title="<%= t(:Show_all_access_points) %>"<% end %> <%= active_link_if access_points_path %>><%= t :Access_points %><span>&#x25BE;</span></a>
+          <ul class="second-level">
+            <% @wisps_menu.each do |wisp| %>
+            <li>
+              <a href="<%= wisp_access_points_url(wisp) %>"><%= wisp.name %><span>&raquo;</span></a>
+              <ul class="third-level">
+                <li><a href="<%= wisp_access_points_url(wisp) %>"><%= t :Access_points_of_this_wisp %></a></li>
+                <li><a href="<%= wisp_groups_url(wisp) %>"><%= t :Groups_of_this_wisp %></a></li>
+                <li><a href="<%= wisp_access_points_favourite_url(wisp) %>"><%= t :Favourites %></a></li>
+              </ul>
+            </li>
+            <% end %>
+          </ul>
+        </li>
+        <% end %>
+        <% if auth?(:wisps_viewer) or auth?(:wisp_access_points_viewer) %>
+        <li>
+          <a href="<%= groups_url %>" title="<%= t :Group_list %>"<%= active_link_if groups_path, '/access_points' %>><%= t :Groups %></a>
+        </li>
+        <% end %>
+        <% if auth? :wisps_viewer %>
+        <li>
+          <a href="<%= users_url %>" title="<%= t :User_management %>"<%= active_link_if users_path %>><%= t :Users %></a>
+        </li>        
+        <li>
+          <a href="<%= edit_configuration_path('owmw') %>" title="<%= t(:Configure_owmw) %>"<%= active_link_if edit_configuration_path('owmw') %>><%= t(:Configure_owmw) %></a>
+        </li>
+        <% end %>
+      </ul>
+    </nav>
+    
+    <ul class="nav main" id="breadcrumbs">
+      <%= render_breadcrumbs :tag => :li, :separator => '<li class="spacer">&raquo</li>' %>
+      <li id="logout"><%= t :logged_as %> <b><%= current_user.username %></b> &nbsp; - &nbsp; <%= link_to t(:Sign_out), destroy_user_session_path %></li>
     </ul>
-
-    <% if flash[:notice] || flash[:alert] %>
-        <div class="box">
-          <p class="notice"><%= flash[:notice] %></p>
-          <p class="alert"><%= flash[:alert] %></p>
-        </div>
+    <% end %>
+    <% if flash[:notice] %>
+    <div class="message notice">
+      <%= flash[:notice] %> <a class="close">&times;&nbsp;chiudi</a>
+    </div>
+    <% end %>
+    <% if flash[:alert] %>
+    <div class="message alert">
+      <%= flash[:alert] %> <a class="close">&times;&nbsp;chiudi</a>
+    </div>
     <% end %>
   </div>
 
@@ -78,5 +131,10 @@
   <%= yield %>
   <div class="clear"></div>
 </div>
+
+<!--[if lte IE 8]>
+  <%= javascript_include_tag 'ie8/warning.js' %>
+  <script>$(window).load(function(){e("<%= javascript_path("ie8").sub('.js', '/') %>")})</script>
+<![endif]-->
 </body>
 </html>

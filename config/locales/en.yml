@@ -8,9 +8,34 @@ en:
         address: address
         city: city
         hostname: hostname
-        public: public
+        public: published
         site_description: installation site
         status: status
+        favourite: favourite
+      group:
+        name: name
+    errors:
+      template:
+        header: "Validation Error"
+        body: "The operation did not succeed, fix the errors reported below and retry."
+      models:
+        user:
+          attributes:
+            email:
+              taken: 'email already used by another user'
+              blank: can't be empty
+            username:
+              blank: can't be empty
+            password:
+              blank: can't be empty
+              confirmation: and password confirmation mismatch
+            password_confirmation:
+              blank: can't be empty
+        group:
+          attributes:
+            name:
+              blank: can't be empty
+  
   # Uppercase
   Activation_date: Activation date
   Activity_graph: Activity graph
@@ -21,9 +46,10 @@ en:
   Availability_report: Availability report
   Availability_report_for: Availability report for %{wisp}
   Avg_availability: Average availability
+  Are_you_sure: Are you sure?
   Back: Back
   Cancel: Cancel
-  Category: Category
+  Category: Category (GeoRSS)
   City: City
   Click_and_drag_to_zoom_in: You can click and drag to zoom in
   Click_to_edit: Click to edit
@@ -57,8 +83,10 @@ en:
   Access_point_named: Access point %{hostname}
   Access_points: Access points
   Access_points_for: %{wisp}'s Access points
+  Access_points_for_group: 'Access points of group "%{group}"'
   Access_points_of_every_wisp: Access points of every wisp
   Access_points_map: Access points Map
+  Home: Home
   Info: Info
   Interface_address: Inteface address
   Interface_vendor: Inteface vendor
@@ -70,7 +98,7 @@ en:
   Latest_seen: Latest seen on
   Loading: Loading
   Map: Map
-  More_info: Altre informazioni
+  More_info: More information
   Name: Name
   Next: Next
   No_data_to_display: Access point unknown, there is no data to display.
@@ -82,9 +110,10 @@ en:
   Notes: Additional notes
   Ok: Ok
   Prev: Previous
-  Public: Public
+  Public: Published
   Public_on_Georss: Visible on GeoRSS
   Quick_search: Quick search
+  Filter_fav: Filter favourite
   Remember_me: Remember me
   Reset_highlighting: Reset highlighting
   Reset_highlighting_fallback_message: There are no records highlighted at the moment
@@ -100,9 +129,88 @@ en:
   Update: Update
   Username: Username
   Will_be_rendered_in_georss: Will be rendered in GeoRSS
+  Wisp: Wisp
   Wisp_list: Wisps List
-  
+  User: User
+  username: Username
+  email: email
+  change_password: change password
+  Password: password
+  password_confirmation: password confirmation
+  Edit: Edit
+  Create: Create
+  Roles: Roles
+  Edit_user: Edit user
+  New_user: New user
+  Account_updated: User account modified successfully
+  Select: Select
+  Account_registered: New user account registered
+  Delete: Delete
+  Last_login: Last login
+  Actions: Actions
+  Online_users: Online users
+  Group: Group
+  Groups: Groups
+  Group_list: Group management
+  Group_statistics: Group statistics
+  New_group: New Group  
+  Edit_group: Edit group
+  Total_AP: Total AP
+  Monitor: Monitoring active?
+  Monitoring_disabled_for_group: Monitoring disabled
+  Monitor_help: "This flag indicates wheter the system should monitor the status of the access points contained in this group"
+  No_wisp: No wisp associated
+  Users: Users
+  User_management: User management interface
+  Mac_address: Mac address
+  Cannot_delete_default_group: Cannot delete default group
+  No_AP: There are no access points yet  
+  Manage_groups: Manage groups
+  Group_modified: Group modified successfully
+  Group_list_of_wisp: 'Group list of "%{wisp}"'
+  View_AP: View AP
+  View_all_the_AP: All access points
+  Groups_of_this_wisp: Groups of this wisp
+  Access_points_of_this_wisp: Access points of this wisp
+  Select_all: Select all
+  Change_group: Change group
+  No_access_point_selected: "You must select some access points.\n\nTry to select the rows of the table with your mouse."
+  Bad_format_parameters: Bad format parameters
+  Group_not_found: Group not found
+  User_does_not_have_permission_group: User does not have permission to manage wisp of the specified group
+  User_does_not_have_permission_ap_id: "User does not have permission to manage wisp of ap with id %{ap_id}"
+  Moving_access_point_different_wisp_not_allowed: 'Moving access point of wisp "%{wisp1}" in a group of "%{wisp2}" is not allowed'
+  Access_point_updated: "%{length} access points updated"
+  Select_all_title: "Select all (CTRL + A)\nor deselect all (ESC)"
+  Change_group_title: "Change group of the selected access points (CTRL + G)"
+  Access_points_of_wisp: Wisp <b>"%{wisp}"</b>
+  Access_points_of_wisp_group: Wisp <b>"%{wisp}"</b> &raquo; <b>"%{group}"</b>
+  Count_stats: Count statistics
+  Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating statists of the access points (up, down, unknown, total)"
+  Published_thead_tooltip: Indicates whether the access point\nis published in the GeoRSS
+  Favourite_acccess_points: Favourite Access Points
+  Total: Total
+  Favourite: Favourite
+  Favourites: Favourites
+  Add_to_favourites: Add to favourites
+  Remove_from_favourites: Remove from favourites
+  Reset_all: Reset all
+  Remove_all_from_favourites: Remove all from favourites
+  View_favourite_of_wisp: View favourite of %{wisp}
+  View_groups_of_wisp: View groups of %{wisp}
+  Unrecognized_property_name: Unrecognized property_name parameter
+  Exec_batch_action: Execute batch action
+  Select_action: Select action
+  Change_group_action: Change group (CTRL + G)
+  Add_to_favourite_action: Add to favourite (CTRL+D)
+  Remove_from_favourite_action: Remove from favourite (ALT+D)
+  Publish_action: Publish (CTRL+P)
+  Unpublish_action: Unpublish (ALT+P)
+  next_page_tooltip: "(SHIFT + RIGHT)"
+  prev_page_tooltip: "(SHIFT + LEFT)"
+
   # Lowercase
+  logged_as: logged in as
   all: all
   back: back
   click_to_edit: click to edit
@@ -118,9 +226,14 @@ en:
     one: 1 day ago
     other: "#{count} days ago"
   than: than
+  total: total
   'true': 'yes'
   unknown: unknown
   up: up
+  description: description
+  name: name
+  monitor: monitoring
+  favourites: favourites
   
   # Defaults for rails
   errors:

@@ -22,20 +22,28 @@ include Net
 class MonitoringWorker < BackgrounDRb::MetaWorker
   set_worker_name :monitoring_worker
 
-  MAX_THREADS = 10
-  PING_TIMEOUT = 5
+  MAX_THREADS = CONFIG['max_threads']
+  PING_TIMEOUT = CONFIG['ping_timeout']
 
   @@monitoring_semaphore = Mutex.new
   @@users_count_semaphore = Mutex.new
 
   def create(args = nil)
     # this method is called, when worker is loaded for the first time
-
   end
 
   def access_points_monitoring
     threads = []
-    AccessPoint.all.each do |ap|
+    access_points = AccessPoint.with_properties_and_group("access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
+      property_sets.category, property_sets.group_id, property_sets.notes, groups.monitor AS group_monitor")
+    
+    access_points.each do |ap|
+      
+      # if access point is in a group which is not being monitored
+      # for some reason when joining active records return a string instead of a boolean
+      if ap.group_monitor == "0" or ap.group_monitor == false
+        next
+      end
 
       # spawn a new thread if there is a "slot" for it. Otherwise, wait for an empty slot
       while threads.length >= MAX_THREADS
@@ -61,17 +69,18 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       end)
 
     end
+    # update group statistics
+    Group.update_all_counts()
 
     # collect remaining threads that are finished theirs job
     while threads.length > 0
       threads.delete_if { |th| th.alive? ? false : th.join() }
       sleep(0.2)
     end
-
   end
 
   def consolidate_access_points_monitoring
-    AccessPoint.all.each do |ap|
+    AccessPoint.with_properties.all.each do |ap|
       begin
         # avoid race conditions with the access_points_monitoring() function
         @@monitoring_semaphore.synchronize {
@@ -206,9 +215,13 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
   end
 
   def housekeeping
-    time = 6.months.to_i.ago
+    #if it doesen't work should be .to_i
+    time = CONFIG['housekeeping_interval'].months.to_i.ago
     ActivityHistory.destroy_all(["created_at < ?", time])
     AssociatedUserCountHistory.destroy_all(["created_at < ?", time])
+    # build missing property sets
+    AccessPoint.build_all_properties()
+    # delete orphan property sets
+    PropertySet.destroy_orphans()
   end
-
 end

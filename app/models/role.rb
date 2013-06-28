@@ -17,4 +17,14 @@
 
 class Role < ActiveRecord::Base
   acts_as_authorization_role
+  
+  def to_s
+    self.name
+  end
+  
+  def self.all_join_wisp
+    self.find_by_sql("SELECT roles.*, wisps.name AS wisp_name, wisps.id AS wisp_id
+                    FROM roles LEFT JOIN wisps ON wisps.id = roles.authorizable_id
+                    ORDER BY wisp_id")
+  end
 end

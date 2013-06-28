@@ -1,11 +1,21 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+wisps_viewer:
+    id: 1
+    name: wisps_viewer
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+wisps_viewer_provinciawifi:
+    id: 2
+    authorizable_type: Wisp
+    authorizable_id: 1
+    name: wisp_access_points_viewer
+
+wisps_viewer_brescia:
+    id: 3
+    authorizable_type: Wisp
+    authorizable_id: 2
+    name: wisp_access_points_viewer
+
+wisps_viewer_small:
+    id: 4
+    authorizable_type: Wisp
+    authorizable_id: 3
+    name: wisp_access_points_viewer

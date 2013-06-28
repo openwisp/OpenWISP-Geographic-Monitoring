@@ -1,0 +1,15 @@
+admin_roles:
+    user_id: 1
+    role_id: 1
+
+brescia_admin_wisp_viewer:
+    user_id: 3
+    role_id: 3
+
+mixed_operator_provincia_viewer:
+    user_id: 4
+    role_id: 2
+
+mixed_operator_brescia_viewer:
+    user_id: 4
+    role_id: 3
