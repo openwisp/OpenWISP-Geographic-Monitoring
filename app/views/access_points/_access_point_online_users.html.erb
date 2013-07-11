@@ -1,86 +1,52 @@
-<% if CONFIG['latest_online_users'] %>
-<div class="grid_12" id="latest-online-users">
-	<div class="box">
-		<h2>
-			<a href="#" class="toggle hidden">
-				<%=t :Latest_10_online_users %>
-				<span class="arrow" data-show="&#x25BC;" data-hide="&#x25B2;">&#x25BC;</span>
-			</a>
-		</h2>
-		<div class="container">
-			<table>
-				<thead>
-					<tr>
-						<th class="name">name</th>
-						<th class="username">username</th>
-						<th class="ip">IP</th>
-						<th class="mac">MAC</th>
-						<th class="association-date">data associazione</th>
-						<th class="login-date">data login</th>
-						<th class="upload">upload (kbytes)</th>
-						<th class="download">download (kbytes)</th>
-						<th class="logout-date">data logout</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td class="name">federico tester</td>
-						<td class="username">fedetester</td>
-						<td class="ip">172.16.40.22</td>
-						<td class="mac">00:11:22:19:5f:d6</td>
-						<td class="association-date">24/06/2013 12:30</td>
-						<td class="login-date">24/06/2013 12:31</td>
-						<td class="upload">2205.77 (kbytes)</td>
-						<td class="download">6610.24 (kbytes)</td>
-						<td class="logout-date"><strong>online</strong></td>
-					</tr>
-					<tr class="odd">
-						<td class="name">federico tester</td>
-						<td class="username">fedetester</td>
-						<td class="ip">172.16.40.22</td>
-						<td class="mac">00:11:22:19:5f:d6</td>
-						<td class="association-date">24/06/2013 12:30</td>
-						<td class="login-date">24/06/2013 12:31</td>
-						<td class="upload">2205.77 (kbytes)</td>
-						<td class="download">6610.24 (kbytes)</td>
-						<td class="logout-date"><strong>online</strong></td>
-					</tr>
-					<tr>
-						<td class="name">federico tester</td>
-						<td class="username">fedetester</td>
-						<td class="ip">172.16.40.22</td>
-						<td class="mac">00:11:22:19:5f:d6</td>
-						<td class="association-date">24/06/2013 12:30</td>
-						<td class="login-date">24/06/2013 12:31</td>
-						<td class="upload">2205.77 (kbytes)</td>
-						<td class="download">6610.24 (kbytes)</td>
-						<td class="logout-date"><strong>online</strong></td>
-					</tr>
-					<tr class="odd">
-							<td class="name">federico tester</td>
-							<td class="username">fedetester</td>
-							<td class="ip">172.16.40.22</td>
-							<td class="mac">00:11:22:19:5f:d6</td>
-							<td class="association-date">24/06/2013 12:30</td>
-							<td class="login-date">24/06/2013 12:31</td>
-							<td class="upload">2205.77 (kbytes)</td>
-							<td class="download">6610.24 (kbytes)</td>
-							<td class="logout-date"><strong>online</strong></td>
-					</tr>
-					<tr>
-							<td class="name">federico tester</td>
-							<td class="username">fedetester</td>
-							<td class="ip">172.16.40.22</td>
-							<td class="mac">00:11:22:19:5f:d6</td>
-							<td class="association-date">24/06/2013 12:30</td>
-							<td class="login-date">24/06/2013 12:31</td>
-							<td class="upload">2205.77 (kbytes)</td>
-							<td class="download">6610.24 (kbytes)</td>
-							<td class="logout-date">24/06/2013 12:30</td>
-					</tr>
-				</tbody>
-			</table>
+<% if CONFIG['latest_online_users'] and @wisp.owmw_enabled? %>
+	<div class="grid_12" id="latest-online-users">
+		<div class="box">
+			<h2>
+				<a href="#" class="toggle hidden">
+					<%=t :Latest_10_online_users %>
+					<span class="arrow" data-show="&#x25BC;" data-hide="&#x25B2;">&#x25BC;</span>
+				</a>
+			</h2>
+			<%
+				RadiusAccounting.active_resource_from(@wisp.owmw_url, @wisp.owmw_username, @wisp.owmw_password)
+				@radius_accountings = RadiusAccounting.find(:all, :params => { 'mac_address' => @access_point.common_name })
+			%>
+			<div class="container">
+				<table>
+					<thead>
+						<tr>
+							<th class="name">name</th>
+							<th class="username">username</th>
+							<th class="ip">IP</th>
+							<th class="mac">MAC</th>
+							<th class="login-date">data login</th>
+							<th class="download">download (kbytes)</th>
+							<th class="upload">upload (kbytes)</th>
+							<th class="logout-date">data logout</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% @radius_accountings.each do |ra| %>
+						<tr <%= cycle('even', 'odd') %>>
+							<td class="name"><%= ra.full_name %></td>
+							<td class="username"><%= ra.username %></td>
+							<td class="ip"><%= ra.framed_ip_address %></td>
+							<td class="mac"><%= ra.calling_station_id %></td>
+							<td class="login-date"><%= Time.parse(ra.acct_start_time).strftime('%d/%m/%Y %H:%M') %></td>
+							<td class="download"><%= (ra.acct_output_octets.to_f / 1024).round(2) %></td>
+							<td class="upload"><%= (ra.acct_input_octets.to_f / 1024).round(2) %></td>
+							<td class="logout-date">
+								<% if ra.acct_stop_time.nil? %>
+									<strong>online</strong>
+								<% else %>
+									<%= Time.parse(ra.acct_stop_time).strftime('%d/%m/%Y %H:%M') %>
+								<% end %>
+							</td>
+						</tr>
+						<% end %>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
-</div>
 <% end %>
