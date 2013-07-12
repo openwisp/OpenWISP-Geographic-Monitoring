@@ -990,6 +990,32 @@ var owgm = {
                 arrow.html(arrow.attr('data-show'));
             }
         });
+    },
+    
+    loadOnlineUsers: function(interval, timer){
+        // default value for interval is 0
+        interval = interval || 0;
+        // default behaviour is setTimeout
+        timer = timer || setTimeout
+        
+        owgm.online_users_timer = timer(function(){
+            // get online users and update UI
+            response = $.get(location.href + '/latest_online_users', function(response){
+                $('#latest-online-users tbody').html(response);
+            });
+        }, interval);
+    },
+    
+    monitorOnlineUsers: function(){
+        $('#latest-online-users h2 a').click(function(e){
+            showing = $(this).hasClass('hidden');
+            if(showing){
+                owgm.loadOnlineUsers(20000, setInterval);
+            }
+            else{
+                clearInterval(owgm.online_users_timer);
+            }
+        });
     }
 };
 

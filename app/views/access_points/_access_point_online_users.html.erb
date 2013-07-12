@@ -7,43 +7,21 @@
 					<span class="arrow" data-show="&#x25BC;" data-hide="&#x25B2;">&#x25BC;</span>
 				</a>
 			</h2>
-			<%
-				RadiusAccounting.active_resource_from(@wisp.owmw_url, @wisp.owmw_username, @wisp.owmw_password)
-				@radius_accountings = RadiusAccounting.find(:all, :params => { 'mac_address' => @access_point.common_name })
-			%>
 			<div class="container">
 				<table>
 					<thead>
 						<tr>
-							<th class="name">name</th>
-							<th class="username">username</th>
-							<th class="ip">IP</th>
-							<th class="mac">MAC</th>
-							<th class="login-date">data login</th>
-							<th class="download">download (kbytes)</th>
-							<th class="upload">upload (kbytes)</th>
-							<th class="logout-date">data logout</th>
+							<th class="name"><%= t :name %></th>
+							<th class="username"><%= t :username %></th>
+							<th class="ip"><%= t :ip_address %></th>
+							<th class="mac"><%= t :mac_address %></th>
+							<th class="login-date"><%= t :login_date %></th>
+							<th class="download"><%= t :download_kbytes %></th>
+							<th class="upload"><%= t :upload_kbytes %></th>
+							<th class="logout-date"><%= t :logout_date %></th>
 						</tr>
 					</thead>
 					<tbody>
-						<% @radius_accountings.each do |ra| %>
-						<tr <%= cycle('even', 'odd') %>>
-							<td class="name"><%= ra.full_name %></td>
-							<td class="username"><%= ra.username %></td>
-							<td class="ip"><%= ra.framed_ip_address %></td>
-							<td class="mac"><%= ra.calling_station_id %></td>
-							<td class="login-date"><%= Time.parse(ra.acct_start_time).strftime('%d/%m/%Y %H:%M') %></td>
-							<td class="download"><%= (ra.acct_output_octets.to_f / 1024).round(2) %></td>
-							<td class="upload"><%= (ra.acct_input_octets.to_f / 1024).round(2) %></td>
-							<td class="logout-date">
-								<% if ra.acct_stop_time.nil? %>
-									<strong>online</strong>
-								<% else %>
-									<%= Time.parse(ra.acct_stop_time).strftime('%d/%m/%Y %H:%M') %>
-								<% end %>
-							</td>
-						</tr>
-						<% end %>
 					</tbody>
 				</table>
 			</div>

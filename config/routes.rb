@@ -34,6 +34,7 @@ Owgm::Application.routes.draw do
       member do
         post 'toggle_public'
         post 'toggle_favourite'
+        get 'latest_online_users'
       end
     end
 
