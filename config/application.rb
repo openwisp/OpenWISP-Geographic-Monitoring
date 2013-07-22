@@ -22,7 +22,7 @@ CONFIG['access_point_pagination'].each do |item|
     end
 end
 # default values if not defined
-CONFIG['latest_online_users'] = CONFIG['latest_online_users'].nil? ? true : CONFIG['latest_online_users'];
+CONFIG['last_logins'] = CONFIG['last_logins'].nil? ? true : CONFIG['last_logins'];
 CONFIG['max_threads'] = CONFIG['max_threads'] || 10
 CONFIG['ping_timeout'] = CONFIG['ping_timeout'] || 5
 CONFIG['housekeeping_interval'] = CONFIG['housekeeping_interval'] || 5

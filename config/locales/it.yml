@@ -210,7 +210,7 @@ it:
   Unpublish_action: Rimuovi pubblicazione (ALT+P)
   next_page_tooltip: "(SHIFT + DESTRA)"
   prev_page_tooltip: "(SHIFT + SINISTRA)"
-  Latest_10_online_users: "Ultimi 10 utenti online"
+  Last_10_logins: "Ultimi 10 login"
   
   # Lowercase
   logged_as: autenticato come

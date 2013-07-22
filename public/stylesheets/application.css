@@ -488,12 +488,12 @@ h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !im
 #category_select select{ padding: 0 }
 #notes textarea{ margin-bottom: 10px }
 
-#latest-online-users table{ margin-top: 12px }
-#latest-online-users thead th{ width: 11%; text-align: center; color: #000 }
-#latest-online-users td{ text-align: center; padding: 10px 0 }
-#latest-online-users .username{ width: 8% }
-#latest-online-users .logout-date{ width: 10% }
-#latest-online-users table strong{ color: green }
-#latest-online-users .container{ display: none }
+#last-logins table{ margin-top: 12px }
+#last-logins thead th{ width: 11%; text-align: center; color: #000 }
+#last-logins td{ text-align: center; padding: 10px 0 }
+#last-logins .username{ width: 8% }
+#last-logins .logout-date{ width: 10% }
+#last-logins table strong{ color: green }
+#last-logins .container{ display: none }
 
 #_d, #_l{ position: fixed !important }

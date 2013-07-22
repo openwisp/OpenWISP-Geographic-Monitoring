@@ -32,7 +32,7 @@ $(document).ready(function() {
     owgm.initMainMenu();
     owgm.initDynamicColumns();
     owgm.initTooltip();
-    owgm.initToggleLatestOnlineUsers();
+    owgm.initToggleLatestLogins();
 });
 
 
@@ -810,7 +810,7 @@ var owgm = {
             });
             owgm.groupsDynamicColumns();
         }
-        if('#latest-online-users'){
+        if('#last-logins'){
             $(window).resize(function(e){
                 owgm.latestOnlineUsersDynamicColumns();
             });
@@ -894,8 +894,8 @@ var owgm = {
     
     latestOnlineUsersDynamicColumns: function(){
         var width = $(window).width(),
-            $ip_column = $('#latest-online-users .ip'),
-            $association_date_column = $('#latest-online-users .association-date');
+            $ip_column = $('#last-logins .ip'),
+            $association_date_column = $('#last-logins .association-date');
         
         if(width <= 1170){
             if($ip_column.eq(0).is(':visible')){
@@ -969,10 +969,10 @@ var owgm = {
         });
     },
     
-    initToggleLatestOnlineUsers: function(){
-        $('#latest-online-users a.toggle').click(function(e){
+    initToggleLatestLogins: function(){
+        $('#last-logins a.toggle').click(function(e){
             // cache some stuff
-            var container = $('#latest-online-users .container'),
+            var container = $('#last-logins .container'),
                 is_visible = container.is(':visible'),
                 arrow = container.parent().find('.arrow');
             // prevent default link behaviour
@@ -992,7 +992,7 @@ var owgm = {
         });
     },
     
-    loadOnlineUsers: function(interval, timer){
+    loadLastLogins: function(interval, timer){
         // default value for interval is 0
         interval = interval || 0;
         // default behaviour is setTimeout
@@ -1000,17 +1000,17 @@ var owgm = {
         
         owgm.online_users_timer = timer(function(){
             // get online users and update UI
-            response = $.get(location.href + '/latest_online_users', function(response){
-                $('#latest-online-users tbody').html(response);
+            response = $.get(location.href + '/last_logins', function(response){
+                $('#last-logins tbody').html(response);
             });
         }, interval);
     },
     
-    monitorOnlineUsers: function(){
-        $('#latest-online-users h2 a').click(function(e){
+    monitorLastLogins: function(){
+        $('#last-logins h2 a').click(function(e){
             showing = $(this).hasClass('hidden');
             if(showing){
-                owgm.loadOnlineUsers(20000, setInterval);
+                owgm.loadLastLogins(20000, setInterval);
             }
             else{
                 clearInterval(owgm.online_users_timer);

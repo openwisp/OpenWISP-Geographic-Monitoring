@@ -30,7 +30,7 @@ class AccessPointsController < ApplicationController
     default :deny
 
     actions :index,:show, :change_group, :select_group, :toggle_public, :toggle_favourite,
-            :batch_select_group, :favourite, :reset_favourites, :latest_online_users do
+            :batch_select_group, :favourite, :reset_favourites, :last_logins do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -76,13 +76,13 @@ class AccessPointsController < ApplicationController
     crumb_for_access_point
   end
   
-  # retrieve latest online users of an ap
-  def latest_online_users
+  # retrieve latest logins and sessions that have been started from an AP
+  def last_logins
     @access_point = AccessPoint.find(params[:id])
     # retrieve radius accountings
     RadiusAccounting.active_resource_from(@wisp.owmw_url, @wisp.owmw_username, @wisp.owmw_password)
-		@radius_accountings = RadiusAccounting.find(:all, :params => { :mac_address => @access_point.common_name, :last => 10 })
-		render :layout => false
+	@radius_accountings = RadiusAccounting.find(:all, :params => { :mac_address => @access_point.common_name, :last => 10 })
+	render :layout => false
   end
   
   def select_group
