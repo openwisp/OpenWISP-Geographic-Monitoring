@@ -209,6 +209,7 @@ en:
   next_page_tooltip: "(SHIFT + RIGHT)"
   prev_page_tooltip: "(SHIFT + LEFT)"
   Last_10_logins: "Last 10 logins"
+  User_deleted: "User deleted"
 
   # Lowercase
   logged_as: logged in as

@@ -211,6 +211,7 @@ it:
   next_page_tooltip: "(SHIFT + DESTRA)"
   prev_page_tooltip: "(SHIFT + SINISTRA)"
   Last_10_logins: "Ultimi 10 login"
+  User_deleted: "Utente cancellato"
   
   # Lowercase
   logged_as: autenticato come
