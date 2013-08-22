@@ -212,6 +212,7 @@ it:
   prev_page_tooltip: "(SHIFT + SINISTRA)"
   Last_10_logins: "Ultimi 10 login"
   User_deleted: "Utente cancellato"
+  OWMW_last_logins_problem: "Problema di rete o funzionalità non implementata per questo wisp (hai aggiornato OWMW?)"
   
   # Lowercase
   logged_as: autenticato come

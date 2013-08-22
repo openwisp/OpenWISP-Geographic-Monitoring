@@ -997,12 +997,22 @@ var owgm = {
         interval = interval || 0;
         // default behaviour is setTimeout
         timer = timer || setTimeout
+        owgm.owmw_not_working = owgm.owmw_not_working || false;
         
         owgm.online_users_timer = timer(function(){
+            if(owgm.owmw_not_working){
+                return false;
+            }
             // get online users and update UI
-            response = $.get(location.href + '/last_logins', function(response){
+            response = $.get(location.pathname + '/last_logins', function(response){
                 $('#last-logins tbody').html(response);
+            }).error(function(){
+                $('#last-logins table').hide();
+                $('#last-logins .message').show();
+                owgm.owmw_not_working = true;
+                clearInterval(owgm.online_users_timer);
             });
+            return true;
         }, interval);
     },
     
