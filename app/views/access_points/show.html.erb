@@ -72,7 +72,10 @@
 								$('#category_select').show();
 						}
 				});
-    }); 
+    });
+    
+    response = $.get(location.href + '/last_logins');
+		$('#last-logins tbody').html(response.responseText);
    
    $('#favourite').click(function() { 
 				$.ajax({
@@ -114,6 +117,8 @@
 
   <div class="clear"></div>
 
+	<%= render :partial => 'access_point_last_logins' %>
+	
   <%= render :partial => 'access_point_graphs' %>
 
   <div class="grid_12">
@@ -126,4 +131,6 @@
 <script>
 		owgm.initSelectGroup("<%= wisp_access_point_select_group_url(@wisp, @access_point) %>");
 		owgm.initFavourite();
+		owgm.loadLastLogins(500);
+		owgm.monitorLastLogins()
 </script>

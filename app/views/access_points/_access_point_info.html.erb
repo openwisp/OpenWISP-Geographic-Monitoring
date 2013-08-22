@@ -29,13 +29,9 @@
     <td><strong><%=t :Mac_address %></strong></td>
     <td class="right"><%= @access_point.common_name %></td>
   </tr>
-  <tr id="group-row">
-    <td><strong><%=t :Group %></strong></td>
-    <td class="right">
-      <a id="group-info" data-groupid="<%= @access_point.group_id %>">
-        <%= @access_point.group_name %>
-      </a>
-    </td>
+  <tr>
+    <td><strong><%=t :Ip_addr %></strong></td>
+    <td class="right"><%= @access_point.ip %></td>
   </tr>
   <tr>
     <td><strong><%=t :Address %></strong></td>
@@ -59,16 +55,8 @@
     </td>
   </tr>
   <tr>
-    <td><strong><%=t :Ip_addr %></strong></td>
-    <td class="right"><%= @access_point.ip %></td>
-  </tr>
-  <tr>
     <td><strong><%=t :Coordinates %></strong></td>
     <td class="right"><%= @access_point.lat %>, <%= @access_point.lng %></td>
-  </tr>
-  <tr>
-    <td><strong><%=t :Activation_date %></strong></td>
-    <td class="right"><%=l(@access_point.activation_date, :format => :long) rescue '-' %></td>
   </tr>
   <tr>
     <td><strong><%=t :Earliest_seen %></strong></td>
@@ -78,8 +66,20 @@
     <td><strong><%=t :Latest_seen %></strong></td>
     <td class="right"><%= l(@access_point.latest_seen, :format => :long) rescue '-' %></td>
   </tr>
+  <tr>
+    <td><strong><%=t :Activation_date %></strong></td>
+    <td class="right"><%=l(@access_point.activation_date, :format => :long) rescue '-' %></td>
+  </tr>
+  <tr id="group-row">
+    <td class="edit"><strong><%=t :Group %></strong></td>
+    <td class="right">
+      <a id="group-info" data-groupid="<%= @access_point.group_id %>">
+        <%= @access_point.group_name %>
+      </a>
+    </td>
+  </tr>
   <tr id="clickable_public">
-    <td><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
+    <td class="edit"><strong><%=t :Public_on_Georss %></strong></td>
     <td id="public" class="right">
       <a class="toggle-public" data-href="<%= toggle_public_wisp_access_point_path(@wisp, @access_point) %>">
         <img src="<%= image_path(@access_point.public? ? 'accept.png' : 'delete.png') %>" alt="">
@@ -87,7 +87,7 @@
     </td>
   </tr>
   <tr>
-    <td id="clickable_category"><strong><%=t :Category %></strong> (<%=t :click_to_edit %>)</td>
+    <td id="clickable_category" class="edit"><strong><%=t :Category %></strong></td>
     <td id="category" class="right">
       <span id="category_select"><%= @access_point.category.present? ? @access_point.category : t(:None) %></span>
       <span id="category_text"></span>

@@ -32,6 +32,7 @@ $(document).ready(function() {
     owgm.initMainMenu();
     owgm.initDynamicColumns();
     owgm.initTooltip();
+    owgm.initToggleLatestLogins();
 });
 
 
@@ -809,6 +810,12 @@ var owgm = {
             });
             owgm.groupsDynamicColumns();
         }
+        if('#last-logins'){
+            $(window).resize(function(e){
+                owgm.latestOnlineUsersDynamicColumns();
+            });
+            owgm.latestOnlineUsersDynamicColumns();
+        }
     },
     
     accessPointsDynamicColumns: function(){
@@ -885,6 +892,34 @@ var owgm = {
         }
     },
     
+    latestOnlineUsersDynamicColumns: function(){
+        var width = $(window).width(),
+            $ip_column = $('#last-logins .ip'),
+            $association_date_column = $('#last-logins .association-date');
+        
+        if(width <= 1170){
+            if($ip_column.eq(0).is(':visible')){
+                $ip_column.hide();
+            }            
+        }
+        else{
+            if(!$ip_column.eq(0).is(':visible')){
+                $ip_column.show();
+            }      
+        }
+        
+        if(width <= 1050){
+            if($association_date_column.eq(0).is(':visible')){
+                $association_date_column.hide();
+            }            
+        }
+        else{
+            if(!$association_date_column.eq(0).is(':visible')){
+                $association_date_column.show();
+            }      
+        }
+    },
+    
     initTooltip: function(){        
         $(".hastip").simpletip({
             fixed: true,
@@ -931,6 +966,65 @@ var owgm = {
             owgm.toggleProperty(el.attr('data-href'), function(result){
                 el.find('img').attr('src', result.image)
             });
+        });
+    },
+    
+    initToggleLatestLogins: function(){
+        $('#last-logins a.toggle').click(function(e){
+            // cache some stuff
+            var container = $('#last-logins .container'),
+                is_visible = container.is(':visible'),
+                arrow = container.parent().find('.arrow');
+            // prevent default link behaviour
+            e.preventDefault();
+            // toggle class hidden
+            $(this).toggleClass('hidden');
+            // toggle container and initialize gmap if necessary
+            container.slideToggle('slow', function(){
+                // on animation complete;
+            });
+            if(!is_visible){
+                arrow.html(arrow.attr('data-hide'));
+            }
+            else{
+                arrow.html(arrow.attr('data-show'));
+            }
+        });
+    },
+    
+    loadLastLogins: function(interval, timer){
+        // default value for interval is 0
+        interval = interval || 0;
+        // default behaviour is setTimeout
+        timer = timer || setTimeout
+        owgm.owmw_not_working = owgm.owmw_not_working || false;
+        
+        owgm.online_users_timer = timer(function(){
+            if(owgm.owmw_not_working){
+                return false;
+            }
+            // get online users and update UI
+            response = $.get(location.pathname + '/last_logins', function(response){
+                $('#last-logins tbody').html(response);
+            }).error(function(){
+                $('#last-logins table').hide();
+                $('#last-logins .message').show();
+                owgm.owmw_not_working = true;
+                clearInterval(owgm.online_users_timer);
+            });
+            return true;
+        }, interval);
+    },
+    
+    monitorLastLogins: function(){
+        $('#last-logins h2 a').click(function(e){
+            showing = $(this).hasClass('hidden');
+            if(showing){
+                owgm.loadLastLogins(20000, setInterval);
+            }
+            else{
+                clearInterval(owgm.online_users_timer);
+            }
         });
     }
 };
