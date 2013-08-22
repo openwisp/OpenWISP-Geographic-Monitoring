@@ -210,6 +210,9 @@ it:
   Unpublish_action: Rimuovi pubblicazione (ALT+P)
   next_page_tooltip: "(SHIFT + DESTRA)"
   prev_page_tooltip: "(SHIFT + SINISTRA)"
+  Last_10_logins: "Ultimi 10 login"
+  User_deleted: "Utente cancellato"
+  OWMW_last_logins_problem: "Problema di rete o funzionalità non implementata per questo wisp (hai aggiornato OWMW?)"
   
   # Lowercase
   logged_as: autenticato come
@@ -236,6 +239,15 @@ it:
   name: nome
   monitor: monitoraggio
   favourites: preferiti
+  name: nome
+  username: username
+  ip_address: ip address
+  mac_address: mac address
+  login_date: data login
+  download_kbytes: download (kbytes)
+  upload_kbytes: upload (kbytes)
+  logout_date: data logout
+  online: online
 
   # Defaults for rails
   errors:

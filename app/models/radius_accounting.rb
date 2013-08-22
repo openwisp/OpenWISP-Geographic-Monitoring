@@ -15,37 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-class ConfigurationsController < ApplicationController
-	before_filter :authenticate_user!
+class RadiusAccounting < ActiveResource::Base
+  extend ActiveModel::Naming
+  include ActiveModel::Serializers::Xml
 
-	access_control do
-    default :deny
-    allow :wisps_viewer
+  def self.active_resource_from(url, username, password)
+    self.site = "#{url}"
+    self.user = username
+    self.password = password
   end
-	
-	def edit
-		to_configure = params[:id]
-
-		case to_configure
-		when 'owmw'
-			@configurations = Configuration.owmw
-		end
-		
-		add_breadcrumb(I18n.t(:Configure_owmw), edit_configuration_path('owmw'))
-	end
-
-	def update
-		configurations = params[:configurations]
-
-		configurations.each do |key, content|
-			case content[:format]
-			when 'boolean'
-				Configuration.set(key, content[:value], 'boolean')
-			when 'array'
-				Configuration.set(key, content[:value].gsub(/ /,"-").gsub(/,/,"\n"), 'array')
-			end
-		end
-
-		redirect_to root_path
-	end
+  
+  def full_name
+    self.attributes[:full_name].class == String ? self.attributes[:full_name] : I18n.t(:User_deleted)
+  end
 end

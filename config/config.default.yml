@@ -1,5 +1,6 @@
 defaults: &defaults
   showmap: false
+  last_logins: true
   # values should be between 1 and 100
   access_point_pagination: [
     { value: 10, default: false },

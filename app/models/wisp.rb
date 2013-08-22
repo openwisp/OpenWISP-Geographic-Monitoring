@@ -28,7 +28,11 @@ class Wisp < ActiveRecord::Base
   end
 
   def owmw_enabled?
-    Configuration.get(:owmw_enabled) && Configuration.get(:wisps_with_owmw).include?(name)
+    Configuration.get(:owmw_enabled) && (
+      Configuration.get(:wisps_with_owmw).include?(name) ||
+      # support names containing spaces too
+      Configuration.get(:wisps_with_owmw).include?(name.gsub(' ', '-'))
+    )
   end
   
   # create unassigned roles for this wisp
