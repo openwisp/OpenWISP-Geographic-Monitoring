@@ -15,9 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-class RadiusAccounting < ActiveResource::Base
+class RadiusSession < ActiveResource::Base
   extend ActiveModel::Naming
   include ActiveModel::Serializers::Xml
+  
+  self.element_name = "radius_accountings"
 
   def self.active_resource_from(url, username, password)
     self.site = "#{url}"
