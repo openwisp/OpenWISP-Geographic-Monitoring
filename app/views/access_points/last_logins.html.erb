@@ -1,9 +1,9 @@
 <% @radius_sessions.each do |ra| %>
 <tr <%= cycle('even', 'odd') %>>
-	<td class="name"><%= ra.full_name %></td>
 	<td class="username"><%= ra.username %></td>
 	<td class="ip"><%= ra.framed_ip_address %></td>
 	<td class="mac"><%= ra.calling_station_id %></td>
+	<td class="name"><%= ra.full_name %></td>
 	<td class="login-date"><%= Time.parse(ra.acct_start_time).strftime('%d/%m/%Y %H:%M') %></td>
 	<td class="download"><%= (ra.acct_output_octets.to_f / 1024).round(2) %></td>
 	<td class="upload"><%= (ra.acct_input_octets.to_f / 1024).round(2) %></td>

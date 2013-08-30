@@ -28,6 +28,6 @@ class RadiusSession < ActiveResource::Base
   end
   
   def full_name
-    self.attributes[:full_name].class == String ? self.attributes[:full_name] : I18n.t(:User_deleted)
+    self.attributes[:full_name].class == String ? self.attributes[:full_name] : "//"
   end
 end
