@@ -1,0 +1,36 @@
+<% if CONFIG['last_logins'] and @wisp.owmw_enabled? %>
+	<div class="grid_12" id="last-logins">
+		<div class="box">
+			<h2>
+				<a href="#" class="toggle hidden">
+					<%=t :Last_10_logins %>
+					<span class="arrow" data-show="&#x25BC;" data-hide="&#x25B2;">&#x25BC;</span>
+				</a>
+			</h2>
+			<div class="container">
+				<table>
+					<thead>
+						<tr>
+							<th class="username"><%= t :username %></th>
+							<th class="ip"><%= t :ip_address %></th>
+							<th class="mac"><%= t :mac_address %></th>
+							<th class="name"><%= t :name %></th>
+							<th class="login-date"><%= t :login_date %></th>
+							<th class="download"><%= t :download_kbytes %></th>
+							<th class="upload"><%= t :upload_kbytes %></th>
+							<th class="logout-date"><%= t :logout_date %></th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- data is loaded by owums.monitorLastLogins() -->
+					</tbody>
+				</table>
+				<div class="message alert" class="hidden"><%= t :OWMW_last_logins_problem %></div>
+			</div>
+		</div>
+	</div>
+	<script>
+		owgm.loadLastLogins(500);
+		owgm.monitorLastLogins();
+	</script>
+<% end %>

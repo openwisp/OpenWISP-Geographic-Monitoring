@@ -72,7 +72,7 @@
 								$('#category_select').show();
 						}
 				});
-    }); 
+    });
    
    $('#favourite').click(function() { 
 				$.ajax({
@@ -114,6 +114,8 @@
 
   <div class="clear"></div>
 
+	<%= render :partial => 'access_point_last_logins' %>
+	
   <%= render :partial => 'access_point_graphs' %>
 
   <div class="grid_12">

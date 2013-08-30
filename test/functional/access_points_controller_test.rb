@@ -105,6 +105,26 @@ class AccessPointsControllerTest < ActionController::TestCase
     activemenu_test()
   end
   
+  test "last logins" do
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    
+    CONFIG['last_logins'] = false
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
+    assert_response :success
+    assert_select '#last-logins', 0
+    
+    CONFIG['last_logins'] = true
+    Configuration.set('owmw_enabled', 'true', 'boolean')
+    Configuration.set('wisps_with_owmw', '%s' % @wisp.name.gsub(' ', '-'), 'array')
+    
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
+    assert_response :success
+    assert_select '#last-logins', 1
+    
+    Configuration.set('owmw_enabled', 'false', 'boolean')
+  end
+  
   test "show access point correct published icon" do
     sign_in users(:admin)
     @wisp = wisps(:provincia_wifi)

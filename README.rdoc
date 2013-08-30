@@ -165,7 +165,11 @@ If you need to customize these options proceed by copying the file and rename it
 
 The options you can customize are:
 * pagination in access point list
-* show "status" column in availability report 
+* show "status" column in availability report
+* *last_logins*: shows session information of users in AP detail page (depends on OWMW and OWMW must be enabled for specific wisps)
+* *max_threads*: number of threads used by background job
+* *ping_timeout*: minutes between pings
+* *housekeeping_interval*: months for the housekeeping
 
 == Copyright
 
