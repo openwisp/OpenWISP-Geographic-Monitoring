@@ -73,9 +73,6 @@
 						}
 				});
     });
-    
-    response = $.get(location.href + '/last_logins');
-		$('#last-logins tbody').html(response.responseText);
    
    $('#favourite').click(function() { 
 				$.ajax({
@@ -131,6 +128,4 @@
 <script>
 		owgm.initSelectGroup("<%= wisp_access_point_select_group_url(@wisp, @access_point) %>");
 		owgm.initFavourite();
-		owgm.loadLastLogins(500);
-		owgm.monitorLastLogins()
 </script>
