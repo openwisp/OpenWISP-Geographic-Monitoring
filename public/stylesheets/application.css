@@ -263,7 +263,9 @@ input.ui-autocomplete-input{ background: #fff none }
 	font-size: 16px; font-weight: bold; margin-bottom: 10px;
 }
 #errorExplanation li{ font-weight: bold }
-.field_with_errors input[type=text], .field_with_errors input[type=password]{ border: 1px solid red }
+.field_with_errors input[type=text],
+.field_with_errors input[type=number],
+.field_with_errors input[type=password]{ border: 1px solid red }
 
 #user_info p.clear{ margin-top: 10px }
 
@@ -498,3 +500,20 @@ h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !im
 #last-logins .message{ margin: 20px; display: none }
 
 #_d, #_l{ position: fixed !important }
+
+.subgroup .field{
+	margin: 10px 0;
+	padding: 0 20px;
+	overflow: hidden;
+	line-height:30px;
+	min-height: 30px;
+}
+.subgroup label{ float: left; font-weight: bold; width: 140px !important }
+.subgroup .right{ float: left; width: 600px; text-align: left }
+.subgroup input{ width: auto !important; margin: 0 15px 0 0  }
+.subgroup input[type=text]{ width: 180px !important }
+.subgroup input[type=number]{ width: 30px !important }
+.subgroup .help{ color: gray }
+.subgroup .field_with_errors{ display: inline }
+
+input[readonly=readonly]{ background: #EEE }

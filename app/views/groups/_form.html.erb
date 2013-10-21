@@ -22,9 +22,83 @@
         </div>
         
         <div class="field">
-            <p><strong><%= label_tag :count_stats, t(:Count_stats) %>:</strong> <%= f.check_box :count_stats %></p>
+            <p><strong><%= label_tag :group_count_stats, t(:Count_stats) %>:</strong> <%= f.check_box :count_stats %></p>
             <p><span class="help"><%= t :Count_stats_help %>.</span></p>
         </div>
+
+        <% if @group.id != 1 %>
+        <fieldset id="alert-settings" class="subgroup hidden">
+            <legend>Alert settings</legend>
+            <div class="field">
+                <%= label_tag :group_alerts, t(:Alerts_active) %>
+                
+                <div class="right">
+                    <%= f.check_box :alerts %>
+                    <span class="help">Help text here.</span>
+                </div>
+            </div>
+            
+            <div class="field">
+                <%= label_tag :group_alerts_email, t(:Email) %>
+                
+                <div class="right">
+                    <%= f.text_field :alerts_email %>
+                    <span class="help">Help text here.</span>
+                </div>
+            </div>
+                
+            <div class="field">
+                <%= label_tag :group_alerts_threshold_down, t(:Threshold_down) %>
+                
+                <div class="right">
+                    <%= f.number_field :alerts_threshold_down %>
+                    <span class="help">Help text here.</span>
+                </div>
+            </div>
+            
+            <div class="field">
+                <%= label_tag :group_alerts_threshold_up, t(:Threshold_Up) %>
+                
+                <div class="right">
+                    <%= f.number_field :alerts_threshold_up %>
+                    <span class="help">Help text here.</span>
+                </div>
+            </div>
+        </fieldset>
+        <script>
+            // hide or show alert settings depending on wether monitoring is active or not
+            $('#group_monitor').change(function(e){
+                if(this.checked){
+                    $('#alert-settings').slideDown(300);
+                }
+                else{
+                    $('#alert-settings').slideUp(300);
+                    $('#group_alerts').removeAttr('checked').trigger('change');
+                }
+            }).trigger('change');
+            
+            // cache inputs
+            var group_alert_related_inputs = $('#alert-settings input[type=text], #alert-settings input[type=number]');
+            
+            // activate or deactivate input related fields depending on main alerts boolean
+            $('#group_alerts').change(function(e){
+                if(this.checked){
+                    group_alert_related_inputs.removeAttr('readonly');
+                }
+                else{
+                    group_alert_related_inputs.attr('readonly', 'readonly');
+                }
+            }).trigger('change');
+            
+            // if clicking on a deactivated field, enable the feature
+            group_alert_related_inputs.click(function(e){
+                if($(this).attr('readonly') == 'readonly'){
+                    $('#group_alerts').attr('checked', 'checked').trigger('change');
+                    $(this).trigger('focus');
+                }
+            });
+        </script>
+        <% end %>
         
         <% unless @group.new_record? %>
         <div class="box" id="group_stats">

@@ -168,7 +168,7 @@ it:
   No_AP: Nessun access point presente
   Group_named: Gruppo "%{group}"
   Manage_groups: Gestisci gruppi
-  Group_modified: Gruppo modificato con successo
+  Group_modified: Gruppo "%{group}" modificato con successo
   Group_list_of_wisp: 'Lista gruppi di "%{wisp}"'
   View_AP: Visualizza AP
   View_all_the_AP: Tutti gli access points
