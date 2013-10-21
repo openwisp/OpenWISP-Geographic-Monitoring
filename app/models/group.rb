@@ -4,6 +4,18 @@ class Group < ActiveRecord::Base
   
   validates_presence_of :name
   
+  validates :alerts_threshold_down,
+            :numericality => { :only_integer => true, :greater_than => 0 },
+            :allow_blank => true
+  
+  validates :alerts_threshold_up,
+            :numericality => { :only_integer => true, :greater_than => 0 },
+            :allow_blank => true
+  
+  validates :alerts_email, :email => true, :allow_blank => true
+  
+  validate :if_alerts_activated_no_empty_alert_fields
+  
   before_destroy :is_default_group?
   
   def up
@@ -89,5 +101,21 @@ class Group < ActiveRecord::Base
   def is_default_group?
     errors.add(:base, I18n.t("Cannot_delete_default_group")) unless self.id != 1
     errors.blank?
+  end
+  
+  def if_alerts_activated_no_empty_alert_fields
+    if alerts
+      if alerts_email.blank?
+        errors.add(:alerts_email, I18n.t(:alerts_email_not_blank_if))
+      end
+      
+      if alerts_threshold_down.blank?
+        errors.add(:alerts_threshold_down, I18n.t(:alerts_threshold_down_not_blank_if))
+      end
+      
+      if alerts_threshold_up.blank?
+        errors.add(:alerts_threshold_up, I18n.t(:alerts_threshold_up_not_blank_if))
+      end
+    end    
   end
 end

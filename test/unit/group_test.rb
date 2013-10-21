@@ -15,6 +15,49 @@ class GroupTest < ActiveSupport::TestCase
     assert group.save()
   end
   
+  test "edit group" do
+    group = Group.find(2)
+    
+    # all alert related fields are not set but this does not interfere with normal saving
+    assert group.save()
+    
+    group.alerts = true
+    group.alerts_email = 'test@test.com'
+    
+    # test alerts_threshold_up not a number
+    group.alerts_threshold_up = 'f'
+    group.alerts_threshold_down = 1
+    assert !group.save()
+    assert(group.errors.length == 1 && group.errors.include?(:alerts_threshold_up))
+    
+    # test alerts_threshold_up less than 1
+    group.alerts_threshold_up = 0
+    assert !group.save()
+    assert(group.errors.length == 1 && group.errors.include?(:alerts_threshold_up))
+    
+    group.alerts_threshold_up = -1
+    assert !group.save()
+    assert(group.errors.length == 1 && group.errors.include?(:alerts_threshold_up))
+    
+    # test alerts_threshold_down not a number
+    group.alerts_threshold_down = 'f'
+    group.alerts_threshold_up = 1
+    assert !group.save()
+    assert(group.errors.length == 1 && group.errors.include?(:alerts_threshold_down))
+    
+    # test alerts_email not an email address
+    group.alerts_threshold_down = '1'
+    group.alerts_email = 'no email address here'
+    assert !group.save()
+    assert(group.errors.length == 1 && group.errors.include?(:alerts_email))
+    
+    # test custom validation (no empty fields if alerts is true)
+    group.alerts_threshold_up = ''
+    group.alerts_email = ''
+    assert !group.save()
+    assert(group.errors.length == 2 && group.errors.include?(:alerts_email) && group.errors.include?(:alerts_threshold_up))
+  end
+  
   test "monitor!" do
     group = groups(:archived)
     # shouldn't save cos name is missing
