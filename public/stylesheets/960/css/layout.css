@@ -364,6 +364,8 @@ input.search.button {
 	width:28%;
 	margin-left:2%;
 }
+input[type=checkbox],
+input[type=radio]{ cursor: pointer }
 
 
 /* articles

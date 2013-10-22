@@ -26,6 +26,9 @@ CONFIG['last_logins'] = CONFIG['last_logins'].nil? ? true : CONFIG['last_logins'
 CONFIG['max_threads'] = CONFIG['max_threads'] || 10
 CONFIG['ping_timeout'] = CONFIG['ping_timeout'] || 5
 CONFIG['housekeeping_interval'] = CONFIG['housekeeping_interval'] || 5
+CONFIG['alerts_threshold_down'] = CONFIG['alerts_threshold_down'] || 90
+CONFIG['alerts_threshold_up'] = CONFIG['alerts_threshold_up'] || 45
+CONFIG['alerts_email'] = CONFIG['alerts_email'] || ""
 
 # Specify where to look for the wisps and access_points table
 # data. Only one value can be enable at a time.

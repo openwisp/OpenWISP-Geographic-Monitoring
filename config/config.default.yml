@@ -10,9 +10,13 @@ defaults: &defaults
   ]
   showstatus: false        # show status column in availability report
 
-  max_threads: 10          #Number of threads
-  ping_timeout: 5          #Minutes between pings
-  housekeeping_interval: 6 #Months for the housekeeping
+  max_threads: 10          # Number of threads
+  ping_timeout: 5          # Minutes between pings
+  housekeeping_interval: 6 # Months for the housekeeping
+  
+  alerts_threshold_down:  90 # default value for group setting "alert_threshold_up"
+  alerts_threshold_up:  45 # default value for group setting "alert_threshold_up"
+  alerts_email: ""
 
 production:
   <<: *defaults

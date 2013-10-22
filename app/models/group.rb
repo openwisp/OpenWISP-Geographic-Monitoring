@@ -5,11 +5,11 @@ class Group < ActiveRecord::Base
   validates_presence_of :name
   
   validates :alerts_threshold_down,
-            :numericality => { :only_integer => true, :greater_than => 0 },
+            :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 },
             :allow_blank => true
   
   validates :alerts_threshold_up,
-            :numericality => { :only_integer => true, :greater_than => 0 },
+            :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 },
             :allow_blank => true
   
   validates :alerts_email, :email => true, :allow_blank => true

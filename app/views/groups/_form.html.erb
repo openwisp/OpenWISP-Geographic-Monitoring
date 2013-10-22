@@ -28,13 +28,13 @@
 
         <% if @group.id != 1 %>
         <fieldset id="alert-settings" class="subgroup hidden">
-            <legend>Alert settings</legend>
+            <legend><%= t :Alert_settings %></legend>
             <div class="field">
                 <%= label_tag :group_alerts, t(:Alerts_active) %>
                 
                 <div class="right">
                     <%= f.check_box :alerts %>
-                    <span class="help">Help text here.</span>
+                    <span class="help"><%= t :Alerts_active_help_text %></span>
                 </div>
             </div>
             
@@ -42,8 +42,8 @@
                 <%= label_tag :group_alerts_email, t(:Email) %>
                 
                 <div class="right">
-                    <%= f.text_field :alerts_email %>
-                    <span class="help">Help text here.</span>
+                    <%= f.text_field :alerts_email, :value => alerts_placeholder(@group, 'alerts_email') %>
+                    <span class="help"><%= t :Alerts_email_help_text %></span>
                 </div>
             </div>
                 
@@ -51,17 +51,17 @@
                 <%= label_tag :group_alerts_threshold_down, t(:Threshold_down) %>
                 
                 <div class="right">
-                    <%= f.number_field :alerts_threshold_down %>
-                    <span class="help">Help text here.</span>
+                    <%= f.number_field :alerts_threshold_down, :value => alerts_placeholder(@group, 'alerts_threshold_down') %>
+                    <span class="help"><%= t :Threshold_down_help_text %></span>
                 </div>
             </div>
             
             <div class="field">
-                <%= label_tag :group_alerts_threshold_up, t(:Threshold_Up) %>
+                <%= label_tag :group_alerts_threshold_up, t(:Threshold_up) %>
                 
                 <div class="right">
-                    <%= f.number_field :alerts_threshold_up %>
-                    <span class="help">Help text here.</span>
+                    <%= f.number_field :alerts_threshold_up, :value => alerts_placeholder(@group, 'alerts_threshold_up') %>
+                    <span class="help"><%= t :Threshold_up_help_text %></span>
                 </div>
             </div>
         </fieldset>

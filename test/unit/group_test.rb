@@ -30,8 +30,8 @@ class GroupTest < ActiveSupport::TestCase
     assert !group.save()
     assert(group.errors.length == 1 && group.errors.include?(:alerts_threshold_up))
     
-    # test alerts_threshold_up less than 1
-    group.alerts_threshold_up = 0
+    # test alerts_threshold_up less than 0
+    group.alerts_threshold_up = -1
     assert !group.save()
     assert(group.errors.length == 1 && group.errors.include?(:alerts_threshold_up))
     

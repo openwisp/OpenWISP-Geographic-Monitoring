@@ -14,6 +14,9 @@ it:
         favourite: preferito
       group:
         name: nome
+        alerts_email: "Email: "
+        alerts_threshold_down: "Soglia down alert:"
+        alerts_threshold_up: "Soglia up alert:"
     errors:
       template:
         header: "Errore di validazione"
@@ -35,6 +38,12 @@ it:
           attributes:
             name:
               blank: non può essere lasciato vuoto
+            alerts_threshold_down:
+              greater_than: "dev'essere maggiore di %{count}"
+              greater_than_or_equal_to: "dev'essere maggiore o uguale a %{count}"
+            alerts_threshold_up:
+              greater_than: "dev'essere maggiore di %{count}"
+              greater_than_or_equal_to: "dev'essere maggiore o uguale a %{count}"
 
   # Uppercase
   Activation_date: Data di attivazione
@@ -188,7 +197,7 @@ it:
   Access_points_of_wisp: Wisp <b>"%{wisp}"</b>
   Access_points_of_wisp_group: Wisp <b>"%{wisp}"</b> &raquo; <b>"%{group}"</b>
   Count_stats: Conteggio statistiche
-  Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando si calcolano le statistiche degli access point (up, down, sconosciuto, totale)
+  Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando vengono calcolate le statistiche generali del wisp (up, down, sconosciuto, totale)
   Published_thead_tooltip: Indica se l'access point\nè pubblicato sul GeoRSS
   Favourite_acccess_points: Access Point Preferiti
   Total: Totale
@@ -212,6 +221,19 @@ it:
   prev_page_tooltip: "(SHIFT + SINISTRA)"
   Last_10_logins: "Ultimi 10 login"
   OWMW_last_logins_problem: "Problema di rete o funzionalità non implementata per questo wisp (hai aggiornato OWMW?)"
+  Alert_settings: Impostazioni Alert del Gruppo
+  Alerts_active: Alert attivi?
+  Alerts_active_help_text: Indica se gli alert via email per questo gruppo sono attivi o meno.
+  Alerts_email_help_text: Indirizzo email che riceverà gli alert per questo gruppo.
+  Threshold_down: Soglia down
+  Threshold_up: Soglia up
+  Threshold_down_help_text: Minuti di attesa prima per l'invio di alert quando un access point non è più raggiungibile.
+  Threshold_up_help_text: Minuti di attesa prima per l'invio di alert quando un access point torna raggiungibile.
+  # errors
+  Is_not_an_email: non è un indirizzo email valido
+  alerts_email_not_blank_if: email dev'essere specificato se gli alert sono attivi
+  alerts_threshold_down_not_blank_if: soglia down dev'essere specificato se gli alert sono attivi
+  alerts_threshold_up_not_blank_if: soglia up dev'essere specificato se gli alert sono attivi
   
   # Lowercase
   logged_as: autenticato come

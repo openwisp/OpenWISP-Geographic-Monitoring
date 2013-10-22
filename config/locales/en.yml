@@ -14,6 +14,9 @@ en:
         favourite: favourite
       group:
         name: name
+        alerts_email: "Email: "
+        alerts_threshold_down: "Alert threshold down:"
+        alerts_threshold_up: "Alert threshold up:"
     errors:
       template:
         header: "Validation Error"
@@ -187,7 +190,7 @@ en:
   Access_points_of_wisp: Wisp <b>"%{wisp}"</b>
   Access_points_of_wisp_group: Wisp <b>"%{wisp}"</b> &raquo; <b>"%{group}"</b>
   Count_stats: Count statistics
-  Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating statists of the access points (up, down, unknown, total)"
+  Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating the general statists of the wisp (up, down, unknown, total)"
   Published_thead_tooltip: Indicates whether the access point\nis published in the GeoRSS
   Favourite_acccess_points: Favourite Access Points
   Total: Total
@@ -211,6 +214,19 @@ en:
   prev_page_tooltip: "(SHIFT + LEFT)"
   Last_10_logins: "Last 10 logins"
   OWMW_last_logins_problem: "Network problem or feature not yet implemented for this wisp (have you upgraded OWMW?)"
+  Alert_settings: Alert Settings for Group
+  Alerts_active: Alert active?
+  Alerts_active_help_text: Indicates whether alert notifications via email for this group are active or not.
+  Alerts_email_help_text: Email address that will receive alerts for this group.
+  Threshold_down: Threshold down
+  Threshold_up: Threshold up
+  Threshold_down_help_text: Minutes to wait before sending an alert when an access point is no longer reachable.
+  Threshold_up_help_text: Minutes to wait before sending an alert when an access point becomes reachable again.
+  # errors
+  Is_not_an_email: is not a valid email address
+  alerts_email_not_blank_if: email must be specified if alerts are active
+  alerts_threshold_down_not_blank_if: threshold down must be specified if alerts are active
+  alerts_threshold_up_not_blank_if: threshold up must be specified if alerts are active
 
   # Lowercase
   logged_as: logged in as

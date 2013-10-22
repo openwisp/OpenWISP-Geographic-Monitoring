@@ -509,11 +509,11 @@ h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !im
 	min-height: 30px;
 }
 .subgroup label{ float: left; font-weight: bold; width: 140px !important }
-.subgroup .right{ float: left; width: 600px; text-align: left }
+.subgroup .right{ float: left; width: 680px; text-align: left }
 .subgroup input{ width: auto !important; margin: 0 15px 0 0  }
 .subgroup input[type=text]{ width: 180px !important }
 .subgroup input[type=number]{ width: 30px !important }
 .subgroup .help{ color: gray }
 .subgroup .field_with_errors{ display: inline }
 
-input[readonly=readonly]{ background: #EEE }
+input[readonly=readonly]{ background: #EEE; color: gray }
