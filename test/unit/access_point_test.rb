@@ -54,6 +54,72 @@ class AccessPointTest < ActiveSupport::TestCase
     end
   end
   
+  test "ensure_with_properties_and_group" do
+    ap = AccessPoint.last
+    exception = assert_raises(RuntimeError) { ap.alerts? }
+    assert_equal "feature in use requires access points to be retrieved with AccessPoint.with_properties_and_group()", exception.message
+  end
+  
+  test "alerts?" do
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    
+    # alerts initially disabled
+    assert ap.alerts? == false
+    
+    # enable alerts for AP  
+    properties = ap.properties
+    properties.alerts = true
+    properties.manager_email = 'owner@test.com'
+    properties.alerts_threshold_up = 20
+    properties.alerts_threshold_down = 10
+    properties.save
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    assert ap.alerts? == true
+    
+    # disable alerts for AP but enable for group
+    properties.alerts = false
+    properties.save
+    group = Group.find(properties.group_id)
+    group.alerts = true
+    group.alerts_threshold_up = 1
+    group.alerts_threshold_down = 1
+    group.alerts_email = 'test@test.com'
+    group.save
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    assert ap.alerts? == true
+    
+    group.alerts = false
+    group.save
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    assert ap.alerts? == false
+  end
+  
+  test "threshold" do
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    
+    group = Group.find(ap.group_id)
+    group.alerts = true
+    group.alerts_threshold_up = 2
+    group.alerts_threshold_down = 1
+    group.alerts_email = 'test@test.com'
+    group.save
+    
+    # threshold_down is 1 and taken from group
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    assert_equal 2, ap.threshold_up.to_i
+    assert_equal 1, ap.threshold_down.to_i
+    
+    # access point overrides threshold settings
+    ap.properties.alerts = true
+    ap.properties.manager_email = 'owner@test.com'
+    ap.properties.alerts_threshold_up = 20
+    ap.properties.alerts_threshold_down = 10
+    ap.properties.save
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    assert_equal 20, ap.threshold_up.to_i
+    assert_equal 10, ap.threshold_down.to_i
+  end
+  
   test "self_favourite" do
     # all wisps
     assert_equal 1, AccessPoint.favourite.count

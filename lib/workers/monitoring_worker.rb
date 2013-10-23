@@ -62,8 +62,13 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         if act
           # avoid race conditions with the consolidate_access_points_monitoring() function
           @@monitoring_semaphore.synchronize {
+            # save activity
             act.save!
-            act.status ? ap.reachable! : ap.unreachable!
+            # if AP reachable status changed
+            if act.status != ap.reachable
+              # save new status
+              act.status ? ap.reachable! : ap.unreachable!
+            end
           }
         end
       end)
@@ -223,5 +228,14 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     AccessPoint.build_all_properties()
     # delete orphan property sets
     PropertySet.destroy_orphans()
+  end
+  
+  def send_alerts
+    begin
+      Alert.send_all
+    rescue Exception => e
+      puts "[#{Time.now}] #{e.message}"  
+      puts "[#{Time.now}] #{e.backtrace.inspect}"
+    end
   end
 end
