@@ -351,8 +351,10 @@ class AccessPoint < ActiveRecord::Base
     
     # the default behaviour with the group table is to include only group_name
     select_fields = "#{PROPERTY_SETS_FIELDS},
-      groups.name AS group_name, groups.alerts AS group_alerts, groups.alerts_email AS group_alerts_email,
-      groups.alerts_threshold_down AS group_alerts_threshold_down, groups.alerts_threshold_up AS group_alerts_threshold_up"
+      groups.name AS group_name, groups.alerts AS group_alerts,
+      groups.alerts_email AS group_alerts_email,
+      groups.alerts_threshold_down AS group_alerts_threshold_down,
+      groups.alerts_threshold_up AS group_alerts_threshold_up"
     
     unless additional_fields.nil?
       select_fields = "#{select_fields}, #{additional_fields}"

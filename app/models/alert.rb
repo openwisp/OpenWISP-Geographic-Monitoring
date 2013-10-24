@@ -7,7 +7,7 @@ class Alert < ActiveRecord::Base
       ap = AccessPoint.with_properties_and_group.find(self.access_point_id)
     end
     
-    puts "sending email..."
+    AlertMailer.notification(self, ap).deliver
     
     self.sent = true
     self.save!

@@ -65,8 +65,8 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
             # save activity
             act.save!
             # if AP reachable status changed
-            if act.status != ap.reachable
-              # save new status
+            if act.status != ap.reachable?
+              # change AP status
               act.status ? ap.reachable! : ap.unreachable!
             end
           }

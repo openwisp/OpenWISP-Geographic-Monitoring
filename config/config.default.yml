@@ -10,12 +10,24 @@ defaults: &defaults
   ]
   showstatus: false        # show status column in availability report
 
-  max_threads: 10          # Number of threads
-  ping_timeout: 5          # Minutes between pings
-  housekeeping_interval: 6 # Months for the housekeeping
+  # Number of threads
+  max_threads: 10
+  # Minutes between pings
+  ping_timeout: 5
+  # Months for the housekeeping
+  housekeeping_interval: 6
   
-  alerts_threshold_down:  90 # default value for group setting "alert_threshold_up"
-  alerts_threshold_up:  45 # default value for group setting "alert_threshold_up"
+  # host for links sent via email
+  protocol: https
+  host: change_me.com
+  # from email in alerts and exception reports
+  from_email: owgm@localhost
+  
+  # default value for group setting "alert_threshold_up"
+  alerts_threshold_down:  90
+  # default value for group setting "alert_threshold_up"
+  alerts_threshold_up:  45
+  # default value for group setting "alert_email"
   alerts_email: ""
 
 production:

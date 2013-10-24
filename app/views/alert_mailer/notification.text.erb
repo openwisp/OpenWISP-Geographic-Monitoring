@@ -1,0 +1,17 @@
+***** OpenWISP Geographic Monitoring *****
+
+<%= t :Notification_type %>: <%= @alert.action == 'down' ? t(:PROBLEM) : t(:RECOVERY) %>
+Host: <%= @ap.hostname %>
+Status: <%= @alert.action.upcase %> <%= t :since %> <%= @alert.created_at %>
+
+<%= t :City %>: <%= @ap.city %>
+<%= t :Address %>: <%= @ap.address %>
+
+<% unless @ap.mng_ip.blank? %>
+<%= t :Ip_addr %>: <%= @ap.mng_ip %>
+<% end %>
+<%= t :Mac_address %>: <%= @ap.common_name %>
+
+<% if(@admin) %>
+URL: <%= CONFIG['protocol'] %>://<%= CONFIG['host'] %><%= wisp_access_point_path(@ap.wisp, @ap) %>
+<% end %>

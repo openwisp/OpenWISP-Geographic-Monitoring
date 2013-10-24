@@ -8,6 +8,8 @@
  :monitoring_worker:
   :access_points_monitoring:
    :trigger_args: 0  */5  *  * * *
+  :send_alerts:
+   :trigger_args: 0  */1  *  * * *
   :consolidate_access_points_monitoring:
    :trigger_args: 0   30  */1 * * *
   :associated_user_counts_monitoring:

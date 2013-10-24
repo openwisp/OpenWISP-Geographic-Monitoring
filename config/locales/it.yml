@@ -221,6 +221,7 @@ it:
   prev_page_tooltip: "(SHIFT + SINISTRA)"
   Last_10_logins: "Ultimi 10 login"
   OWMW_last_logins_problem: "Problema di rete o funzionalità non implementata per questo wisp (hai aggiornato OWMW?)"
+  # Alerts
   Alert_settings: Impostazioni Alert del Gruppo
   Alerts_active: Alert attivi?
   Alerts_active_help_text: Indica se gli alert via email per questo gruppo sono attivi o meno.
@@ -229,11 +230,18 @@ it:
   Threshold_up: Soglia up
   Threshold_down_help_text: Minuti di attesa prima per l'invio di alert quando un access point non è più raggiungibile.
   Threshold_up_help_text: Minuti di attesa prima per l'invio di alert quando un access point torna raggiungibile.
-  # errors
+  # alerts validation errors
   Is_not_an_email: non è un indirizzo email valido
   alerts_email_not_blank_if: email dev'essere specificato se gli alert sono attivi
   alerts_threshold_down_not_blank_if: soglia down dev'essere specificato se gli alert sono attivi
   alerts_threshold_up_not_blank_if: soglia up dev'essere specificato se gli alert sono attivi
+  # alerts email text
+  hostname_is_no_longer_reachable: %{hostname} non è più raggiungibile
+  hostname_is_now_reachable_again: %{hostname} è ora raggiungibile
+  Notification_type: Tipo notifica
+  PROBLEM: PROBLEMA
+  RECOVERY: RIPRISTINO
+  since: da
   
   # Lowercase
   logged_as: autenticato come
