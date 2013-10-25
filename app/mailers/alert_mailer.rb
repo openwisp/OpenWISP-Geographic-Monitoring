@@ -1,6 +1,8 @@
 class AlertMailer < ActionMailer::Base
   default :from => CONFIG['from_email']
   
+  add_template_helper(ApplicationHelper)
+  
   def notification(alert, ap)
     @alert = alert
     @ap = ap

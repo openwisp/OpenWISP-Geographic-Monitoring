@@ -17,9 +17,10 @@ defaults: &defaults
   # Months for the housekeeping
   housekeeping_interval: 6
   
-  # host for links sent via email
+  # protocol, host and subfolder for links sent via email
   protocol: https
   host: change_me.com
+  subdir: 'owgm'
   # from email in alerts and exception reports
   from_email: owgm@localhost
   

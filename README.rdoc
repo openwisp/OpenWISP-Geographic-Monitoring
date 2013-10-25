@@ -171,6 +171,16 @@ The options you can customize are:
 * *ping_timeout*: minutes between pings
 * *housekeeping_interval*: months for the housekeeping
 
+The following options must be configured if the alert system is in use
+
+* *protocol*: http or https, defaults to https for security reasons
+* *host*: domain or ip address where OWGM is installed
+* *subdir*: subdir in which owgm is installed, defaults to "owgm", leave blank if owgm is installed in the root public directory
+* *from_email*: email address that will be used as *"from"* when sending alerts
+* *alerts_threshold_down*: default "threshold down" value for group alert settings
+* *alerts_threshold_up*: default "threshold up" value for group alert settings
+* *alerts_email*: default email value for group alert settings
+
 == Copyright
 
 Copyright (C) 2012 OpenWISP.org

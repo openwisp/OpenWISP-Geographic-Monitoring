@@ -83,4 +83,18 @@ module ApplicationHelper
   def slugify(string)
     return string.downcase.gsub(' ', '-')
   end
+  
+  def base_url
+    protocol = CONFIG['protocol']
+    host = CONFIG['host']
+    subdir = CONFIG['subdir']
+    
+    url = "#{protocol}://#{host}"
+    
+    unless subdir.blank?
+      url = "#{url}/#{subdir}"
+    end
+    
+    return url
+  end
 end

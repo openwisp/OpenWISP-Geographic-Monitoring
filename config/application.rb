@@ -28,6 +28,7 @@ CONFIG['ping_timeout'] = CONFIG['ping_timeout'] || 5
 CONFIG['housekeeping_interval'] = CONFIG['housekeeping_interval'] || 5
 CONFIG['protocol'] = CONFIG['protocol'] || 'https'
 CONFIG['host'] = CONFIG['host'] || 'change_me.com'
+CONFIG['subdir'] = CONFIG['subdir'] || 'owgm'
 CONFIG['from_email'] = CONFIG['from_email'] || 'owgm@localhost'
 CONFIG['alerts_threshold_down'] = CONFIG['alerts_threshold_down'] || 90
 CONFIG['alerts_threshold_up'] = CONFIG['alerts_threshold_up'] || 45

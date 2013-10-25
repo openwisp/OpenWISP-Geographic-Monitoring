@@ -13,5 +13,5 @@ Status: <%= @alert.action.upcase %> <%= t :since %> <%= @alert.created_at %>
 <%= t :Mac_address %>: <%= @ap.common_name %>
 
 <% if(@admin) %>
-URL: <%= wisp_access_point_url(@ap.wisp, @ap) %>
+URL: <%= base_url %><%= wisp_access_point_path(@ap.wisp, @ap) %>
 <% end %>
