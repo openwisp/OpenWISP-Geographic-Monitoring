@@ -23,14 +23,15 @@ class AccessPointsController < ApplicationController
     :toggle_public,
     :toggle_favourite,
     :batch_change_property,
-    :erase_favourite
+    :erase_favourite,
+    :edit_manager_email
   ]
 
   access_control do
     default :deny
 
     actions :index,:show, :change_group, :select_group, :toggle_public, :toggle_favourite,
-            :batch_select_group, :favourite, :reset_favourites, :last_logins do
+            :batch_select_group, :favourite, :reset_favourites, :last_logins, :edit_manager_email do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -244,6 +245,20 @@ class AccessPointsController < ApplicationController
     end
      
     render :status => 200, :json => { "details" => I18n.t(:Access_point_updated, :length => access_points.length) }
+  end
+
+  def edit_manager_email
+	properties = PropertySet.find_by_access_point_id(params[:access_point_id])
+	properties.manager_email = params[:manager_email]
+	
+	if properties.save
+	  render :status => 200, :json => { "details" => "success" }
+	else
+	  render :status => 400, :json => {
+		"details" => "validation error",
+		"errors" => properties.errors
+	  }
+	end
   end
 
   private

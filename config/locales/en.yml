@@ -234,6 +234,9 @@ en:
   PROBLEM: PROBLEM
   RECOVERY: RECOVERY
   since: since
+  # access point page - alert related
+  Manger_email: Manager email
+  not_set: not set
 
   # Lowercase
   logged_as: logged in as

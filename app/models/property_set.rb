@@ -24,6 +24,8 @@ class PropertySet < ActiveRecord::Base
       :with => /^\w+\s|\.|\-*\w+$/,
       :allow_blank => true
   }
+  
+  validates :manager_email, :email => true, :allow_blank => true
 
   def self.categories(wisp)
     # Categories should be specific for each wisp

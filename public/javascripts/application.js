@@ -33,6 +33,7 @@ $(document).ready(function() {
     owgm.initDynamicColumns();
     owgm.initTooltip();
     owgm.initToggleLatestLogins();
+    owgm.initEditManagerEmail();
 });
 
 
@@ -1025,6 +1026,62 @@ var owgm = {
             else{
                 clearInterval(owgm.online_users_timer);
             }
+        });
+    },
+    
+    initEditManagerEmail: function(){
+        owgm.editManager = true;
+        
+        $('#manager_email_input').focus(function(e){
+            $(this).removeClass('inactive');
+        }).blur(function(e){
+            var $this = $(this),
+                value = $this.val()
+                url = $this.attr('data-url');
+            
+            // if invalid add error class
+            if(value != '' && this.validity.valid === false && owgm.editManager === true) {
+                $this.addClass('field_with_errors');
+            }
+            // if valid
+            else{
+                var $input = $(this);
+                
+                // remove error class and make inactive
+                $input.addClass('inactive');
+                $input.removeClass('field_with_errors');
+                
+                // save result to DB
+                if (owgm.editManager === true && this.value != this.defaultValue) {
+                    $.post(url, { manager_email: value })
+                    // error case
+                    .error(function(xhr){
+                        alert(JSON.parse(xhr.responseText).errors.manager_email[0]);
+                        $input.removeClass('inactive').addClass('field_with_errors');
+                        $input.trigger('focus');
+                    });
+                }
+                // cancel
+                else{
+                    this.value = this.defaultValue
+                }
+                
+            }
+        // if pressing enter
+        }).keydown(function(e){
+            if(e.keyCode == 13) {
+                owgm.editManager = true;
+                $(this).trigger('blur');
+            }
+            else if (e.keyCode == 27) {
+                owgm.editManager = false;
+                $(this).trigger('blur');
+            }
+        });
+        
+        //
+        $('#email-row').click(function(e){
+            $('#manager_email_input').trigger('focus');
         });
     }
 };

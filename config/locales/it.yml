@@ -242,6 +242,9 @@ it:
   PROBLEM: PROBLEMA
   RECOVERY: RIPRISTINO
   since: dal
+  # access point page - alert related
+  Manger_email: Email responsabile
+  not_set: non impostata
   
   # Lowercase
   logged_as: autenticato come
