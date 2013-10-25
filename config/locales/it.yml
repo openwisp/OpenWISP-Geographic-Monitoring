@@ -241,7 +241,7 @@ it:
   Notification_type: Tipo notifica
   PROBLEM: PROBLEMA
   RECOVERY: RIPRISTINO
-  since: da
+  since: dal
   
   # Lowercase
   logged_as: autenticato come

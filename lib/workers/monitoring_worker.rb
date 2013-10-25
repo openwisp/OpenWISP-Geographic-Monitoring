@@ -220,10 +220,11 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
   end
 
   def housekeeping
-    #if it doesen't work should be .to_i
     time = CONFIG['housekeeping_interval'].months.to_i.ago
     ActivityHistory.destroy_all(["created_at < ?", time])
     AssociatedUserCountHistory.destroy_all(["created_at < ?", time])
+    # delete old alerts
+    Alert.destroy_all(["created_at < ?", time])
     # build missing property sets
     AccessPoint.build_all_properties()
     # delete orphan property sets
