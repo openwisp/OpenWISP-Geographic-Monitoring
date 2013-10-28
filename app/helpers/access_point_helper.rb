@@ -39,12 +39,12 @@ module AccessPointHelper
       image = 'cluster_'
     end
 
-    if marker.up?
+    if marker.unknown? or !marker.monitor?
+      image += 'unknown.png'
+    elsif marker.up?
       image += 'up.png'
     elsif marker.down?
       image += 'down.png'
-    elsif marker.unknown?
-      image += 'unknown.png'
     end
 
     image_path(image)

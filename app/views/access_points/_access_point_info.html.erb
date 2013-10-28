@@ -44,12 +44,16 @@
   <tr>
     <td><strong><%=t :Status %></strong></td>
     <td class="right">
-      <% if @access_point.up? %>
-          <span class="up"><%=t :up %></span>
-      <% elsif @access_point.down? %>
-          <span class="down"><%=t :down %></span>
-      <% elsif @access_point.unknown? %>
-          <span class="unknown"><%=t :unknown %></span>
+      <% if @access_point.monitor? %>
+        <% if @access_point.up? %>
+            <span class="up"><%=t :up %></span>
+        <% elsif @access_point.down? %>
+            <span class="down"><%=t :down %></span>
+        <% elsif @access_point.unknown? %>
+            <span class="unknown"><%=t :unknown %></span>
+        <% end %>
+      <% else %>
+        <span class="unknown"><%=t :not_monitored %></span>
       <% end %>
       <%= image_tag_for @access_point, :id => 'hs_icon', :class => 'hidden' %>
     </td>

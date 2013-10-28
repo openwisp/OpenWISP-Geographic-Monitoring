@@ -221,6 +221,7 @@ it:
   prev_page_tooltip: "(SHIFT + SINISTRA)"
   Last_10_logins: "Ultimi 10 login"
   OWMW_last_logins_problem: "Problema di rete o funzionalità non implementata per questo wisp (hai aggiornato OWMW?)"
+  not_monitored: non monitorato
   # Alerts
   Alert_settings: Impostazioni Alert del Gruppo
   Alerts_active: Alert attivi?
