@@ -13,6 +13,8 @@ class AlertMailerTest < ActionMailer::TestCase
     ap.group.save!
     assert_equal 0, Alert.count
     
+    ap.manager_email = 'manager@test.com'
+    
     # create alert and send
     ap.unreachable!
     assert_equal 1, Alert.count
@@ -21,5 +23,6 @@ class AlertMailerTest < ActionMailer::TestCase
     alert.send_email()
     
     assert !ActionMailer::Base.deliveries.empty?
+    assert ActionMailer::Base.deliveries.length, 2
   end
 end

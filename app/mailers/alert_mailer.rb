@@ -20,7 +20,7 @@ class AlertMailer < ActionMailer::Base
     mail(:to => @ap.group_alerts_email, :subject => subject)
     
     # send mail to AP manager
-    if @ap.alerts and not @ap.manager_email.nil?
+    unless @ap.manager_email.blank?
       @admin = false
       mail(:to => @ap.manager_email, :subject => subject)
     end
