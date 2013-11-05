@@ -12,9 +12,9 @@ defaults: &defaults
 
   # Number of threads
   max_threads: 10
-  # Minutes between pings
+  # Expected seconds to consider a ping timed-out
   ping_timeout: 5
-  # Months for the housekeeping
+  # Months between each house keeping cycle
   housekeeping_interval: 6
   
   # protocol, host and subfolder for links sent via email

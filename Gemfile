@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', :git => 'git://github.com/spawnazzo/rails.git', :branch => '3-0-stable'
+gem 'rails', '3.0.9'
 gem 'mysql', '2.8.1'
 
 gem 'exception_notification', '~> 3.0.1', :require => 'exception_notifier'

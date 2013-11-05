@@ -81,7 +81,7 @@
              required
              value="<%= @access_point.manager_email %>"
              name="manager_email"
-             <% if(@access_point.manager_email.blank?) %>placeholder="<%= t :not_set %>"<% end %>"
+             <% if(@access_point.manager_email.blank?) %>placeholder="<%= t :not_set %>"<% end %>
              id="manager_email_input" class="edit-in-place inactive"
              data-url="<%= wisp_access_point_edit_manager_email_path(@wisp, @access_point) %>">
       <!-- JS code in owgm.initEditManagerEmail() -->

@@ -100,7 +100,7 @@ class AccessPointsControllerTest < ActionController::TestCase
     sign_in users(:admin)
     @wisp = wisps(:provincia_wifi)
     get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
-    assert_response :success
+    assert_response :success    
     assert_select '#group-info', 'no group'
     activemenu_test()
   end
