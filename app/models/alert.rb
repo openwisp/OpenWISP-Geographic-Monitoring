@@ -2,13 +2,20 @@ class Alert < ActiveRecord::Base
   belongs_to :access_point
   
   def send_email(ap=nil)
-    # retrieve AP if 
+    # retrieve AP if not passed
     if ap.nil?
       ap = AccessPoint.with_properties_and_group.find(self.access_point_id)
     end
     
-    AlertMailer.notification(self, ap).deliver
+    # send email to group
+    AlertMailer.notification(self, ap, ap.group_alerts_email).deliver
     
+    # send email to manager if any
+    unless ap.manager_email.blank?
+      AlertMailer.notification(self, ap, ap.manager_email, false).deliver
+    end
+    
+    # set sent as true and save
     self.sent = true
     self.save!
   end

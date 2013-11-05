@@ -3,10 +3,10 @@ class AlertMailer < ActionMailer::Base
   
   add_template_helper(ApplicationHelper)
   
-  def notification(alert, ap)
+  def notification(alert, ap, email_address, admin=true)
     @alert = alert
     @ap = ap
-    @admin = true
+    @admin = admin
     
     if @alert.action == 'down'
       subject_text = I18n.t(:hostname_is_no_longer_reachable, :hostname => @ap.hostname)
@@ -16,13 +16,7 @@ class AlertMailer < ActionMailer::Base
     
     subject = "[OWGM] #{subject_text}"
     
-    # send mail to admins
-    mail(:to => @ap.group_alerts_email, :subject => subject)
-    
-    # send mail to AP manager
-    unless @ap.manager_email.blank?
-      @admin = false
-      mail(:to => @ap.manager_email, :subject => subject)
-    end
+    # send mail
+    mail(:to => email_address, :subject => subject)
   end
 end
