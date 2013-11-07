@@ -42,7 +42,7 @@
 				$('#notes').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
 						submitdata: {authenticity_token:'#{form_authenticity_token}'},
 						name: 'property_set[notes]', method: 'PUT',
-						type: 'textarea', rows: 10,
+						type: 'textarea', rows: 5,
 						submit: '#{t :Ok}', cancel: '#{t :Cancel}',
 						tooltip: '#{t :Click_to_edit}',
 						placeholder: '#{t :No_notes_available}'
@@ -50,6 +50,7 @@
 				$('#site_description').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
 						submitdata: {authenticity_token:'#{form_authenticity_token}'},
 						name: 'property_set[site_description]', method: 'PUT',
+						type: 'textarea', rows: 5,
 						submit: '#{t :Ok}', cancel: '#{t :Cancel}',
 						tooltip: '#{t :Click_to_edit}',
 						placeholder: '#{t :No_notes_available}'

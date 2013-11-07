@@ -97,4 +97,8 @@ module ApplicationHelper
     
     return url
   end
+  
+  def nl2br(value)
+    return (value.gsub(/\n/,"<br />\n")).html_safe
+  end
 end
