@@ -12,7 +12,7 @@ class Group < ActiveRecord::Base
             :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 },
             :allow_blank => true
   
-  validates :alerts_email, :email => true, :allow_blank => true
+  validates :alerts_email, :multiple_email => true, :allow_blank => true
   
   validate :if_alerts_activated_no_empty_alert_fields
   

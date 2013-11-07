@@ -215,15 +215,18 @@ en:
   not_monitored: not monitored
   Last_10_logins: "Last 10 logins"
   OWMW_last_logins_problem: "Network problem or feature not yet implemented for this wisp (have you upgraded OWMW?)"
+  # Alerts
   Alert_settings: Alert Settings for Group
   Alerts_active: Alert active?
   Alerts_active_help_text: Indicates whether alert notifications via email for this group are active or not.
-  Alerts_email_help_text: Email address that will receive alerts for this group.
+  Alerts_email_help_text: Email addresses that will receive alerts for this group.
+  Email_addresses: Email addresses
   Threshold_down: Threshold down
   Threshold_up: Threshold up
   Threshold_down_help_text: Minutes to wait before sending an alert when an access point is no longer reachable.
   Threshold_up_help_text: Minutes to wait before sending an alert when an access point becomes reachable again.
   # validation errors
+  Value_is_not_an_email: %{value} is not a valid email address
   Is_not_an_email: is not a valid email address
   alerts_email_not_blank_if: email must be specified if alerts are active
   alerts_threshold_down_not_blank_if: threshold down must be specified if alerts are active

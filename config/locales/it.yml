@@ -226,12 +226,14 @@ it:
   Alert_settings: Impostazioni Alert del Gruppo
   Alerts_active: Alert attivi?
   Alerts_active_help_text: Indica se gli alert via email per questo gruppo sono attivi o meno.
-  Alerts_email_help_text: Indirizzo email che riceverà gli alert per questo gruppo.
+  Alerts_email_help_text: Indirizzi email che riceveranno gli alert per questo gruppo.
+  Email_addresses: Indirizzi email
   Threshold_down: Soglia down
   Threshold_up: Soglia up
   Threshold_down_help_text: Minuti di attesa prima per l'invio di alert quando un access point non è più raggiungibile.
   Threshold_up_help_text: Minuti di attesa prima per l'invio di alert quando un access point torna raggiungibile.
   # alerts validation errors
+  Value_is_not_an_email: %{value} non è un indirizzo email valido
   Is_not_an_email: non è un indirizzo email valido
   alerts_email_not_blank_if: email dev'essere specificato se gli alert sono attivi
   alerts_threshold_down_not_blank_if: soglia down dev'essere specificato se gli alert sono attivi

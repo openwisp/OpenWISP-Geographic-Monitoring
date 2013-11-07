@@ -56,6 +56,18 @@ class GroupTest < ActiveSupport::TestCase
     group.alerts_email = ''
     assert !group.save()
     assert(group.errors.length == 2 && group.errors.include?(:alerts_email) && group.errors.include?(:alerts_threshold_up))
+    
+    group.alerts_threshold_up = 1
+    group.alerts_email = 'test@test.com'
+    assert group.save()
+    
+    group.alerts_email = 'test@test.com,WRONG!'
+    assert !group.save()
+    assert_equal 1, group.errors.length
+    assert group.errors.include?(:alerts_email)
+    
+    group.alerts_email = 'test@test.com,dev.test@bar2.com'
+    assert group.save()
   end
   
   test "monitor!" do

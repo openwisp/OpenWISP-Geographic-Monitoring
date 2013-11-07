@@ -7,7 +7,7 @@ class AlertMailerTest < ActionMailer::TestCase
     # enable alerts for AP and ensure no alerts are present in DB
     ap = AccessPoint.with_properties_and_group.find(1)
     ap.group.alerts = true
-    ap.group.alerts_email = 'group@test.com'
+    ap.group.alerts_email = 'group@test.com,group2@test.com'
     ap.group.alerts_threshold_down = 0
     ap.group.alerts_threshold_up = 0
     ap.group.save!

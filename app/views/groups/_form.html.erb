@@ -1,3 +1,8 @@
+<% content_for :after_defaults do %>
+    <%= javascript_include_tag 'jquery-ui.js', 'jquery.tagit.js' %>
+    <%= stylesheet_link_tag 'jquery-ui/styles.css', 'jquery.tagit.css' %>
+<% end %>
+
 <%= form_for @group do |f| %>
     <fieldset id="group_form">
         <legend><strong><%= @group.new_record? ? t(:New_group) : t(:Edit_group) %></strong></legend>
@@ -39,7 +44,7 @@
             </div>
             
             <div class="field">
-                <%= label_tag :group_alerts_email, t(:Email) %>
+                <%= label_tag :group_alerts_email, t(:Email_addresses) %>
                 
                 <div class="right">
                     <%= f.text_field :alerts_email, :value => alerts_placeholder(@group, 'alerts_email') %>
@@ -66,6 +71,8 @@
             </div>
         </fieldset>
         <script>
+            // activate jquery tag-it plugin
+            $("#group_alerts_email").tagit();
             // hide or show alert settings depending on wether monitoring is active or not
             $('#group_monitor').change(function(e){
                 if(this.checked){
@@ -78,15 +85,17 @@
             }).trigger('change');
             
             // cache inputs
-            var group_alert_related_inputs = $('#alert-settings input[type=text], #alert-settings input[type=number]');
+            var group_alert_related_inputs = $('#alert-settings input[type=text], #alert-settings input[type=number], ul.tagit')
             
             // activate or deactivate input related fields depending on main alerts boolean
             $('#group_alerts').change(function(e){
                 if(this.checked){
-                    group_alert_related_inputs.removeAttr('readonly');
+                    group_alert_related_inputs.removeAttr('readonly').removeClass('disabled');
+                    //email_addresses.removeClass('disabled');
                 }
                 else{
-                    group_alert_related_inputs.attr('readonly', 'readonly');
+                    group_alert_related_inputs.attr('readonly', 'readonly').addClass('disabled');
+                    //email_addresses.addClass('disabled');
                 }
             }).trigger('change');
             
