@@ -166,8 +166,8 @@ class AccessPoint < ActiveRecord::Base
     clustered_access_points = []
     already_clustered = []
 
-    find_each do |hs|
-      cluster = around(hs.coords)
+    find_each do |access_point|
+      cluster = around(access_point.coords)
       cluster -= already_clustered
 
       clustered_access_points << ( cluster.count > 1 ? Cluster.new(cluster) : cluster.first )

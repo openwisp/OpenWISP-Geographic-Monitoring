@@ -44,6 +44,13 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_response :success
   end
   
+  test "get access points map of all" do
+    sign_in users(:admin)
+    get :index, { :format => 'json' }
+    
+    assert_response :success
+  end
+  
   test "get access points map of group of wisp provinciawifi" do
     # change group of AP for testing purpose
     ap = access_points(:eduroam)
