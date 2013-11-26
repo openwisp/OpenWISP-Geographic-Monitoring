@@ -140,7 +140,7 @@ class AccessPoint < ActiveRecord::Base
   def threshold_down
     ensure_with_properties_and_group()
     # customized
-    if alerts == "1"
+    unless alerts_threshold_down.nil?
       return alerts_threshold_down.to_i
     # group value
     else
@@ -152,12 +152,35 @@ class AccessPoint < ActiveRecord::Base
   def threshold_up
     ensure_with_properties_and_group()
     # customized
-    if alerts == "1"
+    unless alerts_threshold_up.nil?
       return alerts_threshold_up.to_i
     # group value
     else
       return group_alerts_threshold_up.to_i
     end
+  end
+  
+  # tells if ap has alert settings that differ respect to the group settings
+  def alert_settings_customized?
+    ensure_with_properties_and_group()
+    
+    if(
+      (not alerts_threshold_down.nil? and alerts_threshold_down != group_alerts_threshold_down) or
+      (not alerts_threshold_up.nil? and alerts_threshold_up != group_alerts_threshold_up) or
+      (not alerts.nil? and alerts != group_alerts)
+    )
+      return true
+    else
+      return false
+    end
+  end
+  
+  # reset any customization to alert settings
+  def reset_alert_settings
+    self.properties.alerts = nil
+    self.properties.alerts_threshold_up = nil
+    self.properties.alerts_threshold_down = nil
+    self.properties.save!
   end
 
   ##### Static methods #####

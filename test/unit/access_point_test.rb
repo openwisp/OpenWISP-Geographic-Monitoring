@@ -72,7 +72,8 @@ class AccessPointTest < ActiveSupport::TestCase
     properties.manager_email = 'owner@test.com'
     properties.alerts_threshold_up = 20
     properties.alerts_threshold_down = 10
-    properties.save
+    assert properties.save
+    
     ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
     assert ap.alerts? == true
     
@@ -92,6 +93,28 @@ class AccessPointTest < ActiveSupport::TestCase
     group.save
     ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
     assert ap.alerts? == false
+  end
+  
+  test "manager email validation" do
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    
+    # enable alerts for AP  
+    properties = ap.properties
+    properties.alerts = true
+    properties.manager_email = 'owner@test.com'
+    properties.alerts_threshold_up = 20
+    properties.alerts_threshold_down = 10
+    assert properties.save
+    
+    # ensure mail address gets validated
+    properties.manager_email = 'not an email'
+    assert !properties.save
+    assert(properties.errors.length == 1 && properties.errors.include?(:manager_email))
+    
+    # 1 email address only
+    properties.manager_email = 'two@email.com,addresses@email.com'
+    assert !properties.save
+    assert(properties.errors.length == 1 && properties.errors.include?(:manager_email))
   end
   
   test "threshold" do
@@ -118,6 +141,41 @@ class AccessPointTest < ActiveSupport::TestCase
     ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
     assert_equal 20, ap.threshold_up.to_i
     assert_equal 10, ap.threshold_down.to_i
+    
+    # ensure positive integer
+    ap.properties.alerts_threshold_up = -1
+    assert !ap.properties.save
+    assert(ap.properties.errors.length == 1 && ap.properties.errors.include?(:alerts_threshold_up))
+    
+    # ensure positive integer
+    ap.properties.alerts_threshold_up = 0
+    ap.properties.alerts_threshold_down = -1
+    assert !ap.properties.save
+    assert(ap.properties.errors.length == 1 && ap.properties.errors.include?(:alerts_threshold_down))
+  end
+  
+  test "reset alert settings" do
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    
+    assert !ap.alerts? 
+    
+    ap.properties.alerts = true
+    ap.properties.manager_email = 'owner@test.com'
+    ap.properties.alerts_threshold_up = 20
+    ap.properties.alerts_threshold_down = 10
+    ap.properties.save
+    
+    # retrieve again from DB
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    assert ap.alerts?
+    
+    ap.reset_alert_settings()
+    
+    # retrieve again from DB
+    ap = AccessPoint.with_properties_and_group.sort_with('id', 'asc')[0]
+    assert_nil ap.properties.alerts
+    assert_nil ap.properties.alerts_threshold_up
+    assert_nil ap.properties.alerts_threshold_down
   end
   
   test "self_favourite" do

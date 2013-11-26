@@ -32,8 +32,12 @@ $(document).ready(function() {
     owgm.initMainMenu();
     owgm.initDynamicColumns();
     owgm.initTooltip();
-    owgm.initToggleLatestLogins();
-    owgm.initEditManagerEmail();
+    
+    if($('#access-point-info').length) {
+        owgm.initToggleLatestLogins();
+        owgm.initEditManagerEmail();
+        owgm.initApAlertSettings();
+    }
 });
 
 
@@ -1067,21 +1071,195 @@ var owgm = {
                 }
                 
             }
-        // if pressing enter
         }).keydown(function(e){
+            // if pressing enter
             if(e.keyCode == 13) {
                 owgm.editManager = true;
                 $(this).trigger('blur');
             }
+            // if pressing esc
             else if (e.keyCode == 27) {
                 owgm.editManager = false;
                 $(this).trigger('blur');
             }
         });
         
-        //
+        // focus on field when clicking on row
         $('#email-row').click(function(e){
             $('#manager_email_input').trigger('focus');
+        });
+    },
+    
+    initGroupAlertSettings: function(){
+        // activate jquery tag-it plugin
+        $("#group_alerts_email").tagit();
+        // hide or show alert settings depending on wether monitoring is active or not
+        $('#group_monitor').change(function(e){
+            if(this.checked){
+                $('#alert-settings').slideDown(300);
+            }
+            else{
+                $('#alert-settings').slideUp(300);
+                $('#group_alerts').removeAttr('checked').trigger('change');
+            }
+        }).trigger('change');
+        
+        // cache inputs
+        var group_alert_related_inputs = $('#alert-settings input[type=text], #alert-settings input[type=number], ul.tagit')
+        
+        // activate or deactivate input related fields depending on main alerts boolean
+        $('#group_alerts').change(function(e){
+            if(this.checked){
+                group_alert_related_inputs.removeAttr('readonly').removeClass('disabled');
+                //email_addresses.removeClass('disabled');
+            }
+            else{
+                group_alert_related_inputs.attr('readonly', 'readonly').addClass('disabled');
+                //email_addresses.addClass('disabled');
+            }
+        }).trigger('change');
+        
+        // if clicking on a deactivated field, enable the feature
+        group_alert_related_inputs.click(function(e){
+            if($(this).attr('readonly') == 'readonly'){
+                $('#group_alerts').attr('checked', 'checked').trigger('change');
+                $(this).trigger('focus');
+            }
+        });
+    },
+    
+    initApAlertSettings: function () {
+        // WARNING: this method is really messy.. TODO: improve readability and architecture
+        var post_url = $('#manager_email_input').attr('data-url');
+    
+        var adjustPopUpWidth = function () {
+            $('#alert-settings-popup').width($('#alert-settings').width() + 1);
+        };
+    
+        var updateHTML = function () {
+            $.get(window.location.href).done(function (response) {
+                // get response fragment we need
+                var new_html = $(response).find('#access-point-info').html();
+                // replace HTML with fresh data
+                $('#access-point-info').html(new_html);
+                adjustPopUpWidth();
+            })
+        }
+    
+        $(window).resize(function () {
+            // assign same width as ap info table
+            adjustPopUpWidth();
+        }).load(function () {
+            // assign same width as ap info table
+            adjustPopUpWidth();
+        });
+    
+        // mouse enter: show; mouse leave: hide
+        $('#access-point-info').on('mouseenter', '#alert-settings.monitored, #alert-settings-popup', function (e) {
+            $('#alert-settings-popup').show();
+        }).on('mouseleave', '#alert-settings.monitored, #alert-settings-popup', function (e) {
+            $('#alert-settings-popup, #alert-settings-popup').hide();
+    
+            if (owgm.editAlertSettings) {
+                var threshold_up = $('#alerts_threshold_up').val();
+                var threshold_down = $('#alerts_threshold_down').val();
+    
+                $.post(post_url, {
+                    alerts_threshold_up: threshold_up,
+                    alerts_threshold_down: threshold_down
+                }).
+                done(function () {
+                    updateHTML();
+                    owgm.editAlertSettings = false;
+                });
+            }
+    
+        });
+    
+        var changeAlertsImage = function (action) {
+            var image = $('.toggle-alerts img'),
+                image_name = image.attr('src');
+    
+            if (action === undefined && image_name.indexOf('accept.png') > 0) {
+                action = 'disable';
+            } else if (action === undefined) {
+                action = 'enable';
+            }
+    
+            if (action == 'enable') {
+                image_name = image_name.replace('delete.png', 'accept.png')
+            } else if (action == 'disable') {
+                image_name = image_name.replace('accept.png', 'delete.png')
+            }
+    
+            image.attr('src', image_name);
+    
+            return (action == 'enable') ? 'true' : 'false';
+        };
+    
+        $('#access-point-info').on('click', 'a.toggle-alerts', function (e) {
+    
+            var action = changeAlertsImage();
+    
+            $.post($(this).attr('data-href'), {
+                alerts: action
+            }).done(function () {
+                updateHTML();
+            }).
+            error(function () {
+                alert('ERROR');
+            });
+        });
+    
+        $('#access-point-info').on('click', '#reset-alert-settings', function (e) {
+            e.preventDefault();
+    
+            changeAlertsImage('disable');
+    
+            owgm.editAlertSettings = false;
+            $('#alert-settings-popup').hide();
+    
+            $.post(post_url, {
+                reset: 'true'
+            }).done(function () {
+                updateHTML();
+            });
+        });
+    
+        $('#access-point-info').on('click', '#alert-settings-popup label', function (e) {
+            $(this).parents('tr').find('input').trigger('focus');
+        });
+    
+        $('#access-point-info').on('focus', '#alert-settings-popup .edit-in-place', function (e) {
+            $(this).removeClass('inactive');
+        }).on('blur', '#alert-settings-popup .edit-in-place', function (e) {
+            $(this).addClass('inactive');
+    
+            if (this.value == '') {
+                this.value = this.defaultValue;
+            }
+        }).on('keyup', '#alert-settings-popup .edit-in-place', function (e) {
+    
+            // block negative values
+            if ($(this).val() < 0 || e.keyCode == 189) {
+                this.value = this.defaultValue
+                e.preventDefault();
+                return false;
+            }
+    
+            owgm.editAlertSettings = true;
+            // if pressing enter
+            if (e.keyCode == 13) {
+                $(this).trigger('blur');
+            }
+            // if pressing esc
+            else if (e.keyCode == 27) {
+                owgm.editManager = false;
+                this.value = this.defaultValue;
+                $(this).trigger('blur');
+            }
+        }).on('change', '#alert-settings-popup .edit-in-place', function (e) {
+            owgm.editAlertSettings = true;
         });
     }
 };

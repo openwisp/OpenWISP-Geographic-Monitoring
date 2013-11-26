@@ -52,8 +52,7 @@ Owgm::Application.routes.draw do
     
     match 'access_points/:access_point_id/select_group' => 'access_points#select_group', :as => :access_point_select_group, :via => [:get]
     match 'access_points/:access_point_id/change_group/:group_id' => 'access_points#change_group', :as => :access_point_change_group, :via => [:post]
-    
-    match 'access_points/:access_point_id/edit_manager_email' => 'access_points#edit_manager_email', :as => :access_point_edit_manager_email, :via => [:post]
+    match 'access_points/:access_point_id/edit_ap_alert_settings' => 'access_points#edit_ap_alert_settings', :as => :access_point_edit_ap_alert_settings, :via => [:post]    
   end
   
   resources :groups, :only => [:index, :new, :edit, :create, :update, :destroy] do

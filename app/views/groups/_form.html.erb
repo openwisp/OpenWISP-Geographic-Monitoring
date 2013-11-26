@@ -56,7 +56,7 @@
                 <%= label_tag :group_alerts_threshold_down, t(:Threshold_down) %>
                 
                 <div class="right">
-                    <%= f.number_field :alerts_threshold_down, :value => alerts_placeholder(@group, 'alerts_threshold_down') %>
+                    <%= f.number_field :alerts_threshold_down, :value => alerts_placeholder(@group, 'alerts_threshold_down'), :min => 0 %>
                     <span class="help"><%= t :Threshold_down_help_text %></span>
                 </div>
             </div>
@@ -65,48 +65,12 @@
                 <%= label_tag :group_alerts_threshold_up, t(:Threshold_up) %>
                 
                 <div class="right">
-                    <%= f.number_field :alerts_threshold_up, :value => alerts_placeholder(@group, 'alerts_threshold_up') %>
+                    <%= f.number_field :alerts_threshold_up, :value => alerts_placeholder(@group, 'alerts_threshold_up'), :min => 0 %>
                     <span class="help"><%= t :Threshold_up_help_text %></span>
                 </div>
             </div>
         </fieldset>
-        <script>
-            // activate jquery tag-it plugin
-            $("#group_alerts_email").tagit();
-            // hide or show alert settings depending on wether monitoring is active or not
-            $('#group_monitor').change(function(e){
-                if(this.checked){
-                    $('#alert-settings').slideDown(300);
-                }
-                else{
-                    $('#alert-settings').slideUp(300);
-                    $('#group_alerts').removeAttr('checked').trigger('change');
-                }
-            }).trigger('change');
-            
-            // cache inputs
-            var group_alert_related_inputs = $('#alert-settings input[type=text], #alert-settings input[type=number], ul.tagit')
-            
-            // activate or deactivate input related fields depending on main alerts boolean
-            $('#group_alerts').change(function(e){
-                if(this.checked){
-                    group_alert_related_inputs.removeAttr('readonly').removeClass('disabled');
-                    //email_addresses.removeClass('disabled');
-                }
-                else{
-                    group_alert_related_inputs.attr('readonly', 'readonly').addClass('disabled');
-                    //email_addresses.addClass('disabled');
-                }
-            }).trigger('change');
-            
-            // if clicking on a deactivated field, enable the feature
-            group_alert_related_inputs.click(function(e){
-                if($(this).attr('readonly') == 'readonly'){
-                    $('#group_alerts').attr('checked', 'checked').trigger('change');
-                    $(this).trigger('focus');
-                }
-            });
-        </script>
+        <script>owgm.initGroupAlertSettings()</script>
         <% end %>
         
         <% unless @group.new_record? %>

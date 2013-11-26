@@ -225,6 +225,7 @@ en:
   Threshold_up: Threshold up
   Threshold_down_help_text: Minutes to wait before sending an alert when an access point is no longer reachable.
   Threshold_up_help_text: Minutes to wait before sending an alert when an access point becomes reachable again.
+  Is_customized: Customized settings?
   # validation errors
   Value_is_not_an_email: %{value} is not a valid email address
   Is_not_an_email: is not a valid email address
@@ -241,6 +242,9 @@ en:
   # access point page - alert related
   Manger_email: Manager email
   not_set: not set
+  reset: reset
+  Yes: Yes
+  No: No
 
   # Lowercase
   logged_as: logged in as

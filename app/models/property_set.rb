@@ -26,6 +26,14 @@ class PropertySet < ActiveRecord::Base
   }
   
   validates :manager_email, :email => true, :allow_blank => true
+  
+  validates :alerts_threshold_down,
+            :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 },
+            :allow_blank => true
+  
+  validates :alerts_threshold_up,
+            :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 },
+            :allow_blank => true
 
   def self.categories(wisp)
     # Categories should be specific for each wisp

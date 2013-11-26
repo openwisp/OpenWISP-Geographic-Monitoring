@@ -24,14 +24,14 @@ class AccessPointsController < ApplicationController
     :toggle_favourite,
     :batch_change_property,
     :erase_favourite,
-    :edit_manager_email
+    :edit_ap_alert_settings
   ]
 
   access_control do
     default :deny
 
     actions :index,:show, :change_group, :select_group, :toggle_public, :toggle_favourite,
-            :batch_select_group, :favourite, :reset_favourites, :last_logins, :edit_manager_email do
+            :batch_select_group, :favourite, :reset_favourites, :last_logins, :edit_ap_alert_settings do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -246,13 +246,55 @@ class AccessPointsController < ApplicationController
      
     render :status => 200, :json => { "details" => I18n.t(:Access_point_updated, :length => access_points.length) }
   end
-
-  def edit_manager_email
+  
+  def edit_ap_alert_settings
+	# get all AP info, needed for comparing
+	ap = AccessPoint.with_properties_and_group.find(params[:access_point_id])
+	# get properties object, needed for saving eventual changes
 	properties = PropertySet.find_by_access_point_id(params[:access_point_id])
-	properties.manager_email = params[:manager_email]
 	
-	if properties.save
+	# nothing has been changed yet
+	changed = false
+	
+	# if manager email supplied
+	if params[:manager_email]
+	  # change manager email
+	  properties.manager_email = params[:manager_email]
+	  changed = true
+	end
+	
+	# if alerts supplied
+	if params[:alerts]
+	  # change alerts (true or false)
+	  properties.alerts = params[:alerts] == 'true' ? true : false;
+	  changed = true
+	end
+	
+	# if alerts_threshold_up supplied
+	if params[:alerts_threshold_up]
+	  properties.alerts = true if !ap.alerts?
+	  # change alerts_threshold_up (integer)
+	  properties.alerts_threshold_up = params[:alerts_threshold_up]
+	  changed = true
+	end
+	
+	# if alerts_threshold_down supplied
+	if params[:alerts_threshold_down]
+	  properties.alerts = true if !ap.alerts?
+	  # change alerts_threshold_down (integer)
+	  properties.alerts_threshold_down = params[:alerts_threshold_down]
+	  changed = true
+	end
+	
+	if params[:reset]
+	  ap.reset_alert_settings()
+	  changed = true
+	end
+	
+	if changed and properties.save
 	  render :status => 200, :json => { "details" => "success" }
+	elsif changed == false
+	  render :status => 200, :json => { "details" => "nothing changed" }
 	else
 	  render :status => 400, :json => {
 		"details" => "validation error",
