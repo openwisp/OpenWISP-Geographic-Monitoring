@@ -181,6 +181,32 @@ The following options must be configured if the alert system is in use
 * *alerts_threshold_up*: default "threshold up" value for group alert settings
 * *alerts_email*: default email value for group alert settings
 
+=== Alerts
+
+Since version 1.2.1, OWGM can send email alerts when an access point changes status from reachable to unreachable and vice versa.
+
+Alerts can be configured on a group of access points, by editing the group settings, or can be configured specifically for a
+single access point. The only requirement is that the access point is in a group that is being monitored, that is has the flag "Monitoring active?" set as true.
+
+For alerts to work, rails SMTP configuration must be set correctly.
+If alerts are not being sent, edit your environment file and check if the SMTP settings are configured, eg:
+
+    # config/environments/production.rb
+    
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+        :address =>              '127.0.0.1',
+        :port =>                 25,
+        :domain =>               'mail.mydomain.com',
+        #:user_name =>            'user',
+        #:password =>             'password',
+        #:authentication =>       'plain',
+        #:enable_starttls_auto => false
+    }
+
+Be sure to send emails from a server which is authorized to send email from the domain you use, otherwise the monitoring emails will be treated as SPAM.
+For more information read here: http://en.wikipedia.org/wiki/MX_record
+
 == Copyright
 
 Copyright (C) 2012 OpenWISP.org
