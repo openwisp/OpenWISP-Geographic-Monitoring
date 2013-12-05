@@ -21,6 +21,30 @@ class AlertTest < ActiveSupport::TestCase
     assert_equal 1, Alert.count
     assert_equal 0, Alert.where(:access_point_id => 1, :action => 'up', :sent => false).count
     assert_equal 1, Alert.where(:access_point_id => 1, :action => 'down', :sent => false).count
+    
+    # deletes previous alert if not sent
+    Alert.build(:access_point_id => 1, :status => false)
+    assert_equal 1, Alert.count
+    
+    # send
+    Alert.last.send_email()
+    assert_equal 1, Alert.where(:access_point_id => 1, :action => 'down', :sent => true).count
+    
+    # should not create other alerts with same status (DOWN) consecutively for the same access point
+    Alert.build(:access_point_id => 1, :status => false)
+    assert_equal 1, Alert.count
+    
+    # should create a new alert
+    Alert.build(:access_point_id => 1, :status => true)
+    assert_equal 2, Alert.count
+    
+    # deletes previous alert if not sent
+    Alert.build(:access_point_id => 1, :status => true)
+    assert_equal 2, Alert.count
+    
+    # won't create alert at all
+    Alert.build(:access_point_id => 1, :status => true)
+    assert_equal 2, Alert.count
   end
   
   test "send_all" do
