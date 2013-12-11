@@ -183,7 +183,7 @@ The following options must be configured if the alert system is in use
 
 === Alerts
 
-Since version 1.2.1, OWGM can send email alerts when an access point changes status from reachable to unreachable and vice versa.
+Since version 1.3, OWGM can send email alerts when an access point changes status from reachable to unreachable and vice versa.
 
 Alerts can be configured on a group of access points, by editing the group settings, or can be configured specifically for a
 single access point. The only requirement is that the access point is in a group that is being monitored, that is has the flag "Monitoring active?" set as true.
@@ -206,6 +206,22 @@ If alerts are not being sent, edit your environment file and check if the SMTP s
 
 Be sure to send emails from a server which is authorized to send email from the domain you use, otherwise the monitoring emails will be treated as SPAM.
 For more information read here: http://en.wikipedia.org/wiki/MX_record
+
+Some default values can be configured in **config.yml**:
+
+* alerts_threshold_down
+* alerts_threshold_up
+* alerts_email
+
+=== Exception notifications
+
+Since version 1.3 OWGM can send exceptions via email.
+
+To make it work be sure to configure your **smtp_settings** correctly as described
+before and then set the following configuration keys in your **config.yml**:
+
+* exception_notification_recipients
+* mail_subject_prefix
 
 == Copyright
 
