@@ -23,10 +23,12 @@ defaults: &defaults
   subdir: 'owgm'
   # from email in alerts and exception reports
   from_email: owgm@localhost
+  # mail subject prefix that will be used in exceptions and monitoring
+  mail_subject_prefix: "[OWGM]"
   
   # comma separated emails to which rails exceptions will be sent
   exception_notification_recipients: root@localhost
-  mail_subject_prefix: "[OWGM]"
+  
   
   # default value for group setting "alert_threshold_up"
   alerts_threshold_down:  90

@@ -14,7 +14,7 @@ class AlertMailer < ActionMailer::Base
       subject_text = I18n.t(:hostname_is_now_reachable_again, :hostname => @ap.hostname)
     end
     
-    subject = "[OWGM] #{subject_text}"
+    subject = "#{CONFIG['mail_subject_prefix']} #{subject_text}"
     
     # send mail
     mail(:to => email_address, :subject => subject)
