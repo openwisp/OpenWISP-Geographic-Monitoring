@@ -213,6 +213,23 @@ Some default values can be configured in **config.yml**:
 * alerts_threshold_up
 * alerts_email
 
+=== OWUMS graphs ===
+
+Enable each wisp you need by configuring the owums hash in **config.yml**:
+
+    owums: {
+        "wisp-slug": {
+          url: "https://mydomain.com/owums",
+          username: "username",
+          password: "password"
+        }
+    }
+
+Keep in mind that:
+
+* each key in the owums hash represents a wisp
+* keys must contain wisp slug (lowercase name and dashes instead of spaces)
+
 === Exception notifications
 
 Since version 1.3 OWGM can send exceptions via email.

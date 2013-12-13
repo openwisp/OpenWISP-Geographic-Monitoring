@@ -17,6 +17,18 @@ defaults: &defaults
   # Months between each house keeping cycle
   housekeeping_interval: 6
   
+  # owums credentials for each wisp
+  # each key in the owums hash is a wisp
+  # keys must contain wisp slug (lowercase name and dashes instead of spaces)
+  owums: {
+    "wisp-slug": {
+      url: "https://mydomain.com/owums",
+      username: "username",
+      password: "password"
+    }
+    # add any other wisp here
+  }
+  
   # protocol, host and subfolder for links sent via email
   protocol: https
   host: change_me.com
@@ -28,7 +40,6 @@ defaults: &defaults
   
   # comma separated emails to which rails exceptions will be sent
   exception_notification_recipients: root@localhost
-  
   
   # default value for group setting "alert_threshold_up"
   alerts_threshold_down:  90

@@ -72,7 +72,12 @@ class AccessPointsController < ApplicationController
   def show
     @access_point = AccessPoint.with_properties_and_group.find(params[:id])
     @access_point.build_property_set_if_group_name_empty()
-
+    
+    @from = Date.strptime(params[:from], I18n.t('date.formats.default')) rescue 1.months.ago.to_date
+    @to = Date.strptime(params[:to], I18n.t('date.formats.default')) rescue Date.today
+    
+    require "net/http"
+	require "uri"
     crumb_for_wisp
     crumb_for_access_point
   end

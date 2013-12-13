@@ -245,6 +245,11 @@ en:
   reset: reset
   Yes: Yes
   No: No
+  # usage stats
+  Usage_stats: Usage statistics
+  Interval: Interval
+  Daily_logins: Daily logins
+  Daily_traffic: Daily traffic
 
   # Lowercase
   logged_as: logged in as

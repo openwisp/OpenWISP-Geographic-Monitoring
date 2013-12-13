@@ -52,7 +52,12 @@ Owgm::Application.routes.draw do
     
     match 'access_points/:access_point_id/select_group' => 'access_points#select_group', :as => :access_point_select_group, :via => [:get]
     match 'access_points/:access_point_id/change_group/:group_id' => 'access_points#change_group', :as => :access_point_change_group, :via => [:post]
-    match 'access_points/:access_point_id/edit_ap_alert_settings' => 'access_points#edit_ap_alert_settings', :as => :access_point_edit_ap_alert_settings, :via => [:post]    
+    match 'access_points/:access_point_id/edit_ap_alert_settings' => 'access_points#edit_ap_alert_settings', :as => :access_point_edit_ap_alert_settings, :via => [:post]
+  
+    # OWUMS graphs
+    match 'stats/logins.json' => 'stats#logins', :as => :logins_json, :via => [:get]
+    match 'stats/traffic.json' => 'stats#traffic', :as => :traffic_json, :via => [:get]
+    match 'stats/export' => 'stats#export', :as => :export_stats, :via => [:post]
   end
   
   resources :groups, :only => [:index, :new, :edit, :create, :update, :destroy] do
@@ -61,7 +66,7 @@ Owgm::Application.routes.draw do
       post 'toggle_count_stats'
     end
   end
-
+  
   match 'wisps/' => 'wisps#index', :via => [:get]
   
   # You can have the root of your site routed with "root"

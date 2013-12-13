@@ -252,6 +252,11 @@ it:
   reset: resetta
   "Yes": Sì
   No: No
+  # usage stats
+  Usage_stats: Statistiche di utilizzo
+  Interval: Periodo
+  Daily_logins: Login giornalieri
+  Daily_traffic: Traffico giornaliero
   
   # Lowercase
   logged_as: autenticato come

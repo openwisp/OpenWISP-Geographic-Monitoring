@@ -547,3 +547,13 @@ ul.disabled{ background: #eee !important; border-color: #bbb !important }
 #alert-settings-popup label{ cursor: pointer }
 #alert-settings-popup .inner{ padding: 10px 20px }
 #alert-settings-popup .edit-in-place{ width: 50px }
+
+#stats-interval{ text-align:right; margin-bottom:0 }
+#stats-interval input, #stats-interval{ font-size: 14px !important }
+#stats-usage h4{ margin-bottom: 0 }
+#stats-usage .stats .block{ padding-top: 0 }
+#stats-usage button{ font-size: 13px; padding: 3px 7px; margin: 0 0 0 3px }
+#stats-usage{ min-height: 950px }
+
+#stats-usage .block.stats{ min-height: 400px }
+.big_graph .center{ margin-top: 180px }
