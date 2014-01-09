@@ -51,7 +51,7 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
 
     if @group.update_attributes(params[:group])
-      flash[:notice] = t(:Group_modified)
+      flash[:notice] = t(:Group_modified, :group => @group.name)
       redirect_to(groups_url)
     else
       render :action => "edit"

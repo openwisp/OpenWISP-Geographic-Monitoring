@@ -44,6 +44,13 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_response :success
   end
   
+  test "get access points map of all" do
+    sign_in users(:admin)
+    get :index, { :format => 'json' }
+    
+    assert_response :success
+  end
+  
   test "get access points map of group of wisp provinciawifi" do
     # change group of AP for testing purpose
     ap = access_points(:eduroam)
@@ -100,9 +107,29 @@ class AccessPointsControllerTest < ActionController::TestCase
     sign_in users(:admin)
     @wisp = wisps(:provincia_wifi)
     get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
-    assert_response :success
+    assert_response :success    
     assert_select '#group-info', 'no group'
     activemenu_test()
+  end
+  
+  test "last logins" do
+    sign_in users(:admin)
+    @wisp = wisps(:provincia_wifi)
+    
+    CONFIG['last_logins'] = false
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
+    assert_response :success
+    assert_select '#last-logins', 0
+    
+    CONFIG['last_logins'] = true
+    Configuration.set('owmw_enabled', 'true', 'boolean')
+    Configuration.set('wisps_with_owmw', '%s' % @wisp.name.gsub(' ', '-'), 'array')
+    
+    get :show, { :wisp_id => @wisp.name, :id => access_points(:wherecamp).id }
+    assert_response :success
+    assert_select '#last-logins', 1
+    
+    Configuration.set('owmw_enabled', 'false', 'boolean')
   end
   
   test "show access point correct published icon" do

@@ -82,7 +82,7 @@
 
 #gmap_show {
     width: 100%;
-    height: 396px;
+    height: 463px;
 }
 
 #map_container{ position: relative }
@@ -163,19 +163,20 @@ th {
 
 .pagination{ float: left; margin: 4px 10px 0 0 }
 
-.pagination a, a.button{
+.pagination a, a.button, button{
     padding: 4px 10px;
     margin: 0 3px 0 0;
     background: #333;
     color: #fff;
     border-radius: 3px;
 }
-a.button{ font-size: 13px }
+a.button, button{ font-size: 13px }
 .pagination a{ font-size: 13px }
 .pagination .current{ font-weight: bold }
 .pagination a:hover, .pagination a:focus,
-a.button:hover, a.button:focus{ background: #000 !important }
+a.button:hover, a.button:focus, button:focus{ background: #000 !important }
 .pagination .current a{ background: #d3d3d3 !important; color: #333; cursor: default  }
+button{ cursor: pointer; border: 1px solid #000; margin: 5px 10px 0 0 }
 
 #access_points_paginate{ overflow: hidden; margin-top: 18px; display: inline }
 #access_points_quicksearch #q{ width: 200px; margin: 2px 0 0 5px }
@@ -263,7 +264,10 @@ input.ui-autocomplete-input{ background: #fff none }
 	font-size: 16px; font-weight: bold; margin-bottom: 10px;
 }
 #errorExplanation li{ font-weight: bold }
-.field_with_errors input[type=text], .field_with_errors input[type=password]{ border: 1px solid red }
+.field_with_errors input[type=text],
+.field_with_errors input[type=number],
+.field_with_errors input[type=password],
+input.field_with_errors{ border: 1px solid red }
 
 #user_info p.clear{ margin-top: 10px }
 
@@ -377,8 +381,8 @@ input.submit{
     text-indent: -1000px;
 }
 
-#public img{ vertical-align: top }
-#group-info{ padding-left: 25px; background: transparent url(../images/edit.png) no-repeat scroll 0 center }
+#access_point_detail img{ vertical-align: top }
+.edit{ padding-left: 36px; background: #eee url(../images/edit.png) no-repeat scroll 13px center }
 .empty-page-msg{ text-align: center; font-size: 14px; font-weight: bold; padding: 30px 0 20px }
 #wisp-list tbody td{ vertical-align: middle }
 
@@ -438,7 +442,9 @@ th.favourite img{ vertical-align: top; width: 15px; margin-right: 6px }
 #access_points_list .favourite img{ vertical-align: top }
 .odd2 td{ background-color: #fcfcfc }
 #access_points_list .toggle-public, .toggle-monitor,
-.toggle-count-stats, .toggle-favourite{ cursor: pointer }
+.toggle-count-stats, .toggle-favourite, .toggle-alerts,
+#reset-alert-settings{ cursor: pointer }
+#reset-alert-settings{ text-decoration: underline }
 
 form .field p{ margin: 0 0 5px }
 form .help{ font-size: 12px; color: #606060 }
@@ -450,8 +456,10 @@ h2 .unknown{ border-bottom: 1px solid #9f9f9f }
 h2 .favourites{ border-bottom: 1px solid #ffe793 }
 h2 .total{ border-bottom: 1px solid #fff }
 
-#access_point_detail .up{ color: #093; font-weight: bold }
-#access_point_detail .down{ color: #F33; font-weight: bold }
+#access_point_detail .up,
+#alert-settings-popup .up{ color: #093; font-weight: bold }
+#access_point_detail .down,
+#alert-settings-popup .down{ color: #F33; font-weight: bold }
 #access_point_detail .unknown{ color: #9f9f9f; font-weight: bold }
 #access_point_detail .unknown{ color: #6b6b70 }
 
@@ -486,6 +494,66 @@ h2 .total{ border-bottom: 1px solid #fff }
 
 h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !important }
 #category_select select{ padding: 0 }
-#notes textarea{ margin-bottom: 10px }
+
+#last-logins table{ margin-top: 12px }
+#last-logins thead th{ width: 11%; text-align: center; color: #000 }
+#last-logins td{ text-align: center; padding: 10px 0 }
+#last-logins .username{ width: 8% }
+#last-logins .logout-date{ width: 10% }
+#last-logins table strong{ color: green }
+#last-logins .container{ display: none }
+#last-logins .message{ margin: 20px; display: none }
 
 #_d, #_l{ position: fixed !important }
+
+.subgroup .field{
+	margin: 10px 0;
+	padding: 0 20px;
+	overflow: hidden;
+	line-height:30px;
+	min-height: 30px;
+}
+.subgroup label{ float: left; font-weight: bold; width: 140px !important }
+.subgroup .right{ float: left; width: 680px; text-align: left }
+.subgroup input{ width: auto !important; margin: 0 15px 0 0  }
+.subgroup input[type=text]{ width: 180px !important }
+.subgroup input[type=number]{ width: 30px !important }
+.subgroup .help{ color: gray }
+.subgroup .field_with_errors{ display: inline }
+
+input[readonly=readonly], .disabled li, .disabled input, input.disabled{ background: #EEE !important; color: gray !important }
+ul.disabled{ background: #eee !important; border-color: #bbb !important }
+#alert-settings .disabled li.tagit-choice{ background: #ccc !important; color: #555 !important; }
+
+#email-row{ cursor: pointer }
+.edit-in-place{ text-align: right; font-size: 12px; color: #333; width: 100%; border: 1px solid #ccc; }
+.edit-in-place.inactive{ background-color: transparent; border: 1px solid #eeeeee; cursor: pointer }
+
+#site_description textarea, #notes textarea{ width: 95%  !important }
+
+#access-point-info{ position:relative }
+#alert-settings-popup{
+	position: absolute;
+	bottom: -102px;
+	min-height: 40px;
+	width: 507px;
+	background: transparent none;
+	padding: 0;
+	border: 0 none;
+	display:none;
+	z-index: 99
+}
+
+#alert-settings-popup label{ cursor: pointer }
+#alert-settings-popup .inner{ padding: 10px 20px }
+#alert-settings-popup .edit-in-place{ width: 50px }
+
+#stats-interval{ text-align:right; margin-bottom:0 }
+#stats-interval input, #stats-interval{ font-size: 14px !important }
+#stats-usage h4{ margin-bottom: 0 }
+#stats-usage .stats .block{ padding-top: 0 }
+#stats-usage button{ font-size: 13px; padding: 3px 7px; margin: 0 0 0 3px }
+#stats-usage{ min-height: 950px }
+
+#stats-usage .block.stats{ min-height: 400px }
+.big_graph .center{ margin-top: 180px }

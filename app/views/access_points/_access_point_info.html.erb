@@ -21,77 +21,149 @@
 <br />
 <table id="access_point_detail">
   <tbody class="hover">
-  <tr>
-    <td><strong><%=t :Hostname %></strong></td>
-    <td class="right"><%= @access_point.hostname %></td>
-  </tr>
-  <tr>
-    <td><strong><%=t :Mac_address %></strong></td>
-    <td class="right"><%= @access_point.common_name %></td>
-  </tr>
-  <tr id="group-row">
-    <td><strong><%=t :Group %></strong></td>
-    <td class="right">
-      <a id="group-info" data-groupid="<%= @access_point.group_id %>">
-        <%= @access_point.group_name %>
-      </a>
-    </td>
-  </tr>
-  <tr>
-    <td><strong><%=t :Address %></strong></td>
-    <td class="right"><%= @access_point.address %></td>
-  </tr>
-  <tr>
-    <td><strong><%=t :City %></strong></td>
-    <td class="right"><%= @access_point.city %></td>
-  </tr>
-  <tr>
-    <td><strong><%=t :Status %></strong></td>
-    <td class="right">
-      <% if @access_point.up? %>
-          <span class="up"><%=t :up %></span>
-      <% elsif @access_point.down? %>
-          <span class="down"><%=t :down %></span>
-      <% elsif @access_point.unknown? %>
-          <span class="unknown"><%=t :unknown %></span>
-      <% end %>
-      <%= image_tag_for @access_point, :id => 'hs_icon', :class => 'hidden' %>
-    </td>
-  </tr>
-  <tr>
-    <td><strong><%=t :Ip_addr %></strong></td>
-    <td class="right"><%= @access_point.ip %></td>
-  </tr>
-  <tr>
-    <td><strong><%=t :Coordinates %></strong></td>
-    <td class="right"><%= @access_point.lat %>, <%= @access_point.lng %></td>
-  </tr>
-  <tr>
-    <td><strong><%=t :Activation_date %></strong></td>
-    <td class="right"><%=l(@access_point.activation_date, :format => :long) rescue '-' %></td>
-  </tr>
-  <tr>
-    <td><strong><%=t :Earliest_seen %></strong></td>
-    <td class="right"><%= l(@access_point.earliest_seen, :format => :long) rescue '-' %></td>
-  </tr>
-  <tr>
-    <td><strong><%=t :Latest_seen %></strong></td>
-    <td class="right"><%= l(@access_point.latest_seen, :format => :long) rescue '-' %></td>
-  </tr>
-  <tr id="clickable_public">
-    <td><strong><%=t :Public_on_Georss %></strong> (<%=t :click_to_edit %>)</td>
-    <td id="public" class="right">
-      <a class="toggle-public" data-href="<%= toggle_public_wisp_access_point_path(@wisp, @access_point) %>">
-        <img src="<%= image_path(@access_point.public? ? 'accept.png' : 'delete.png') %>" alt="">
-      </a>
-    </td>
-  </tr>
-  <tr>
-    <td id="clickable_category"><strong><%=t :Category %></strong> (<%=t :click_to_edit %>)</td>
-    <td id="category" class="right">
-      <span id="category_select"><%= @access_point.category.present? ? @access_point.category : t(:None) %></span>
-      <span id="category_text"></span>
-    </td>
-  </tr>
+    <tr>
+      <td><strong><%=t :Hostname %></strong></td>
+      <td class="right"><%= @access_point.hostname %></td>
+    </tr>
+    <tr>
+      <td><strong><%=t :Mac_address %></strong></td>
+      <td class="right"><%= @access_point.common_name %></td>
+    </tr>
+    <tr>
+      <td><strong><%=t :Ip_addr %></strong></td>
+      <td class="right"><%= @access_point.ip %></td>
+    </tr>
+    <tr>
+      <td><strong><%=t :Address %></strong></td>
+      <td class="right"><%= @access_point.address %></td>
+    </tr>
+    <tr>
+      <td><strong><%=t :City %></strong></td>
+      <td class="right"><%= @access_point.city %></td>
+    </tr>
+    <tr>
+      <td><strong><%=t :Status %></strong></td>
+      <td class="right">
+        <% if @access_point.monitor? %>
+          <% if @access_point.up? %>
+              <span class="up"><%=t :up %></span>
+          <% elsif @access_point.down? %>
+              <span class="down"><%=t :down %></span>
+          <% elsif @access_point.unknown? %>
+              <span class="unknown"><%=t :unknown %></span>
+          <% end %>
+        <% else %>
+          <span class="unknown"><%=t :not_monitored %></span>
+        <% end %>
+        <%= image_tag_for @access_point, :id => 'hs_icon', :class => 'hidden' %>
+      </td>
+    </tr>
+    <tr>
+      <td><strong><%=t :Coordinates %></strong></td>
+      <td class="right"><%= @access_point.lat %>, <%= @access_point.lng %></td>
+    </tr>
+    <tr>
+      <td><strong><%=t :Earliest_seen %></strong></td>
+      <td class="right"><%= l(@access_point.earliest_seen, :format => :long) rescue '-' %></td>
+    </tr>
+    <tr>
+      <td><strong><%=t :Latest_seen %></strong></td>
+      <td class="right"><%= l(@access_point.latest_seen, :format => :long) rescue '-' %></td>
+    </tr>
+    <tr>
+      <td><strong><%=t :Activation_date %></strong></td>
+      <td class="right"><%=l(@access_point.activation_date, :format => :long) rescue '-' %></td>
+    </tr>
+    <tr id="group-row">
+      <td class="edit"><strong><%=t :Group %></strong></td>
+      <td class="right">
+        <a id="group-info" data-groupid="<%= @access_point.group_id %>">
+          <%= @access_point.group_name %>
+        </a>
+      </td>
+    </tr>
+    <tr id="clickable_public">
+      <td class="edit"><strong><%=t :Public_on_Georss %></strong></td>
+      <td id="public" class="right">
+        <a class="toggle-public" data-href="<%= toggle_public_wisp_access_point_path(@wisp, @access_point) %>">
+          <img src="<%= image_path(@access_point.public? ? 'accept.png' : 'delete.png') %>" alt="">
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td id="clickable_category" class="edit"><strong><%=t :Category %></strong></td>
+      <td id="category" class="right">
+        <span id="category_select"><%= @access_point.category.present? ? @access_point.category : t(:None) %></span>
+        <span id="category_text"></span>
+      </td>
+    </tr>
+    <tr id="email-row">
+      <td class="edit"><strong><%=t :Manger_email %></strong></td>
+      <td class="right">
+        <input type="email"
+               required
+               value="<%= @access_point.manager_email %>"
+               name="manager_email"
+               <% if(@access_point.manager_email.blank?) %>placeholder="<%= t :not_set %>"<% end %>
+               id="manager_email_input" class="edit-in-place inactive"
+               data-url="<%= wisp_access_point_edit_ap_alert_settings_path(@wisp, @access_point) %>">
+        <!-- JS code in owgm.initEditManagerEmail() -->
+      </td>
+    </tr>
+    <tr id="alert-settings"<% if @access_point.monitor? %> class="monitored"<% end %>>
+      <td class="edit"><strong><%=t :Alerts_active %></strong></td>
+      <td class="right">
+        <% if @access_point.monitor? %>
+        <a class="toggle-alerts" data-href="<%= wisp_access_point_edit_ap_alert_settings_path(@wisp, @access_point) %>">
+          <img src="<%= image_path(@access_point.alerts? ? 'accept.png' : 'delete.png') %>" alt="">
+        </a>
+        <% else %>
+          <span class="unknown"><%= t :not_monitored %></span>
+        <% end %>
+      </td>
+    </tr>
   </tbody>
 </table>
+
+<div id="alert-settings-popup">
+  <table>
+    <tbody class="hover">
+      <tr>
+        <td class="edit">
+          <strong><label><%=t :Threshold_down %></label></strong>
+        </td>
+        <td class="right">
+          <input type="number"
+                 value="<%= @access_point.threshold_down %>"
+                 id="alerts_threshold_down"
+                 name="alerts_threshold_down"
+                 class="edit-in-place inactive"
+                 min="0">
+        </td>
+      </tr>
+      <tr>
+        <td class="edit">
+          <strong><label><%=t :Threshold_up %></label></strong>
+        </td>
+        <td class="right">
+          <input type="number"
+                 value="<%= @access_point.threshold_up %>"
+                 id="alerts_threshold_up"
+                 name="alerts_threshold_up"
+                 class="edit-in-place inactive"
+                 min="0">
+        </td>
+      </tr>
+      <tr>
+        <td class="edit"><strong><%=t :Is_customized %></strong></td>
+        <td class="right">
+          <% if @access_point.alert_settings_customized? %>
+            <a id="reset-alert-settings"><%= t :reset %></a> &nbsp; - &nbsp; <span class="up"><%=t :Yes %></span>
+          <% else %>
+            <span class="down"><%=t :No %></span>
+          <% end %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -14,6 +14,9 @@ it:
         favourite: preferito
       group:
         name: nome
+        alerts_email: "Email: "
+        alerts_threshold_down: "Soglia down alert:"
+        alerts_threshold_up: "Soglia up alert:"
     errors:
       template:
         header: "Errore di validazione"
@@ -35,6 +38,12 @@ it:
           attributes:
             name:
               blank: non può essere lasciato vuoto
+            alerts_threshold_down:
+              greater_than: "dev'essere maggiore di %{count}"
+              greater_than_or_equal_to: "dev'essere maggiore o uguale a %{count}"
+            alerts_threshold_up:
+              greater_than: "dev'essere maggiore di %{count}"
+              greater_than_or_equal_to: "dev'essere maggiore o uguale a %{count}"
 
   # Uppercase
   Activation_date: Data di attivazione
@@ -168,7 +177,7 @@ it:
   No_AP: Nessun access point presente
   Group_named: Gruppo "%{group}"
   Manage_groups: Gestisci gruppi
-  Group_modified: Gruppo modificato con successo
+  Group_modified: Gruppo "%{group}" modificato con successo
   Group_list_of_wisp: 'Lista gruppi di "%{wisp}"'
   View_AP: Visualizza AP
   View_all_the_AP: Tutti gli access points
@@ -188,7 +197,7 @@ it:
   Access_points_of_wisp: Wisp <b>"%{wisp}"</b>
   Access_points_of_wisp_group: Wisp <b>"%{wisp}"</b> &raquo; <b>"%{group}"</b>
   Count_stats: Conteggio statistiche
-  Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando si calcolano le statistiche degli access point (up, down, sconosciuto, totale)
+  Count_stats_help: Questa impostazione indica al sistema se deve tenere in considerazione anche gli access point di questo gruppo quando vengono calcolate le statistiche generali del wisp (up, down, sconosciuto, totale)
   Published_thead_tooltip: Indica se l'access point\nè pubblicato sul GeoRSS
   Favourite_acccess_points: Access Point Preferiti
   Total: Totale
@@ -210,6 +219,44 @@ it:
   Unpublish_action: Rimuovi pubblicazione (ALT+P)
   next_page_tooltip: "(SHIFT + DESTRA)"
   prev_page_tooltip: "(SHIFT + SINISTRA)"
+  Last_10_logins: "Ultimi 10 login"
+  OWMW_last_logins_problem: "Problema di rete o funzionalità non implementata per questo wisp (hai aggiornato OWMW?)"
+  not_monitored: non monitorato
+  # Alerts
+  Alert_settings: Impostazioni Alert del Gruppo
+  Alerts_active: Alert attivi?
+  Alerts_active_help_text: Indica se gli alert via email per questo gruppo sono attivi o meno.
+  Alerts_email_help_text: Indirizzi email che riceveranno gli alert per questo gruppo.
+  Email_addresses: Indirizzi email
+  Threshold_down: Soglia down
+  Threshold_up: Soglia up
+  Threshold_down_help_text: Minuti di attesa prima per l'invio di alert quando un access point non è più raggiungibile.
+  Threshold_up_help_text: Minuti di attesa prima per l'invio di alert quando un access point torna raggiungibile.
+  Is_customized: Impostazioni personalizzate?
+  # alerts validation errors
+  Value_is_not_an_email: %{value} non è un indirizzo email valido
+  Is_not_an_email: non è un indirizzo email valido
+  alerts_email_not_blank_if: email dev'essere specificato se gli alert sono attivi
+  alerts_threshold_down_not_blank_if: soglia down dev'essere specificato se gli alert sono attivi
+  alerts_threshold_up_not_blank_if: soglia up dev'essere specificato se gli alert sono attivi
+  # alerts email text
+  hostname_is_no_longer_reachable: %{hostname} non è più raggiungibile
+  hostname_is_now_reachable_again: %{hostname} è ora raggiungibile
+  Notification_type: Tipo notifica
+  PROBLEM: PROBLEMA
+  RECOVERY: RIPRISTINO
+  since: dal
+  # access point page - alert related
+  Manger_email: Email responsabile
+  not_set: non impostata
+  reset: resetta
+  "Yes": Sì
+  No: No
+  # usage stats
+  Usage_stats: Statistiche di utilizzo
+  Interval: Periodo
+  Daily_logins: Login giornalieri
+  Daily_traffic: Traffico giornaliero
   
   # Lowercase
   logged_as: autenticato come
@@ -236,6 +283,15 @@ it:
   name: nome
   monitor: monitoraggio
   favourites: preferiti
+  name: nome
+  username: username
+  ip_address: ip address
+  mac_address: mac address
+  login_date: data login
+  download_kbytes: download (kbytes)
+  upload_kbytes: upload (kbytes)
+  logout_date: data logout
+  online: online
 
   # Defaults for rails
   errors:

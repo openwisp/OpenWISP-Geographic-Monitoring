@@ -42,7 +42,7 @@ class ConfigurationsController < ApplicationController
 			when 'boolean'
 				Configuration.set(key, content[:value], 'boolean')
 			when 'array'
-				Configuration.set(key, content[:value].gsub(/ /,"").gsub(/,/,"\n"), 'array')
+				Configuration.set(key, content[:value].gsub(/ /,"-").gsub(/,/,"\n"), 'array')
 			end
 		end
 

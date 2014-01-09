@@ -336,6 +336,7 @@ fieldset p input, fieldset div.field input {
 	width:95%;
 }
 fieldset input[type=text],
+fieldset input[type=number],
 fieldset input[type=password]{ padding: 0.7% 1.5%; font-size: 12px }
 fieldset p select, fieldset div.field select {
 	width:99%;
@@ -363,6 +364,8 @@ input.search.button {
 	width:28%;
 	margin-left:2%;
 }
+input[type=checkbox],
+input[type=radio]{ cursor: pointer }
 
 
 /* articles

@@ -1,3 +1,8 @@
+<% content_for :after_defaults do %>
+    <%= javascript_include_tag 'jquery-ui.js', 'jquery.tagit.js' %>
+    <%= stylesheet_link_tag 'jquery-ui/styles.css', 'jquery.tagit.css' %>
+<% end %>
+
 <%= form_for @group do |f| %>
     <fieldset id="group_form">
         <legend><strong><%= @group.new_record? ? t(:New_group) : t(:Edit_group) %></strong></legend>
@@ -22,9 +27,51 @@
         </div>
         
         <div class="field">
-            <p><strong><%= label_tag :count_stats, t(:Count_stats) %>:</strong> <%= f.check_box :count_stats %></p>
+            <p><strong><%= label_tag :group_count_stats, t(:Count_stats) %>:</strong> <%= f.check_box :count_stats %></p>
             <p><span class="help"><%= t :Count_stats_help %>.</span></p>
         </div>
+
+        <% if @group.id != 1 %>
+        <fieldset id="alert-settings" class="subgroup hidden">
+            <legend><%= t :Alert_settings %></legend>
+            <div class="field">
+                <%= label_tag :group_alerts, t(:Alerts_active) %>
+                
+                <div class="right">
+                    <%= f.check_box :alerts %>
+                    <span class="help"><%= t :Alerts_active_help_text %></span>
+                </div>
+            </div>
+            
+            <div class="field">
+                <%= label_tag :group_alerts_email, t(:Email_addresses) %>
+                
+                <div class="right">
+                    <%= f.text_field :alerts_email, :value => alerts_placeholder(@group, 'alerts_email') %>
+                    <span class="help"><%= t :Alerts_email_help_text %></span>
+                </div>
+            </div>
+                
+            <div class="field">
+                <%= label_tag :group_alerts_threshold_down, t(:Threshold_down) %>
+                
+                <div class="right">
+                    <%= f.number_field :alerts_threshold_down, :value => alerts_placeholder(@group, 'alerts_threshold_down'), :min => 0 %>
+                    <span class="help"><%= t :Threshold_down_help_text %></span>
+                </div>
+            </div>
+            
+            <div class="field">
+                <%= label_tag :group_alerts_threshold_up, t(:Threshold_up) %>
+                
+                <div class="right">
+                    <%= f.number_field :alerts_threshold_up, :value => alerts_placeholder(@group, 'alerts_threshold_up'), :min => 0 %>
+                    <span class="help"><%= t :Threshold_up_help_text %></span>
+                </div>
+            </div>
+        </fieldset>
+        <script>owgm.initGroupAlertSettings()</script>
+        <% end %>
         
         <% unless @group.new_record? %>
         <div class="box" id="group_stats">

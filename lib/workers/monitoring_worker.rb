@@ -62,8 +62,13 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         if act
           # avoid race conditions with the consolidate_access_points_monitoring() function
           @@monitoring_semaphore.synchronize {
+            # save activity
             act.save!
-            act.status ? ap.reachable! : ap.unreachable!
+            # if AP reachable status changed
+            if act.status != ap.reachable?
+              # change AP status
+              act.status ? ap.reachable! : ap.unreachable!
+            end
           }
         end
       end)
@@ -215,13 +220,23 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
   end
 
   def housekeeping
-    #if it doesen't work should be .to_i
     time = CONFIG['housekeeping_interval'].months.to_i.ago
     ActivityHistory.destroy_all(["created_at < ?", time])
     AssociatedUserCountHistory.destroy_all(["created_at < ?", time])
+    # delete old alerts
+    Alert.destroy_all(["created_at < ?", time])
     # build missing property sets
     AccessPoint.build_all_properties()
     # delete orphan property sets
     PropertySet.destroy_orphans()
+  end
+  
+  def send_alerts
+    begin
+      Alert.send_all
+    rescue Exception => e
+      puts "[#{Time.now}] #{e.message}"  
+      puts "[#{Time.now}] #{e.backtrace.inspect}"
+    end
   end
 end

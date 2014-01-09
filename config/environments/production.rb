@@ -9,6 +9,17 @@ Owgm::Application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
   config.perform_caching                   = true
+  
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+      :address =>              '127.0.0.1',
+      :port =>                 25,
+      :domain =>               'localhost',
+      #:user_name =>            'user',
+      #:password =>             'password',
+      #:authentication =>       'plain',
+      #:enable_starttls_auto => false
+  }
 
   # Specifies the header that your server uses for sending files
   #config.action_dispatch.x_sendfile_header = "X-Sendfile"
