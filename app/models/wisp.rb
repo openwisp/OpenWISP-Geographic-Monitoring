@@ -26,9 +26,53 @@ class Wisp < ActiveRecord::Base
   def to_param
     "#{name.downcase.gsub(/[^a-z0-9]+/i, '-')}"
   end
-
+  
+  def slug
+    name.gsub(' ', '-').downcase
+  end
+  
   def owmw_enabled?
-    Configuration.get(:owmw_enabled) && Configuration.get(:wisps_with_owmw).include?(name)
+    Configuration.get(:owmw_enabled) && (
+      Configuration.get(:wisps_with_owmw).include?(name) ||
+      # support names containing spaces too
+      Configuration.get(:wisps_with_owmw).include?(slug)
+    )
+  end
+  
+  # determin if owums is enabled for this wisp
+  def owums_enabled?
+    begin
+      CONFIG['owums'].include?(slug)
+    rescue NoMethodError
+      return false
+    end
+  end
+  
+  # return owums base url of wisp or nil if not set
+  def owums_baseurl
+    if owums_enabled?
+      return CONFIG['owums'][slug]['url']
+    else
+      return nil
+    end
+  end
+  
+  # return owums username of wisp or nil if not set
+  def owums_username
+    if owums_enabled?
+      return CONFIG['owums'][slug]['username']
+    else
+      return nil
+    end
+  end
+  
+  # return owums password of wisp or nil if not set
+  def owums_password
+    if owums_enabled?
+      return CONFIG['owums'][slug]['password']
+    else
+      return nil
+    end
   end
   
   # create unassigned roles for this wisp

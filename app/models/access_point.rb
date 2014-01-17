@@ -26,6 +26,7 @@ class AccessPoint < ActiveRecord::Base
   CLUSTER_ACCESS_POINTS_WITHIN_KM = 2
 
   belongs_to :wisp
+  belongs_to :group
   has_one :property_set, :autosave => true, :dependent => :destroy
   has_many :activities
   has_many :activity_histories
@@ -126,6 +127,61 @@ class AccessPoint < ActiveRecord::Base
       self.group_name = properties.group.name
     end
   end
+  
+  # Alert related
+  
+  # determine if alerts are active for this AP or not
+  def alerts?
+    ensure_with_properties_and_group()
+    return (alerts == "1" or group_alerts == "1")
+  end
+  
+  # return alert threshold down value
+  def threshold_down
+    ensure_with_properties_and_group()
+    # customized
+    unless alerts_threshold_down.nil?
+      return alerts_threshold_down.to_i
+    # group value
+    else
+      return group_alerts_threshold_down.to_i
+    end
+  end
+  
+  # return alert threshold up value
+  def threshold_up
+    ensure_with_properties_and_group()
+    # customized
+    unless alerts_threshold_up.nil?
+      return alerts_threshold_up.to_i
+    # group value
+    else
+      return group_alerts_threshold_up.to_i
+    end
+  end
+  
+  # tells if ap has alert settings that differ respect to the group settings
+  def alert_settings_customized?
+    ensure_with_properties_and_group()
+    
+    if(
+      (not alerts_threshold_down.nil? and alerts_threshold_down != group_alerts_threshold_down) or
+      (not alerts_threshold_up.nil? and alerts_threshold_up != group_alerts_threshold_up) or
+      (not alerts.nil? and alerts != group_alerts)
+    )
+      return true
+    else
+      return false
+    end
+  end
+  
+  # reset any customization to alert settings
+  def reset_alert_settings
+    self.properties.alerts = nil
+    self.properties.alerts_threshold_up = nil
+    self.properties.alerts_threshold_down = nil
+    self.properties.save!
+  end
 
   ##### Static methods #####
 
@@ -133,8 +189,8 @@ class AccessPoint < ActiveRecord::Base
     clustered_access_points = []
     already_clustered = []
 
-    find_each do |hs|
-      cluster = around(hs.coords)
+    find_each do |access_point|
+      cluster = around(access_point.coords)
       cluster -= already_clustered
 
       clustered_access_points << ( cluster.count > 1 ? Cluster.new(cluster) : cluster.first )
@@ -236,7 +292,6 @@ class AccessPoint < ActiveRecord::Base
     end
   end
 
-
   def self.activated(till=nil)
     where("activation_date <= ?", till)
   end
@@ -295,14 +350,19 @@ class AccessPoint < ActiveRecord::Base
   end
 
   private
+  
+  PROPERTY_SETS_FIELDS = "access_points.*,
+    property_sets.reachable, property_sets.public, property_sets.site_description,
+    property_sets.category, property_sets.group_id, property_sets.favourite, property_sets.notes,
+    property_sets.alerts, property_sets.manager_email,
+    property_sets.alerts_threshold_down, property_sets.alerts_threshold_up"
 
   # select access_points left join property_sets
   def self.with_properties(select_fields=nil)
     # select almost all the attributes by default
     # exclude property_sets.id and property_sets.access_point_id because of rare use
     if select_fields.nil?
-      select_fields = "access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
-      property_sets.category, property_sets.group_id, property_sets.favourite, property_sets.notes"
+      select_fields = PROPERTY_SETS_FIELDS
     end
     select(select_fields).joins("LEFT JOIN `property_sets` ON `property_sets`.`access_point_id` = `access_points`.`id`")
   end
@@ -313,8 +373,14 @@ class AccessPoint < ActiveRecord::Base
     # exclude property_sets.id and property_sets.access_point_id because of rare use
     
     # the default behaviour with the group table is to include only group_name
-    select_fields = "access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
-      property_sets.category, property_sets.group_id, property_sets.favourite, property_sets.notes, groups.name AS group_name"
+    select_fields = "#{PROPERTY_SETS_FIELDS},
+      groups.id AS group_id,
+      groups.name AS group_name,
+      groups.monitor AS monitor,
+      groups.alerts AS group_alerts,
+      groups.alerts_email AS group_alerts_email,
+      groups.alerts_threshold_down AS group_alerts_threshold_down,
+      groups.alerts_threshold_up AS group_alerts_threshold_up"
     
     unless additional_fields.nil?
       select_fields = "#{select_fields}, #{additional_fields}"
@@ -324,8 +390,23 @@ class AccessPoint < ActiveRecord::Base
           LEFT JOIN `groups` ON `property_sets`.`group_id` = `groups`.`id`")
   end
 
-
   def set_reachable_to(boolean)
-    property_set.update_attribute(:reachable, boolean) rescue PropertySet.create(:reachable => boolean, :access_point => self)
+    begin
+      property_set.update_attribute(:reachable, boolean)
+    rescue
+      # must be created because does not exist
+      PropertySet.create(:reachable => boolean, :access_point => self)
+    end
+    
+    # create alert
+    Alert.build(:access_point_id => self.id, :status => boolean)
+  end
+  
+  def ensure_with_properties_and_group
+    begin
+      if group_name.nil? or reachable.nil?: end
+    rescue
+      raise 'feature in use requires access points to be retrieved with AccessPoint.with_properties_and_group()'
+    end
   end
 end

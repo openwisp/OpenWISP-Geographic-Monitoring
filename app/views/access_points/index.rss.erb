@@ -45,7 +45,9 @@
           <% else %>
               <georss:point><%= ap.lat %> <%= ap.lng %></georss:point>
           <% end %>
+          <pubDate><%= ap.created_at %></pubDate>
           <updated><%= ap.updated_at %></updated>
+          <%= ap.created_at %>
         </item>
     <% end %>
   </channel>

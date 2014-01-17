@@ -65,4 +65,8 @@ class Cluster
   def unknown?
     status == -1
   end
+  
+  def monitor?
+    status.nil?
+  end
 end

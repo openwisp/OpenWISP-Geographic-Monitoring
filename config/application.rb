@@ -22,9 +22,19 @@ CONFIG['access_point_pagination'].each do |item|
     end
 end
 # default values if not defined
+CONFIG['last_logins'] = CONFIG['last_logins'].nil? ? true : CONFIG['last_logins'];
 CONFIG['max_threads'] = CONFIG['max_threads'] || 10
 CONFIG['ping_timeout'] = CONFIG['ping_timeout'] || 5
 CONFIG['housekeeping_interval'] = CONFIG['housekeeping_interval'] || 5
+CONFIG['protocol'] = CONFIG['protocol'] || 'https'
+CONFIG['host'] = CONFIG['host'] || 'change_me.com'
+CONFIG['subdir'] = CONFIG['subdir'] || 'owgm'
+CONFIG['from_email'] = CONFIG['from_email'] || 'owgm@localhost'
+CONFIG['alerts_threshold_down'] = CONFIG['alerts_threshold_down'] || 90
+CONFIG['alerts_threshold_up'] = CONFIG['alerts_threshold_up'] || 45
+CONFIG['alerts_email'] = CONFIG['alerts_email'] || ""
+CONFIG['mail_subject_prefix'] = CONFIG['mail_subject_prefix'] || '[OWGM]'
+CONFIG['exception_notification_recipients'] = CONFIG['exception_notification_recipients'] || 'root@localhost'
 
 # Specify where to look for the wisps and access_points table
 # data. Only one value can be enable at a time.
@@ -75,6 +85,6 @@ module Owgm
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
 
-    config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+    config.action_mailer.default_url_options = { :host => CONFIG['host'] }
   end
 end

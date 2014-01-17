@@ -14,6 +14,9 @@ en:
         favourite: favourite
       group:
         name: name
+        alerts_email: "Email: "
+        alerts_threshold_down: "Alert threshold down:"
+        alerts_threshold_up: "Alert threshold up:"
     errors:
       template:
         header: "Validation Error"
@@ -167,6 +170,7 @@ en:
   No_AP: There are no access points yet  
   Manage_groups: Manage groups
   Group_modified: Group modified successfully
+  Group_modified: Gruppo "%{group}" modificato con successo
   Group_list_of_wisp: 'Group list of "%{wisp}"'
   View_AP: View AP
   View_all_the_AP: All access points
@@ -186,7 +190,7 @@ en:
   Access_points_of_wisp: Wisp <b>"%{wisp}"</b>
   Access_points_of_wisp_group: Wisp <b>"%{wisp}"</b> &raquo; <b>"%{group}"</b>
   Count_stats: Count statistics
-  Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating statists of the access points (up, down, unknown, total)"
+  Count_stats_help: "This flag indicates if the sysem has to take in consideration the access points of this group when evaluating the general statists of the wisp (up, down, unknown, total)"
   Published_thead_tooltip: Indicates whether the access point\nis published in the GeoRSS
   Favourite_acccess_points: Favourite Access Points
   Total: Total
@@ -208,6 +212,44 @@ en:
   Unpublish_action: Unpublish (ALT+P)
   next_page_tooltip: "(SHIFT + RIGHT)"
   prev_page_tooltip: "(SHIFT + LEFT)"
+  not_monitored: not monitored
+  Last_10_logins: "Last 10 logins"
+  OWMW_last_logins_problem: "Network problem or feature not yet implemented for this wisp (have you upgraded OWMW?)"
+  # Alerts
+  Alert_settings: Alert Settings for Group
+  Alerts_active: Alert active?
+  Alerts_active_help_text: Indicates whether alert notifications via email for this group are active or not.
+  Alerts_email_help_text: Email addresses that will receive alerts for this group.
+  Email_addresses: Email addresses
+  Threshold_down: Threshold down
+  Threshold_up: Threshold up
+  Threshold_down_help_text: Minutes to wait before sending an alert when an access point is no longer reachable.
+  Threshold_up_help_text: Minutes to wait before sending an alert when an access point becomes reachable again.
+  Is_customized: Customized settings?
+  # validation errors
+  Value_is_not_an_email: %{value} is not a valid email address
+  Is_not_an_email: is not a valid email address
+  alerts_email_not_blank_if: email must be specified if alerts are active
+  alerts_threshold_down_not_blank_if: threshold down must be specified if alerts are active
+  alerts_threshold_up_not_blank_if: threshold up must be specified if alerts are active
+  # alerts email text
+  hostname_is_no_longer_reachable: %{hostname} is no longer reachable
+  hostname_is_now_reachable_again: %{hostname} is now reachable again
+  Notification_type: Tipo notifica
+  PROBLEM: PROBLEM
+  RECOVERY: RECOVERY
+  since: since
+  # access point page - alert related
+  Manger_email: Manager email
+  not_set: not set
+  reset: reset
+  Yes: Yes
+  No: No
+  # usage stats
+  Usage_stats: Usage statistics
+  Interval: Interval
+  Daily_logins: Daily logins
+  Daily_traffic: Daily traffic
 
   # Lowercase
   logged_as: logged in as
@@ -234,6 +276,15 @@ en:
   name: name
   monitor: monitoring
   favourites: favourites
+  name: name
+  username: username
+  ip_address: ip address
+  mac_address: mac address
+  login_date: login date
+  download_kbytes: download (kbytes)
+  upload_kbytes: upload (kbytes)
+  logout_date: logout date
+  online: online
   
   # Defaults for rails
   errors:

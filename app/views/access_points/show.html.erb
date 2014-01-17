@@ -19,8 +19,13 @@
 #%>
 
 <% content_for :after_defaults do %>
-    <%= javascript_include_tag 'https://maps.google.com/maps/api/js?sensor=false&v=3.9', 'gmaps.markermanager', 'owgm.gmaps', 'jquery.jeditable' %>
-
+    <%= javascript_include_tag(
+						'https://maps.google.com/maps/api/js?sensor=false&v=3.9',
+						'gmaps.markermanager',
+						'owgm.gmaps',
+						'jquery.jeditable')
+		%>
+		
     <%= javascript_tag "$(function(){
 				$('#clickable_category').click(function() { $('#category_select').click() });
 				$('#clickable_site_description').click(function() { $('#site_description').click() });
@@ -42,7 +47,7 @@
 				$('#notes').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
 						submitdata: {authenticity_token:'#{form_authenticity_token}'},
 						name: 'property_set[notes]', method: 'PUT',
-						type: 'textarea', rows: 10,
+						type: 'textarea', rows: 5,
 						submit: '#{t :Ok}', cancel: '#{t :Cancel}',
 						tooltip: '#{t :Click_to_edit}',
 						placeholder: '#{t :No_notes_available}'
@@ -50,6 +55,7 @@
 				$('#site_description').editable('#{wisp_access_point_property_set_url(@wisp, @access_point)}', {
 						submitdata: {authenticity_token:'#{form_authenticity_token}'},
 						name: 'property_set[site_description]', method: 'PUT',
+						type: 'textarea', rows: 5,
 						submit: '#{t :Ok}', cancel: '#{t :Cancel}',
 						tooltip: '#{t :Click_to_edit}',
 						placeholder: '#{t :No_notes_available}'
@@ -72,19 +78,8 @@
 								$('#category_select').show();
 						}
 				});
-    }); 
-   
-   $('#favourite').click(function() { 
-				$.ajax({
-						url: 'http://www.repubblica.it',
-						method: 'get',
-						success: function (result) {
-							alert('Your bookmark has been saved');
-						}
-				});
-    });"
-
-%>
+    });" %>
+		
 <% end %>
 
 <div class="grid_12">
@@ -107,13 +102,15 @@
   </div>
 
   <div class="grid_6">
-    <div class="box">
+    <div class="box" id="access-point-info">
       <%= render :partial => 'access_point_info' %>
     </div>
   </div>
 
   <div class="clear"></div>
-
+		
+	<%= render :partial => 'access_point_last_logins' %>
+	
   <%= render :partial => 'access_point_graphs' %>
 
   <div class="grid_12">

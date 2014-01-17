@@ -24,7 +24,7 @@
   <h4><%=t :Description %></h4>
   <br/>
 
-  <p><%= @access_point.description.empty? ? t(:No_description_available) : @access_point.description %></p>
+  <p><%= @access_point.description.empty? ? t(:No_description_available) : nl2br(@access_point.description) %></p>
 </div>
 
 <div class="box with_border">
@@ -34,12 +34,12 @@
     <span id="clickable_site_description"><strong>(<%=t :Click_to_edit %>)</strong></span>
   </p>
 
-  <p id="site_description"><%= @access_point.site_description.blank? ? t(:No_site_description_available) : @access_point.site_description %></p>
+  <p id="site_description"><%= @access_point.site_description.blank? ? t(:No_site_description_available) : nl2br(@access_point.site_description) %></p>
 </div>
 
 <div class="box with_border">
   <h4><%=t :Notes %></h4>
   <p><span id="clickable_notes"><strong>(<%=t :Click_to_edit %>)</strong></span></p>
 
-  <p id="notes"><%= @access_point.notes.blank? ? t(:No_notes_available) : simple_format(@access_point.notes) %></p>
+  <p id="notes"><%= @access_point.notes.blank? ? t(:No_notes_available) : nl2br(@access_point.notes) %></p>
 </div>

@@ -32,6 +32,12 @@ $(document).ready(function() {
     owgm.initMainMenu();
     owgm.initDynamicColumns();
     owgm.initTooltip();
+    
+    if($('#access-point-info').length) {
+        owgm.initToggleLatestLogins();
+        owgm.initEditManagerEmail();
+        owgm.initApAlertSettings();
+    }
 });
 
 
@@ -57,16 +63,14 @@ var owgm = {
             object.parent('form').submit();
         });
     },
+    
+    subUri: 'owgm',
 
     path: function(path) {
         var _curr = window.location.pathname;
         var _params = window.location.search;
         if (path.charAt(0) === '/') {
-            if (_curr.substr(1, owums.subUri.length) === owums.subUri) {
-                return '/'+owums.subUri+path+_params;
-            } else {
-                return path+_params;
-            }
+            return path+_params;
         } else {
             return _curr+'/'+path+_params;
         }
@@ -809,6 +813,12 @@ var owgm = {
             });
             owgm.groupsDynamicColumns();
         }
+        if('#last-logins'){
+            $(window).resize(function(e){
+                owgm.latestOnlineUsersDynamicColumns();
+            });
+            owgm.latestOnlineUsersDynamicColumns();
+        }
     },
     
     accessPointsDynamicColumns: function(){
@@ -885,6 +895,34 @@ var owgm = {
         }
     },
     
+    latestOnlineUsersDynamicColumns: function(){
+        var width = $(window).width(),
+            $ip_column = $('#last-logins .ip'),
+            $association_date_column = $('#last-logins .association-date');
+        
+        if(width <= 1170){
+            if($ip_column.eq(0).is(':visible')){
+                $ip_column.hide();
+            }            
+        }
+        else{
+            if(!$ip_column.eq(0).is(':visible')){
+                $ip_column.show();
+            }      
+        }
+        
+        if(width <= 1050){
+            if($association_date_column.eq(0).is(':visible')){
+                $association_date_column.hide();
+            }            
+        }
+        else{
+            if(!$association_date_column.eq(0).is(':visible')){
+                $association_date_column.show();
+            }      
+        }
+    },
+    
     initTooltip: function(){        
         $(".hastip").simpletip({
             fixed: true,
@@ -931,6 +969,295 @@ var owgm = {
             owgm.toggleProperty(el.attr('data-href'), function(result){
                 el.find('img').attr('src', result.image)
             });
+        });
+    },
+    
+    initToggleLatestLogins: function(){
+        $('#last-logins a.toggle').click(function(e){
+            // cache some stuff
+            var container = $('#last-logins .container'),
+                is_visible = container.is(':visible'),
+                arrow = container.parent().find('.arrow');
+            // prevent default link behaviour
+            e.preventDefault();
+            // toggle class hidden
+            $(this).toggleClass('hidden');
+            // toggle container and initialize gmap if necessary
+            container.slideToggle('slow', function(){
+                // on animation complete;
+            });
+            if(!is_visible){
+                arrow.html(arrow.attr('data-hide'));
+            }
+            else{
+                arrow.html(arrow.attr('data-show'));
+            }
+        });
+    },
+    
+    loadLastLogins: function(interval, timer){
+        // default value for interval is 0
+        interval = interval || 0;
+        // default behaviour is setTimeout
+        timer = timer || setTimeout
+        owgm.owmw_not_working = owgm.owmw_not_working || false;
+        
+        owgm.online_users_timer = timer(function(){
+            if(owgm.owmw_not_working){
+                return false;
+            }
+            // get online users and update UI
+            response = $.get(location.pathname + '/last_logins', function(response){
+                $('#last-logins tbody').html(response);
+            }).error(function(){
+                $('#last-logins table').hide();
+                $('#last-logins .message').show();
+                owgm.owmw_not_working = true;
+                clearInterval(owgm.online_users_timer);
+            });
+            return true;
+        }, interval);
+    },
+    
+    monitorLastLogins: function(){
+        $('#last-logins h2 a').click(function(e){
+            showing = $(this).hasClass('hidden');
+            if(showing){
+                owgm.loadLastLogins(20000, setInterval);
+            }
+            else{
+                clearInterval(owgm.online_users_timer);
+            }
+        });
+    },
+    
+    initEditManagerEmail: function(){
+        owgm.editManager = true;
+        
+        $('#manager_email_input').focus(function(e){
+            $(this).removeClass('inactive');
+        }).blur(function(e){
+            var $this = $(this),
+                value = $this.val()
+                url = $this.attr('data-url');
+            
+            // if invalid add error class
+            if(value != '' && this.validity.valid === false && owgm.editManager === true) {
+                $this.addClass('field_with_errors');
+            }
+            // if valid
+            else{
+                var $input = $(this);
+                
+                // remove error class and make inactive
+                $input.addClass('inactive');
+                $input.removeClass('field_with_errors');
+                
+                // save result to DB
+                if (owgm.editManager === true && this.value != this.defaultValue) {
+                    $.post(url, { manager_email: value })
+                    // error case
+                    .error(function(xhr){
+                        alert(JSON.parse(xhr.responseText).errors.manager_email[0]);
+                        $input.removeClass('inactive').addClass('field_with_errors');
+                        $input.trigger('focus');
+                    });
+                }
+                // cancel
+                else{
+                    this.value = this.defaultValue
+                }
+                
+            }
+        }).keydown(function(e){
+            // if pressing enter
+            if(e.keyCode == 13) {
+                owgm.editManager = true;
+                $(this).trigger('blur');
+            }
+            // if pressing esc
+            else if (e.keyCode == 27) {
+                owgm.editManager = false;
+                $(this).trigger('blur');
+            }
+        });
+        
+        // focus on field when clicking on row
+        $('#email-row').click(function(e){
+            $('#manager_email_input').trigger('focus');
+        });
+    },
+    
+    initGroupAlertSettings: function(){
+        // activate jquery tag-it plugin
+        $("#group_alerts_email").tagit();
+        // hide or show alert settings depending on wether monitoring is active or not
+        $('#group_monitor').change(function(e){
+            if(this.checked){
+                $('#alert-settings').slideDown(300);
+            }
+            else{
+                $('#alert-settings').slideUp(300);
+                $('#group_alerts').removeAttr('checked').trigger('change');
+            }
+        }).trigger('change');
+        
+        // cache inputs
+        var group_alert_related_inputs = $('#alert-settings input[type=text], #alert-settings input[type=number], ul.tagit')
+        
+        // activate or deactivate input related fields depending on main alerts boolean
+        $('#group_alerts').change(function(e){
+            if(this.checked){
+                group_alert_related_inputs.removeAttr('readonly').removeClass('disabled');
+                //email_addresses.removeClass('disabled');
+            }
+            else{
+                group_alert_related_inputs.attr('readonly', 'readonly').addClass('disabled');
+                //email_addresses.addClass('disabled');
+            }
+        }).trigger('change');
+        
+        // if clicking on a deactivated field, enable the feature
+        group_alert_related_inputs.click(function(e){
+            if($(this).attr('readonly') == 'readonly'){
+                $('#group_alerts').attr('checked', 'checked').trigger('change');
+                $(this).trigger('focus');
+            }
+        });
+    },
+    
+    initApAlertSettings: function () {
+        // WARNING: this method is really messy.. TODO: improve readability and architecture
+        var post_url = $('#manager_email_input').attr('data-url');
+    
+        var adjustPopUpWidth = function () {
+            $('#alert-settings-popup').width($('#alert-settings').width() + 1);
+        };
+    
+        var updateHTML = function () {
+            $.get(window.location.href).done(function (response) {
+                // get response fragment we need
+                var new_html = $(response).find('#access-point-info').html();
+                // replace HTML with fresh data
+                $('#access-point-info').html(new_html);
+                adjustPopUpWidth();
+            })
+        }
+    
+        $(window).resize(function () {
+            // assign same width as ap info table
+            adjustPopUpWidth();
+        }).load(function () {
+            // assign same width as ap info table
+            adjustPopUpWidth();
+        });
+    
+        // mouse enter: show; mouse leave: hide
+        $('#access-point-info').on('mouseenter', '#alert-settings.monitored, #alert-settings-popup', function (e) {
+            $('#alert-settings-popup').show();
+        }).on('mouseleave', '#alert-settings.monitored, #alert-settings-popup', function (e) {
+            $('#alert-settings-popup, #alert-settings-popup').hide();
+    
+            if (owgm.editAlertSettings) {
+                var threshold_up = $('#alerts_threshold_up').val();
+                var threshold_down = $('#alerts_threshold_down').val();
+    
+                $.post(post_url, {
+                    alerts_threshold_up: threshold_up,
+                    alerts_threshold_down: threshold_down
+                }).
+                done(function () {
+                    updateHTML();
+                    owgm.editAlertSettings = false;
+                });
+            }
+    
+        });
+    
+        var changeAlertsImage = function (action) {
+            var image = $('.toggle-alerts img'),
+                image_name = image.attr('src');
+    
+            if (action === undefined && image_name.indexOf('accept.png') > 0) {
+                action = 'disable';
+            } else if (action === undefined) {
+                action = 'enable';
+            }
+    
+            if (action == 'enable') {
+                image_name = image_name.replace('delete.png', 'accept.png')
+            } else if (action == 'disable') {
+                image_name = image_name.replace('accept.png', 'delete.png')
+            }
+    
+            image.attr('src', image_name);
+    
+            return (action == 'enable') ? 'true' : 'false';
+        };
+    
+        $('#access-point-info').on('click', 'a.toggle-alerts', function (e) {
+    
+            var action = changeAlertsImage();
+    
+            $.post($(this).attr('data-href'), {
+                alerts: action
+            }).done(function () {
+                updateHTML();
+            }).
+            error(function () {
+                alert('ERROR');
+            });
+        });
+    
+        $('#access-point-info').on('click', '#reset-alert-settings', function (e) {
+            e.preventDefault();
+    
+            changeAlertsImage('disable');
+    
+            owgm.editAlertSettings = false;
+            $('#alert-settings-popup').hide();
+    
+            $.post(post_url, {
+                reset: 'true'
+            }).done(function () {
+                updateHTML();
+            });
+        });
+    
+        $('#access-point-info').on('click', '#alert-settings-popup label', function (e) {
+            $(this).parents('tr').find('input').trigger('focus');
+        });
+    
+        $('#access-point-info').on('focus', '#alert-settings-popup .edit-in-place', function (e) {
+            $(this).removeClass('inactive');
+        }).on('blur', '#alert-settings-popup .edit-in-place', function (e) {
+            $(this).addClass('inactive');
+    
+            if (this.value == '') {
+                this.value = this.defaultValue;
+            }
+        }).on('keyup', '#alert-settings-popup .edit-in-place', function (e) {
+    
+            // block negative values
+            if ($(this).val() < 0 || e.keyCode == 189) {
+                this.value = this.defaultValue
+                e.preventDefault();
+                return false;
+            }
+    
+            owgm.editAlertSettings = true;
+            // if pressing enter
+            if (e.keyCode == 13) {
+                $(this).trigger('blur');
+            }
+            // if pressing esc
+            else if (e.keyCode == 27) {
+                owgm.editManager = false;
+                this.value = this.defaultValue;
+                $(this).trigger('blur');
+            }
+        }).on('change', '#alert-settings-popup .edit-in-place', function (e) {
+            owgm.editAlertSettings = true;
         });
     }
 };

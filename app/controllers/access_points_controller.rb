@@ -23,14 +23,15 @@ class AccessPointsController < ApplicationController
     :toggle_public,
     :toggle_favourite,
     :batch_change_property,
-    :erase_favourite
+    :erase_favourite,
+    :edit_ap_alert_settings
   ]
 
   access_control do
     default :deny
 
     actions :index,:show, :change_group, :select_group, :toggle_public, :toggle_favourite,
-            :batch_select_group, :favourite, :reset_favourites do
+            :batch_select_group, :favourite, :reset_favourites, :last_logins, :edit_ap_alert_settings do
       allow :wisps_viewer
       allow :wisp_access_points_viewer, :of => :wisp, :if => :wisp_loaded?
     end
@@ -71,9 +72,23 @@ class AccessPointsController < ApplicationController
   def show
     @access_point = AccessPoint.with_properties_and_group.find(params[:id])
     @access_point.build_property_set_if_group_name_empty()
-
+    
+    @from = Date.strptime(params[:from], I18n.t('date.formats.default')) rescue 1.months.ago.to_date
+    @to = Date.strptime(params[:to], I18n.t('date.formats.default')) rescue Date.today
+    
+    require "net/http"
+	require "uri"
     crumb_for_wisp
     crumb_for_access_point
+  end
+  
+  # retrieve latest logins and sessions that have been started from an AP
+  def last_logins
+    @access_point = AccessPoint.find(params[:id])
+    # retrieve radius accountings
+    RadiusSession.active_resource_from(@wisp.owmw_url, @wisp.owmw_username, @wisp.owmw_password)
+	@radius_sessions = RadiusSession.find(:all, :params => { :mac_address => @access_point.common_name, :last => 10 })
+	render :layout => false
   end
   
   def select_group
@@ -235,6 +250,62 @@ class AccessPointsController < ApplicationController
     end
      
     render :status => 200, :json => { "details" => I18n.t(:Access_point_updated, :length => access_points.length) }
+  end
+  
+  def edit_ap_alert_settings
+	# get all AP info, needed for comparing
+	ap = AccessPoint.with_properties_and_group.find(params[:access_point_id])
+	# get properties object, needed for saving eventual changes
+	properties = PropertySet.find_by_access_point_id(params[:access_point_id])
+	
+	# nothing has been changed yet
+	changed = false
+	
+	# if manager email supplied
+	if params[:manager_email]
+	  # change manager email
+	  properties.manager_email = params[:manager_email]
+	  changed = true
+	end
+	
+	# if alerts supplied
+	if params[:alerts]
+	  # change alerts (true or false)
+	  properties.alerts = params[:alerts] == 'true' ? true : false;
+	  changed = true
+	end
+	
+	# if alerts_threshold_up supplied
+	if params[:alerts_threshold_up]
+	  properties.alerts = true if !ap.alerts?
+	  # change alerts_threshold_up (integer)
+	  properties.alerts_threshold_up = params[:alerts_threshold_up]
+	  changed = true
+	end
+	
+	# if alerts_threshold_down supplied
+	if params[:alerts_threshold_down]
+	  properties.alerts = true if !ap.alerts?
+	  # change alerts_threshold_down (integer)
+	  properties.alerts_threshold_down = params[:alerts_threshold_down]
+	  changed = true
+	end
+	
+	if params[:reset]
+	  ap.reset_alert_settings()
+	  changed = true
+	end
+	
+	if changed and properties.save
+	  render :status => 200, :json => { "details" => "success" }
+	elsif changed == false
+	  render :status => 200, :json => { "details" => "nothing changed" }
+	else
+	  render :status => 400, :json => {
+		"details" => "validation error",
+		"errors" => properties.errors
+	  }
+	end
   end
 
   private
