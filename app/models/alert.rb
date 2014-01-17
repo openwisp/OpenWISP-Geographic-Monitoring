@@ -8,8 +8,10 @@ class Alert < ActiveRecord::Base
     end
     
     # send email to group
-    AlertMailer.notification(self, ap, ap.group_alerts_email).deliver
-    
+    unless ap.group_alerts_email.blank?
+      AlertMailer.notification(self, ap, ap.group_alerts_email).deliver
+    end
+
     # send email to manager if any
     unless ap.manager_email.blank?
       AlertMailer.notification(self, ap, ap.manager_email, false).deliver

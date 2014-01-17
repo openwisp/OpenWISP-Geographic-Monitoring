@@ -118,4 +118,32 @@ class AlertTest < ActiveSupport::TestCase
     # ensure all alerts are sent
     assert_equal 0, Alert.where(:sent => false).count
   end
+
+  test "send_email" do
+    assert_equal Alert.count, 0 
+    ap = AccessPoint.with_properties_and_group.find(1)
+    ap.id = 100
+    ap.save!
+    ap.group.alerts = false
+    ap.group.alerts_email = nil
+    assert ap.group.save
+
+    ap.properties.alerts = true
+    ap.properties.manager_email = 'iiiiii@ciii.it'
+    ap.properties.alerts_threshold_down = 0
+    ap.properties.alerts_threshold_up = 0
+    assert ap.properties.save
+
+    ap = AccessPoint.with_properties_and_group.find(1)
+    ap.unreachable!
+    assert_equal Alert.count, 1
+    
+    alert = Alert.first
+    alert.send_email()
+    assert alert.sent 
+
+    ap.destroy
+    Alert.first.destroy
+  end
+  
 end

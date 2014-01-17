@@ -8,3 +8,4 @@ db/test.sqlite3
 tmp/*
 config/config.yml
 config/database.yml
+.bundle/
