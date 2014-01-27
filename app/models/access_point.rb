@@ -32,6 +32,7 @@ class AccessPoint < ActiveRecord::Base
   has_many :activity_histories
   has_many :associated_user_counts
   has_many :associated_user_count_histories
+  has_many :alerts, :dependent => :destroy
 
   def coords
     [lat, lng]

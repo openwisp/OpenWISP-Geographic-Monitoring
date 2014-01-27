@@ -143,7 +143,24 @@ class AlertTest < ActiveSupport::TestCase
     assert alert.sent 
 
     ap.destroy
-    Alert.first.destroy
+  end
+  
+  test "delete ap" do
+    ap = AccessPoint.with_properties_and_group.find(1)
+    ap.group.alerts = true
+    ap.group.alerts_email = 'group@test.com'
+    ap.group.alerts_threshold_down = 2
+    ap.group.alerts_threshold_up = 1
+    ap.group.save!
+    
+    ap.unreachable!
+    assert_equal 1, Alert.where(:access_point_id => ap.id, :action => 'down', :sent => false).count
+    assert_equal 1, Alert.count
+    
+    ap.destroy()
+    
+    # we expect no errors and no alerts to be sent
+    assert_equal 0, Alert.send_all
   end
   
 end
