@@ -163,4 +163,29 @@ class AlertTest < ActiveSupport::TestCase
     assert_equal 0, Alert.send_all
   end
   
+  test "not relevant emails destroyed" do
+    assert_equal 0, Alert.send_all
+    
+    ap = AccessPoint.with_properties_and_group.find(1)
+    ap.group.alerts = true
+    ap.group.alerts_email = 'group@test.com'
+    ap.group.alerts_threshold_down = 2
+    ap.group.alerts_threshold_up = 1
+    ap.group.save!
+    
+    ap = AccessPoint.with_properties_and_group.find(1)
+    assert ap.alerts?
+    assert_equal 0, Alert.count
+    
+    # here an alert should be created
+    ap.unreachable!
+    assert_equal 1, Alert.where(:access_point_id => ap.id, :action => 'down', :sent => false).count
+    assert_equal 1, Alert.count
+    
+    # now ap is reachable, ensure previous alert is deleted
+    ap.reachable!
+    assert_equal 1, Alert.where(:access_point_id => ap.id, :action => 'up', :sent => false).count
+    assert_equal 1, Alert.count
+    assert_equal 0, Alert.where(:access_point_id => ap.id, :action => 'down', :sent => false).count
+  end
 end
