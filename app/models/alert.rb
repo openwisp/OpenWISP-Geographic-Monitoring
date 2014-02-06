@@ -37,6 +37,15 @@ class Alert < ActiveRecord::Base
     status = params[:status] ? 'up' : 'down'
     ap_id = params[:access_point_id]
     
+    # check if there is any pending alert for the specified access point
+    # which has not been sent yet
+    # and delete it cos is no longer needed
+    # (status has changed before the time specified in the threshold)
+    pending_alerts = Alert.where(
+      :access_point_id => ap_id,
+      :sent => false
+    ).destroy_all()
+    
     # check if the previous alert for this access point has the same action (up or down)
     # in case the action is the same don't create alert
     # this avoids sending more consecutive alerts with same message
@@ -49,15 +58,6 @@ class Alert < ActiveRecord::Base
     if last_alert and last_alert.action == status
       return false
     end
-    
-    # check if there is any pending alert for the specified access point
-    # which has not been sent yet
-    # and delete it cos is no longer needed
-    # (status has changed before the time specified in the threshold)
-    pending_alerts = Alert.where(
-      :access_point_id => ap_id,
-      :sent => false
-    ).destroy_all()
     
     # create alert
     Alert.create(
