@@ -213,7 +213,7 @@ Some default values can be configured in **config.yml**:
 * alerts_threshold_up
 * alerts_email
 
-=== OWUMS graphs ===
+=== OWUMS graphs
 
 Enable each wisp you need by configuring the owums hash in **config.yml**:
 
