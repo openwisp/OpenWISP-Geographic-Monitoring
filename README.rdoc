@@ -229,6 +229,7 @@ Keep in mind that:
 
 * each key in the owums hash represents a wisp
 * keys must contain wisp slug (lowercase name and dashes instead of spaces)
+* user must have 'stats_viewer' permission
 
 === Exception notifications
 
