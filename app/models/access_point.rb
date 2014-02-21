@@ -134,7 +134,7 @@ class AccessPoint < ActiveRecord::Base
   # determine if alerts are active for this AP or not
   def alerts?
     ensure_with_properties_and_group()
-    return (alerts == "1" or group_alerts == "1")
+    return (alerts_property == "1" or group_alerts == "1")
   end
   
   # return alert threshold down value
@@ -168,7 +168,7 @@ class AccessPoint < ActiveRecord::Base
     if(
       (not alerts_threshold_down.nil? and alerts_threshold_down != group_alerts_threshold_down) or
       (not alerts_threshold_up.nil? and alerts_threshold_up != group_alerts_threshold_up) or
-      (not alerts.nil? and alerts != group_alerts)
+      (not alerts_property.nil? and alerts_property != group_alerts)
     )
       return true
     else
@@ -355,7 +355,7 @@ class AccessPoint < ActiveRecord::Base
   PROPERTY_SETS_FIELDS = "access_points.*,
     property_sets.reachable, property_sets.public, property_sets.site_description,
     property_sets.category, property_sets.group_id, property_sets.favourite, property_sets.notes,
-    property_sets.alerts, property_sets.manager_email,
+    property_sets.alerts AS alerts_property, property_sets.manager_email,
     property_sets.alerts_threshold_down, property_sets.alerts_threshold_up"
 
   # select access_points left join property_sets

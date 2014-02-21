@@ -1137,9 +1137,9 @@ var owgm = {
         var updateHTML = function () {
             $.get(window.location.href).done(function (response) {
                 // get response fragment we need
-                var new_html = $(response).find('#access-point-info').html();
+                var new_html = $(response).find('#alert-settings-customized-row').html();
                 // replace HTML with fresh data
-                $('#access-point-info').html(new_html);
+                $('#alert-settings-customized-row').html(new_html);
                 adjustPopUpWidth();
             })
         }
@@ -1196,7 +1196,6 @@ var owgm = {
         };
     
         $('#access-point-info').on('click', 'a.toggle-alerts', function (e) {
-    
             var action = changeAlertsImage();
     
             $.post($(this).attr('data-href'), {
@@ -1209,7 +1208,7 @@ var owgm = {
             });
         });
     
-        $('#access-point-info').on('click', '#reset-alert-settings', function (e) {
+        $('#access-point-info').delegate('#reset-alert-settings', 'click', function (e) {
             e.preventDefault();
     
             changeAlertsImage('disable');
