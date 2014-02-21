@@ -531,7 +531,6 @@ ul.disabled{ background: #eee !important; border-color: #bbb !important }
 
 #site_description textarea, #notes textarea{ width: 95%  !important }
 
-#access-point-info{ position:relative }
 #alert-settings-popup{
 	position: absolute;
 	bottom: -102px;

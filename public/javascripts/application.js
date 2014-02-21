@@ -1151,6 +1151,9 @@ var owgm = {
             // assign same width as ap info table
             adjustPopUpWidth();
         });
+        
+        var topDistance = $('#access-point-info').offset().top + $('#access-point-info').height();
+        $('#alert-settings-popup').css('top', topDistance-1);
     
         // mouse enter: show; mouse leave: hide
         $('#access-point-info').on('mouseenter', '#alert-settings.monitored, #alert-settings-popup', function (e) {
