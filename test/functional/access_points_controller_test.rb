@@ -289,6 +289,58 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert !ap[2].properties.favourite
   end
   
+  test "edit ap alert settings" do
+    sign_in users(:admin)
+    
+    ap = AccessPoint.with_properties_and_group.find(1)
+    
+    post :edit_ap_alert_settings, {
+      #:format => 'json',
+      :access_point_id => 1,
+      :wisp_id => ap.wisp_id,
+      :alerts => 'true'
+    }
+    assert_response :success
+    ap = AccessPoint.with_properties_and_group.find(1)
+    assert_equal ap.properties.alerts, true
+    assert ap.alert_settings_customized?
+    
+    post :edit_ap_alert_settings, {
+      #:format => 'json',
+      :access_point_id => 1,
+      :wisp_id => ap.wisp_id,
+      :alerts => 'false'
+    }
+    assert_response :success
+    ap = AccessPoint.with_properties_and_group.find(1)
+    assert_equal ap.properties.alerts, false
+    
+    post :edit_ap_alert_settings, {
+      #:format => 'json',
+      :access_point_id => 1,
+      :wisp_id => ap.wisp_id,
+      :alerts => 'true',
+      :alerts_threshold_up => 20,
+      :alerts_threshold_down => 30
+    }
+    assert_response :success
+    ap = AccessPoint.with_properties_and_group.find(1)
+    assert_equal ap.properties.alerts, true
+    assert_equal ap.threshold_up, 20
+    assert_equal ap.threshold_down, 30
+    assert ap.alert_settings_customized?
+    
+    post :edit_ap_alert_settings, {
+      #:format => 'json',
+      :access_point_id => 1,
+      :wisp_id => ap.wisp_id,
+      :reset => 'true'
+    }
+    
+    ap = AccessPoint.with_properties_and_group.find(1)
+    assert !ap.alert_settings_customized?
+  end
+  
   test "show access points by group" do
     sign_in users(:admin)
     # move all the ap in group public squares
