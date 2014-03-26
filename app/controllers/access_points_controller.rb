@@ -60,7 +60,13 @@ class AccessPointsController < ApplicationController
     
     respond_to do |format|
       format.any(:html, :js) { @access_points = access_points_with_sort_search_and_paginate.of_wisp(@wisp) }
-      format.json { @access_points = access_points_with_filter.of_wisp(@wisp).draw_map }
+      format.json {
+		@access_points = access_points_with_filter.of_wisp(@wisp)
+		# if not simple view call draw_map model method which does clusters
+		if params[:simple].nil?
+		  @access_points = @access_points.draw_map
+		end
+	  }
       format.rss { @access_points = AccessPoint.of_wisp(@wisp).on_georss }
     end
 

@@ -77,7 +77,7 @@ var gmaps = {
             var map_div_id = $(gmaps.mapDivSingle).attr('id');
             var access_point_coords = gmaps.getCoords($(gmaps.mapDivSingle).attr(gmaps.latSelector), $(gmaps.mapDivSingle).attr(gmaps.lngSelector));
             gmaps.map = new google.maps.Map(document.getElementById(map_div_id), $.extend(gmaps.opts, {
-                zoom: 13,
+                zoom: 18,
                 center: access_point_coords,
                 draggable: true,
                 navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
@@ -90,6 +90,7 @@ var gmaps = {
                 icon: gmaps.gIcon($(gmaps.singleAccessPointIcon).attr('src')),
                 shadow: gmaps.gShadow($(gmaps.singleAccessPointIcon).attr('src'))
             });
+            gmaps.tmpMarker = _marker;
         }
     },
 
@@ -194,5 +195,40 @@ var gmaps = {
 
         _content = _content.replace(/__access_points__/, _access_points);
         return _content;
+    },
+    
+    loadMarkersFromJSON: function(url){
+        // get AP data
+        $.getJSON(url).done(function(json, status, xhr){
+            // init empty container
+            gmaps.markers = [];
+            gmaps.infoWindow = new google.maps.InfoWindow({});
+            // loop over results
+            for(var i=0,length=json.length; i<length; i++){
+                var ap = json[i].access_point,
+                    // gmap marker
+                    marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(ap.lat, ap.lng),
+                            map: gmaps.map,
+                            icon: gmaps.gIcon(ap.icon),
+                            shadow: gmaps.gShadow(ap.icon),
+                            // store extra info
+                            name: ap.hostname,
+                            url: ap.url
+                    });
+                gmaps.markers[i] = marker;
+                // bind info window on click
+                google.maps.event.addListener(gmaps.markers[i], 'click', function() {
+                    // close any open info windows
+                    gmaps.infoWindow.close();
+                    // set content (linked name)
+                    gmaps.infoWindow.setContent('<a href="'+this.url+'">'+this.name+'</a>')
+                    // open
+                    gmaps.infoWindow.open(gmaps.map, this);
+                });
+            }
+            // remove initial marker (there are two overlapping markers)
+            gmaps.tmpMarker.setMap(null);
+        });
     }
 }

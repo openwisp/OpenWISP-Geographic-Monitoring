@@ -123,4 +123,6 @@
 <script>
 		owgm.initSelectGroup("<%= wisp_access_point_select_group_url(@wisp, @access_point) %>");
 		owgm.initFavourite();
+		// load all markers in the background
+		gmaps.loadMarkersFromJSON('<%= wisp_access_points_url(@wisp) %>?simple=true');
 </script>

@@ -51,6 +51,16 @@ class AccessPointsControllerTest < ActionController::TestCase
     assert_response :success
   end
   
+  test "get access points json simple" do
+    sign_in users(:admin)
+    get :index, { :format => 'json', :simple => 'true' }
+    assert_response :success
+    
+    data = JSON::load(response.body)
+    assert data.class == Array
+    assert data[0]['access_point'].class == Hash
+  end
+  
   test "get access points map of group of wisp provinciawifi" do
     # change group of AP for testing purpose
     ap = access_points(:eduroam)
