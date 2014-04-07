@@ -27,8 +27,9 @@ class User < ActiveRecord::Base
   attr_accessible :username, :email, :password, :password_confirmation
   
   validates_uniqueness_of :email
-  validates_presence_of :username, :email, :password, :password_confirmation
+  validates_presence_of :username, :email
   validates :password, :confirmation => true
+  validate :password_confirmation_cannot_be_empty
   
   after_save :invalidate_cache
   after_destroy :invalidate_cache
@@ -125,6 +126,16 @@ class User < ActiveRecord::Base
   
   def self.available_roles
     ROLES
+  end
+  
+  def password_confirmation_cannot_be_empty
+    # allow changes on existing records without submitting a new password
+    if not new_record? and !password.blank? and password_confirmation.blank?
+      errors.add(:password_confirmation, I18n.t('activerecord.errors.models.user.attributes.password_confirmation.blank'))
+    # require password on new records
+    elsif new_record? and (password.blank? or password_confirmation.blank?)
+      errors.add(:password_confirmation, I18n.t('activerecord.errors.models.user.attributes.password.blank'))
+    end
   end
   
   private

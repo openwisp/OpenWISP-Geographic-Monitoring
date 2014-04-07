@@ -40,13 +40,24 @@ class UsersControllerTest < ActionController::TestCase
     # simple edit
     post :update, :id => 2, :user => {
       :username => 'user_test',
-      :email => 'test_user@user.it',
+      :email => 'test_user2@user.it',
       :password => 'password',
       :password_confirmation => 'password'
     }
-    user = users(:sfigato)
+    user = User.find(2)
     assert user.username == 'user_test', 'username has not changed'
-    assert user.email == 'test_user@user.it', 'email has not changed'
+    assert user.email == 'test_user2@user.it', 'email has not changed'
+    assert_redirected_to users_path, 'should redirect to user list after success'
+    
+    # simple edit without password
+    post :update, :id => 2, :user => {
+      :username => 'user_test',
+      :email => 'test_user3@user.it',
+      :password => '',
+      :password_confirmation => ''
+    }
+    user = User.find(2)
+    assert user.email == 'test_user3@user.it', 'email has not changed'
     assert_redirected_to users_path, 'should redirect to user list after success'
     
     # complex edit (edit roles too)
@@ -58,7 +69,7 @@ class UsersControllerTest < ActionController::TestCase
       :password_confirmation => 'password'
     }, :roles => [1]
     assert_redirected_to users_path
-    
+    user = User.find(2)
     assert user.roles(force_query=true).length >= 1, 'user should have 1 role assigned'
     
     # simple edit should fail
@@ -88,6 +99,23 @@ class UsersControllerTest < ActionController::TestCase
     sign_in users(:admin)
     # create all roles
     Wisp.create_all_roles
+    
+    # create new user without password should fail
+    post :create, :user => {
+      :username => 'new_user',
+      :email => 'new_user@testing.com',
+    }
+    assert_equal User.count, 4
+    
+    # password mismatch
+    post :create, :user => {
+      :username => 'new_user',
+      :email => 'new_user@testing.com',
+      :password => 'password',
+      :password_confirmation => 'wrong'
+    }
+    assert_equal User.count, 4
+    
     # crete new user with 6 roles assigned
     post :create, :user => {
       :username => 'new_user',
@@ -95,6 +123,7 @@ class UsersControllerTest < ActionController::TestCase
       :password => 'password',
       :password_confirmation => 'password'
     }, :roles => Role.last(6)
+    assert_equal User.count, 5
     new_user = User.last
     assert new_user.username == 'new_user', 'username has not been set as expected'
     assert new_user.email == 'new_user@testing.com', 'email has not been set as expected'
