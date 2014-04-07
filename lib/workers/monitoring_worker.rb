@@ -235,6 +235,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     begin
       Alert.send_all
     rescue Exception => e
+      puts "Problem in send_alerts"
       puts "[#{Time.now}] #{e.message}"  
       puts "[#{Time.now}] #{e.backtrace.inspect}"
     end

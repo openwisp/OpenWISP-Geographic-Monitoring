@@ -78,7 +78,13 @@ class Alert < ActiveRecord::Base
     
     # loop over collection
     alerts.each do |alert|
-      ap = AccessPoint.with_properties_and_group.find(alert.access_point_id)
+      begin
+        ap = AccessPoint.with_properties_and_group.find(alert.access_point_id)
+      rescue ActiveRecord::RecordNotFound
+        # if ap not found destroy alert and continue
+        alert.destroy
+        next
+      end
       
       # if alerts for this ap are deactivated skip and destroy the alert
       unless ap.alerts?

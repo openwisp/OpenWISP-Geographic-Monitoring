@@ -163,6 +163,18 @@ class AlertTest < ActiveSupport::TestCase
     assert_equal 0, Alert.send_all
   end
   
+  test "delete ap from external app" do
+    # simulate a case in which an access point has been deleted from the DB by an external application
+    # by creating an alert with a non-existent access point relation
+    Alert.create(:access_point_id => 99, :action => 'down', :sent => false)
+    assert_equal 1, Alert.where(:access_point_id => 99, :action => 'down', :sent => false).count
+    assert_equal 1, Alert.count
+    assert_equal 0, AccessPoint.where(:id => 99).count
+    
+    # we expect no errors and no alerts to be sent
+    assert_equal 0, Alert.send_all
+  end
+  
   test "not relevant emails destroyed" do
     assert_equal 0, Alert.send_all
     
