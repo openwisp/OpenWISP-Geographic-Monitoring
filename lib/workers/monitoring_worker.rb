@@ -38,41 +38,47 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       property_sets.category, property_sets.group_id, property_sets.notes, groups.monitor AS group_monitor")
     
     access_points.each do |ap|
-      
-      # if access point is in a group which is not being monitored
-      # for some reason when joining active records return a string instead of a boolean
-      if ap.group_monitor == "0" or ap.group_monitor == false
+      begin
+        # if access point is in a group which is not being monitored
+        # for some reason when joining active records return a string instead of a boolean
+        if ap.group_monitor == "0" or ap.group_monitor == false
+          next
+        end
+  
+        # spawn a new thread if there is a "slot" for it. Otherwise, wait for an empty slot
+        while threads.length >= MAX_THREADS
+          threads.delete_if { |th| th.alive? ? false : th.join() }
+          sleep(0.2)
+        end
+  
+        threads.push(Thread.new do
+          begin
+            pt = Net::Ping::External.new(ap.ip, nil, PING_TIMEOUT)
+            reachable = pt.ping?
+            act = ap.activities.build(:status => reachable) if ap.known? || (ap.unknown? && reachable)
+          rescue
+            act = ap.activities.build(:status => false) if ap.known?
+          end
+          if act
+            # avoid race conditions with the consolidate_access_points_monitoring() function
+            @@monitoring_semaphore.synchronize {
+              # save activity
+              act.save!
+              # if AP reachable status changed
+              if act.status != ap.reachable?
+                # change AP status
+                act.status ? ap.reachable! : ap.unreachable!
+              end
+            }
+          end
+        end)
+      rescue Exception => e
+        puts "[#{Time.now}] Problem while pinging ap '#{ap.hostname}'"
+        puts "[#{Time.now}] #{e.message}"  
+        puts "[#{Time.now}] #{e.backtrace.inspect}"
+        ExceptionNotifier::Notifier.background_exception_notification(e).deliver
         next
       end
-
-      # spawn a new thread if there is a "slot" for it. Otherwise, wait for an empty slot
-      while threads.length >= MAX_THREADS
-        threads.delete_if { |th| th.alive? ? false : th.join() }
-        sleep(0.2)
-      end
-
-      threads.push(Thread.new do
-        begin
-          pt = Net::Ping::External.new(ap.ip, nil, PING_TIMEOUT)
-          reachable = pt.ping?
-          act = ap.activities.build(:status => reachable) if ap.known? || (ap.unknown? && reachable)
-        rescue
-          act = ap.activities.build(:status => false) if ap.known?
-        end
-        if act
-          # avoid race conditions with the consolidate_access_points_monitoring() function
-          @@monitoring_semaphore.synchronize {
-            # save activity
-            act.save!
-            # if AP reachable status changed
-            if act.status != ap.reachable?
-              # change AP status
-              act.status ? ap.reachable! : ap.unreachable!
-            end
-          }
-        end
-      end)
-
     end
     # update group statistics
     Group.update_all_counts()
@@ -110,6 +116,9 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         }
       rescue Exception => e
         puts "[#{Time.now}] Problem in consolidate_access_points_monitoring() for access point '#{ap.hostname}': #{e}"
+        puts "[#{Time.now}] #{e.message}"  
+        puts "[#{Time.now}] #{e.backtrace.inspect}"
+        ExceptionNotifier::Notifier.background_exception_notification(e).deliver
         next
       end
     end
@@ -141,6 +150,9 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
                 aps_with_users << ap_id
               rescue Exception => e
                 puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}', access point id '#{ap_id}': #{e}"
+                puts "[#{Time.now}] #{e.message}"  
+                puts "[#{Time.now}] #{e.backtrace.inspect}"
+                ExceptionNotifier::Notifier.background_exception_notification(e).deliver
                 next
               end
             end
@@ -159,11 +171,17 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
                 }
               rescue Exception => e
                 puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}', access point '#{ap.hostname}': #{e}"
+                puts "[#{Time.now}] #{e.message}"  
+                puts "[#{Time.now}] #{e.backtrace.inspect}"
+                ExceptionNotifier::Notifier.background_exception_notification(e).deliver
                 next
               end
             end
           rescue Exception => e
             puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}': #{e}"
+            puts "[#{Time.now}] #{e.message}"  
+            puts "[#{Time.now}] #{e.backtrace.inspect}"
+            ExceptionNotifier::Notifier.background_exception_notification(e).deliver
           end
         end)
       end
@@ -208,27 +226,40 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
               }
             rescue Exception => e
               puts "[#{Time.now}] Problem in consolidate_associated_user_counts_monitoring() for wisp '#{wisp.name}', access point '#{ap.hostname}': #{e}"
+              puts "[#{Time.now}] #{e.message}"  
+              puts "[#{Time.now}] #{e.backtrace.inspect}"
+              ExceptionNotifier::Notifier.background_exception_notification(e).deliver
               next
             end
           end
         end
       rescue Exception => e
         puts "[#{Time.now}] Problem in consolidate_associated_user_counts_monitoring() for wisp '#{wisp.name}': #{e}"
+        puts "[#{Time.now}] #{e.message}"  
+        puts "[#{Time.now}] #{e.backtrace.inspect}"
+        ExceptionNotifier::Notifier.background_exception_notification(e).deliver
         next
       end
     end
   end
 
   def housekeeping
-    time = CONFIG['housekeeping_interval'].months.to_i.ago
-    ActivityHistory.destroy_all(["created_at < ?", time])
-    AssociatedUserCountHistory.destroy_all(["created_at < ?", time])
-    # delete old alerts
-    Alert.destroy_all(["created_at < ?", time])
-    # build missing property sets
-    AccessPoint.build_all_properties()
-    # delete orphan property sets
-    PropertySet.destroy_orphans()
+    begin
+      time = CONFIG['housekeeping_interval'].months.to_i.ago
+      ActivityHistory.destroy_all(["created_at < ?", time])
+      AssociatedUserCountHistory.destroy_all(["created_at < ?", time])
+      # delete old alerts
+      Alert.destroy_all(["created_at < ?", time])
+      # build missing property sets
+      AccessPoint.build_all_properties()
+      # delete orphan property sets
+      PropertySet.destroy_orphans()
+    rescue Exception => e
+      puts "Problem in housekeeping"
+      puts "[#{Time.now}] #{e.message}"  
+      puts "[#{Time.now}] #{e.backtrace.inspect}"
+      ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+    end
   end
   
   def send_alerts
@@ -238,6 +269,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       puts "Problem in send_alerts"
       puts "[#{Time.now}] #{e.message}"  
       puts "[#{Time.now}] #{e.backtrace.inspect}"
+      ExceptionNotifier::Notifier.background_exception_notification(e).deliver
     end
   end
 end
