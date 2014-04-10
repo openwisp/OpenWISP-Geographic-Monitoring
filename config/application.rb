@@ -35,6 +35,7 @@ CONFIG['alerts_threshold_up'] = CONFIG['alerts_threshold_up'] || 45
 CONFIG['alerts_email'] = CONFIG['alerts_email'] || ""
 CONFIG['mail_subject_prefix'] = CONFIG['mail_subject_prefix'] || '[OWGM]'
 CONFIG['exception_notification_recipients'] = CONFIG['exception_notification_recipients'] || 'root@localhost'
+CONFIG['check_monitoring_max_min'] = CONFIG['check_monitoring_max_min'] || 15
 
 # Specify where to look for the wisps and access_points table
 # data. Only one value can be enable at a time.

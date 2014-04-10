@@ -16,6 +16,8 @@ defaults: &defaults
   ping_timeout: 5
   # Months between each house keeping cycle
   housekeeping_interval: 6
+  # Maximum number of minutes before the "rake check:monitoring" will send an alert
+  check_monitoring_max_min: 15
   
   # owums credentials for each wisp
   # each key in the owums hash is a wisp
