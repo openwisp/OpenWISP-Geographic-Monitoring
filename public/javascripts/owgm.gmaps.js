@@ -201,7 +201,7 @@ var gmaps = {
         // get AP data
         $.getJSON(url).done(function(json, status, xhr){
             // init empty container
-            gmaps.markers = [];
+            gmaps.accessPoints = [];
             gmaps.infoWindow = new google.maps.InfoWindow({});
             // loop over results
             for(var i=0,length=json.length; i<length; i++){
@@ -209,16 +209,16 @@ var gmaps = {
                     // gmap marker
                     marker = new google.maps.Marker({
                             position: new google.maps.LatLng(ap.lat, ap.lng),
-                            map: gmaps.map,
+                            //map: gmaps.map,
                             icon: gmaps.gIcon(ap.icon),
                             shadow: gmaps.gShadow(ap.icon),
                             // store extra info
                             name: ap.hostname,
                             url: ap.url
                     });
-                gmaps.markers[i] = marker;
+                gmaps.accessPoints[i] = marker;
                 // bind info window on click
-                google.maps.event.addListener(gmaps.markers[i], 'click', function() {
+                google.maps.event.addListener(gmaps.accessPoints[i], 'click', function() {
                     // close any open info windows
                     gmaps.infoWindow.close();
                     // set content (linked name)
@@ -227,8 +227,12 @@ var gmaps = {
                     gmaps.infoWindow.open(gmaps.map, this);
                 });
             }
-            // remove initial marker (there are two overlapping markers)
+            // remove initial marker (there are two overlapping accessPoints)
             gmaps.tmpMarker.setMap(null);
+            
+            gmaps.markerCluster = new MarkerClusterer(gmaps.map, gmaps.accessPoints, {
+                gridSize: 30
+            });
         });
     }
 }
