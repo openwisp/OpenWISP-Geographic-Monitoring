@@ -91,6 +91,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
   end
 
   def consolidate_access_points_monitoring
+    # calculate average of activities
     AccessPoint.with_properties.all.each do |ap|
       begin
         # avoid race conditions with the access_points_monitoring() function
@@ -104,10 +105,30 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
               first_time = ap.activities.first.created_at.change(:min => 0, :sec => 0)
             end
             last_time = ap.activities.last.created_at.change(:min => 0, :sec => 0)
+            
+            # calculate the number of status changes
+            status_changes = 0
+            latest_activities = ap.activities.where(:created_at => first_time..last_time)
+            last_value = latest_activities[0].status
+            
+            latest_activities.each do |activity|
+              status = activity['status']
+              
+              if status != last_value
+                status_changes +=1
+              end
+              
+              last_value = status
+            end
 
             avg = ap.activities.where(:created_at => first_time..last_time).average(:status)
             if avg
-              history = ap.activity_histories.build(:status => avg.to_f, :start_time => first_time, :last_time => last_time)
+              history = ap.activity_histories.build(
+                :status => avg.to_f,
+                :start_time => first_time,
+                :last_time => last_time,
+                :num_change_status => status_changes
+              )
               history.save!
             end
 
