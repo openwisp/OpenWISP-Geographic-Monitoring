@@ -114,7 +114,7 @@
         </div>
     <% end %>
 
-    <% if @wisp.owmw_enabled? %>
+    <% if @wisp.owmw_enabled? and CONFIG['user_counts_graphs'] %>
         <% if auth?(:wisps_viewer) || auth?(:wisp_associated_user_count_histories_viewer, @wisp)%>
             <div class="grid_6">
               <div class="box">

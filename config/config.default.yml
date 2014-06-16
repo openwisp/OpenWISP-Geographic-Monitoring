@@ -19,6 +19,9 @@ defaults: &defaults
   # Maximum number of minutes before the "rake check:monitoring" will send an alert
   check_monitoring_max_min: 15
   
+  # user counts graphs can be disabled
+  user_counts_graphs: true
+  
   # owums credentials for each wisp
   # each key in the owums hash is a wisp
   # keys must contain wisp slug (lowercase name and dashes instead of spaces)
