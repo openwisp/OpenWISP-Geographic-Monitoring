@@ -183,6 +183,31 @@ class AccessPoint < ActiveRecord::Base
     self.properties.alerts_threshold_down = nil
     self.properties.save!
   end
+  
+  # returns number of status changes between the specified date range
+  def get_status_changes_between_dates(date_range)
+    status_changes = 0
+    latest_activities = self.activities.where(:created_at => date_range)
+    
+    # if no activity return 0
+    if latest_activities.length < 1
+      return 0
+    end
+    
+    last_value = latest_activities[0].status
+    
+    latest_activities.each do |activity|
+      status = activity[:status]
+      
+      if status != last_value
+        status_changes += 1
+      end
+      
+      last_value = status
+    end
+    
+    return status_changes
+  end
 
   ##### Static methods #####
 
@@ -405,7 +430,8 @@ class AccessPoint < ActiveRecord::Base
   
   def ensure_with_properties_and_group
     begin
-      if group_name.nil? or reachable.nil?: end
+      if group_name.nil? or reachable.nil?
+      end
     rescue
       raise 'feature in use requires access points to be retrieved with AccessPoint.with_properties_and_group()'
     end

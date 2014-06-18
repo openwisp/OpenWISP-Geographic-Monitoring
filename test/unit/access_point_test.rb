@@ -213,6 +213,42 @@ class AccessPointTest < ActiveSupport::TestCase
     assert_equal 2, AccessPoint.known.count
   end
   
+  test "get_status_changes_between_dates" do
+    ap = AccessPoint.first
+    ap.activities.destroy_all()
+    ap.reachable!
+    date_range = DateTime.now-30.minutes..DateTime.now+30.minutes
+    
+    # initial is 0 because no changed in the specified datetime range
+    assert_equal 0, ap.get_status_changes_between_dates(date_range)
+    
+    # expect 1 status change
+    ap.activities.build(:status => false).save!
+    assert_equal 1, ap.get_status_changes_between_dates(date_range)
+    
+    # expect again 1 only cos status hasn't changed
+    ap.activities.build(:status => false).save!
+    assert_equal 1, ap.get_status_changes_between_dates(date_range)
+    
+    # now we should have 2
+    ap.activities.build(:status => true).save!
+    assert_equal 2, ap.get_status_changes_between_dates(date_range)
+    
+    # then 3
+    ap.activities.build(:status => false).save!
+    assert_equal 3, ap.get_status_changes_between_dates(date_range)
+    
+    # now 4
+    ap.activities.build(:status => true).save!
+    assert_equal 4, ap.get_status_changes_between_dates(date_range)
+    
+    # stays 4 cos status hasn't changed
+    ap.activities.build(:status => true).save!
+    assert_equal 4, ap.get_status_changes_between_dates(date_range)
+    ap.activities.build(:status => true).save!
+    assert_equal 4, ap.get_status_changes_between_dates(date_range)
+  end
+  
   test "sorting" do
     
     def test_sorting(attr='id', direction='asc')

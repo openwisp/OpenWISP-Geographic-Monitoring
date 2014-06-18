@@ -107,19 +107,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
             last_time = ap.activities.last.created_at.change(:min => 0, :sec => 0)
             
             # calculate the number of status changes
-            status_changes = 0
-            latest_activities = ap.activities.where(:created_at => first_time..last_time)
-            last_value = latest_activities[0].status
-            
-            latest_activities.each do |activity|
-              status = activity['status']
-              
-              if status != last_value
-                status_changes +=1
-              end
-              
-              last_value = status
-            end
+            status_changes = ap.get_status_changes_between_dates(first_time..last_time)
 
             avg = ap.activities.where(:created_at => first_time..last_time).average(:status)
             if avg
