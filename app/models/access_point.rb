@@ -197,7 +197,7 @@ class AccessPoint < ActiveRecord::Base
     last_value = latest_activities[0].status
     
     latest_activities.each do |activity|
-      status = activity[:status]
+      status = activity.status
       
       if status != last_value
         status_changes += 1

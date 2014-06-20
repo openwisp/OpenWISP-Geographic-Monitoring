@@ -214,39 +214,54 @@ class AccessPointTest < ActiveSupport::TestCase
   end
   
   test "get_status_changes_between_dates" do
-    ap = AccessPoint.first
-    ap.activities.destroy_all()
-    ap.reachable!
-    date_range = DateTime.now-30.minutes..DateTime.now+30.minutes
+    def do_test(ap)
+      ap.activities.destroy_all()
+      ap.reachable!
+      date_range = DateTime.now-2.hours..DateTime.now+2.hours
+      
+      # initial is 0 because no changed in the specified datetime range
+      assert_equal 0, ap.get_status_changes_between_dates(date_range)
+      
+      # expect 0
+      ap.activities.build(:status => true).save!
+      assert_equal 0, ap.get_status_changes_between_dates(date_range)
+      
+      # expect 1 status change
+      ap.activities.build(:status => false).save!
+      ap.unreachable!
+      assert_equal 1, ap.get_status_changes_between_dates(date_range)
+      
+      # expect again 1 only cos status hasn't changed
+      ap.activities.build(:status => false).save!
+      assert_equal 1, ap.get_status_changes_between_dates(date_range)
+      
+      # now we should have 2
+      ap.activities.build(:status => true).save!
+      ap.reachable!
+      assert_equal 2, ap.get_status_changes_between_dates(date_range)
+      
+      # then 3
+      ap.activities.build(:status => false).save!
+      ap.unreachable!
+      assert_equal 3, ap.get_status_changes_between_dates(date_range)
+      
+      # now 4
+      ap.activities.build(:status => true).save!
+      ap.reachable!
+      assert_equal 4, ap.get_status_changes_between_dates(date_range)
+      
+      # stays 4 cos status hasn't changed
+      ap.activities.build(:status => true).save!
+      assert_equal 4, ap.get_status_changes_between_dates(date_range)
+      ap.activities.build(:status => true).save!
+      assert_equal 4, ap.get_status_changes_between_dates(date_range)
+    end
     
-    # initial is 0 because no changed in the specified datetime range
-    assert_equal 0, ap.get_status_changes_between_dates(date_range)
+    do_test(AccessPoint.first)
     
-    # expect 1 status change
-    ap.activities.build(:status => false).save!
-    assert_equal 1, ap.get_status_changes_between_dates(date_range)
-    
-    # expect again 1 only cos status hasn't changed
-    ap.activities.build(:status => false).save!
-    assert_equal 1, ap.get_status_changes_between_dates(date_range)
-    
-    # now we should have 2
-    ap.activities.build(:status => true).save!
-    assert_equal 2, ap.get_status_changes_between_dates(date_range)
-    
-    # then 3
-    ap.activities.build(:status => false).save!
-    assert_equal 3, ap.get_status_changes_between_dates(date_range)
-    
-    # now 4
-    ap.activities.build(:status => true).save!
-    assert_equal 4, ap.get_status_changes_between_dates(date_range)
-    
-    # stays 4 cos status hasn't changed
-    ap.activities.build(:status => true).save!
-    assert_equal 4, ap.get_status_changes_between_dates(date_range)
-    ap.activities.build(:status => true).save!
-    assert_equal 4, ap.get_status_changes_between_dates(date_range)
+    ap = AccessPoint.with_properties_and_group("access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
+      property_sets.category, property_sets.group_id, property_sets.notes, groups.monitor AS group_monitor").first
+    do_test(ap)
   end
   
   test "sorting" do
