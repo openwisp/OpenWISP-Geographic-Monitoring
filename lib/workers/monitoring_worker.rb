@@ -92,7 +92,16 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
 
   def consolidate_access_points_monitoring
     # calculate average of activities
-    AccessPoint.with_properties.all.each do |ap|
+    access_points = AccessPoint.with_properties_and_group("access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
+      property_sets.category, property_sets.group_id, property_sets.notes, groups.monitor AS group_monitor")
+    
+    access_points.each do |ap|
+      # if access point is in a group which is not being monitored
+      # for some reason when joining active records return a string instead of a boolean
+      if ap.group_monitor == "0" or ap.group_monitor == false
+        next
+      end
+      
       begin
         # avoid race conditions with the access_points_monitoring() function
         @@monitoring_semaphore.synchronize {
