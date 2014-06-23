@@ -24,14 +24,24 @@ class Configuration < ActiveRecord::Base
   def self.get(key)
     value = AppConfig[key]
     raise("BUG: value for key #{key} not found!") if value.nil?
-
+    
+    if value.class == Array and value.length == 1 and value[0].include?(',')
+      value = value[0].split(',')
+    end
+    
     value
   end
 
-  def self.set(key, value, format, description = nil)
+  def self.set(key, value, format, description=nil)
     key = key.to_s
     value = value.to_s
     format = format.to_s
+    
+    if format == 'array'
+      # if format is array
+      # use comma separator without space, convert space between words with dashes
+      value = value.gsub(', ', ',').gsub(/ /,"-").downcase
+    end
 
     begin
       AppConfig.set_key(key, value, format)

@@ -38,4 +38,17 @@ class WispTest < ActiveSupport::TestCase
     assert_equal 2, wisp.count_access_points(:total)
     assert_equal 0, wisp.count_access_points(:favourite)
   end
+  
+  test "owmw_enabled" do
+    Wisp.all.each do |wisp|
+      assert_equal false, wisp.owmw_enabled?
+    end
+    
+    Configuration.set('owmw_enabled', true, 'boolean')
+    Configuration.set('wisps_with_owmw', 'provinciawifi, freewifi brescia, small wisp', 'array')
+    
+    Wisp.all.each do |wisp|
+      assert_equal true, wisp.owmw_enabled?
+    end
+  end
 end
