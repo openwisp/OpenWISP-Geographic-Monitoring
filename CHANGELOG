@@ -20,7 +20,10 @@ Version 1.3
  * Latest online users
  * Configurable alerts (by group and single AP)
  * Exception notifications
+ * Latest logins
  * Traffic and Login statistics for each AP (taken from Radius)
+ * Status changes count in ActivityHistory model
+ * minor improvements and bug fixes
  
 April 26th, 2012 - Version 1.0.5
 
