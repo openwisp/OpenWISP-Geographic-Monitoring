@@ -24,6 +24,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
 
   MAX_THREADS = CONFIG['max_threads']
   PING_TIMEOUT = CONFIG['ping_timeout']
+  MAX_PINGS = CONFIG['max_pings']
 
   @@monitoring_semaphore = Mutex.new
   @@users_count_semaphore = Mutex.new
@@ -45,20 +46,31 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
           next
         end
   
-        # spawn a new thread if there is a "slot" for it. Otherwise, wait for an empty slot
+        # wait until there is a "slot" for a new thread
         while threads.length >= MAX_THREADS
-          threads.delete_if { |th| th.alive? ? false : th.join() }
+          threads.delete_if { |th| th.alive? ? false : th.join(1) }
           sleep(0.2)
         end
-  
+        
+        # spawn a new thread
         threads.push(Thread.new do
           begin
-            pt = Net::Ping::External.new(ap.ip, nil, PING_TIMEOUT)
-            reachable = pt.ping?
+            # do a maximum number of pings as indicated in MAX_PINGS
+            MAX_PINGS.times do
+              # initialize
+              pt = Net::Ping::External.new(ap.ip, nil, PING_TIMEOUT)
+              # perform ping
+              reachable = pt.ping?
+              # if ping is successful exit loop, otherwise keep trying until MAX_PINGS
+              if reachable
+                break
+              end
+            end
             act = ap.activities.build(:status => reachable) if ap.known? || (ap.unknown? && reachable)
           rescue
             act = ap.activities.build(:status => false) if ap.known?
           end
+          
           if act
             # avoid race conditions with the consolidate_access_points_monitoring() function
             @@monitoring_semaphore.synchronize {
@@ -80,14 +92,15 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         next
       end
     end
-    # update group statistics
-    Group.update_all_counts()
 
     # collect remaining threads that are finished theirs job
     while threads.length > 0
-      threads.delete_if { |th| th.alive? ? false : th.join() }
+      threads.delete_if { |th| th.alive? ? false : th.join(1) }
       sleep(0.2)
     end
+    
+    # update group statistics
+    Group.update_all_counts()
   end
 
   def consolidate_access_points_monitoring

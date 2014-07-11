@@ -24,6 +24,7 @@ end
 CONFIG['last_logins'] = CONFIG['last_logins'].nil? ? true : CONFIG['last_logins'];
 CONFIG['max_threads'] = CONFIG['max_threads'] || 10
 CONFIG['ping_timeout'] = CONFIG['ping_timeout'] || 5
+CONFIG['max_pings'] = CONFIG['max_pings'] || 5
 CONFIG['housekeeping_interval'] = CONFIG['housekeeping_interval'] || 5
 CONFIG['protocol'] = CONFIG['protocol'] || 'https'
 CONFIG['host'] = CONFIG['host'] || 'change_me.com'

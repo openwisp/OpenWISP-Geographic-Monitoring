@@ -14,6 +14,8 @@ defaults: &defaults
   max_threads: 10
   # Expected seconds to consider a ping timed-out
   ping_timeout: 5
+  # Max number of pings for each AP before considering it down
+  max_pings: 5
   # Months between each house keeping cycle
   housekeeping_interval: 6
   # Maximum number of minutes before the "rake check:monitoring" will send an alert
