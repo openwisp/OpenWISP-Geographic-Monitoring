@@ -93,10 +93,17 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       end
     end
 
-    # collect remaining threads that are finished theirs job
-    while threads.length > 0
-      threads.delete_if { |th| th.alive? ? false : th.join(1) }
-      sleep(0.2)
+    begin
+      # collect remaining threads that are finished theirs job
+      while threads.length > 0
+        threads.delete_if { |th| th.alive? ? false : th.join() }
+        sleep(0.2)
+      end
+    rescue Exception => e
+      puts "[#{Time.now}] Got exception while cleaning threads"
+      puts "[#{Time.now}] #{e.message}"
+      puts "[#{Time.now}] #{e.backtrace.inspect}"
+      ExceptionNotifier::Notifier.background_exception_notification(e).deliver
     end
     
     # update group statistics
