@@ -92,8 +92,8 @@ class AccessPointsController < ApplicationController
   def last_logins
     @access_point = AccessPoint.find(params[:id])
     # retrieve radius accountings
-    RadiusSession.active_resource_from(@wisp.owmw_url, @wisp.owmw_username, @wisp.owmw_password)
-	@radius_sessions = RadiusSession.find(:all, :params => { :mac_address => @access_point.common_name, :last => 10 })
+    RadiusSession.active_resource_from(@wisp.owums_url, @wisp.owums_username, @wisp.owums_password)
+	@radius_sessions = RadiusSession.find(:all, :params => { :ap => @access_point.common_name, :last => 10 })
 	render :layout => false
   end
   

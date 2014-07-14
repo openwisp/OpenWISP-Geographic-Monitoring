@@ -20,6 +20,7 @@ class RadiusSession < ActiveResource::Base
   include ActiveModel::Serializers::Xml
   
   self.element_name = "radius_accountings"
+  self.format = CustomXMLFormatter.new
 
   def self.active_resource_from(url, username, password)
     self.site = "#{url}"

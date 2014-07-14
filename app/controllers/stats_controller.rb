@@ -47,7 +47,7 @@ class StatsController < ApplicationController
   # get data from owums
   def get_owums_data(path, method='get')
 	# build URL
-	url = "#{@wisp.owums_baseurl}#{path}"
+	url = "#{@wisp.owums_url}#{path}"
 	
 	# build http request object
 	uri = URI.parse(url)

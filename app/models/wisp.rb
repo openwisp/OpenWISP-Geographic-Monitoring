@@ -49,7 +49,7 @@ class Wisp < ActiveRecord::Base
   end
   
   # return owums base url of wisp or nil if not set
-  def owums_baseurl
+  def owums_url
     if owums_enabled?
       return CONFIG['owums'][slug]['url']
     else
