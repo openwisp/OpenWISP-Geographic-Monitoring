@@ -48,6 +48,6 @@ owumsGraphs.drawLogins = function(params){
             },
             series: logins
         });
+        $('#'+params.el).parents('.block.stats').addClass('loaded');
     });
-    
 }

@@ -56,25 +56,17 @@
                     <% end %>
                 </div>
                 
-                <h4><%= t(:Daily_logins) %></h4>
-                
                 <div class="block stats">
                     <div class="block big_graph" id="logins_graph" data-url="<%= wisp_logins_json_path %>">
                         <h5 class="center"><%=t :Loading_data %> <%= image_tag "spinner.gif" %></h5>
                     </div>
                 </div>
                 
-                <br class="clear" />
-                
-                <h4><%= t(:Daily_traffic) %></h4>
-                
                 <div class="block stats">
                     <div class="block big_graph" id="traffic_graph" data-url="<%= wisp_traffic_json_path %>">
                         <h5 class="center"><%=t :Loading_data %> <%= image_tag "spinner.gif" %></h5>
                     </div>
                 </div>
-                
-                <br class="clear" />
             </div>
         </div>
         <script>

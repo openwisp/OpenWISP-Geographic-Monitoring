@@ -65,5 +65,6 @@ owumsGraphs.drawTraffic = function(params){
             },
             series: traffic
         });
+        $('#'+params.el).parents('.block.stats').addClass('loaded');
     });
 }
