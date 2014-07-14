@@ -1008,9 +1008,10 @@ var owgm = {
             }
             // get online users and update UI
             response = $.get(location.pathname + '/last_logins', function(response){
+                $('#last-logins .loading').hide();
                 $('#last-logins tbody').html(response);
+                $('#last-logins table').slideDown(255);
             }).error(function(){
-                $('#last-logins table').hide();
                 $('#last-logins .message').show();
                 owgm.owmw_not_working = true;
                 clearInterval(owgm.online_users_timer);
