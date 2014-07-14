@@ -37,8 +37,10 @@
 			</div>
 		</div>
 		<script>
-			owgm.loadLastLogins(500);
-			owgm.monitorLastLogins();
+			owgm.loadLastLogins(function(){
+				// callback to be executed after first load
+				owgm.monitorLastLogins(30000) // refresh every 30 seconds
+			});
 		</script>
 	<% end %>
 <% end %>

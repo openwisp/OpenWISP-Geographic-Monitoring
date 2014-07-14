@@ -995,41 +995,37 @@ var owgm = {
         });
     },
     
-    loadLastLogins: function(interval, timer){
-        // default value for interval is 0
-        interval = interval || 0;
-        // default behaviour is setTimeout
-        timer = timer || setTimeout
-        owgm.owmw_not_working = owgm.owmw_not_working || false;
-        
-        owgm.online_users_timer = timer(function(){
-            if(owgm.owmw_not_working){
-                return false;
+    loadLastLogins: function(onSuccess){
+        owgm.owums_not_working = owgm.owums_not_working || false;
+        // if we previously discovered this feature isn't working stop here
+        if(owgm.owums_not_working){
+            return false;
+        }
+        // get online users and update UI
+        response = $.get(location.pathname + '/last_logins', function(response){
+            $('#last-logins .loading').hide();
+            $('#last-logins tbody').html(response);
+            $('#last-logins table').slideDown(255);
+            // handy onSuccess callback
+            if (onSuccess) {
+                onSuccess();
             }
-            // get online users and update UI
-            response = $.get(location.pathname + '/last_logins', function(response){
-                $('#last-logins .loading').hide();
-                $('#last-logins tbody').html(response);
-                $('#last-logins table').slideDown(255);
-            }).error(function(){
-                $('#last-logins .message').show();
-                owgm.owmw_not_working = true;
-                clearInterval(owgm.online_users_timer);
-            });
-            return true;
-        }, interval);
+        // in case of errors show message
+        }).error(function(){
+            $('#last-logins .message').show();
+            $('#last-logins .loading').hide();
+            owgm.owums_not_working = true;
+        });
+        return true;
     },
     
-    monitorLastLogins: function(){
-        $('#last-logins h2 a').click(function(e){
-            showing = $(this).hasClass('hidden');
-            if(showing){
-                owgm.loadLastLogins(20000, setInterval);
+    monitorLastLogins: function(milliseconds){
+        setInterval(function(){
+            shown = !$('#last-logins h2 a').hasClass('hidden');
+            if(shown && window.isActive){
+                owgm.loadLastLogins(); // refresh
             }
-            else{
-                clearInterval(owgm.online_users_timer);
-            }
-        });
+        }, milliseconds);
     },
     
     initEditManagerEmail: function(){
@@ -1309,3 +1305,13 @@ $.fn.togglePop = function(action, speed){
     }    
     return el;
 }
+
+window.isActive = true;
+
+window.onfocus = function () { 
+  isActive = true; 
+}; 
+
+window.onblur = function () { 
+  isActive = false; 
+};
