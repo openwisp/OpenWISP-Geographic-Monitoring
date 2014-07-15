@@ -1,4 +1,4 @@
-<% if CONFIG['last_logins'] and @wisp.owmw_enabled? and @access_point.known? %>
+<% if CONFIG['last_logins'] and @wisp.owums_enabled? and @access_point.known? %>
 	<% if auth?(:wisps_viewer) || auth?(:wisp_associated_user_counts_viewer, @wisp)%>
 		<div class="grid_12" id="last-logins">
 			<div class="box">
@@ -32,7 +32,7 @@
 							<!-- data is loaded by owums.monitorLastLogins() -->
 						</tbody>
 					</table>
-					<div class="message alert" class="hidden"><%= t :OWMW_last_logins_problem %></div>
+					<div class="message alert" class="hidden"><%= t :last_logins_problem %></div>
 				</div>
 			</div>
 		</div>

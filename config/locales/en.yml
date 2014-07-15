@@ -214,7 +214,7 @@ en:
   prev_page_tooltip: "(SHIFT + LEFT)"
   not_monitored: not monitored
   Last_10_logins: "Last 10 logins"
-  OWMW_last_logins_problem: "Network problem or feature not yet implemented for this wisp (have you upgraded OWMW?)"
+  last_logins_problem: "Network problem or feature not yet implemented for this wisp"
   # Alerts
   Alert_settings: Alert Settings for Group
   Alerts_active: Alert active?
