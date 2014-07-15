@@ -55,6 +55,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         # spawn a new thread
         threads.push(Thread.new do
           begin
+            reachable = nil
             # do a maximum number of pings as indicated in MAX_PINGS
             MAX_PINGS.times do
               # initialize
