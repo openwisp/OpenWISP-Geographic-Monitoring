@@ -47,7 +47,7 @@ class StatsController < ApplicationController
   # get data from owums
   def get_owums_data(path, method='get')
 	# build URL
-	url = "#{@wisp.owums_url}#{path}"
+	url = "#{@wisp.owums_url}#{path}?#{params.to_query}"
 	
 	# build http request object
 	uri = URI.parse(url)
@@ -64,8 +64,6 @@ class StatsController < ApplicationController
 	
 	# credentials
 	request.basic_auth(@wisp.owums_username, @wisp.owums_password)
-	# keep querystring params
-	request.set_form_data(params)
 	# return response object
 	return http.request(request)
   end
