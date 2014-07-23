@@ -24,13 +24,13 @@ namespace :check do
       wisp = Wisp.find_by_name(WISP)
     end
     
-    if not wisp.owmw_enabled?
-      puts "Wisp does not have owmw enabled"
+    if not wisp.owums_enabled?
+      puts "Wisp does not have owums enabled"
       return
     end
     
     access_points = wisp.access_points.with_properties_and_group.where('property_sets.reachable = 0 AND groups.count_stats = 1')
-    RadiusSession.active_resource_from(wisp.owmw_url, wisp.owmw_username, wisp.owmw_password)
+    RadiusSession.active_resource_from(wisp.owums_url, wisp.owums_username, wisp.owums_password)
     
     possible_false_negatives = []
     counter = 0
@@ -43,7 +43,7 @@ namespace :check do
         end
         
         # retrieve radius sessions
-        sessions = RadiusSession.find(:all, :params => { :mac_address => ap.common_name, :last => 1 })
+        sessions = RadiusSession.find(:all, :params => { :ap => ap.common_name, :last => 1 })
         
         # if no radius sessions available skip to next iteration
         if sessions.length == 0
