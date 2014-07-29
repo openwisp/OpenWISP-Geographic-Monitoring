@@ -231,7 +231,7 @@ var gmaps = {
             gmaps.tmpMarker.setMap(null);
             
             gmaps.markerCluster = new MarkerClusterer(gmaps.map, gmaps.accessPoints, {
-                gridSize: 30,
+                gridSize: 23,
                 maxZoom: 18
             });
         });
