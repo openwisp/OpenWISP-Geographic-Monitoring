@@ -116,7 +116,7 @@ var gmaps = {
     },
 
     fetchMarkers: function() {
-        $.getJSON(location.href, function(markers){
+        $.getJSON(location.href+'?simple=true', function(markers){
             $.each(markers, function(){
                 var marker_container;
                 if (this.access_point) {
