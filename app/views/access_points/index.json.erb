@@ -28,7 +28,7 @@
         :address => marker.address,
         :city => marker.city,
         :icon => image_path_for(marker),
-        :url => wisp_access_point_url(marker.wisp, marker)
+        :url => wisp_access_point_url(marker.wisp_id, marker)
       }}.to_json
     elsif marker.is_a? Cluster
       access_points_clustered = []
