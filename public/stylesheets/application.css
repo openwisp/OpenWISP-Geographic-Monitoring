@@ -107,7 +107,7 @@
     width: 200px;
     margin: 15px 0 !important;
     height: 20px;
-    font-size: 20px    
+    font-size: 20px
 }
 
 #login {
@@ -509,7 +509,7 @@ h2 span.arrow{ position: relative; top: 0; margin-left: 5px; font-size: 13px !im
 	font-weight: bold;
 	font-size: 15px;
 }
-#last-logins a{ font-weight: normal }
+h2 a.toggle{ font-weight: normal }
 
 #_d, #_l{ position: fixed !important }
 

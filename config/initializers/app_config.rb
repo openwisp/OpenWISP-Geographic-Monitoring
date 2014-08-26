@@ -37,6 +37,7 @@ CONFIG['mail_subject_prefix'] = CONFIG['mail_subject_prefix'] || '[OWGM]'
 CONFIG['exception_notification_recipients'] = CONFIG['exception_notification_recipients'] || 'root@localhost'
 CONFIG['check_monitoring_max_min'] = CONFIG['check_monitoring_max_min'] || 15
 CONFIG['user_counts_graphs'] = CONFIG['user_counts_graphs'].nil? ? true : CONFIG['user_counts_graphs']
+CONFIG['ap_stats_collapsed'] ||= CONFIG['ap_stats_collapsed'].nil? ? false : CONFIG['ap_stats_collapsed']
 
 # set mailer host
 Owgm::Application.config.action_mailer.default_url_options = { :host => CONFIG['host'] }

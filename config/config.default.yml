@@ -23,6 +23,8 @@ defaults: &defaults
   
   # user counts graphs can be disabled
   user_counts_graphs: true
+  # AP usage stats hidden
+  ap_stats_collapsed: false
   
   # owums credentials for each wisp
   # each key in the owums hash is a wisp

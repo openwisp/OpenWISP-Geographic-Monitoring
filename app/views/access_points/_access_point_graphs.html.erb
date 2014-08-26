@@ -21,15 +21,15 @@
     <%= stylesheet_link_tag 'jquery-ui/styles' %>
     <%= javascript_include_tag(
         'highcharts',
-				'highcharts.exporting',
-				'jquery-ui',
-				'owgm.graphs',
+        'highcharts.exporting',
+        'jquery-ui',
+        'owgm.graphs',
         'owgm.activity_graph',
         'owgm.activity_histories_graph',
         'owgm.associated_users_graph',
         'owgm.associated_user_histories_graph'
-		) %>
-    
+    ) %>
+
     <% if @wisp.owums_enabled? %>
         <%= javascript_include_tag(
             'owums.graphs',
@@ -43,45 +43,53 @@
     <% if @wisp.owums_enabled? and (auth?(:wisps_viewer) or auth?(:wisp_associated_user_counts_viewer, @wisp)) %>
         <div class="grid_12">
             <div class="box" id="stats-usage">
-                <h2><%= t(:Usage_stats) %></h2>
-                
-                <div class="box" id="stats-interval" data-url="<%= wisp_export_stats_path %>">
-                    <%= form_tag '', :method => :get do %>
-                        <strong><%=t :Interval %></strong>:
-                        <%= text_field_tag 'from', l(@from) %>
-                        <strong>-</strong>
-                        <%= text_field_tag 'to', l(@to) %>
-                        <%= hidden_field_tag 'mac', @access_point.common_name %>
-                        <button type="submit"><%= t(:Update) %></button>
-                    <% end %>
-                </div>
-                
-                <div class="block stats">
-                    <div class="block big_graph" id="logins_graph" data-url="<%= wisp_logins_json_path %>">
-                        <h5 class="center"><%=t :Loading_data %> <%= image_tag "spinner.gif" %></h5>
+                <h2>
+                    <a href="#" class="toggle<% if CONFIG['ap_stats_collapsed'] %> hidden<% end %>">
+                        <%= t(:Usage_stats) %>
+                        <span class="arrow" data-show="&#x25BC;" data-hide="&#x25B2;">&#x25BC;</span>
+                    </a>
+                </h2>
+
+                <div class="container<% if CONFIG['ap_stats_collapsed'] %> hidden<% end %>">
+                    <div class="box" id="stats-interval" data-url="<%= wisp_export_stats_path %>">
+                        <%= form_tag '', :method => :get do %>
+                            <strong><%=t :Interval %></strong>:
+                            <%= text_field_tag 'from', l(@from) %>
+                            <strong>-</strong>
+                            <%= text_field_tag 'to', l(@to) %>
+                            <%= hidden_field_tag 'mac', @access_point.common_name %>
+                            <button type="submit"><%= t(:Update) %></button>
+                        <% end %>
                     </div>
-                </div>
-                
-                <div class="block stats">
-                    <div class="block big_graph" id="traffic_graph" data-url="<%= wisp_traffic_json_path %>">
-                        <h5 class="center"><%=t :Loading_data %> <%= image_tag "spinner.gif" %></h5>
+
+                    <div class="block stats">
+                        <div class="block big_graph" id="logins_graph" data-url="<%= wisp_logins_json_path %>">
+                            <h5 class="center"><%=t :Loading_data %> <%= image_tag "spinner.gif" %></h5>
+                        </div>
+                    </div>
+
+                    <div class="block stats">
+                        <div class="block big_graph" id="traffic_graph" data-url="<%= wisp_traffic_json_path %>">
+                            <h5 class="center"><%=t :Loading_data %> <%= image_tag "spinner.gif" %></h5>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <script>
-            owumsGraphs.drawLogins();
-            owumsGraphs.drawTraffic();
-            
+            if (!$('#stats-usage .container').hasClass('hidden')) {
+                owumsGraphs.drawLogins();
+                owumsGraphs.drawTraffic();
+            }
             $('#stats-interval form').submit(function(e){
                 e.preventDefault();
                 owumsGraphs.drawLogins();
                 owumsGraphs.drawTraffic();
-            })
+            });
         </script>
         <div class="clear"></div>
     <% end %>
-    
+
     <% if auth?(:wisps_viewer) || auth?(:wisp_activity_histories_viewer, @wisp)%>
         <div class="grid_6">
           <div class="box">
