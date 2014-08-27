@@ -56,6 +56,9 @@ defaults: &defaults
   alerts_threshold_up:  45
   # default value for group setting "alert_email"
   alerts_email: ""
+  # uncomment the following config keys if you need to customize the subjects and body texts
+  #alert_down_subject_suffix: "%{hostname} is no longer reachable"
+  #alert_up_subject_suffix: "%{hostname} is now reachable again"
 
 production:
   <<: *defaults
