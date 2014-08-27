@@ -235,7 +235,7 @@ en:
   # alerts email text
   hostname_is_no_longer_reachable: %{hostname} is no longer reachable
   hostname_is_now_reachable_again: %{hostname} is now reachable again
-  Notification_type: Tipo notifica
+  Notification_type: Notification type
   PROBLEM: PROBLEM
   RECOVERY: RECOVERY
   since: since

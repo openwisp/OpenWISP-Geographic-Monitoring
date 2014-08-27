@@ -1,3 +1,22 @@
+<%
+@data = {
+    :notification_type => @alert.action == 'down' ? t(:PROBLEM) : t(:RECOVERY),
+    :hostname => @ap.hostname,
+    :status => @alert.action.upcase,
+    :status_changed_at => @alert.created_at,
+    :city => @ap.city,
+    :address => @ap.address,
+    :ip => @ap.mng_ip,
+    :mac_address => @ap.common_name,
+    :notes => @ap.notes.nil? ? '' : @ap.notes.html_safe,
+    :url => "#{base_url}#{wisp_access_point_path(@ap.wisp, @ap)}"
+  }
+%>
+<% if @admin and CONFIG['alert_body_text_admin'] %>
+<%= CONFIG['alert_body_text_admin'] % @data %>
+<% elsif !@admin and CONFIG['alert_body_text_manager'] %>
+<%= CONFIG['alert_body_text_manager'] % @data %>
+<% else %>
 ***** OpenWISP Geographic Monitoring *****
 
 <%= t :Notification_type %>: <%= @alert.action == 'down' ? t(:PROBLEM) : t(:RECOVERY) %>
@@ -19,4 +38,5 @@ Status: <%= @alert.action.upcase %> <%= t :since %> <%= @alert.created_at %>
 
 <% if(@admin) %>
 URL: <%= base_url %><%= wisp_access_point_path(@ap.wisp, @ap) %>
+<% end %>
 <% end %>

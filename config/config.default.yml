@@ -59,6 +59,10 @@ defaults: &defaults
   # uncomment the following config keys if you need to customize the subjects and body texts
   #alert_down_subject_suffix: "%{hostname} is no longer reachable"
   #alert_up_subject_suffix: "%{hostname} is now reachable again"
+  # message text that will be sent to admins
+  #alert_body_text_admin: ""
+  # message that will be sent to access point owners or managers
+  #alert_body_text_manager: ""
 
 production:
   <<: *defaults
