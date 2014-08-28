@@ -56,13 +56,41 @@ defaults: &defaults
   alerts_threshold_up:  45
   # default value for group setting "alert_email"
   alerts_email: ""
-  # uncomment the following config keys if you need to customize the subjects and body texts
+  # uncomment the following config keys if you need to customize the subject and body text of alarms
   #alert_down_subject_suffix: "%{hostname} is no longer reachable"
   #alert_up_subject_suffix: "%{hostname} is now reachable again"
   # message text that will be sent to admins
-  #alert_body_text_admin: ""
+  #alert_body_text_admin: |
+  #  ***** OpenWISP Geographic Monitoring *****
+  #  
+  #  Notification type: %{notification_type}
+  #  Host: %{hostname}
+  #  Status: %{status} since %{status_changed_at}
+  #  
+  #  City: %{city}
+  #  Address: %{address}
+  #  Ip address: %{ip}
+  #  Mac address: %{mac_address}
+  #  
+  #  Notes:
+  #  %{notes}
+  #  
+  #  URL: %{url}
   # message that will be sent to access point owners or managers
-  #alert_body_text_manager: ""
+  #alert_body_text_manager: |
+  #  ***** OpenWISP Geographic Monitoring *****
+  #  
+  #  Notification type: %{notification_type}
+  #  Host: %{hostname}
+  #  Status: %{status} since %{status_changed_at}
+  #  
+  #  City: %{city}
+  #  Address: %{address}
+  #  Ip address: %{ip}
+  #  Mac address: %{mac_address}
+  #  
+  #  Notes:
+  #  %{notes}
 
 production:
   <<: *defaults
