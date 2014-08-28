@@ -2,20 +2,20 @@
 
 == What is it?
 
-OpenWISP Geographic Monitoring (OWGM) is a Ruby on Rails application, capable of monitoring a wISP's access points. 
+OpenWISP Geographic Monitoring (OWGM) is a Ruby on Rails application, capable of monitoring a wISP's access points.
 
 OWGM supports the following functionalities:
 * monitoring access point availability and position via GMaps
 * english/italian translation
 
-Even though the application can be used as standalone, such use will result in a pretty useless application. OpenWISP Geographic Monitoring is in fact made to be integrated OWM. 
+Even though the application can be used as standalone, such use will result in a pretty useless application. OpenWISP Geographic Monitoring is in fact made to be integrated OWM.
 
 == How to install
 
 === Prerequisites
 
-The OpenWISP Gegraphic Monitoring is currently being developed with Ruby on Rails 3.0. Being a RoR application, it can be 
-deployed using any of the methods Rails supports. 
+The OpenWISP Gegraphic Monitoring is currently being developed with Ruby on Rails 3.0. Being a RoR application, it can be
+deployed using any of the methods Rails supports.
 Even so, what we are currently using (and find quite stable) is the following environment:
 
 * Ruby Enterprise Edition 1.8 (http://www.rubyenterpriseedition.com/index.html)
@@ -25,9 +25,9 @@ Even so, what we are currently using (and find quite stable) is the following en
 
 === Installation
 
-Once deployed using your favourite environment, you need to configure a deamon OpenWISP Geographic Monitoring needs to perform its usual activities (mainly using ICMP to check for AP connectivity). 
+Once deployed using your favourite environment, you need to configure a deamon OpenWISP Geographic Monitoring needs to perform its usual activities (mainly using ICMP to check for AP connectivity).
 
-To do this, you can use the following init.d script (customization may be needed, this script was coded for Ubuntu 10.04). 
+To do this, you can use the following init.d script (customization may be needed, this script was coded for Ubuntu 10.04).
 
 ==== Startup script
 
@@ -38,8 +38,8 @@ Of course you can change any of that to whatever fits your needs.
     #!/bin/sh
     ### BEGIN INIT INFO
     # Provides:          owgm-daemons
-    # Required-Start:    $local_fs $network  
-    # Required-Stop:     $local_fs $network 
+    # Required-Start:    $local_fs $network
+    # Required-Stop:     $local_fs $network
     # Default-Start:     2 3 4 5
     # Default-Stop:      0 1 6
     # Short-Description: Starting owgm-daemons
@@ -55,11 +55,11 @@ Of course you can change any of that to whatever fits your needs.
 
     # The daemon you wish to start with this script
     # (it must have already been deployed of course).
-    OPENWISP_APP="owgm" 
+    OPENWISP_APP="owgm"
 
     # The Rails environment in which the script must be run.
     # It will almost always be set to production.
-    RAILS_ENV="production" 
+    RAILS_ENV="production"
 
     ####################################################
 
@@ -92,29 +92,29 @@ Of course you can change any of that to whatever fits your needs.
 
     case "$1" in
       start)
-        log_daemon_msg "Starting OpenWISP daemon" "$NAME" 
+        log_daemon_msg "Starting OpenWISP daemon" "$NAME"
         openwisp_daemons_start
-        RET="$?" 
+        RET="$?"
         log_end_msg $RET
         return $RET
         ;;
       stop)
-        log_daemon_msg "Stopping OpenWISP daemon" "$NAME" 
+        log_daemon_msg "Stopping OpenWISP daemon" "$NAME"
         openwisp_daemons_stop
-        RET="$?" 
+        RET="$?"
         log_end_msg $RET
         return $RET
         ;;
       restart)
-        log_daemon_msg "Restarting OpenWISP daemon" "$NAME" 
+        log_daemon_msg "Restarting OpenWISP daemon" "$NAME"
         openwisp_daemons_restart
-        RET="$?" 
+        RET="$?"
         log_end_msg $RET
         return $RET
         ;;
       status)
         openwisp_daemons_status
-        RET="$?" 
+        RET="$?"
         return $RET
         ;;
       *)
@@ -192,7 +192,7 @@ For alerts to work, rails SMTP configuration must be set correctly.
 If alerts are not being sent, edit your environment file and check if the SMTP settings are configured, eg:
 
     # config/environments/production.rb
-    
+
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
         :address =>              '127.0.0.1',
@@ -212,6 +212,13 @@ Some default values can be configured in **config.yml**:
 * alerts_threshold_down
 * alerts_threshold_up
 * alerts_email
+
+Since version 1.4 it is also possible to customize the alert subject and body text by uncommenting and tweaking the following configuration keys in config.yml:
+
+* alert_down_subject_suffix
+* alert_up_subject_suffix
+* alert_body_text_admin (message sent to admins)
+* alert_body_text_manager (message sent to emails set in the "Manager email" field of each access point)
 
 === OWUMS graphs
 
