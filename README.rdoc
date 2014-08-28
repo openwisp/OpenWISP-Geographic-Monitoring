@@ -204,9 +204,6 @@ If alerts are not being sent, edit your environment file and check if the SMTP s
         #:enable_starttls_auto => false
     }
 
-Be sure to send emails from a server which is authorized to send email from the domain you use, otherwise the monitoring emails will be treated as SPAM.
-For more information read here: http://en.wikipedia.org/wiki/MX_record
-
 Some default values can be configured in **config.yml**:
 
 * alerts_threshold_down
