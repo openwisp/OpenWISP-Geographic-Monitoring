@@ -38,6 +38,16 @@ defaults: &defaults
     # add any other wisp here
   }
   
+  # datawarehouse credentials for each wisp
+  # if you are using the openwisp module for pentahoo
+  datawarehouse: {
+    "wisp-slug": {
+      url: "http://my.datawarehouse.com",
+      username: "username",
+      password: "password"
+    }
+  }
+  
   # protocol, host and subfolder for links sent via email
   protocol: https
   host: change_me.com

@@ -26,11 +26,11 @@ class Wisp < ActiveRecord::Base
   def to_param
     "#{name.downcase.gsub(/[^a-z0-9]+/i, '-')}"
   end
-  
+
   def slug
     name.gsub(' ', '-').downcase
   end
-  
+
   def owmw_enabled?
     Configuration.get(:owmw_enabled) && (
       Configuration.get(:wisps_with_owmw).include?(name) ||
@@ -38,7 +38,7 @@ class Wisp < ActiveRecord::Base
       Configuration.get(:wisps_with_owmw).include?(slug)
     )
   end
-  
+
   # determin if owums is enabled for this wisp
   def owums_enabled?
     begin
@@ -47,7 +47,7 @@ class Wisp < ActiveRecord::Base
       return false
     end
   end
-  
+
   # return owums base url of wisp or nil if not set
   def owums_url
     if owums_enabled?
@@ -56,7 +56,7 @@ class Wisp < ActiveRecord::Base
       return nil
     end
   end
-  
+
   # return owums username of wisp or nil if not set
   def owums_username
     if owums_enabled?
@@ -65,7 +65,7 @@ class Wisp < ActiveRecord::Base
       return nil
     end
   end
-  
+
   # return owums password of wisp or nil if not set
   def owums_password
     if owums_enabled?
@@ -74,7 +74,43 @@ class Wisp < ActiveRecord::Base
       return nil
     end
   end
-  
+
+  # determine if datawarehouse is enabled for this wisp
+  def datawarehouse_enabled?
+    begin
+      CONFIG['datawarehouse'].include?(slug)
+    rescue NoMethodError
+      return false
+    end
+  end
+
+  # return datawarehouse base url of wisp or nil if not set
+  def datawarehouse_url
+    if datawarehouse_enabled?
+      return CONFIG['datawarehouse'][slug]['url']
+    else
+      return nil
+    end
+  end
+
+  # return datawarehouse username of wisp or nil if not set
+  def datawarehouse_username
+    if datawarehouse_enabled?
+      return CONFIG['datawarehouse'][slug]['username']
+    else
+      return nil
+    end
+  end
+
+  # return datawarehouse password of wisp or nil if not set
+  def datawarehouse_password
+    if datawarehouse_enabled?
+      return CONFIG['datawarehouse'][slug]['password']
+    else
+      return nil
+    end
+  end
+
   # create unassigned roles for this wisp
   def create_roles
     roles = User.available_roles
@@ -83,18 +119,18 @@ class Wisp < ActiveRecord::Base
       next if role == :wisps_viewer
       unless Role.where({:authorizable_id => self.id, :name => role.to_s}).length > 0
         new_roles << Role.create({:authorizable_type => 'Wisp', :name => role.to_s, :authorizable_id => self.id})
-      end      
+      end
     end
     new_roles
   end
-  
+
   # the following method takes in consideration the "count_stats" column of the table group
   # only access points with following conditions are counted:
   #   * access points assigned to a group which has "count_stats" == true are counted
   #   * access points with no property set record associated
   def count_access_points(action=:total)
     groups_where = 'groups.count_stats IS NULL OR groups.count_stats = 1'
-    
+
     case action.to_sym
     when :total
       # all indipendently on the value of reachable
@@ -114,32 +150,32 @@ class Wisp < ActiveRecord::Base
     else
       raise ArgumentError, 'unknown action argument "%s", can be only "total", "up", "down", "unknown" or "favourite"' % action
     end
-    
+
     # scope the query so we can add more restrictions to the lookup if needed
     query = AccessPoint.with_properties_and_group('groups.count_stats').of_wisp(self).where(groups_where).scoped
     # in all the cases except total
     if property_sets_where
       query = query.where(property_sets_where)
     end
-    
+
     # return count only
     return query.count()
   end
-  
+
   # count groups of wisp
   def count_groups
     return Group.where(['wisp_id = ? OR wisp_id IS NULL', self.id]).count()
   end
-  
+
   ### Static methods ###
-  
+
   # creates are roles if missing
   def self.create_all_roles
     self.all.each do |wisp|
       wisp.create_roles
     end
   end
-  
+
   # creates all roles if it finds a number of roles that is less than expected
   # is run automatically when displaying "edit user" and "new user" pages
   def self.create_all_roles_if_necessary
@@ -149,7 +185,7 @@ class Wisp < ActiveRecord::Base
       self.create_all_roles
     end
   end
-  
+
   def self.collection(user)
     collection = []
     is_wisp_viewer = user.roles_include?(:wisps_viewer)
@@ -158,7 +194,7 @@ class Wisp < ActiveRecord::Base
     end
     collection
   end
-  
+
   # select wisps accessible to user
   def self.all_accessible_to(user)
     if user.nil?

@@ -554,18 +554,18 @@ ul.disabled{ background: #eee !important; border-color: #bbb !important }
 #alert-settings-popup .inner{ padding: 10px 20px }
 #alert-settings-popup .edit-in-place{ width: 50px }
 
-#stats-interval{ text-align: center; margin: 15px 0; padding: 0 }
-#stats-interval input, #stats-interval{ font-size: 14px !important }
-#stats-interval input{
+#stats-interval, .stats-interval{ text-align: center; margin: 15px 0; padding: 0 }
+#stats-interval input, #stats-interval,
+.stats-interval input, .stats-interval{ font-size: 14px !important }
+#stats-interval input, .stats-interval input{
 	text-align: center;
 	letter-spacing: 1px;
 	font-weight: bold;
 }
-#stats-usage h4{ margin-bottom: 0 }
-#stats-usage .stats .block{ padding-top: 0 }
-#stats-usage button{ font-size: 13px; padding: 3px 7px; margin: 0 0 0 3px }
+.large-graph-container .stats .block{ padding-top: 0 }
+.large-graph-container button{ font-size: 13px; padding: 3px 7px; margin: 0 0 0 3px }
 
-#stats-usage .block.stats{ min-height: 400px; margin: 0 0 10px; padding: 0; outline: 1px solid #BBB }
-#stats-usage .loaded{ outline: 0 none !important }
+.large-graph-container .block.stats{ min-height: 400px; margin: 0 0 10px; padding: 0; outline: 1px solid #BBB }
+.large-graph-container .loaded{ outline: 0 none !important }
 
 .big_graph .center{ line-height: 400px }

@@ -49,6 +49,7 @@ it:
   Activation_date: Data di attivazione
   Activity_graph: Grafico attività
   Activity_average_graph: Grafico media attività
+  Activity_average_archive: Dati media attività archiviati
   Address: Indirizzo
   Associated_users_graph: Grafico utenti associati
   Associated_users_average_graph: Grafico media utenti associati

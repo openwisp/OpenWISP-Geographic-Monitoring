@@ -996,6 +996,9 @@ var owgm = {
                 owumsGraphs.drawLogins();
                 owumsGraphs.drawTraffic();
             }
+            if ($(this).parents('.box').attr('id') == 'stats-activities' && !is_visible) {
+                graphs.drawActivityArchive();
+            }
         });
     },
 

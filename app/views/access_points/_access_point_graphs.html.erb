@@ -37,12 +37,18 @@
             'owums.logins_graph'
         ) %>
     <% end %>
+
+    <% if @wisp.datawarehouse_enabled? %>
+        <%= javascript_include_tag(
+            'datawarehouse.activities_graph'
+        ) %>
+    <% end %>
 <% end %>
 
 <% if @access_point.known? %>
     <% if @wisp.owums_enabled? and (auth?(:wisps_viewer) or auth?(:wisp_associated_user_counts_viewer, @wisp)) %>
         <div class="grid_12">
-            <div class="box" id="stats-usage">
+            <div class="box large-graph-container" id="stats-usage">
                 <h2>
                     <a href="#" class="toggle<% if CONFIG['ap_stats_collapsed'] %> hidden<% end %>">
                         <%= t(:Usage_stats) %>
@@ -77,7 +83,7 @@
             </div>
         </div>
         <script>
-            if (!$('#stats-usage .container').hasClass('hidden')) {
+            if (!$('#stats-usage .container').is(':hidden')) {
                 owumsGraphs.drawLogins();
                 owumsGraphs.drawTraffic();
             }
@@ -112,6 +118,46 @@
             <p>&nbsp;</p>
           </div>
         </div>
+    <% end %>
+
+    <% if @wisp.datawarehouse_enabled? and (auth?(:wisps_viewer) or auth?(:wisp_associated_user_counts_viewer, @wisp)) %>
+        <div class="grid_12">
+            <div class="box large-graph-container" id="stats-activities">
+                <h2>
+                    <a href="#" class="toggle<% if CONFIG['ap_stats_collapsed'] %> hidden<% end %>">
+                        <%= t(:Activity_average_archive) %>
+                        <span class="arrow" data-show="&#x25BC;" data-hide="&#x25B2;">&#x25BC;</span>
+                    </a>
+                </h2>
+
+                <div class="container<% if CONFIG['ap_stats_collapsed'] %> hidden<% end %>">
+                    <div class="box stats-interval" id="activities-interval">
+                        <%= form_tag '', :method => :get do %>
+                            <strong><%=t :Interval %></strong>:
+                            <%= text_field_tag 'paramStartDate', l(@from - 1.month) %>
+                            <strong>-</strong>
+                            <%= text_field_tag 'paramStopDate', l(@to - 1.month) %>
+                            <%= hidden_field_tag 'parammacaddress', @access_point.common_name.upcase %>
+                            <button type="submit"><%= t(:Update) %></button>
+                        <% end %>
+                    </div>
+
+                    <div class="block big_graph stats" id="activities_graph" data-url="<%= wisp_activities_json_path %>">
+                        <h5 class="center"><%=t :Loading_data %> <%= image_tag "spinner.gif" %></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            if (!$('#stats-activities .container').is(':hidden')) {
+                graphs.drawActivityArchive();
+            }
+            $('#stats-activities form').submit(function(e){
+                e.preventDefault();
+                graphs.drawActivityArchive();
+            });
+        </script>
+        <div class="clear"></div>
     <% end %>
 
     <% if @wisp.owmw_enabled? and CONFIG['user_counts_graphs'] %>
