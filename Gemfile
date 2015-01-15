@@ -20,7 +20,7 @@ gem 'warden', '~> 1.0.4'
 gem 'devise', '~> 1.3.4'
 gem 'acl9', '~> 0.12.0'
 
-gem 'packet', '0.1.15', :git => 'git://github.com/dguerri/packet.git'
+gem 'packet', '0.1.15', :git => 'git://github.com/openwisp/packet-legacy'
 gem 'backgroundrb-rails3', '~> 1.1.5', :require => 'backgroundrb'
 
 gem 'capistrano', '~> 2.9.0', :require => false
