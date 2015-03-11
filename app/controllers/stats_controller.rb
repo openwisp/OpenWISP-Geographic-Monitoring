@@ -73,7 +73,7 @@ class StatsController < ApplicationController
     # build http request object
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
+    http.use_ssl = url[0, 5] == 'https'
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
     # get or post
