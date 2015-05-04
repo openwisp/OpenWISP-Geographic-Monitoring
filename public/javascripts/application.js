@@ -367,13 +367,12 @@ var owgm = {
             // add current row array to the "data" array
             data.push(row);
         });
-        // convert data array to JSON string
-        json_data = JSON.stringify(data);
         // POST the JSON string to Rails
         $.ajax({
             type: 'post',
+            dataType: 'json',
             url: export_url,
-            data: json_data,
+            data: data,
             // if file excel has been generated successfully
             success: function(data){
                 if(data.result == 'success'){
