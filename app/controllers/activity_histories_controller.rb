@@ -46,10 +46,10 @@ class ActivityHistoriesController < ApplicationController
       format.json { render :json => @activity_history }
     end
   end
-  
+
   # accepts only POST
   def export
-    
+
     @showstatus = CONFIG['showstatus']
     # prepare header row
     header = [
@@ -63,24 +63,23 @@ class ActivityHistoriesController < ApplicationController
       I18n.t('Up'),
       I18n.t('Down')
     ]
-    
-    if @showstatus == true
+
+    if @showstatus
         header.push(I18n.t('Status'))
     end
     # entity body is a json string, decode it to get the data for the excel
     @access_points = ActiveSupport::JSON.decode(request.body.read)
-    
+
     # load spreadsheet gem and Date
-    
     # prepare file
     book = Spreadsheet::Workbook.new
     sheet1 = book.create_worksheet
     today = Date.today().strftime('%d-%m-%Y')
     sheet1.name = 'Report %s' % [today]
-    header.each_with_index do |cell, i|      
+    header.each_with_index do |cell, i|
       sheet1.row(0).push cell
     end
-      
+
     sheet1.row(0).height = 25
     heading_cells = Spreadsheet::Format.new :color => :black,
                                      :weight => :bold,
@@ -88,7 +87,7 @@ class ActivityHistoriesController < ApplicationController
                                      :vertical_align => :middle,
                                      :horizontal_align => :center
     centered_cells = Spreadsheet::Format.new :horizontal_align => :center
-    
+
     sheet1.column(0).width = 20
     sheet1.column(1).width = 22
     sheet1.column(2).width = 18
@@ -98,9 +97,9 @@ class ActivityHistoriesController < ApplicationController
     sheet1.column(6).width = 16
     #Value of status could be quite long
     sheet1.column(9).width = 22
-    
+
     sheet1.row(0).default_format = heading_cells
-    
+
     @access_points.each_with_index do |access_point, i|
       # init new row
       row = sheet1.row(1+i)
@@ -112,19 +111,19 @@ class ActivityHistoriesController < ApplicationController
       # center the activation date column
       row.set_format(2, centered_cells)
       # center the last 3 columns
-      3.times{ |i|
-        row.set_format(i+6, centered_cells)
+      3.times{ |c|
+        row.set_format(c+6, centered_cells)
       }
     end
 
     # write excel in tmp folder
     book.write '%s/tmp/availability-report.xls' % [Rails.root]
-    
+
     respond_to do |format|
       format.json { render :json => { :result => 'success', 'url' => wisp_send_report_path } }
     end
   end
-  
+
   def send_report
     today = Date.today().strftime('%d-%m-%Y')
     file = '%s/tmp/availability-report.xls' % [Rails.root]
