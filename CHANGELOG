@@ -12,22 +12,33 @@ For a detailed changelog of each commits use the "git log" command.
 [D] Documentation
 [M] Misc
 [N] Note
- 
+
 * Log
 
-Version 1.3
+May 4th, 2015 - Version 1.4
 
- * Latest online users
- * Configurable alerts (by group and single AP)
- * Exception notifications
- * Latest logins
- * Traffic and Login statistics for each AP (taken from Radius)
- * Status changes count in ActivityHistory model
- * minor improvements and bug fixes
- 
+ * [F] Added false_negatives rake task
+ * [F] Implemented MAX_PINGS (multiple pings before considering an AP down)
+ * [B] Use OWUMS API directly when querying for last logins
+ * [B] Fixed HTTP request bug in stats_controller
+ * [B] Disabled clustering in general map for performance reasons
+ * [F] Customizable body in alert emails
+ * [B] Fixed request uri too large when downloading graph images
+ * [B] Archived Activity Histories (Datawarehouse Integration)
+ * [B] Avoid possible encoding issues in availability report export
+
+June 23th, 2015 - Version 1.3
+
+ * [F] Latest online users
+ * [F] Configurable alerts (by group and single AP)
+ * [F] Exception notifications
+ * [F] Latest logins
+ * [F] Traffic and Login statistics for each AP (taken from Radius)
+ * [F] Status changes count in ActivityHistory model
+ * [B] minor improvements and bug fixes
+
 April 26th, 2012 - Version 1.0.5
 
  * [N] Initial commit to Github
  * [D] Added CHANGELOG
  * [D] Added README.rdoc
-
