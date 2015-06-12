@@ -239,11 +239,22 @@ Keep in mind that:
 
 Since version 1.3 OWGM can send exceptions via email.
 
-To make it work be sure to configure your **smtp_settings** correctly as described
-before and then set the following configuration keys in your **config.yml**:
+To make it work be sure to configure your *smtp_settings* correctly as described
+before and then set the following configuration keys in your *config.yml*:
 
 * exception_notification_recipients
 * mail_subject_prefix
+
+
+=== Sentry exception notification
+
+Available since *OWGM-1.4.1*.
+
+Just add to your configuration file in *config/config.yml* the following line:
+
+    sentry_dsn: 'http://public:secret@example.com/project-id'
+
+To obtain a new *dsn* setting key, create a new project in your sentry account, add the domain of the OWUMS instance on to the allowed domains, then get the dsn setting by going to the "installation & setup" page on the project.
 
 == Copyright
 

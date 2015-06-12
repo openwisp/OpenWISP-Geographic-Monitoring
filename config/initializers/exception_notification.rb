@@ -1,15 +1,17 @@
-if Rails.env.production?
+if Rails.env.production? and CONFIG['sentry_dsn'].nil?
   ExceptionNotifier::Notifier.prepend_view_path File.join(Rails.root, 'app/views')
 
-  recipients = CONFIG['exception_notification_recipients'].split(',')
+  recipients = CONFIG['exception_notification_recipients'].split(',') rescue false
   sender = CONFIG['from_email']
   email_subject_prefix = CONFIG['mail_subject_prefix']
 
-  Owgm::Application.config.middleware.use(
-    ExceptionNotifier,
-    :email_prefix => email_subject_prefix << ' ',
-    :sender_address => sender,
-    :exception_recipients => recipients,
-    :sections =>  %w(request session devise environment backtrace)
-  )
+  if recipients
+    Owgm::Application.config.middleware.use(
+      ExceptionNotifier,
+      :email_prefix => email_subject_prefix << ' ',
+      :sender_address => sender,
+      :exception_recipients => recipients,
+      :sections =>  %w(request session devise environment backtrace)
+    )
+  end
 end
