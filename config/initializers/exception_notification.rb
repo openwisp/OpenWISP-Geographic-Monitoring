@@ -1,4 +1,4 @@
-if Rails.env.production? and CONFIG['sentry_dsn'].nil?
+if Rails.env.production? and CONFIG['sentry_dsn'].nil? and CONFIG['exception_notification_recipients']
   ExceptionNotifier::Notifier.prepend_view_path File.join(Rails.root, 'app/views')
 
   recipients = CONFIG['exception_notification_recipients'].split(',') rescue false
