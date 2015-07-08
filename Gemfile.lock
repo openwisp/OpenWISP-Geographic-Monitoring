@@ -133,6 +133,7 @@ GEM
       faraday (>= 0.7.6)
     spreadsheet (0.7.6)
       ruby-ole (>= 1.0)
+    system_timer (1.2.4)
     thor (0.14.6)
     treetop (1.4.15)
       polyglot
@@ -170,4 +171,5 @@ DEPENDENCIES
   ruby-ole (~> 1.2.11.4)
   sentry-raven
   spreadsheet (~> 0.7.3)
+  system_timer
   warden (~> 1.0.4)
