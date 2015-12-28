@@ -285,7 +285,6 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
   def housekeeping
     begin
       time = CONFIG['housekeeping_interval'].months.to_i.ago
-      ActivityHistory.destroy_all(["created_at < ?", time])
       AssociatedUserCountHistory.destroy_all(["created_at < ?", time])
       # delete old alerts
       Alert.destroy_all(["created_at < ?", time])
@@ -295,7 +294,19 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       PropertySet.destroy_orphans()
     rescue Exception => e
       puts "Problem in housekeeping"
-      puts "[#{Time.now}] #{e.message}"  
+      puts "[#{Time.now}] #{e.message}"
+      puts "[#{Time.now}] #{e.backtrace.inspect}"
+      ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+    end
+  end
+
+  def clean_activityhistory
+    begin
+      time = CONFIG['housekeeping_interval'].months.to_i.ago
+      ActivityHistory.destroy_all(["created_at < ?", time])
+    rescue Exception => e
+      puts "Problem in clean_activityhistory"
+      puts "[#{Time.now}] #{e.message}"
       puts "[#{Time.now}] #{e.backtrace.inspect}"
       ExceptionNotifier::Notifier.background_exception_notification(e).deliver
     end
