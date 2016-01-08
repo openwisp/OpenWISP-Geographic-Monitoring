@@ -125,7 +125,9 @@ class AccessPoint < ActiveRecord::Base
     if self.group_name.nil?
       properties = self.properties
       properties.save!
-      self.group_name = properties.group.name
+      if properties.group
+        self.group_name = properties.group.name
+      end
     end
   end
   
