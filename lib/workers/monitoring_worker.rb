@@ -37,7 +37,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     threads = []
     access_points = AccessPoint.with_properties_and_group("access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
       property_sets.category, property_sets.group_id, property_sets.notes, groups.monitor AS group_monitor")
-    
+
     access_points.each do |ap|
       begin
         # if access point is in a group which is not being monitored
@@ -45,13 +45,13 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         if ap.group_monitor == "0" or ap.group_monitor == false
           next
         end
-  
+
         # wait until there is a "slot" for a new thread
         while threads.length >= MAX_THREADS
           threads.delete_if { |th| th.alive? ? false : th.join(1) }
           sleep(0.2)
         end
-        
+
         # spawn a new thread
         threads.push(Thread.new do
           begin
@@ -71,7 +71,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
           rescue
             act = ap.activities.build(:status => false) if ap.known?
           end
-          
+
           if act
             # avoid race conditions with the consolidate_access_points_monitoring() function
             @@monitoring_semaphore.synchronize {
@@ -87,9 +87,9 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         end)
       rescue Exception => e
         puts "[#{Time.now}] Problem while pinging ap '#{ap.hostname}'"
-        puts "[#{Time.now}] #{e.message}"  
+        puts "[#{Time.now}] #{e.message}"
         puts "[#{Time.now}] #{e.backtrace.inspect}"
-        ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+        log_exception(e)
         next
       end
     end
@@ -104,9 +104,9 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       puts "[#{Time.now}] Got exception while cleaning threads"
       puts "[#{Time.now}] #{e.message}"
       puts "[#{Time.now}] #{e.backtrace.inspect}"
-      ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+      log_exception(e)
     end
-    
+
     # update group statistics
     Group.update_all_counts()
   end
@@ -115,14 +115,14 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     # calculate average of activities
     access_points = AccessPoint.with_properties_and_group("access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
       property_sets.category, property_sets.group_id, property_sets.notes, groups.monitor AS group_monitor")
-    
+
     access_points.each do |ap|
       # if access point is in a group which is not being monitored
       # for some reason when joining active records return a string instead of a boolean
       if ap.group_monitor == "0" or ap.group_monitor == false
         next
       end
-      
+
       begin
         # avoid race conditions with the access_points_monitoring() function
         @@monitoring_semaphore.synchronize {
@@ -135,7 +135,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
               first_time = ap.activities.first.created_at.change(:min => 0, :sec => 0)
             end
             last_time = ap.activities.last.created_at.change(:min => 0, :sec => 0)
-            
+
             # calculate the number of status changes
             status_changes = ap.get_status_changes_between_dates(first_time..last_time)
 
@@ -155,9 +155,9 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         }
       rescue Exception => e
         puts "[#{Time.now}] Problem in consolidate_access_points_monitoring() for access point '#{ap.hostname}': #{e}"
-        puts "[#{Time.now}] #{e.message}"  
+        puts "[#{Time.now}] #{e.message}"
         puts "[#{Time.now}] #{e.backtrace.inspect}"
-        ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+        log_exception(e)
         next
       end
     end
@@ -189,9 +189,9 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
                 aps_with_users << ap_id
               rescue Exception => e
                 puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}', access point id '#{ap_id}': #{e}"
-                puts "[#{Time.now}] #{e.message}"  
+                puts "[#{Time.now}] #{e.message}"
                 puts "[#{Time.now}] #{e.backtrace.inspect}"
-                ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+                log_exception(e)
                 next
               end
             end
@@ -210,17 +210,17 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
                 }
               rescue Exception => e
                 puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}', access point '#{ap.hostname}': #{e}"
-                puts "[#{Time.now}] #{e.message}"  
+                puts "[#{Time.now}] #{e.message}"
                 puts "[#{Time.now}] #{e.backtrace.inspect}"
-                ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+                log_exception(e)
                 next
               end
             end
           rescue Exception => e
             puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}': #{e}"
-            puts "[#{Time.now}] #{e.message}"  
+            puts "[#{Time.now}] #{e.message}"
             puts "[#{Time.now}] #{e.backtrace.inspect}"
-            ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+            log_exception(e)
           end
         end)
       end
@@ -265,18 +265,18 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
               }
             rescue Exception => e
               puts "[#{Time.now}] Problem in consolidate_associated_user_counts_monitoring() for wisp '#{wisp.name}', access point '#{ap.hostname}': #{e}"
-              puts "[#{Time.now}] #{e.message}"  
+              puts "[#{Time.now}] #{e.message}"
               puts "[#{Time.now}] #{e.backtrace.inspect}"
-              ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+              log_exception(e)
               next
             end
           end
         end
       rescue Exception => e
         puts "[#{Time.now}] Problem in consolidate_associated_user_counts_monitoring() for wisp '#{wisp.name}': #{e}"
-        puts "[#{Time.now}] #{e.message}"  
+        puts "[#{Time.now}] #{e.message}"
         puts "[#{Time.now}] #{e.backtrace.inspect}"
-        ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+        log_exception(e)
         next
       end
     end
@@ -296,7 +296,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       puts "Problem in housekeeping"
       puts "[#{Time.now}] #{e.message}"
       puts "[#{Time.now}] #{e.backtrace.inspect}"
-      ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+      log_exception(e)
     end
   end
 
@@ -308,18 +308,18 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       puts "Problem in clean_activityhistory"
       puts "[#{Time.now}] #{e.message}"
       puts "[#{Time.now}] #{e.backtrace.inspect}"
-      ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+      log_exception(e)
     end
   end
-  
+
   def send_alerts
     begin
       Alert.send_all
     rescue Exception => e
       puts "Problem in send_alerts"
-      puts "[#{Time.now}] #{e.message}"  
+      puts "[#{Time.now}] #{e.message}"
       puts "[#{Time.now}] #{e.backtrace.inspect}"
-      ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+      log_exception(e)
     end
   end
 end

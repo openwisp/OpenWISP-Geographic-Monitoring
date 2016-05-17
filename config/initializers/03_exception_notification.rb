@@ -1,3 +1,5 @@
+CONFIG['exception_notifier_enabled'] = false
+
 if Rails.env.production? and CONFIG['sentry_dsn'].nil? and CONFIG['exception_notification_recipients']
   ExceptionNotifier::Notifier.prepend_view_path File.join(Rails.root, 'app/views')
 
@@ -13,5 +15,6 @@ if Rails.env.production? and CONFIG['sentry_dsn'].nil? and CONFIG['exception_not
       :exception_recipients => recipients,
       :sections =>  %w(request session devise environment backtrace)
     )
+    CONFIG['exception_notifier_enabled'] = true
   end
 end
