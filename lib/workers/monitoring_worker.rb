@@ -89,7 +89,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         puts "[#{Time.now}] Problem while pinging ap '#{ap.hostname}'"
         puts "[#{Time.now}] #{e.message}"
         puts "[#{Time.now}] #{e.backtrace.inspect}"
-        log_exception(e)
+        if CONFIG['exception_notifier_enabled']
+          ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+        end
+        if CONFIG['sentry_enabled']
+          Raven.capture_exception(e)
+        end
         next
       end
     end
@@ -104,7 +109,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       puts "[#{Time.now}] Got exception while cleaning threads"
       puts "[#{Time.now}] #{e.message}"
       puts "[#{Time.now}] #{e.backtrace.inspect}"
-      log_exception(e)
+      if CONFIG['exception_notifier_enabled']
+        ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+      end
+      if CONFIG['sentry_enabled']
+        Raven.capture_exception(e)
+      end
     end
 
     # update group statistics
@@ -157,7 +167,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         puts "[#{Time.now}] Problem in consolidate_access_points_monitoring() for access point '#{ap.hostname}': #{e}"
         puts "[#{Time.now}] #{e.message}"
         puts "[#{Time.now}] #{e.backtrace.inspect}"
-        log_exception(e)
+        if CONFIG['exception_notifier_enabled']
+          ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+        end
+        if CONFIG['sentry_enabled']
+          Raven.capture_exception(e)
+        end
         next
       end
     end
@@ -191,7 +206,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
                 puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}', access point id '#{ap_id}': #{e}"
                 puts "[#{Time.now}] #{e.message}"
                 puts "[#{Time.now}] #{e.backtrace.inspect}"
-                log_exception(e)
+                if CONFIG['exception_notifier_enabled']
+                  ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+                end
+                if CONFIG['sentry_enabled']
+                  Raven.capture_exception(e)
+                end
                 next
               end
             end
@@ -212,7 +232,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
                 puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}', access point '#{ap.hostname}': #{e}"
                 puts "[#{Time.now}] #{e.message}"
                 puts "[#{Time.now}] #{e.backtrace.inspect}"
-                log_exception(e)
+                if CONFIG['exception_notifier_enabled']
+                  ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+                end
+                if CONFIG['sentry_enabled']
+                  Raven.capture_exception(e)
+                end
                 next
               end
             end
@@ -220,7 +245,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
             puts "[#{Time.now}] Problem in associated_user_counts_monitoring() for wisp '#{wisp.name}': #{e}"
             puts "[#{Time.now}] #{e.message}"
             puts "[#{Time.now}] #{e.backtrace.inspect}"
-            log_exception(e)
+            if CONFIG['exception_notifier_enabled']
+              ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+            end
+            if CONFIG['sentry_enabled']
+              Raven.capture_exception(e)
+            end
           end
         end)
       end
@@ -267,7 +297,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
               puts "[#{Time.now}] Problem in consolidate_associated_user_counts_monitoring() for wisp '#{wisp.name}', access point '#{ap.hostname}': #{e}"
               puts "[#{Time.now}] #{e.message}"
               puts "[#{Time.now}] #{e.backtrace.inspect}"
-              log_exception(e)
+              if CONFIG['exception_notifier_enabled']
+                ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+              end
+              if CONFIG['sentry_enabled']
+                Raven.capture_exception(e)
+              end
               next
             end
           end
@@ -276,7 +311,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         puts "[#{Time.now}] Problem in consolidate_associated_user_counts_monitoring() for wisp '#{wisp.name}': #{e}"
         puts "[#{Time.now}] #{e.message}"
         puts "[#{Time.now}] #{e.backtrace.inspect}"
-        log_exception(e)
+        if CONFIG['exception_notifier_enabled']
+          ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+        end
+        if CONFIG['sentry_enabled']
+          Raven.capture_exception(e)
+        end
         next
       end
     end
@@ -296,7 +336,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       puts "Problem in housekeeping"
       puts "[#{Time.now}] #{e.message}"
       puts "[#{Time.now}] #{e.backtrace.inspect}"
-      log_exception(e)
+      if CONFIG['exception_notifier_enabled']
+        ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+      end
+      if CONFIG['sentry_enabled']
+        Raven.capture_exception(e)
+      end
     end
   end
 
@@ -308,7 +353,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       puts "Problem in clean_activityhistory"
       puts "[#{Time.now}] #{e.message}"
       puts "[#{Time.now}] #{e.backtrace.inspect}"
-      log_exception(e)
+      if CONFIG['exception_notifier_enabled']
+        ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+      end
+      if CONFIG['sentry_enabled']
+        Raven.capture_exception(e)
+      end
     end
   end
 
@@ -319,7 +369,12 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
       puts "Problem in send_alerts"
       puts "[#{Time.now}] #{e.message}"
       puts "[#{Time.now}] #{e.backtrace.inspect}"
-      log_exception(e)
+      if CONFIG['exception_notifier_enabled']
+        ExceptionNotifier::Notifier.background_exception_notification(e).deliver
+      end
+      if CONFIG['sentry_enabled']
+        Raven.capture_exception(e)
+      end
     end
   end
 end
