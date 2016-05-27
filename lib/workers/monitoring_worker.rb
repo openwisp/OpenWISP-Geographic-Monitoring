@@ -38,6 +38,7 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
     access_points = AccessPoint.with_properties_and_group("access_points.*, property_sets.reachable, property_sets.public, property_sets.site_description,
       property_sets.category, property_sets.group_id, property_sets.notes, groups.monitor AS group_monitor")
 
+    started = Time.now
     access_points.each do |ap|
       begin
         # if access point is in a group which is not being monitored
@@ -116,6 +117,8 @@ class MonitoringWorker < BackgrounDRb::MetaWorker
         Raven.capture_exception(e)
       end
     end
+    execution_time = Time.now - started
+    puts "[#{Time.now}] access_points_monitoring completed in #{execution_time}"
 
     # update group statistics
     Group.update_all_counts()
