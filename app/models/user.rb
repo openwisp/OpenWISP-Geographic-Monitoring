@@ -38,6 +38,7 @@ class User < ActiveRecord::Base
 
   ROLES = [
     :wisps_viewer, # higher role
+    :wisp_username_viewer,
     :wisp_access_points_viewer, :wisp_activities_viewer, :wisp_activity_histories_viewer,
     :wisp_associated_user_counts_viewer, :wisp_associated_user_count_histories_viewer,
   ]
