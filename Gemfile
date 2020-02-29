@@ -8,7 +8,7 @@ gem 'sentry-raven'
 gem 'system_timer'
 gem 'pony'
 
-gem 'jquery-rails', '~> 1.0.11'
+gem 'jquery-rails', '~> 3.1.5'
 gem 'kaminari', '~> 0.12.4'
 gem 'breadcrumbs_on_rails', '~> 2.0.0'
 gem 'app-config', '~> 0.1.2'
