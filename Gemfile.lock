@@ -125,7 +125,7 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (~> 0.14.4)
-    rake (10.1.0)
+    rake (13.0.1)
     rdoc (3.12.2)
       json (~> 1.4)
     ruby-ole (1.2.11.6)
