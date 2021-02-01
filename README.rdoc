@@ -1,3 +1,9 @@
+== Project discontinued
+
+Please use {OpenWISP Monitoring}[https://github.com/openwisp/openwisp-monitoring#openwisp-monitoring].
+
+The README is maintained below for historic purposes.
+
 = OpenWISP Geographic Monitoring
 
 == What is it?
