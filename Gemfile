@@ -17,7 +17,7 @@ gem 'geokit', '~> 1.5.0'
 gem 'geokit-rails3', '~> 0.1.2'
 
 gem 'net-ping', '~> 1.5.0'
-gem 'nokogiri', '~> 1.4.6'
+gem 'nokogiri', '~> 1.12.5'
 
 gem 'warden', '~> 1.0.4'
 gem 'devise', '~> 1.3.4'
